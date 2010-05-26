@@ -2,11 +2,9 @@
 if (!defined('RAPIDLEECH'))
   {require_once("404.php");exit;}
 
-
 	Download( $LINK );
 	function Download( $link )
 	{
-
 	    global $premium_acc, $hf_cookie_auth_value;		
 		if( ($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) ||
 			($_REQUEST ["premium_acc"] == "on" && $premium_acc ["ifile_it"] ["user"] && $premium_acc ["ifile_it"] ["pass"])			
@@ -15,7 +13,6 @@ if (!defined('RAPIDLEECH'))
 			DownloadPremium($link);
 		}
 		else
-
 		{
 			DownloadFree($link);
 		}
@@ -29,27 +26,13 @@ if (!defined('RAPIDLEECH'))
 	  $dl_link = "http://ifile.it/dl";
 	  
       if($_POST["ffi"] == "ok"){
-
-
-
 	    
 		$capcay_msg = cek_post_ffi($dl_link);
-
-
         
       } // end _POST
-
-
-
 	  
 	  // not else; just do it again
 	  {
-
-
-
-
-
-
 
         $page = GetPage( $link );
 		$cookie = GetCookies( $page );
@@ -60,26 +43,20 @@ if (!defined('RAPIDLEECH'))
            $page = GetPage( $loc, $cookie, 0, $Referer);
 		
 		   if(!preg_match("/__alias_id.+=(?:[\t]+)*\'(.+)'/", $page, $file_key)) html_error('File key __alias_id Not Found!', 0);
-
 	       $dllink = "http://ifile.it/download:dl_request?alias_id=".$file_key[1]."&type=na&esn=1";
 	       $page = GetPage( $dllink, $cookie, 0, $Referer);
-
 		   
 		}elseif(!isset($_POST["ffi"])){
-
-
 		   html_error( "Error get link ifile.it/dl, probably changes have been made on the page." , 0 );
 		}
         
-
-
         if (strpos($page,'captcha":0') )
         {
 		   $page = GetPage( $loc, $cookie );
+		   // twice is a must
+		   $page = GetPage( $loc, $cookie );
 		   if(!preg_match('%href="(http://s\d+\.ifile\.it/.+/.+/\d+/.+\..{3})"%U', $page, $dlink)) html_error('Final Download Link Not Found!');
 		   $Href = $dlink[1];
-
-
 
 		   $FileName = basename($Href);        
 		   RedirectDownload( $Href, $FileName );
@@ -114,6 +91,8 @@ if (!defined('RAPIDLEECH'))
 		  return $capcay_msg;
 		}else{
 		   $page = GetPage( $dl_link, $cookie, 0, $Referer );
+		   // twice is a must
+		   $page = GetPage( $dl_link, $cookie, 0, $Referer );
 		   
 		   if(!preg_match('%href="(http://s\d+\.ifile\.it/.+/.+/\d+/.+\..{3})"%U', $page, $dlink)) {
 		     html_error('Final Download Link Not Found!', 0);
@@ -128,15 +107,10 @@ if (!defined('RAPIDLEECH'))
 	
 	
 	function load_recapcay($dllink, $cookie=0, $Referer=0, $capcay_msg=''){
-
 	
        $page = GetPage( "http://api.recaptcha.net/challenge?k=6LehdQcAAAAAABt0QFfzJT0yxsFydQsVTADaFakD", 0, 0, $Referer );
        is_present($page,"Expired session", "Expired session . Go to main page and reattempt", 0);        
        $ch = cut_str ( $page ,"challenge : '" ,"'" );
-
-
-
-
        
        $page = GetPage( "http://api.recaptcha.net/image?c=".$ch, $cookie, 0, $Referer );
        $headerend = strpos($page,"\r\n\r\n");
@@ -155,7 +129,6 @@ if (!defined('RAPIDLEECH'))
        print "<input name=\"ch\" value=\"".$ch."\" type=\"hidden\">$nn";
        print "<input name=\"ffi\" value=\"ok\" type=\"hidden\">$nn";
        print "<input name=\"link\" value=\"".urlencode($dllink)."\" type=\"hidden\">$nn";
-
        print "<input name=\"captcha_check\" type=\"text\" >";
        print "<input name=\"Submit\" value=\"Submit\" type=\"submit\"></form></p>";		   
        exit("</body></html>");
@@ -185,27 +158,32 @@ if (!defined('RAPIDLEECH'))
 	    $post["submitBtn"] = "continue";
 	    $page = sslcurl( $signin, $post );
 	    $cookie = GetCookies($page);
+		
 	    $Referer = $link;
 	    if (!preg_match('%(http\:\/\/ifile.it\/\?timestamp=\d+)">you have successfully signed in%', $page, $redir)) html_error('Invalid Authentication', 0);
 	    $loc = trim($redir[1]);
-	    $page = GetPage( $loc, $cookie );
+	    $page = GetPage( $loc, $cookie );		
 	    $cookie .= '; ' . GetCookies($page);
 	    
 	    $page = GetPage( $link, $cookie );
+		
         if(!preg_match('%ocation: (.+)\r\n%', $page, $rdir)) html_error( "Error get link ifile.it/dl, probably changes have been made on the page." , 0 );
 	    
 	    $page = GetPage( $rdir[1], $cookie );
 	    $Referer = $rdir[1];
 	    
         if(!preg_match("/__alias_id.+=(?:[\t]+)*\'(.+)'/", $page, $file_key)) html_error('File key __alias_id Not Found!', 0);
-	    $dllink = "http://ifile.it/download:dl_request?alias_id=".$file_key[1]."&type=na&esn=1";
+	    $dllink = "http:/"."/ifile.it/download:dl_request?alias_id=".$file_key[1]."&type=na&esn=1";		
 	    $page = GetPage( $dllink, $cookie, 0, $Referer);
         
 	    if (strpos($page,'captcha":0') )
         {
            $loc = $rdir[1];
-		   $page = GetPage( $loc, $cookie );
-           if (!preg_match('%href="(http://s\d+\.ifile\.it/.+/.+/\d+/.+\..{3})"%U', $page, $dlink)) html_error('Final Download Link Not Found!', 0);
+		   $page = GetPage( $loc, $cookie, 0, $Referer );
+            // gajebo kacrut.. >,<" ; twice is a must
+		   $page = GetPage( $loc, $cookie, 0, $Referer );
+		   
+		   if (!preg_match('%href="(http://s\d+\.ifile\.it/.+/.+/\d+/.+\..{3})"%U', $page, $dlink)) html_error('Final Download Link Not Found!', 0);
 		   $Href = $dlink[1];
            $FileName = basename($Href);
 		   RedirectDownload( $Href, $FileName, $cookie, 0, $Referer );
@@ -221,12 +199,6 @@ if (!defined('RAPIDLEECH'))
 	  }
 	   
 	   exit ();
-
-
-
-
-
-
 	}
 	
   	/**
@@ -335,7 +307,7 @@ if (!defined('RAPIDLEECH'))
 /************************ifile.it**********************************
 // written by kaox 24-may-2009
 // update by kaox 15-nov-2009
-// update by Idx 01-apr-2010 - +Rebuild with Malhotra's OOP code
 // update by Idx 03-apr-2010
+// update by Idx 27-may-2010
 ************************ifile.it*********************************/
 ?>
