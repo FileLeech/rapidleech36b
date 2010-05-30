@@ -19,9 +19,7 @@ if (!defined('RAPIDLEECH'))
 	}
 
 	function DownloadFree( $link )
-	{
-	  global $download_dir, $PHP_SELF, $nn;
-	
+	{	
 	  $Referer = $link;
 	  $dl_link = "http://ifile.it/dl";
 	  
@@ -107,6 +105,7 @@ if (!defined('RAPIDLEECH'))
 	
 	
 	function load_recapcay($dllink, $cookie=0, $Referer=0, $capcay_msg=''){
+	   global $PHP_SELF, $download_dir, $nn;
 	
        $page = GetPage( "http://api.recaptcha.net/challenge?k=6LehdQcAAAAAABt0QFfzJT0yxsFydQsVTADaFakD", 0, 0, $Referer );
        is_present($page,"Expired session", "Expired session . Go to main page and reattempt", 0);        
@@ -307,7 +306,7 @@ if (!defined('RAPIDLEECH'))
 /************************ifile.it**********************************
 // written by kaox 24-may-2009
 // update by kaox 15-nov-2009
-// update by Idx 03-apr-2010
 // update by Idx 27-may-2010
+// update by Idx 30-may-2010
 ************************ifile.it*********************************/
 ?>
