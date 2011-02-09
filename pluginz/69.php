@@ -1,179 +1,248 @@
-<?php
-if (!defined('RAPIDLEECH'))
-  {require_once("404.php");exit;}
-
-  //error_reporting(E_ALL);
-
+<?php    
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
+}
+	  
 	Download( $LINK );
-	function Download( $link ){
+	function Download($link) {
 		global $premium_acc;
-
-		if (($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) ||
-			($_REQUEST ["premium_acc"] == "on" && $premium_acc ["sharingmatrix"] ["user"] && $premium_acc ["sharingmatrix"] ["pass"]) 
-			)
-		{
-			//DownloadPremium($link);
-		}
-		else
-		{
-			DownloadFree($link);
-		}		
+          if(preg_match('/http:\/\/.+filesonic\.com\/folder\/[^\'"]+/i', $link, $match)){
+          if(!$match[0]){html_error ( 'Link not found' );}
+          $page = GetPage($link,0,0,0); 
+          preg_match_all('/<td><a href="(.*)">/i', $page, $matches);
+          if (! is_file ( "audl.php" )) html_error ( 'audl.php not found' );
+          echo "<form action=\"audl.php?GO=GO\" method=post>\n";
+          echo "<input type=hidden name=links value='" . implode ( "\r\n", $matches [1] ) . "'>\n";
+          foreach ( array ( "useproxy", "proxy", "proxyuser", "proxypass" ) as $v )
+          echo "<input type=hidden name=$v value=" . $_GET [$v] . ">\n";
+          echo "<script language=\"JavaScript\">void(document.forms[0].submit());</script>\n</form>\n";
+          flush ();
+          exit ();
+          }
+    if ( ($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) ||
+      ($_REQUEST ["premium_acc"] == "on" && $premium_acc ["filesonic_com"] ["user"] && $premium_acc ["filesonic_com"] ["pass"] ) ) 
+                      
+                {
+			DownloadPremium($link);
+                }else
+                if( $_POST['pass_pre'] == "ok") { 
+                global $Referer;
+                $post["passwd"]=$_POST['password'];
+                $link=$_POST['link'];
+                $cookie=$_POST['cookie'];
+                $page = GetPage($link, $cookie, $post, $Referer );
+                is_page($page);
+                if (stristr ( $page, "Location:" )) {
+                $Href = trim ( cut_str ( $page, "Location: ", "\n" ) );
+                $FileName = $_POST["name"];               
+                RedirectDownload($Href,$FileName,$cookie);exit;}
+                DownloadPremium($link);
+                }else
+                if( $_POST['pass_free'] == "ok") {
+                global $Referer;    
+                $post["passwd"]=$_POST['password_free'];
+                $link=$_POST['link'];
+                $cookie=$_POST['cookie'];
+                $page = GetPage($link, $cookie, $post, $Referer );
+                is_page($page);
+                DownloadFree($link);
+                }
+                else
+                {
+      DownloadFree($link);
+                }               	
 	}
+	function DownloadFree($link) {
+                global $Referer,$download_dir;
+               
+                if( $_POST['captcha'] == "ok") {
+                @unlink(urldecode($_POST["delete"]));
+                $post=unserialize(urldecode($_POST['post']));
+                $post["recaptcha_response_field"] =$_POST["capt"];
+                $cookie=urldecode($_POST["cookie"]);
+                $link = $_POST["link"];
+                $page = GetPage($link,$cookie,$post,$Referer); 
+                is_page($page);
+                if(preg_match('/http:\/\/.+filesonic\.com\/download\/[^\'"]+/i', $page, $linkdr)){
+                $Href = trim ($linkdr[0]);
+                $FileName = $_POST["name"];               
+                RedirectDownload($Href,$FileName,$cookie);exit;}
+                }
+                if($_POST['captcha'] == "ok"){echo  ("<center><font color=red><b>Wrong captcha .Please re-enter</b></font></center>");}
 
-	function DownloadFree( $link )
-	{
-	    global $PHP_SELF, $nn;
-	    $Referer = $link;
-		if( isset($_POST['step']) && $_POST['step'] == "1"){
-		  $post=array();
-	      //$post["?&code"]= $_POST["captcha"];
-	      $post["code"]= $_POST["captcha"];
-          $cookie=urldecode($_POST["cookie"]); 
-		  $FileName = urldecode($_POST["filename"]);
-		  $id=$_POST["id"];
-		  $verify = "http://sharingmatrix.com/ajax_scripts/verifier.php";
-		  $page = GetPage( $verify, $cookie, $post, $Referer );
-		  
-		  $snap = substr ( stristr ( $page, "\r\n\r\n" ), strlen ( "\r\n\r\n" ) );
-	      $st = explode("\r\n", $snap);
-          $st = join("", $st);
-		  if(preg_match("/7.*\r\n(\d{1})\r\n.*/", $snap, $cucok)){
-		    $match = $cucok[1];
-		  }
-
-	      if( isset($match) && $match == "1" ){
-		    $dl = "http://sharingmatrix.com/ajax_scripts/dl.php";
-		    $page = GetPage( $dl, $cookie, 0, $Referer );
-			
-		    preg_match('/\d+\r\n(\d+)\r\n\d+/i', $page, $mh);
-	        $did=$mh[1];	      
-	        $_get = "http://sharingmatrix.com/ajax_scripts/_get.php?link_id=".$id."&link_name=".$FileName."&dl_id=".$did."&password=";
-		    $page = GetPage( $_get, $cookie, 0, $Referer );
-		    $sv = cut_str ( $page ,'serv:"' ,'"' );
-	        $hs = cut_str ( $page ,'hash:"' ,'"' );
-	        $dwn=$sv."/download/".$hs."/".$did."/";
-		    
-		    RedirectDownload( $dwn, $FileName, $cookie );
-		    exit ();
-		  }else{
-		    $err_msg = "Captcha incorrect! Please reattempt";
-		  }
-		  
-		}
-		
-		$page = GetPage( $link );
-		is_present($page,"File has been deleted", "File has been deleted", 0);
-	    is_present($page,"already downloading file", "You are already downloading file. Only premium users can download several files at the same time.", 0);
-        //if($snap) html_error("download link not found , please verify the link in your browser" , 0 );
-		$cookie = GetCk($page);
-
-		preg_match('/\/file\/(\d+)/i', $link, $mh);
-	    $id = $mh[1];
-	    $req="http://sharingmatrix.com/ajax_scripts/download.php?type_membership=free&link_id=".$id ;
-		$page = GetPage( $req, $cookie, 0, $Referer );
-
-		$timer = cut_str ( $page ,"ctjv = '" ,"'" );
-	    $link_name = cut_str ( $page ,"link_name = '" ,"'" );
-	    $capcay_url = cut_str ( $page ,"CAPTCHA_IMAGE_URL = '" ,"'" );
-		if(isset($err_msg)) echo $err_msg."<br>";
-		insert_timer($timer, "Please wait");
-		
-	    $ses_url="http://sharingmatrix.com/ajax_scripts/check_timer.php?tmp=".rand(1,999);
-		$page = GetPage( $ses_url, $cookie, 0, $Referer );
-		
-		if(preg_match("/img:([\w]+)/i", $page, $cucok)){
-	      $img_url=$capcay_url . $cucok[1] . ".jpg";
-          $code = '<div align=center >'.(isset($err_msg) ? $err_msg:'').
-		           '<form method="post" action="'.$PHP_SELF.(isset($_GET["idx"]) ? "?idx=".$_GET["idx"] : "").'">'.$nn;
-          $code .= '<input type="hidden" name="step" value="1">'.$nn;
-          $code .= '<input type="hidden" name="link" value="'.urlencode($link).'">'.$nn;
-          $code .= '<input type="hidden" name="id" value="'.$id.'">'.$nn;
-          $code .= '<input type="hidden" name="filename" value="'.urlencode($link_name).'">'.$nn;
-          $code .= '<input type="hidden" name="cookie" value="'.urlencode($cookie).'">'.$nn;
-          $code .= 'Please enter : <img src="'.$img_url.'?'.rand(1,10000).'"><br><br>'.$nn;
-          $code .= '<input type="text" name="captcha"> <input type="submit" value="Download">'.$nn;
-          $code .= '</form></div>';
-          exit($code);
-		
-		}else{
-		
-		    preg_match('/\d+\r\n(\d+)\r\n\d+/i', $page, $mh);
-	        $did=$mh[1];	      
-	        $_get = "http://sharingmatrix.com/ajax_scripts/_get.php?link_id=".$id."&link_name=".$FileName."&dl_id=".$did."&password=";
-		    $page = GetPage( $_get, $cookie, 0, $Referer );
-		    $sv = cut_str ( $page ,'serv:"' ,'"' );
-	        $hs = cut_str ( $page ,'hash:"' ,'"' );
-	        $dwn=$sv."/download/".$hs."/".$did."/";
-		    
-		    RedirectDownload( $dwn, $FileName, $cookie );
-		}
-		
+                $page = GetPage( $link, 0, 0, 0);
+                $cookie = GetCookies($page);
+                if (stristr ( $page, "Location:" ))
+                {
+                $link = trim(cut_str($page, "Location:","\n"));
+                }
+                $page = GetPage($link,$cookie,0,0);
+                is_page($page);
+                preg_match('/\/file\/(\d+)/i', $link, $mh);
+                $id = $mh[1];
+                preg_match ( '%<input type="text" value="(.*)" name="URL_%', $page, $fname );
+                $linkcheck = $fname[1];
+                $FileName = basename ($linkcheck);
+                preg_match('/<a href="(.*)" id="free_download">/', $page, $match);
+                $linkcd = "http://www.filesonic.com/file/$id/$match[1]"; 
+                $page = GetPage($linkcd,$cookie,0,$Referer);
+                is_page($page);	
+                if(strpos ( $page ,'<h3><span>Download Error</span></a></h3>' )){
+                        html_error("Download link error by parallel downloads", 0);
+                }
+                if (stristr ( $page, "Please wait" ))
+                {
+                preg_match ( '/var countDownDelay = (.*);/', $page, $count );
+                $countDown = trim($count [1]); 
+                if($countDown<90){
+                insert_timer( $countDown, "Waiting link timelock","",true );
+                }
+                if ($countDown>90) {
+                    echo ('<script type="text/javascript">');
+                    echo ('wait_time = ' . ($countDown + 1) . ';');
+                    echo ('function waitLoop() {');
+                    echo ('if (wait_time == 0) {');
+                    echo ('location.reload();');
+                    echo ('}');
+                    echo ('wait_time = wait_time - 1;');
+                    echo ('document.getElementById("waitTime").innerHTML = wait_time;');
+                    echo ('setTimeout("waitLoop()",1000);');
+                    echo ('}');
+                    echo ('</script>');
+                    echo '<br /><img src="http://images3.rapidshare.com/img/waitingdude.png" alt="" /><br /><br />';
+                    html_error("Download limit exceeded. You have to wait <font color=black><span id='waitTime'>$countDown</span></font> second(s) until the next download.<script>waitLoop();</script>", 0);
+                    }   
+                }
+                if (stristr ( $page, "Please Enter Password:" ))
+                {
+                preg_match('%<form enctype="application/x-www-form-urlencoded" action="(.*)" method="post">%', $page, $match);
+                $linkpw = "http://www.filesonic.com$match[1]"; 
+                ?>
+                        <center>
+                        <form action="<?php echo $PHP_SELF; ?>" method="post"  />
+                        <br><b>- Password Protected File -</b><br><font class="small">Please enter the password below to download this file</font><br/>
+                        <input type="hidden" name="link" value="<?php echo $linkpw;?>" />
+                        <input type="hidden" name="cookie" value="<?php echo $cookie;?>" />
+                        <input type="hidden" name="pass_free" value="ok" />
+                        <input type="text" name="password_free" /><p><input type="submit" value="Submit" /></p>
+                        </form>
+                        <?php
+                        exit ();
+                }
+                $tm = cut_str($page, "name='tm' value='","'");
+                $tm_hash = cut_str($page, "name='tm_hash' value='","'");
+                unset($post);
+                $post["tm"] =$tm;
+                $post["tm_hash"] =$tm_hash;
+                $page = GetPage($linkcd,$cookie,$post,$Referer);
+                is_page($page);	
+                if (stristr ( $page, "Please Enter Captcha:" ))
+                {     
+                preg_match('/<form action="(.*)" method="post" id="captchaForm">/', $page, $match);
+                $linkstart = "$link$match[1]";
+                $ch = cut_str ( $page ,'Recaptcha.create("' ,'"' );
+                $cachestop = rand();
+                $linkcaptcha ="http://www.google.com/recaptcha/api/challenge?k=$ch&cachestop=".$cachestop."&ajax=1";
+                $page = GetPage($linkcaptcha,0,0,0); 
+                is_page($page);
+                $cookieApi = GetCookies($page);
+                $ch=cut_str ( $page ,"challenge : '" ,"'" );
+                if($ch) {
+                $linkch = "http://www.google.com/recaptcha/api/image?c=".$ch;
+                $page = GetPage($linkch,$cookieApi,0,0); 
+                $headerend = strpos($page,"\r\n\r\n");
+                $pass_img = substr($page,$headerend+4);
+                $imgfile = $download_dir."filesonic_captcha.jpg";
+                if (file_exists($imgfile)) {unlink($imgfile);}
+                write_file($imgfile, $pass_img);
+                } else {html_error("Error get captcha. Please try again!", 0);}
+                $post['recaptcha_challenge_field']=$ch;
+                print	"<form method=\"post\" action=\"".$PHP_SELF.(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "")."\">$nn";
+                print	"<h4>Enter <img src=\"$imgfile\"> here:</h4><input name=\"capt\" type=\"text\" >$nn";
+                print	"<input name=\"link\" value=\"$linkstart\" type=\"hidden\">$nn";
+                print   '<input type="hidden" name="post" value="'.urlencode(serialize($post)).'">'.$nn;
+                print	"<input name=\"captcha\" value=\"ok\" type=\"hidden\">$nn";
+                print	"<input type=\"hidden\" name=\"cookie\"  value=\"".urlencode($cookie)."\" >".$nn;
+                print	"<input name=\"name\" value=\"$FileName\" type=\"hidden\">$nn";
+                print	"<input type=\"hidden\" name=\"delete\"  value=\"".urlencode($imgfile)."\" >".$nn;
+                print	"<input name=\"Submit\" value=\"Submit\" type=\"submit\"></form>";
+                exit;
+                }
+                if(strpos ( $page ,'<h3><span>Download Error</span></a></h3>' )){
+                        html_error("Download link error by parallel downloads", 0);
+                }
+                if(preg_match('/http:\/\/.+filesonic\.com\/download\/[^\'"]+/i', $page, $linkdr)){
+                $Href = trim ($linkdr[0]);
+                $FileName = basename ($link);              
+                RedirectDownload($Href,$FileName,$cookie);
+                }
+                DownloadFree($link);       
 	}
-	
-	function DownloadPremium($link)
-	{
-		global $premium_acc;
-		$Referer = $link;
-	    $sm_user = $_REQUEST["premium_user"] ? trim( $_REQUEST["premium_user"] ) : $premium_acc["sharingmatrix"]["user"];
-		$sm_pass = $_REQUEST["premium_pass"] ? trim( $_REQUEST["premium_pass"] ) : $premium_acc["sharingmatrix"]["pass"];
-		$loginUrl='http://sharingmatrix.com/ajax_scripts/login.php?email='.$sm_user.'&password='.$sm_pass.'&remember_me=false';
-		$page = GetPage( $loginUrl, 0, $post, $Referer );
-		$cookie = "PHPSESSID=".cut_str ( $page ,'Set-Cookie: PHPSESSID=' ,';' );
-	    $snap = cut_str ( $page ,"\r\n\r\n" ,"\r\n\r\n" );
-	    $st= explode("\r\n",$snap);
-        $st= join("", $st);
-	    if( $st !== "110" ){
-	       html_error( "Bad username/password combination" , 0 );
-	    }
-		
-		$page = GetPage( $link, $cookie, 0, $Referer );
-		$snap = cut_str ( $page ,"sUrl='http://" ,"'" );
-	    is_present($page,"File has been deleted", "File has been deleted", 0);
-	    if($snap) html_error("download link not foun , please verify the link in your browser" , 0 );
-		$FileName = cut_str ( $page ,'link_name=' ,'&' );
-		
-		$page = GetPage( "http://".$snap, $cookie, 0, $Referer );
-		$sv = cut_str ( $page ,'serv:"' ,'"' );
-	    $hs = cut_str ( $page ,'hash:"' ,'"' );
-	    $dwn=$sv."/download/".$hs."/0/";
-		 
-		RedirectDownload( $dwn, $FileName, $cookie, 0, $Referer );
-		exit ();
-	}
-	
-	/**
-	 * You can use this function to retrieve pages without parsing the link
-	 * 
-	 * @param string $link The link of the page to retrieve
-	 * @param string $cookie The cookie value if you need
-	 * @param array $post name=>value of the post data
-	 * @param string $referer The referer of the page, it might be the value you are missing if you can't get plugin to work
-	 * @param string $auth Page authentication, unneeded in most circumstances
-	 */
+	function DownloadPremium($link) {
+		global $Referer, $premium_acc;
+                
+                $page = GetPage( $link, 0, 0, 0);
+                is_present($page, 'This file was deleted', 'Download link not found');
+                if (stristr ( $page, "Location:" ))
+                {
+                $link = trim(cut_str($page, "Location:","\n"));
+                }
+                $page = GetPage( $link, 0, 0, $Referer);
+                preg_match ( '%<input type="text" value="(.*)" name="URL_%', $page, $fname );
+                $linkcheck = $fname[1];
+                $filename = basename ($linkcheck);
+                $page = GetPage("http://www.filesonic.com",0,0,0);
+                is_page($page);			
+                $cookie = GetCookies($page);
+                $post = array ();
+                $postlog['rememberMe'] = '1';
+                $post ["email"] = $_GET ["premium_user"] ? $_GET ["premium_user"] : $premium_acc ["filesonic_com"] ["user"];
+                $post ["password"] = $_GET ["premium_pass"] ? $_GET ["premium_pass"] : $premium_acc ["filesonic_com"] ["pass"];
+                $page = GetPage('http://www.filesonic.com/user/login',$cookie,$post,0);
+                is_page($page);	
+                $cookie = GetCookies($page);
+                is_notpresent($cookie, 'nickname=', 'Error logging in - Account not found!');
+                $page = GetPage($link,$cookie,0,$Referer);
+                 if (stristr ( $page, "Please Enter Password:" ))
+                {      
+                 preg_match('%<form enctype="application/x-www-form-urlencoded" action="(.*)" method="post">%', $page, $match);
+                 $linkpw = "http://www.filesonic.com$match[1]"; 
+                        ?>
+                        <center>
+                        <form action="<?php echo $PHP_SELF; ?>" method="post"  />
+                        <br><b>- Password Protected File -</b><br><font class="small">Please enter the password below to download this file</font><br/>
+                        <input type="hidden" name="link" value="<?php echo $linkpw;?>" />
+                        <input type="hidden" name="cookie" value="<?php echo $cookie;?>" />
+                        <input type="hidden" name="name" value="<?php echo $filename;?>" />
+                        <input type="hidden" name="pass_pre" value="ok" />
+                        <input type="text" name="password" /><p><input type="submit" value="Submit" /></p>
+                        </form>
+                        <?php
+                        exit ();
+                }
+                if (stristr ( $page, "Location:" )) {
+                $Href = trim ( cut_str ( $page, "Location: ", "\n" ) );
+                $FileName = $filename;               
+                RedirectDownload($Href,$FileName,$cookie);
+                }
+                else{
+                html_error ( "Download link not found", 0 );
+                }   
+        }           
+
 	function GetPage($link, $cookie = 0, $post = 0, $referer = 0, $auth = 0) {
 		global $pauth;
 		if (!$referer) {
 			global $Referer;
 			$referer = $Referer;
 		}
-
 		$Url = parse_url(trim($link));
 		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $referer, $cookie, $post, 0, $_GET ["proxy"], $pauth, $auth );
 		is_page ( $page );
 		return $page;
 	}
-	
-	/**
-	 * Use this function instead of insert_location so that we can improve this feature in the future
-	 * 
-	 * @param string $link The download link of the file
-	 * @param string $FileName The name of the file
-	 * @param string $cookie The cookie value
-	 * @param array $post The post value will be serialized here
-	 * @param string $referer The page that refered to this link
-	 * @param string $auth In format username:password
-	 * @param array $params This parameter allows you to add extra _GET values to be passed on
-	 */
+
 	function RedirectDownload($link, $FileName, $cookie = 0, $post = 0, $referer = 0, $auth = "", $params = array()) {
 		global $pauth;
 		if (!$referer) {
@@ -214,19 +283,8 @@ if (!defined('RAPIDLEECH'))
 
 		insert_location ( $loc );
 	}
-	
 
-	// Manual get cookie
-	function GetCk($content){
-      $parthead = preg_replace('/Set-Cookie: .+deleted.+|Set-Cookie: .+=;.+/i', '', $content);
-      preg_match_all('/Set-Cookie: (.*);/U',$parthead,$temp);
-      $cookie = $temp[1];
-      $cook = implode('; ',$cookie);
-      return $cook;
-    }
-	
-/************************sharingmatrix.com**********************************	
- WRITTEN BY KAOX 08-oct-09
- Update by Idx 10-May-2010
-************************sharingmatrix.com**********************************/
+// Written by VinhNhaTrang 21.10.2010
+// fix by VinhNhaTrang 21.11.2010
+// Rewrite into 36B by Ruud v.Tony
 ?>

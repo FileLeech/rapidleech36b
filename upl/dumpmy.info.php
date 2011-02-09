@@ -3,14 +3,14 @@
 <tr><td align=center>
 	
 <div id=info width=100% align=center>Retrive upload ID</div>
-<?php
+<?
 			$ref='http://dumpmy.info/';
 ?>
 <script>document.getElementById('info').style.display='none';</script>
 <table width=600 align=center>
 </td></tr>
 <tr><td align=center>
-<?php
+<?
 
 			$rnd=time();
 			$upurl=$ref.'ubr_link_upload.php?rnd_id='.$rnd.'000';
@@ -44,7 +44,7 @@
 ?>
 <script>document.getElementById('progressblock').style.display='none';</script>
 <div id=final width=100% align=center>Get final code</div>
-<?php		
+<?php
 			is_page($upfiles);
 			$finish_url=trim(cut_str($upfiles,'Location:',"\n"));
 			if (!$finish_url) html_error ('Error get location');
@@ -56,7 +56,7 @@
 			$download_link=$ref.$tmp;
 ?>
 <script>document.getElementById('final').style.display='none';</script>
-<?php
+<?
 
 // sert 28.02.2009 - by pL413R - www.ultrashare.info
 ?>

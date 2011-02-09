@@ -1,212 +1,229 @@
-<?php
-if (! defined ( 'RAPIDLEECH' ))
-  { require_once("404.php"); exit; }
-
-if (preg_match ( "/f=(\w+)/", $Url ["query"], $matches )) {
-	$page = geturl ( "www.megaupload.com", 80, "/xml/folderfiles.php?folderid=" . $matches [1], 0, 0, 0, 0, $_GET ["proxy"], $pauth );
-	if (! preg_match_all ( "/url=\"(http[^\"]+)\"/", $page, $matches )) html_error ( 'link not found' );
+<?php    
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
+}
+	  
+	Download( $LINK );
+	function Download($link) {
+		global $premium_acc, $mu_cookie_user_value;
+		//Get link folder
+		$matches = "";
+		$Url = parse_url(trim($link));
+		if (preg_match ( "/f=(\w+)/", $Url ["query"], $matches )) {
+			$page = GetPage("http://www.megaupload.com/xml/folderfiles.php?folderid=" . $matches [1]);
+			if (! preg_match_all ( "/url=\"(http[^\"]+)\"/", $page, $matches )) html_error ( 'link not found' );
+			
+			if (! is_file ( "audl.php" )) html_error ( 'audl.php not found' );
+			echo "<form action=\"audl.php?GO=GO\" method=post>\n";
+			echo "<input type=hidden name=links value='" . implode ( "\r\n", $matches [1] ) . "'>\n";
+			foreach ( array ( "useproxy", "proxy", "proxyuser", "proxypass" ) as $v )
+				echo "<input type=hidden name=$v value=" . $_GET [$v] . ">\n";
+			echo "<script language=\"JavaScript\">void(document.forms[0].submit());</script>\n</form>\n";
+			flush ();
+			exit ();
+		}
+		//Redirect
+    if (($_GET ["premium_acc"] == "on" && $_GET ["premium_user"] && $_GET ["premium_pass"])
+    || ($_GET ["premium_acc"] == "on" && $premium_acc ["megaupload"] ["user"] && $premium_acc ["megaupload"] ["pass"])
+    || ($_GET ["mu_acc"] == "on" && ($_GET ["mu_cookie"] || $_GET["mu_hash"] || $_GET["auth_hash"] || $mu_cookie_user_value)) )
+		{
+			DownloadPremium($link);
+		} 
+		else 
+		{
+			DownloadFree($link);
+		}
+	}
 	
-	if (! is_file ( "audl.php" )) html_error ( 'audl.php not found' );
-	echo "<form action=\"audl.php?GO=GO\" method=post>\n";
-	echo "<input type=hidden name=links value='" . implode ( "\r\n", $matches [1] ) . "'>\n";
-	foreach ( array (
-		"useproxy", "proxy", "proxyuser", "proxypass" 
-	) as $v )
-		echo "<input type=hidden name=$v value=" . $_GET [$v] . ">\n";
-	echo "<script language=\"JavaScript\">void(document.forms[0].submit());</script>\n</form>\n";
-	flush ();
-	exit ();
-}
+	function DownloadFree($link) 
+	{
+        global $Referer;
+		$post = array();
 
-if ($_GET ["step"] != "1") {
-	list ( $LINK, $filepassword ) = explode ( "|", $LINK, 2 );
-	$LINK = preg_replace ( "/\.com\/[a-z]{2}\//", ".com/", $LINK );
-	$Url = parse_url ( trim($LINK) );
-	$filepassword = trim($filepassword);
-}
+		//Get password
+		$arr = explode("|", $link);
+		if (count($arr)>=2) 
+		{
+			$link = $arr[0];
+			$post ["filepassword"] = $arr[1];
+		}
+		
+		$page = GetPage($link, 0, $post, $Referer);
+        is_present ( $page, "The file you are trying to access is temporarily unavailable" );
+		is_present ( $page, "link you have clicked is not available", "File not found, Unfortunately, the link you have clicked is not available!" );
 
-/* 
-sent from audl
-index.php?&mu_acc=on&mu_hash=HASHED_COOKIE&link=BASE64_LINK&idx=|manual
-*/
-if (($_GET ["premium_acc"] == "on" && $_GET ["premium_user"] && $_GET ["premium_pass"]) 
-|| ($_GET ["premium_acc"] == "on" && $premium_acc ["megaupload"] ["user"] && $premium_acc ["megaupload"] ["pass"]) 
-|| ($_GET ["mu_acc"] == "on" && ($_GET ["mu_cookie"] || $_GET["mu_hash"] || $_GET["auth_hash"] || $mu_cookie_user_value)) ) {
-	if ($_GET['step'] == 1) {
-		$post ["filepassword"] = $_GET ['filepassword'];
-		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $Referer, $premium_cookie, $post, 0, $_GET ["proxy"], $pauth );
-	} else {
-		$post = array ();
+		if (stristr($page,'password protected')) 
+		{
+			html_error("Password is incorrect! Input link with password: Link|Password.");
+        }
+		
+		//$countDown = trim ( cut_str ( $page, "count=",";" ) );
+		$countDown = rand(5, 10);
+		insert_timer( $countDown, "<b>Megaupload Free User</b>.","",true );
+		
+		preg_match('/http:\/\/(.*)" class="down_butt1"/', $page, $match);
+		if (isset($match[1])) 
+		{
+			$Href = 'http://'.$match[1];
+			$Url = parse_url ( html_entity_decode($Href, ENT_QUOTES, 'UTF-8') );
+			if (! is_array ( $Url )) 
+			{
+				html_error ( "Download link not found, Plugin needs to be updated Error 1!", 0 );
+			}
+			$FileName = ! $FileName ? strip_quotes(basename ( stripslashes($Url ["path"]) )) : $FileName;
+			RedirectDownload( $Href, $FileName );
+			exit ();
+		}
+		else 
+		{
+			html_error ( "Download link not found, Plugin needs to be updated Error 2!", 0 );
+        }
+	}
+	
+	function DownloadPremium($link) 
+	{
+		global $Referer, $premium_acc, $mu_cookie_user_value;
+		
+		$post = array();
 		$post ['login'] = 1;
-		$post ['redir'] = 1;
-		
-		if(isset($_GET["auth_hash"])){
-		 require_once("other.php");
-		 $split_hash = explode(":", strrev(dcd($_GET["auth_hash"])));
-		 if(count($split_hash)>1)
-		 {
-			$_GET["premium_user"] = $split_hash[0];
-			$_GET["premium_pass"] = $split_hash[1];
-		 }
-		}		
-		
+
+    if(isset($_GET["auth_hash"])){
+      require_once("other.php");
+      $split_hash = explode(":", strrev(dcd($_GET["auth_hash"])));
+      if(count($split_hash)>1)
+      {
+      $_GET["premium_user"] = $split_hash[0];
+      $_GET["premium_pass"] = $split_hash[1];
+      }
+    }
+                  
 		$post ["username"] = $_GET ["premium_user"] ? $_GET ["premium_user"] : $premium_acc ["megaupload"] ["user"];
 		$post ["password"] = $_GET ["premium_pass"] ? $_GET ["premium_pass"] : $premium_acc ["megaupload"] ["pass"];
-		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, "/?c=login", 0, 0, $post, 0, $_GET ["proxy"], $pauth );
-		is_page ( $page );
-		
-		$premium_cookie = trim ( cut_str ( $page, "Set-Cookie:", ";" ) );
-		
-		if ($mu_cookie_user_value) {
-			$premium_cookie = 'user=' . $mu_cookie_user_value;
-		} elseif ($_GET ["mu_acc"] == "on" && $_GET ["mu_cookie"]) {
-			$premium_cookie = 'user=' . $_GET ["mu_cookie"];
-		} elseif ($_GET["mu_hash"]) {
-			$premium_cookie = 'user=' . strrev(dcd($_GET["mu_hash"]));		
-		} elseif (! stristr ( $premium_cookie, "user" )) {
-			html_error ( "Cannot use premium account", 0 );
-		}
-		
-		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), 0, $premium_cookie, $filepassword ? array (
-			"filepassword" => $filepassword 
-		) : 0, 0, $_GET ["proxy"], $pauth );
-		is_page ( $page );
-		
-		$Href = $LINK;
-		$Referer = $LINK;
-		if (stristr ( $page, 'password protected' )) {
-			html_error("You should insert link with format: http://www.megaupload.com/?d=xxxxxxxx|password");
-		}
-	}
-	
-	if (stristr ( $page, "Location:" )) {
-		$Href = trim ( cut_str ( $page, "Location: ", "\n" ) );
-		//$Url = parse_url ( $Href );
-		$Url = parse_url ( html_entity_decode($Href, ENT_QUOTES, 'UTF-8') );
-		//$FileName = ! $FileName ? basename ( $Url ["path"] ) : $FileName;
-		$FileName = ! $FileName ? strip_quotes(basename ( stripslashes($Url ["path"]) )) : $FileName;
-		
-		insert_location ( "$PHP_SELF?filename=" . urlencode ( $FileName ) . "&host=" . $Url ["host"] . "&path=" . urlencode ( $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : "") ) . "&referer=" . urlencode ( $Referer ) . "&cookie=" . urlencode ( $premium_cookie ) . "&email=" . ($_GET ["domail"] ? $_GET ["email"] : "") . "&partSize=" . ($_GET ["split"] ? $_GET ["partSize"] : "") . "&method=" . $_GET ["method"] . "&proxy=" . ($_GET ["useproxy"] ? $_GET ["proxy"] : "") . "&saveto=" . $_GET ["path"] . "&link=" . urlencode ( $LINK ) . ($_GET ["add_comment"] == "on" ? "&comment=" . urlencode ( $_GET ["comment"] ) : "") . ($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") );
-	} elseif ($page = cut_str ( $page, 'downloadlink">', '</div>' )) {
-		$Href = cut_str ( $page, 'href="', '"' );
-		$Referer = $LINK;
-		//$Url = parse_url ( $Href );
-		$Url = parse_url ( html_entity_decode($Href, ENT_QUOTES, 'UTF-8') );
-		//$FileName = ! $FileName ? basename ( $Url ["path"] ) : $FileName;
-		$FileName = ! $FileName ? strip_quotes(basename ( stripslashes($Url ["path"]) )) : $FileName;
-		
-		insert_location ( "$PHP_SELF?filename=" . urlencode ( $FileName ) . "&host=" . $Url ["host"] . "&path=" . urlencode ( $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : "") ) . "&referer=" . urlencode ( $Referer ) . "&cookie=" . urlencode ( $premium_cookie ) . "&email=" . ($_GET ["domail"] ? $_GET ["email"] : "") . "&partSize=" . ($_GET ["split"] ? $_GET ["partSize"] : "") . "&method=" . $_GET ["method"] . "&proxy=" . ($_GET ["useproxy"] ? $_GET ["proxy"] : "") . "&saveto=" . $_GET ["path"] . "&link=" . urlencode ( $LINK ) . ($_GET ["add_comment"] == "on" ? "&comment=" . urlencode ( $_GET ["comment"] ) : "") . ($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") );
-	} else {
-		html_error ( "Download link not found", 0 );
-	}
-} 
-else 
-{
-	$cookie = array (
-		"user=XTOKCFTTQUGFM50AQ9C6AAY1SDEH-34O; megauploadtoolbar_id=D910E987B19B436EBF452B3C0D503909; megauploadtoolbar_visible=yes; toolbar=1; MUTBI=E%3D3%2CP%3D3; v=1" 
-	);
-	
-	if ($_GET ["step"] == "1" || $filepassword) {
-		if ($_GET ["step"] == "1") {
-			$post ["captchacode"] = $_GET ["imagecode"];
-			$post ["captcha"] = $_GET ["imagestring"];
-			$post ["megavar"] = $_GET ["megavar"];
-		} else
-			$post ["filepassword"] = $filepassword;
-		
-		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $Referer, $cookie, $post, 0, $_GET ["proxy"], $pauth );
-		is_page ( $page );
-		
-		is_present ( $page, "The file you are trying to access is temporarily unavailable" );
-		if (! stristr ( $page, "id=\"captchaform" )) {
-			$countDown = trim ( cut_str ( $page, "count=", ";" ) );
-			$countDown = (! is_numeric ( $countDown ) ? 26 : $countDown);
-			
-			$Href = cut_str ( $page, 'downloadlink"><a href="', '"' );
-			//$Url = parse_url ( $Href );
-			$Url = parse_url ( html_entity_decode($Href, ENT_QUOTES, 'UTF-8') );
-			if (! is_array ( $Url )) {
-				html_error ( "Download link not found", 0 );
-			}
-			insert_timer ( $countDown, "The file is being prepared.", "", true );
-			$FileName = ! $FileName ? strip_quotes(basename ( stripslashes($Url ["path"]) )) : $FileName;
-			
-			insert_location ( "$PHP_SELF?filename=" . urlencode ( $FileName ) . "&host=" . $Url ["host"] . "&path=" . urlencode ( $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : "") ) . "&referer=" . urlencode ( $Referer ) . "&email=" . ($_GET ["domail"] ? $_GET ["email"] : "") . "&partSize=" . ($_GET ["split"] ? $_GET ["partSize"] : "") . "&method=" . $_GET ["method"] . "&proxy=" . ($_GET ["useproxy"] ? $_GET ["proxy"] : "") . "&saveto=" . $_GET ["path"] . "&link=" . urlencode ( $LINK ) . ($_GET ["add_comment"] == "on" ? "&comment=" . urlencode ( $_GET ["comment"] ) : "") . ($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") );
-			exit ();
-		}
-	} else {
-		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), 0, $cookie, 0, 0, $_GET ["proxy"], $pauth );
-		is_page ( $page );
-		
-		if (stristr ( $page, "Location:" )) {
-			$Referer = $LINK;
-			$Href = trim ( cut_str ( $page, "ocation:", "\n" ) );
-			//$Url = parse_url ( $Href );
-			$Url = parse_url ( html_entity_decode($Href, ENT_QUOTES, 'UTF-8') );
-			
-			$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $Referer, $cookie, 0, 0, $_GET ["proxy"], $pauth );
-			is_page ( $page );
-			
-			is_present ( $page, "All download slots assigned to your country", "All download slots assigned to your country are currently in use" );
-			
-			if (! stristr ( $page, "gencap.php?" )) {
-				print "An error occured, see details below:<br>" . $nn . str_replace ( "<HEAD>", "<HEAD>$nn<base href=\"http://www.megaupload.com\">", $page );
-				exit ();
-			}
-			$LINK = $Href;
-		}
-		is_present ( $page, 'The file you are trying to access is temporarily unavailable' );
-		is_present ( $page, 'the link you have clicked is not available', 'Invalid link' );
-		is_present ( $page, 'This file has expired due to inactivity' );
-		
-		$Href = $LINK;
-		$Referer = $LINK;
-		if (stristr ( $page, 'password protected' )) {
-			print "<form name=\"dl\" action=\"".$PHP_SELF."?".(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "")."\" method=\"post\">\n";
-			print "<input type=\"hidden\" name=\"link\" value=\"" . urlencode ( $Href ) . "\">\n<input type=\"hidden\" name=\"referer\" value=\"" . urlencode ( $Referer ) . "\">\n<input type=\"hidden\" name=\"fileid\" value=\"$fid\">\n<input type=\"hidden\" name=\"imagecode\" value=\"$imagecode\">\n<input type=\"hidden\" name=\"megavar\" value=\"$megavar\">\n<input type=\"hidden\" name=\"step\" value=\"1\">\n";
-			print "<input type=\"hidden\" name=\"comment\" id=\"comment\" value=\"" . $_GET ["comment"] . "\">\n<input type=\"hidden\" name=\"email\" id=\"email\" value=\"" . $_GET ["email"] . "\">\n<input type=\"hidden\" name=\"partSize\" id=\"partSize\" value=\"" . $_GET ["partSize"] . "\">\n<input type=\"hidden\" name=\"method\" id=\"method\" value=\"" . $_GET ["method"] . "\">\n";
-			print "<input type=\"hidden\" name=\"proxy\" id=\"proxy\" value=\"" . $_GET ["proxy"] . "\">\n<input type=\"hidden\" name=\"proxyuser\" id=\"proxyuser\" value=\"" . $_GET ["proxyuser"] . "\">\n<input type=\"hidden\" name=\"proxypass\" id=\"proxypass\" value=\"" . $_GET ["proxypass"] . "\">\n<input type=\"hidden\" name=\"path\" id=\"path\" value=\"" . $_GET ["path"] . "\">\n";
-			print "<h4>Enter password here: <input type=\"text\" name=\"filepassword\" size=\"13\">&nbsp;&nbsp;<input type=\"submit\" onclick=\"return check()\" value=\"Download File\"></h4>\n";
-			print "<script language=\"JavaScript\">" . $nn . "function check() {" . $nn . "var imagecode=document.dl.imagestring.value;" . $nn . 'if (imagecode == "") { window.alert("You didn\'t enter the image verification code"); return false; }' . $nn . 'else { return true; }' . $nn . '}' . $nn . '</script>' . $nn;
-			print "</form>\n</body>\n</html>";
-			exit ();
-		}
-		
-		if (stristr ( $page, "?c=happyhour" )) {
-			preg_match ( '/<a href="(.*)" style="font-size:15px;"/', $page, $tmp );
-			if (! $tmp [1]) {
-				html_error ( "Download link not found in happy hour" );
-			}
-			$Href = $tmp [1];
-			//$Url = parse_url ( $Href );
-			$Url = parse_url ( html_entity_decode($Href, ENT_QUOTES, 'UTF-8') );
-			if (! is_array ( $Url )) {
-				html_error ( "Download link not found", 0 );
-			}
-			$FileName = ! $FileName ? strip_quotes(basename ( stripslashes($Url ["path"]) )) : $FileName;
-			
-			insert_location ( "$PHP_SELF?filename=" . urlencode ( $FileName ) . "&host=" . $Url ["host"] . "&path=" . urlencode ( $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : "") ) . "&referer=" . urlencode ( $Referer ) . "&email=" . ($_GET ["domail"] ? $_GET ["email"] : "") . "&partSize=" . ($_GET ["split"] ? $_GET ["partSize"] : "") . "&method=" . $_GET ["method"] . "&proxy=" . ($_GET ["useproxy"] ? $_GET ["proxy"] : "") . "&saveto=" . $_GET ["path"] . "&link=" . urlencode ( $LINK ) . ($_GET ["add_comment"] == "on" ? "&comment=" . urlencode ( $_GET ["comment"] ) : "") . ($pauth ? "&pauth=$pauth" : "") . (isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") );
-			exit ();
-		}
-		
-		if (! stristr ( $page, "id=\"captchaform" )) html_error ( "Image code not found", 0 );
-	}
-	
-	$Href = $LINK;
-	$Referer = $LINK;
-	$page = cut_str ( $page, 'id="captchaform">', '</FORM>' );
-	$imagecode = cut_str ( $page, 'captchacode" value="', '"' );
-	$megavar = cut_str ( $page, '<input type="hidden" name="megavar" value="', '">' );
-	
-	$access_image_url = cut_str ( $page, 'img src="', '"' );
-	
-	print "<form name=\"dl\" action=\"".$PHP_SELF."?".(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "")."\" method=\"post\">\n";
-	print "<input type=\"hidden\" name=\"link\" value=\"" . urlencode ( $Href ) . "\">\n<input type=\"hidden\" name=\"referer\" value=\"" . urlencode ( $Referer ) . "\">\n<input type=\"hidden\" name=\"fileid\" value=\"$fid\">\n<input type=\"hidden\" name=\"imagecode\" value=\"$imagecode\">\n<input type=\"hidden\" name=\"megavar\" value=\"$megavar\">\n<input type=\"hidden\" name=\"step\" value=\"1\">\n";
-	print "<input type=\"hidden\" name=\"comment\" id=\"comment\" value=\"" . $_GET ["comment"] . "\">\n<input type=\"hidden\" name=\"email\" id=\"email\" value=\"" . $_GET ["email"] . "\">\n<input type=\"hidden\" name=\"partSize\" id=\"partSize\" value=\"" . $_GET ["partSize"] . "\">\n<input type=\"hidden\" name=\"method\" id=\"method\" value=\"" . $_GET ["method"] . "\">\n";
-	print "<input type=\"hidden\" name=\"proxy\" id=\"proxy\" value=\"" . $_GET ["proxy"] . "\">\n<input type=\"hidden\" name=\"proxyuser\" id=\"proxyuser\" value=\"" . $_GET ["proxyuser"] . "\">\n<input type=\"hidden\" name=\"proxypass\" id=\"proxypass\" value=\"" . $_GET ["proxypass"] . "\">\n<input type=\"hidden\" name=\"path\" id=\"path\" value=\"" . $_GET ["path"] . "\">\n";
-	print "<h4>Enter <img src=\"$access_image_url\" style='background-color: #FFF'> here: <input type=\"text\" name=\"imagestring\" size=\"3\">&nbsp;&nbsp;<input type=\"submit\" onclick=\"return check()\" value=\"Download File\"></h4>\n";
-	print "<script language=\"JavaScript\">" . $nn . "function check() {" . $nn . "var imagecode=document.dl.imagestring.value;" . $nn . 'if (imagecode == "") { window.alert("You didn\'t enter the image verification code"); return false; }' . $nn . 'else { return true; }' . $nn . '}' . $nn . '</script>' . $nn;
-	print "</form>\n</body>\n</html>";
-}
+		$page = GetPage('http://www.megaupload.com/?c=login',0,$post,'http://www.megaupload.com');
+		is_page($page);
 
-?>
+    $premium_cookie = trim ( cut_str ( $page, "Set-Cookie:", ";" ) );
+                   
+    if ($mu_cookie_user_value) {
+          $premium_cookie = 'user=' . $mu_cookie_user_value;
+    } elseif ($_GET ["mu_acc"] == "on" && $_GET ["mu_cookie"]) {
+          $premium_cookie = 'user=' . $_GET ["mu_cookie"];
+    } elseif ($_GET["mu_hash"]) {
+          $premium_cookie = 'user=' . strrev(dcd($_GET["mu_hash"]));             
+    } elseif (! stristr ( $premium_cookie, "user" )) {
+           html_error ( "Cannot use premium account", 0 );
+    }
+	
+		//Get password
+		$post = array();
+		$arr = explode("|", $link);
+		if (count($arr)>=2) 
+		{
+			$link = $arr[0];
+			$post ["filepassword"] = $arr[1];
+		}
+		
+		$page = GetPage($link,$premium_cookie,$post,$Referer);
+		is_present ( $page, "The file you are trying to access is temporarily unavailable" );
+		is_present ( $page, "link you have clicked is not available", "File not found, Unfortunately, the link you have clicked is not available!" );
+				
+		if (stristr($page,'password protected')) 
+		{
+			html_error("Password is incorrect! Input link with password: LINK|PASSWORD.");
+		}
+
+        if (stristr ( $page, "Location:" )) 
+		{
+			//Premium with Direct active
+			$Href = trim ( cut_str ( $page, "Location: ", "\n" ) );	
+        } 
+		elseif (preg_match('/http:\/\/(.*)" class="down_ad_butt1"/', $page, $match)) 
+		{
+			//Premium with Direct disable
+			$Href = "http://" . $match[1];
+			$Referer = $link;
+        } 
+		elseif (preg_match('/http:\/\/(.*)" class="down_butt1"/', $page, $match)) 
+		{
+			//Free account - member
+			echo "<div>Using free acoount - You're member</div>";
+			$Href = "http://" . $match[1];
+			$Referer = $link;
+		} 
+		else 
+		{
+			html_error ( "Download link not found, Plugin needs to be updated!", 0 );
+        }
+		
+		$Url = parse_url ( html_entity_decode($Href, ENT_QUOTES, 'UTF-8') );
+		$FileName = ! $FileName ? strip_quotes(basename ( stripslashes($Url ["path"]) )) : $FileName;
+		RedirectDownload( $Href, $FileName, $premium_cookie );
+	}
+
+	function GetPage($link, $cookie = 0, $post = 0, $referer = 0, $auth = 0) {
+		global $pauth;
+		if (!$referer) {
+			global $Referer;
+			$referer = $Referer;
+		}
+		$Url = parse_url(trim($link));
+		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $referer, $cookie, $post, 0, $_GET ["proxy"], $pauth, $auth );
+		is_page ( $page );
+		return $page;
+	}
+
+	function RedirectDownload($link, $FileName, $cookie = 0, $post = 0, $referer = 0, $auth = "", $params = array()) {
+		global $pauth;
+		if (!$referer) {
+			global $Referer;
+			$referer = $Referer;
+		}
+		$Url = parse_url($link);
+		
+		if (substr($auth,0,6) != "&auth=") $auth = "&auth=" . $auth;
+		if (!is_array($params)) {
+			// Some problems with the plugin, quit it
+			html_error('Plugin problem! Please report, error: "The parameter passed must be an array"');
+		}
+		$addon = "";
+		if (count((array) $params) > 0) {
+			foreach ($params as $name => $value) {
+				if (is_array($value)) {
+					$value = serialize($value);
+				}
+				$addon .= '&'.$name.'='.urlencode($value).'&';
+			}
+			$addon = substr($addon,0,-1);
+		}
+		$loc = "{$_SERVER['PHP_SELF']}?filename=" . urlencode ( $FileName ) . 
+			"&host=" . $Url ["host"] . "&port=" . $Url ["port"] . "&path=" . 
+			urlencode ( $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : "") ) . 
+			"&referer=" . urlencode ( $referer ) . "&email=" . ($_GET ["domail"] ? $_GET ["email"] : "") . 
+			"&partSize=" . ($_GET ["split"] ? $_GET ["partSize"] : "") . "&method=" . $_GET ["method"] . 
+			"&proxy=" . ($_GET ["useproxy"] ? $_GET ["proxy"] : "") . "&saveto=" . $_GET ["path"] . 
+			"&link=" . urlencode ( $link ) . ($_GET ["add_comment"] == "on" ? "&comment=" . 
+			urlencode ( $_GET ["comment"] ) : "") . $auth . ($pauth ? "&pauth=$pauth" : "") . 
+			($_GET ["uploadlater"] ? "&uploadlater=".$_GET["uploadlater"]."&uploadtohost=".$_GET['uploadtohost'] : "") .
+			"&cookie=" . urlencode($cookie) .
+			"&post=" . urlencode ( serialize ( $post ) ) .
+			($_POST ["uploadlater"] ? "&uploadlater=".$_POST["uploadlater"]."&uploadtohost=".urlencode($_POST['uploadtohost']) : "").
+			($_POST ['autoclose'] ? "&autoclose=1" : "").
+			(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") . $addon;
+
+		insert_location ( $loc );
+	}
+
+
+/*******************megaupload.com*******************************\
+megaupload.com download plugin
+Updated by Raj Malhotra on 10 Jan 2010 => MegaUpload captcha is downloaded on server, then display
+Fixed by Raj Malhotra on 20 Jan 2010   => Fixed for Download link not found in happy hour
+Fixed by VinhNhaTrang on 13 Oct 2010
+Fixed by VinhNhaTrang on 30 Nov 2010
+Fixed by thangbom40000 on 1 Dec 2010   => Fix for free user and premium download, no wait time, no capcha with free user.
+Fixed by thangbom40000 on 4 Dec 2010   => Fix input link with password: LINK|PASSWORD
+Updated by Raj Malhotra on 12 Dec 2010 => Added some improvements
+Rewrite into 36B by Ruud v.Tony, also added auth hash based idoenx mods
+\*******************megaupload.com*******************************/
+ ?>

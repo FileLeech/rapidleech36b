@@ -1,9 +1,10 @@
-<?php
-if (!defined('RAPIDLEECH'))
-  {require_once("404.php");exit;}
- 
-	
-	Download( $LINK );	
+<?php    
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
+}
+	  
+	Download( $LINK );
 	function Download($link) 
 	{
 		global $premium_acc;
@@ -22,67 +23,54 @@ if (!defined('RAPIDLEECH'))
 	{
 		global $Referer;
 		$Referer = $link;
-		
 		$page = GetPage($link);
-		
-		$fileID = trim ( cut_str($page,'file_id" value="','"') );
-		$code = trim ( cut_str($page,'code" value="','"') );
-				
-		$action = trim ( cut_str($page,'action" value="','"') );
-		$Href_1 = "http://uploading.com/files";
-		$Referer = $Href_1 . "/get/" . $fileID . "/";
-		$Href_1 .= trim ( cut_str($page,'form action="http://uploading.com/files','"') );
 
+		$fileID = trim ( cut_str($page,'file_id" value="','"') );
+		$code = trim ( cut_str($page,'code" value="','"') );	
+		$action = trim ( cut_str($page,'action" value="','"') );
+		$Href_1 = trim ( cut_str($page,'form action="http://uploading.com/files','"') );
+		$Href_1 = "http://uploading.com/files".$Href_1;
 		$cookie = GetCookies($page);
 		$temp = cut_str($page,'<div class="c_1','</div>');
 		$FileName = trim(cut_str($temp,'<h2>','</h2>'));
-		
-		is_present($page, "Sorry, the file requested by you does not exist on our servers.");
-		is_present($page, "We are sorry, the file was removed either by its owner or due to the complaint received" );
+		is_present($page, 'Sorry, the file requested by you does not exist on our servers','Download link not found');
+		is_present($page, 'We are sorry, the file was removed either by its owner','Download link not found' );
 		if (stristr ( $page, "Sorry, you can download only one file per" ))
 		{
 			$minutes = trim ( cut_str ( $page, "Sorry, you can download only one file per ", " minutes." ) );
 			if ($minutes)
 			{
-				html_error ( "Download limit exceeded. Sorry, you can download only one file per <font color=black><span id='waitTime'>$minutes</span></font> minutes. Please try again later or acquire a premium membership.", 0 ); 
+				html_error ( "Download limit exceeded. Sorry, you can download only one file per <font color=black><span id='waitTime'>$minutes</span></font> minutes.Please try again later or acquire a premium membership.", 0 ); 
 			}
 			else
 			{
 				html_error ( "Download limit exceeded. Please try again later or acquire a premium membership.", 0 ); 
 			}
 		}
-
 		$post = Array();
 		$post["action"] = $action;
 		$post["file_id"] = $fileID;
-		$post["code"] = $code;		
-		$page = GetPage( $Href_1, $cookie, $post, $Referer );		
-
+		$post["code"] = $code;
+		$page = GetPage( $Href_1, $cookie, $post, $Referer );
 		is_present($page, "Requested file not found");
-
 		preg_match_all('/start_timer\((\d+)\)/i', $page,$tm);
 		$count = trim ( $tm[1][0] );
-
 		insert_timer( $count, "Waiting link timelock", "", true );
-
 		$tid=str_replace(".","12",microtime(true));
 		$sUrl="http://uploading.com/files/get/?JsHttpRequest=".$tid."-xml";
-		
-		$code = trim( cut_str( $page, 'code: "', '",' ) );
-		
 		unset($post);
 		$post["file_id"]=$fileID;
 		$post["code"] = $code;
 		$post["action"]="get_link";
 		$post["pass"]="";
 		$page = GetPage( $sUrl, $cookie, $post, $Referer );
-						
-		$dUrl = str_replace("\\","",cut_str($page,'link": "','"'));
-
+                if(strpos ( $page ,'You still need to wait for the download start' )){
+                html_error("You still need to wait for the download start. Please wait for some minute and reattempt", 0);
+                }
+                $dUrl=str_replace("\\","",cut_str($page,'answer":{"link":"','"'));
 		if ($dUrl=="") {
 			html_error("Download url error , Please wait for some minute and reattempt",0);
 		}
-				
 		RedirectDownload( $dUrl, $FileName, $cookie, 0, $Referer );
 		exit ();		
 	}
@@ -94,67 +82,39 @@ if (!defined('RAPIDLEECH'))
 		$tid=str_replace(".","12",microtime(true));
 		$loginUrl = "http://uploading.com/general/login_form/?JsHttpRequest=".$tid."-xml";
 		$usrEmail = "";
-
 		$post=array();
-		$usrEmail = $_REQUEST ["premium_user"] ? $_REQUEST ["premium_user"] : $premium_acc ["uploading"] ["user"];
+		$usrEmail = $_GET ["premium_user"] ? $_GET ["premium_user"] : $premium_acc ["uploading"] ["user"];
 		$post["email"] = $usrEmail;
-		$post["password"]= $_REQUEST ["premium_pass"] ? $_REQUEST ["premium_pass"] : $premium_acc ["uploading"] ["pass"];
-		$page = GetPage($loginUrl, 0, $post, 'http://uploading.com/' );
-		
-		$cookie=GetCookies($page);
-		
-		$identifier = "u=1;";
-		if(strpos($cookie, $identifier) === false)
-		{
-			html_error("Login Failed , Bad username/password combination.",0);
-		}
+		$post["password"]= $_GET ["premium_pass"] ? $_GET ["premium_pass"] : $premium_acc ["uploading"] ["pass"];
+		$page = GetPage($loginUrl, 0, $post, 'http://uploading.com/login/' );
 
-		$page = GetPage( 'http://uploading.com/', $cookie, 0, 'http://uploading.com/' );
-		
-		$identifier = "Membership: Premium";
-		if( strpos( $page, $identifier ) === false)
+		$cookie=GetCookies($page);
+		if(strpos($cookie,"error=") != false)
 		{
 			html_error("Login Failed , Bad username/password combination.",0);
 		}
-		
 		$page = GetPage( $link, $cookie, 0, $Referer );
-		
-		$fileID = cut_str($page,"get_link', file_id: ",",");
-		$code = trim( cut_str( $page, 'code: "', '",' ) );
-				
+                is_present($page, 'Sorry, the file requested by you does not exist on our servers','Download link not found');
+		is_present($page, 'We are sorry, the file was removed either by its owner','Download link not found' );
+		$code = trim( cut_str( $page, 'code: "', '",' ) );		
 		$Url = parse_url( $link );
 		$tmp = basename($Url["path"]);
 		$FileName = str_replace(".html","",$tmp);
-
 		$tid = str_replace(".","12",microtime(true));
 		$sUrl = "http://uploading.com/files/get/?JsHttpRequest=".$tid."-xml";
-		
 		unset($post);
-		$post["file_id"]=$fileID;
-        $post["code"] = $code;
+		$post["code"] = $code;
 		$post["action"] = "get_link";
 		$page = GetPage( $sUrl, $cookie, $post, $Referer );
-		
-		$dUrl = str_replace("\\","",cut_str($page,'link": "','"'));
+                $dUrl=str_replace("\\","",cut_str($page,'answer":{"link":"','"'));
 		if ( $dUrl=="" ) 
 		{ 
 			html_error("Download url error , Please reattempt",0);
 		}
-		
-		
 		RedirectDownload( $dUrl, $FileName, $cookie, 0, $Referer );
 		exit ();
 	}
-	
-	/**
-	 * You can use this function to retrieve pages without parsing the link
-	 * 
-	 * @param string $link The link of the page to retrieve
-	 * @param string $cookie The cookie value if you need
-	 * @param array $post name=>value of the post data
-	 * @param string $referer The referer of the page, it might be the value you are missing if you can't get plugin to work
-	 * @param string $auth Page authentication, unneeded in most circumstances
-	 */
+
 	function GetPage($link, $cookie = 0, $post = 0, $referer = 0, $auth = 0) {
 		global $pauth;
 		if (!$referer) {
@@ -166,18 +126,7 @@ if (!defined('RAPIDLEECH'))
 		is_page ( $page );
 		return $page;
 	}
-	
-	/**
-	 * Use this function instead of insert_location so that we can improve this feature in the future
-	 * 
-	 * @param string $link The download link of the file
-	 * @param string $FileName The name of the file
-	 * @param string $cookie The cookie value
-	 * @param array $post The post value will be serialized here
-	 * @param string $referer The page that refered to this link
-	 * @param string $auth In format username:password
-	 * @param array $params This parameter allows you to add extra _GET values to be passed on
-	 */
+
 	function RedirectDownload($link, $FileName, $cookie = 0, $post = 0, $referer = 0, $auth = "", $params = array()) {
 		global $pauth;
 		if (!$referer) {
@@ -214,21 +163,22 @@ if (!defined('RAPIDLEECH'))
 			"&post=" . urlencode ( serialize ( $post ) ) .
 			($_POST ["uploadlater"] ? "&uploadlater=".$_POST["uploadlater"]."&uploadtohost=".urlencode($_POST['uploadtohost']) : "").
 			($_POST ['autoclose'] ? "&autoclose=1" : "").
-			(isset($_GET["audl"]) ? "&audl=doum" : "") . $addon;
-		
+			(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") . $addon;
+
 		insert_location ( $loc );
 	}
+	
 
-
-
-/***********************uploading.com***************************\  
+/**************************************************\  
 WRITTEN by kaox 24-may-2009
 UPDATE by kaox  29-nov-2009
 UPDATE by rajmalhotra  20 Jan 2010
-UPDATE by rajmalhotra Fix for downloading from Premium Accounts 24 Jan 2010 and converted in OOP's format
+UPDATE by rajmalhotra Fix for downloading from Premium Accounts 23 Jan 2010 and converted in OOP's format
 Fixed by rajmalhotra Fix for downloading from Free and Premium Accounts 07 Feb 2010. Basically fix changes due to change in Site
 UPDATE by Idx 20-Mar-2010
 update by Idx 23-Mar-2010
 update by Idx 27-Mar-2010
-\**********************uploading.com****************************/
+Fixed by VinhNhaTrang 27-10-2010
+Rebuild also fix mistakenly typing in default params for audl 36B by Ruud v.Tony (I guess Idoenx forget bout that, lol :D)
+\**************************************************/
 ?>

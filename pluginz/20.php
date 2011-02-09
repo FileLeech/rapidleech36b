@@ -1,83 +1,64 @@
-<?php
-if (!defined('RAPIDLEECH'))
-  {require_once("404.php");exit;}
-  
-  
-	Download( $LINK );	
-	function Download($link) 
+<?php    
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
+}
+	  
+	Download( $LINK );
+	function Download( $link ) 
 	{
-		DownloadFree($link);
-	}	
+		$page = GetPage($link);
+		is_present( $page, "file link that you requested is not valid", "The file link that you requested is not valid. Please contact link publisher or try to make a search", "0" );
+		$cookie = GetCookies($page);
 
-	function DownloadFree( $link )
-	{
-        global $Referer, $PHP_SELF, $nn;
-		
-		
-		if(isset($_POST["userPass2"]) && $_POST["userPass2"]!=""){
-	      $post=array();
-          $post["userPass2"]=$_POST["userPass2"];
-          $cookie=$_POST["cookie"];
-		  $Referer=$_POST["link"];		  
-		  
-		}else{
-		  $post = $cookie = 0;		  
+		if ($_GET ["step"] == "1") {
+			$post = Array();
+			$post["userPass2"] = $_POST['userPass2'];
+			$cookie = urldecode($_POST['cookie']);
+			$page = GetPage($link,$cookie,$post,$link);
+			is_present($page, "enter password to access this file", "The password you have entered is not valid.");
+		} elseif (stristr($page, 'enter password to access this file')) {
+			echo "\n" . '<form name="dl_password" action="' . $PHP_SELF . '" method="post" >' . "\n";
+			echo '<input type="hidden" name="link" value="' . urlencode ($link) . '" />' . "\n";
+			echo '<input type="hidden" name="referer" value="' . urlencode ($Referer) . '" />' . "\n";
+			echo '<input type="hidden" name="cookie" value="' . urlencode ($cookie) . '" />' . "\n";
+			echo '<input type="hidden" name="step" value="1" />' . "\n";
+			echo '<input type="hidden" name="comment" id="comment" value="' . $_GET ["comment"] . '" />' . "\n";
+			echo '<input type="hidden" name="email" id="email" value="' . $_GET ["email"] . '" />' . "\n";
+			echo '<input type="hidden" name="partSize" id="partSize" value="' . $_GET ["partSize"] . '" />' . "\n";
+			echo '<input type="hidden" name="method" id="method" value="' . $_GET ["method"] . '" />' . "\n";
+			echo '<input type="hidden" name="proxy" id="proxy" value="' . $_GET ["proxy"] . '" />' . "\n";
+			echo '<input type="hidden" name="proxyuser" id="proxyuser" value="' . $_GET ["proxyuser"] . '" />' . "\n";
+			echo '<input type="hidden" name="proxypass" id="proxypass" value="' . $_GET ["proxypass"] . '" />' . "\n";
+			echo '<input type="hidden" name="path" id="path" value="' . $_GET ["path"] . '" />' . "\n";
+			echo '<h4>Enter password here: <input type="text" name="userPass2" id="filepass" size="13" />&nbsp;&nbsp;<input type="submit" onclick="return check()" value="Download File" /></h4>' . "\n";
+			echo "<script language='JavaScript'>\nfunction check() {\nvar pass=document.getElementById('filepass');\nif (pass.value == '') { window.alert('You didn\'t enter the password'); return false; }\nelse { return true; }\n}\n</script>\n";
+			echo "</form>\n</body>\n</html>";
+			exit;
 		}
-		$page = GetPage( $link, $cookie, $post, $Referer );
-		$cookie = GetCookies($page); 
-		
-		// passworded
-        if(preg_match("/<form.+\"theForm\"/i", $page)){
-		  global $PHP_SELF, $nn;
-		
-          $code = $nn.$nn."<div style=\"text-align: center\"><br><br>\n";
-		  if(strpos($page, "passError();") !== false)
-          {
-            $code .= "<div style=\"text-align: center\">The password you have entered is not valid. <br> Please enter a correct password.</div>";
-          }else{
-            $code .= "<div style=\"text-align: center\">Please enter password to access this file:</div><br>";
-          }
-		  
-          $code .= '<div style="text-align: center">'.$nn;
-		  $code .= '<form name="theForm" method="post" action="'.$PHP_SELF.'">'.$nn;
-          $code .= ' <input type="password" name="userPass2" style="width:175px"/>'.$nn;
-          $code .= ' <input type="submit" value="Send password" />'.$nn;
-          $code .= ' <input type="hidden" name="cookie" value="'.$cookie.'">'.$nn;
-          $code .= ' <input type="hidden" name="link" value="'.urlencode($link).'">'.$nn;
-          $code .= '</form></div></div></body></html>';
-          echo $code;
-          die();
-        } // end passworded
-		
-        if (preg_match('/var c = ([0-9]+);/', $page, $count))
-        {
-            $countDown = $count[1];
-            insert_timer($countDown, "Waiting link timelock");
-        }        
-		
-        preg_match('/location = "(.*)";/', $page, $loc);
-		$Href = $loc[1];
-		$FileName = str_replace ( " " , "_" , basename($Href) );
-		
-		RedirectDownload( $Href, $FileName, $cookie, 0, $Referer );
-		exit ();		
+
+		getCountDown($page);
+		$FileName = trim(cut_str($page, 'name="Description" content="', ' download free at 2shared.'));
+
+		// Retrieve download link
+		if (preg_match ('/dc(\d+)\.2shared\.com\/download(\d)\/([^\'|\"]+)/i', $page, $L)) {
+			$dllink = "http://dc" . $L[1] . ".2shared.com/download" . $L[2] . "/" . $L[3];
+		} else {
+			html_error("Download-link not found.");
+		}
+
+		RedirectDownload($dllink, $FileName, $cookie);
 	}
 	
-	function DownloadPremium( $link )
+	function getCountDown($page) 
 	{
-	   // not imlemented yet
-		exit ();
+		if (preg_match ( '/var c = ([0-9])*;/', $page, $count ) ) 
+		{
+			$countDown = $count [1];
+			insert_timer ( $countDown, "Waiting link timelock" );
+		}
 	}
-	
-	/**
-	 * You can use this function to retrieve pages without parsing the link
-	 * 
-	 * @param string $link The link of the page to retrieve
-	 * @param string $cookie The cookie value if you need
-	 * @param array $post name=>value of the post data
-	 * @param string $referer The referer of the page, it might be the value you are missing if you can't get plugin to work
-	 * @param string $auth Page authentication, unneeded in most circumstances
-	 */
+
 	function GetPage($link, $cookie = 0, $post = 0, $referer = 0, $auth = 0) {
 		global $pauth;
 		if (!$referer) {
@@ -89,18 +70,7 @@ if (!defined('RAPIDLEECH'))
 		is_page ( $page );
 		return $page;
 	}
-	
-	/**
-	 * Use this function instead of insert_location so that we can improve this feature in the future
-	 * 
-	 * @param string $link The download link of the file
-	 * @param string $FileName The name of the file
-	 * @param string $cookie The cookie value
-	 * @param array $post The post value will be serialized here
-	 * @param string $referer The page that refered to this link
-	 * @param string $auth In format username:password
-	 * @param array $params This parameter allows you to add extra _GET values to be passed on
-	 */
+
 	function RedirectDownload($link, $FileName, $cookie = 0, $post = 0, $referer = 0, $auth = "", $params = array()) {
 		global $pauth;
 		if (!$referer) {
@@ -137,15 +107,17 @@ if (!defined('RAPIDLEECH'))
 			"&post=" . urlencode ( serialize ( $post ) ) .
 			($_POST ["uploadlater"] ? "&uploadlater=".$_POST["uploadlater"]."&uploadtohost=".urlencode($_POST['uploadtohost']) : "").
 			($_POST ['autoclose'] ? "&autoclose=1" : "").
-			(isset($_GET["audl"]) ? "&audl=doum" : "") . $addon;
-		
+			(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") . $addon;
+
 		insert_location ( $loc );
 	}
-	
-/***********2shared.com**************\
- WRITTEN BY KAOX xx-xx-xxxx
- Upate By Idx 25-mar-2010
- 
- Upate By Idx 27-mar-2010 Rewrite in OOP based on Raj Malhotra code 
-\***********2shared.com**************/
+
+
+/********************************************************
+Fixed by Raj Malhotra on 10 April 2010 => Fix Reloading to main page when link does not exists.
+
+Fixed by Th3-822 on 30 October 2010 => Fixed & Added support for password protected files.
+Fixed by Th3-822 on 25 December 2010 => Fixed: 2shared changed it's system (Again... Now shows dlink in same page)
+Rewrite into 36B by Ruud v.Tony
+*********************************************************/
 ?>

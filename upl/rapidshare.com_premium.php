@@ -1,11 +1,8 @@
 <?php
 
 ####### Premium Account Info. ###########
-//$rapidshare_login = ""; //Set your username
-//$rapidshare_pass = ""; //Set your password
-
-$rapidshare_login = $upload_acc["rs_com_pre"]["user"]; 
-$rapidshare_pass = $upload_acc["rs_com_pre"]["pass"]; 
+$rapidshare_login = ""; //Set your username
+$rapidshare_pass = ""; //Set your password
 ##############################
 
 $not_done=true;
@@ -65,8 +62,7 @@ if ($continue_up)
 <script>document.getElementById('info').style.display='none';</script>
 <?php 		
 			$url = parse_url($url_action);
-			$upagent = "RAPIDSHARE MANAGER Application Version: NOT INSTALLED VERSION STARTED";
-			$upfiles = upfile($url["host"],$url["port"] ? $url["port"] : 80, $url["path"].($url["query"] ? "?".$url["query"] : ""),0, 0, $post, $lfile, $lname, "filecontent");
+			$upfiles = upfile($url["host"],$url["port"] ? $url["port"] : 80, $url["path"].($url["query"] ? "?".$url["query"] : ""),0, 0, $post, $lfile, $lname, "filecontent", "", $proxy, $pauth);
 ?>
 <script>document.getElementById('progressblock').style.display='none';</script>
 <?php 	

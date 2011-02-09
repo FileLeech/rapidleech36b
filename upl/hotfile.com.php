@@ -1,11 +1,8 @@
 <?php 
 
 ####### Free Account Info. ###########
-//$hotfile_username=""; //  Set you username
-//$hotfile_password=""; //  Set your password
-
-$hotfile_username = $upload_acc["hf_com"]["user"]; 
-$hotfile_password = $upload_acc["hf_com"]["pass"]; 
+$hotfile_username=""; //  Set you username
+$hotfile_password=""; //  Set your password
 ##############################
 
 $not_done=true;
@@ -41,7 +38,7 @@ if ($continue_up)
 </td></tr>
 <tr><td align=center>
 <div id=info width=100% align=center>Retrive upload ID</div>
-<?php			
+<?php
             $usr=$_REQUEST['my_login'];
             $pass=$_REQUEST['my_pass'];
 			$ref="http://hotfile.com/";

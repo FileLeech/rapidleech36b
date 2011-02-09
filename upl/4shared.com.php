@@ -40,17 +40,19 @@ if ($continue_up)
 <div id=login width=100% align=center>Login to 4shared</div>
 <?php 
 	        $post['login'] = $_REQUEST['my_login'];
-            $post['password'] = $_REQUEST['my_pass'];
+		$post['password'] = $_REQUEST['my_pass'];
+		$post['remember'] = true;
 			
-            $page = geturl("www.4shared.com", 80, "/index.jsp", 0, 0, $post);			
-			is_page($page);
-			$cookie = GetCookies($page);
+		$page = geturl("www.4shared.com", 80, "/index.jsp", 0, 0, $post);			
+		is_page($page);
+
+		$cookie = GetCookies($page);
 ?>
 <script>document.getElementById('login').style.display='none';</script>
-<div id=info width=100% align=center>Retrive upload ID</div>
+<div id=info width=100% align=center>4shared upload</div>
 <?php 
-			preg_match('/location *= *"(.*?)"/i', $page, $redir1);
-			$redir = $redir1[1];
+			$redir = cut_str ( $page, 'replace("', '"' );
+
 			$Url = parse_url($redir);
 			$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), 0, $cookie, 0, 0, $_GET["proxy"],$pauth);
 			preg_match('/Location: *(.*)/i', $page, $fmanager);

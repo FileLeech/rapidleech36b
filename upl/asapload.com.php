@@ -7,7 +7,7 @@
 			$ref = 'http://asapload.com/';
 ?>
 	<script>document.getElementById('info').style.display='none';</script>
-<?php
+<?
 
 			$post["upload_description"]=$descript;
 			$post["upload_password"]="";
@@ -37,7 +37,7 @@
 
 ?>
 <script>document.getElementById('progressblock').style.display='none';</script>
-<?php
+<?
 			is_page($upfiles);
 
 			$tmp = cut_str($upfiles,"[URL=","]");

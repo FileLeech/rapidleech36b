@@ -3,14 +3,14 @@
 <tr><td align=center>
 	
 <div id=info width=100% align=center>Retrive upload ID</div>
-<?php
+<?
 			$ref='http://fileshare.in.ua/';
 ?>
 <script>document.getElementById('info').style.display='none';</script>
 <table width=600 align=center>
 </td></tr>
 <tr><td align=center>
-<?php
+<?
 
 			$Url=parse_url($ref);
 			$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), 0, 0, 0, 0, $_GET["proxy"],$pauth);
@@ -34,7 +34,7 @@
 ?>
 <script>document.getElementById('progressblock').style.display='none';</script>
 <div id=final width=100% align=center>Get final code</div>
-<?php		
+<?php
 			is_page($upfiles);
 			$finish_url=trim(cut_str($upfiles,'location:',"\n"));
 			if (!$finish_url) html_error ('Error get location 1');
@@ -47,7 +47,7 @@
 			$download_link=$finish_url;
 ?>
 <script>document.getElementById('final').style.display='none';</script>
-<?php
+<?
 
 // sert 03.10.2008
 ?>

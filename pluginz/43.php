@@ -1,38 +1,86 @@
-<?php
-if (!defined('RAPIDLEECH'))
-  {require_once("404.php");exit;}
+<?php    
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
+}
+	  
+	Download( $LINK );
+    function Download($link){
+        $page=GetPage($link);
+        is_present($page,"This file is either temporarily unavailable or does not exist", "This file is either temporarily unavailable or does not exist");
+        if (!preg_match("#Location: (.*)#", $page,$redirect)){
+            html_error("Error 1:Plugin is out of date");
+        }
+        $page=GetPage($redirect[1]);
+        insert_timer(15);
+        if (!preg_match("#window.location = '(.*)'#",$page,$dlink)){
+            html_error("Error 2:Plugin is out of date", 0);
+        }
+        $page=GetPage($dlink[1]);
+        if (!preg_match('#(http:\/\/\w+.fileape.com\/nu\/.*)"#',$page,$dlink)){
+            html_error("Error 3: Plugin is out of date");
+        }
+        $Url=parse_url(trim($dlink[1]));
+        $FileName=basename($Url['path']);
+        RedirectDownload(trim($dlink[1]), $FileName);
+        //echo "<pre>";var_dump(nl2br(htmlentities($page)));echo "</pre>";exit;
+        exit;
+    }
 
+	function GetPage($link, $cookie = 0, $post = 0, $referer = 0, $auth = 0) {
+		global $pauth;
+		if (!$referer) {
+			global $Referer;
+			$referer = $Referer;
+		}
+		$Url = parse_url(trim($link));
+		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $referer, $cookie, $post, 0, $_GET ["proxy"], $pauth, $auth );
+		is_page ( $page );
+		return $page;
+	}
 
-$username = "TheOnly92";
-$password = "qnn1jWR7";
+	function RedirectDownload($link, $FileName, $cookie = 0, $post = 0, $referer = 0, $auth = "", $params = array()) {
+		global $pauth;
+		if (!$referer) {
+			global $Referer;
+			$referer = $Referer;
+		}
+		$Url = parse_url($link);
+		
+		if (substr($auth,0,6) != "&auth=") $auth = "&auth=" . $auth;
+		if (!is_array($params)) {
+			// Some problems with the plugin, quit it
+			html_error('Plugin problem! Please report, error: "The parameter passed must be an array"');
+		}
+		$addon = "";
+		if (count((array) $params) > 0) {
+			foreach ($params as $name => $value) {
+				if (is_array($value)) {
+					$value = serialize($value);
+				}
+				$addon .= '&'.$name.'='.urlencode($value).'&';
+			}
+			$addon = substr($addon,0,-1);
+		}
+		$loc = "{$_SERVER['PHP_SELF']}?filename=" . urlencode ( $FileName ) . 
+			"&host=" . $Url ["host"] . "&port=" . $Url ["port"] . "&path=" . 
+			urlencode ( $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : "") ) . 
+			"&referer=" . urlencode ( $referer ) . "&email=" . ($_GET ["domail"] ? $_GET ["email"] : "") . 
+			"&partSize=" . ($_GET ["split"] ? $_GET ["partSize"] : "") . "&method=" . $_GET ["method"] . 
+			"&proxy=" . ($_GET ["useproxy"] ? $_GET ["proxy"] : "") . "&saveto=" . $_GET ["path"] . 
+			"&link=" . urlencode ( $link ) . ($_GET ["add_comment"] == "on" ? "&comment=" . 
+			urlencode ( $_GET ["comment"] ) : "") . $auth . ($pauth ? "&pauth=$pauth" : "") . 
+			($_GET ["uploadlater"] ? "&uploadlater=".$_GET["uploadlater"]."&uploadtohost=".$_GET['uploadtohost'] : "") .
+			"&cookie=" . urlencode($cookie) .
+			"&post=" . urlencode ( serialize ( $post ) ) .
+			($_POST ["uploadlater"] ? "&uploadlater=".$_POST["uploadlater"]."&uploadtohost=".urlencode($_POST['uploadtohost']) : "").
+			($_POST ['autoclose'] ? "&autoclose=1" : "").
+			(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") . $addon;
 
-$action_url = 'http://forums.anime-eden.com/login.php';
-$act = parse_url($action_url);
-$post = array();
-$post['vb_login_username'] = $username;
-$post['vb_login_password'] = $password;
-$post['login'] = 'Login';
-$post['cookieuser'] = "";
-$post['s'] = "";
-$post['do'] = "login";
-$post['vb_login_md5password'] = "";
-$post['vb_login_md5password_utf'] = "";
+		insert_location ( $loc );
+	}
 
-$page = geturl($act["host"], $act["port"] ? $act["port"] : 80, $act["path"], $Referer, 0, $post, 0, $_GET["proxy"],$pauth);
-$cookie = GetCookies($page);
-$cookie = implode(';',$cookie);
-
-$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"], $Referer, $cookie, 0, 0, $_GET["proxy"],$pauth);
-is_page($page);
-
-$link = cut_str($page,'MB)</span><br /><a href="','">Click here to ');
-$Url = parse_url ( $link );
-//$link = $Url['scheme'].'://'.$username.':'.$password.'@'.$Url['host'].$Url['path'];
-
-$auth = urlencode(base64_encode($username.':'.$password));
-
-$FileName = !$FileName ? basename($Url["path"]) : $FileName;
-insert_location("$PHP_SELF?filename=".urlencode($FileName)."&auth=".$auth."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&cookie=".urlencode($cookie)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
-
+//by VDHDEVIL
+//Rewrite into 36B by Ruud v.Tony
 
 ?>

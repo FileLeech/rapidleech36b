@@ -1,147 +1,154 @@
-<?php
-if (! defined ( 'RAPIDLEECH' ))
-{
-	require_once ("404.php");
-	exit ();
+<?php    
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
 }
-	
+	  
 	Download( $LINK );
-	
-	function Download( $link )
-	{
-		global $premium_acc;
-		if ( ( $_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"] ) ||
-			( $_REQUEST ["premium_acc"] == "on" && $premium_acc ["easyshare"] ["user"] && $premium_acc ["easyshare"] ["pass"] ) )
-		{
-			DownloadPremium( $link );
-		}
-		else
-		{
-			DownloadFree( $link );
-		}
-	}
-		
-	function DownloadFree( $link )
-	{
-		global $pauth;
-		$Referer = $link;
-		
-		$page = GetPage( $link, 0, 0, 0, $pauth );
-		
-		$cookies = biscottiDiKaox( $page );
-		is_present ( $page, 'File was deleted' );
-		is_present ( $page, 'File not found' );
-        is_present ( $page, 'You have downloaded over 150MB during last hour.' );  
-		$FileName = trim ( cut_str ( $page, "<title>Download ", "," ) );
-				
-		$div = trim ( cut_str ( $page, '<div id="block-captcha">', "</div>" ) );
-		$count = trim ( cut_str ( $div, "w='", "'" ) );
-		
-		insert_timer( $count, "Waiting link timelock");
-		
-		if ( $src = trim ( cut_str ( $page, "u='", "'" ) ) )
-		{
-			$Url = parse_url( $link );
-			$Href = "http://".$Url["host"].$src;
-			$page = GetPage( $Href, $cookies, 0, $Referer, $pauth );
+    function Download($link) {
+        global $premium_acc;
+        if (( $_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"] ) ||
+                ( $_REQUEST ["premium_acc"] == "on" && $premium_acc ["easyshare_com"] ["user"] && $premium_acc ["easyshare_com"] ["pass"] )) {
+            DownloadPremium($link);
+        } else if ($_POST['easy_share'] == "ok") {
+            DownloadFree($link);
+        } else {
+            Retrieve($link);
         }
-		
-        $Href = trim ( cut_str($page,'post" action="','"') );
-        $id = trim ( cut_str($page,'"id" value="','"') ); 
-		
-		$post = array ();
-		$post ["captcha"] = "";
-		$post ["id"] = $id;
-		
-		RedirectDownload( $Href, $FileName, $cookies, $post, $Referer, $pauth );
-		exit ();
-	}
-	
-	function DownloadPremium( $link )
-	{
-		global $premium_acc, $pauth, $Referer;
-		
-		// Getting file name
-		$page = GetPage( $link, 0, 0, 0, $pauth );
-		is_present ( $page, 'File was deleted' );
-		is_present ( $page, 'File not found' );
-        $FileName = trim ( cut_str ( $page, "<title>Download ", "," ) );
-		// Getting file name end
-		
-		// login 
-		$login = "http://www.easy-share.com/accounts/login";
-		
-		$post ["login"] = $_REQUEST ["premium_user"] ? $_REQUEST ["premium_user"] : $premium_acc ["easyshare"] ["user"];
-		$post ["password"] = $_REQUEST ["premium_pass"] ? $_REQUEST ["premium_pass"] : $premium_acc ["easyshare"] ["pass"];
-		$post ["remember"] = "1";
-			
-		$page = GetPage( $login, 0, $post, "http://www.easy-share.com/", $pauth );
-		
-		$cook = GetCookies( $page );
-		// end login 
-		
-		is_notpresent ( $cook, "PREMIUM", "Login failed<br>Wrong login/password?" );
-		
-		$page = GetPage( $link, $cook, 0, 0, $pauth );
-		is_present ( $page, 'File was deleted' );
-		is_present ( $page, 'File not found' );
-		
-		if ( !isset($FileName) || $FileName == "" )
-		{
-			$Url = parse_url ( $link );
-			$FileName = ! $FileName ? basename ( $Url ["path"] ) : $FileName;
-		}
-		
-		preg_match ( '/Location:.+?\\r/i', $page, $loca );
-		$redir = rtrim ( $loca [0] );
-		preg_match ( '/http:.+/i', $redir, $loca );
-		$Href = trim ( $loca [0] );
-		
-		$cookie = $cook . "; " . biscottiDiKaox ( $page );
-	
-		RedirectDownload( $Href, $FileName, $cookie, 0, $Referer, $pauth );
-		exit ();
-	}
-	
-	function biscottiDiKaox( $content )
-	{
-		preg_match_all("/Set-Cookie: (.*)\n/",$content,$matches);
-		foreach ( $matches[1] as $coll ) 
-		{
-			$bis0=split(";",$coll);
-			$bis1=$bis0[0]."; ";
-			$bis2=split("=",$bis1);
-			$cek=" ".$bis2[0]."="; 
-			if( strpos( $bis1,"=deleted" ) || strpos( $bis1,$cek.";" ) ) 
-			{
-			}
-			else
-			{
-				if ( substr_count( $bis,$cek ) > 0 )
-				{
-					$patrn=" ".$bis2[0]."=[^ ]+";
-					$bis=preg_replace("/$patrn/"," ".$bis1,$bis);     
-				} 
-				else 
-				{
-					$bis.=$bis1;
-				}
-			}
-		}  
-		
-		$bis=str_replace("  "," ",$bis);     
-		return rtrim($bis);
-	}
-	
-	/**
-	 * You can use this function to retrieve pages without parsing the link
-	 * 
-	 * @param string $link The link of the page to retrieve
-	 * @param string $cookie The cookie value if you need
-	 * @param array $post name=>value of the post data
-	 * @param string $referer The referer of the page, it might be the value you are missing if you can't get plugin to work
-	 * @param string $auth Page authentication, unneeded in most circumstances
-	 */
+    }
+
+    function Retrieve($link) {
+        global $download_dir;    
+        $page = GetPage($link);
+        is_present($page, "The file could not be found", "The file could not be found. Please check the download link.");
+        is_present($page, "File not available", "File not available");
+        is_present($page, "Page not found", "The file could not be found. Please check the download link.");
+        $cookie = GetCookies($page);
+        $FileName = cut_str($page, 'Download ', ',');
+        $FileName = trim($FileName);
+        $linkcaptcha = cut_str($page, "/file_contents/captcha/", "'");
+        if (!strpos($page, 'method="post" action="')) {
+            $time = cut_str($page, "w='", "'");
+            insert_timer($time);
+            $randnum = rand(10000, 100000);
+            $Referer = $link;
+            $linkcaptcha = "http://www.easy-share.com/file_contents/captcha/" . $linkcaptcha;
+            $page = GetPage($linkcaptcha, $cookie, 0, $Referer);
+            $cookie .='; ' . GetCookies($page);
+        }
+        $linkpost = cut_str($page, 'method="post" action="', '"');
+        $linkcaptcha = cut_str($page, 'Recaptcha.create("', '"');
+        $valid = cut_str($page, 'name="id" value="', '"');
+        $page = GetPage('http://www.google.com/recaptcha/api/challenge?k=' . $linkcaptcha . '&ajax=1');
+        $challenge = cut_str($page, "challenge : '", "'");
+        $img = 'http://www.google.com/recaptcha/api/image?c=' . $challenge;
+        $page = GetPage($img);
+        $headerend = strpos($page, "\r\n\r\n");
+        $pass_img = substr($page, $headerend + 4);
+        write_file($download_dir . "easyshare_captcha.jpg", $pass_img);
+        $data = array();
+        $data['link'] = $linkpost;
+        $data['referer'] = $referer;
+        $data['challenge'] = $challenge;
+        $data['valid'] = $valid;
+        $data['easy_share'] = "ok";
+        $data['cookie'] = $cookie;
+        $data['FileName'] = $FileName;
+        EnterCaptcha($download_dir . "easyshare_captcha.jpg", $data, 5);
+    }
+
+    function DownloadFree($link) {
+        $post = array();
+        $post["recaptcha_challenge_field"] = $_POST['challenge'];
+        $post["recaptcha_response_field"] = $_POST['captcha'];
+        $post["id"] = $_POST['valid'];
+        $cookie = $_POST['cookie'];
+        $Referer = $_POST['referer'];
+        $FileName = $_POST["FileName"];
+        $Url = parse_url($link);
+        $FileName = !$FileName ? basename($Url["path"]) : $FileName;
+        RedirectDownload($link, $FileName, $cookie, $post, $Referer);
+    }
+
+    function DownloadPremium($link) {
+        global $premium_acc, $pauth, $Referer;
+        $Referer = "http://www.easy-share.com/";
+        $page = GetPage($link, 0, 0, 0, $pauth);
+        is_present($page, 'File was deleted');
+        is_present($page, 'File not found');
+        $FileName = trim(cut_str($page, "<title>Download ", ","));
+        $FileName = str_replace(" ", ".", $FileName);
+        $login = "http://www.easy-share.com/accounts/login";
+        $post = array();
+        $post ["login"] = $_REQUEST ["premium_user"] ? $_REQUEST ["premium_user"] : $premium_acc ["easyshare"] ["user"];
+        $post ["password"] = $_REQUEST ["premium_pass"] ? $_REQUEST ["premium_pass"] : $premium_acc ["easyshare"] ["pass"];
+        $post ["remember"] = "1";
+        $page = GetPage($login, 0, $post, "http://www.easy-share.com/", $pauth);
+        $cookies = GetCookies($page);
+        if (!preg_match("#PREMIUM=[\w%]+#", $cookies, $Premium)) {
+            html_error("Login Failed , Bad username/password combination");
+        }
+        preg_match("#PHPSESSID=\w+#", $cookies, $PhpSessId);
+        $page = GetPage($link, $cookies, 0, $Referer, $pauth);
+        $cookies = $PhpSessId[0] . "; " . $Premium[0] . "; " . GetCookies($page);
+        if (preg_match("#Location: (.*)#", $page, $prelink)) {
+            if (function_exists(encrypt) && $cookies != "") {
+                $cookies = encrypt($cookies);
+            }
+            $Url = parse_url($prelink[1]);
+            insert_location("$PHP_SELF?filename=" . urlencode($FileName) .
+                    "&host=" . $Url["host"] .
+                    "&path=" . urlencode($Url["path"] . ($Url["query"] ? "?" . $Url["query"] : "")) .
+                    "&referer=" . urlencode($Referer) .
+                    "&cookie=" . urlencode($cookies) .
+                    "&email=" . ($_GET["domail"] ? $_GET["email"] : "") .
+                    "&partSize=" . ($_GET["split"] ? $_GET["partSize"] : "") .
+                    "&method=" . $_GET["method"] . "&proxy=" . ($_GET["useproxy"] ? $_GET["proxy"] : "") .
+                    "&saveto=" . $_GET["path"] . "&link=" . $link . ($_GET["add_comment"] == "on" ? "&comment=" . urlencode($_GET["comment"]) : "") .
+                    "&pauth=" . (isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
+        }
+        exit();
+    }
+
+  function EnterCaptcha($captchaImg, $inputs, $captchaSize = '5', $defaultParam_array = array()) {
+    echo "\n";
+    echo('<form name="dl" action="' . $_SERVER['PHP_SELF'] . '" method="post">');
+    echo "\n";
+    foreach ($inputs as $name => $input) {
+        echo('<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $input . '" />');
+        echo "\n";
+    }
+    if (!empty($defaultParam_array)) {
+        foreach ($defaultParam_array as $name => $input) {
+            echo('<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $input . '" />');
+            echo "\n";
+        }
+    }
+    echo('<h4>Enter <img src="' . $captchaImg . '" /> here: <input type="text" name="captcha" size="' . $captchaSize . '" />&nbsp;&nbsp;');
+    echo "\n";
+    echo( '<input type="submit" onclick="return check();" value="Enter Captcha" /></h4>');
+    echo "\n";
+    echo('<script type="text/javascript">');
+    echo "\n";
+    echo('function check() {');
+    echo "\n";
+    echo('var captcha=document.dl.captcha.value;');
+    echo "\n";
+    echo('if (captcha == "") { window.alert("You didn\'t enter the image verification code"); return false; }');
+    echo "\n";
+    echo('else { return true; }');
+    echo "\n";
+    echo('}');
+    echo "\n";
+    echo('</script>');
+    echo "\n";
+    echo('</form>');
+    echo "\n";
+    echo('</body>');
+    echo "\n";
+    echo('</html>');
+  }
+
 	function GetPage($link, $cookie = 0, $post = 0, $referer = 0, $auth = 0) {
 		global $pauth;
 		if (!$referer) {
@@ -153,18 +160,7 @@ if (! defined ( 'RAPIDLEECH' ))
 		is_page ( $page );
 		return $page;
 	}
-	
-	/**
-	 * Use this function instead of insert_location so that we can improve this feature in the future
-	 * 
-	 * @param string $link The download link of the file
-	 * @param string $FileName The name of the file
-	 * @param string $cookie The cookie value
-	 * @param array $post The post value will be serialized here
-	 * @param string $referer The page that refered to this link
-	 * @param string $auth In format username:password
-	 * @param array $params This parameter allows you to add extra _GET values to be passed on
-	 */
+
 	function RedirectDownload($link, $FileName, $cookie = 0, $post = 0, $referer = 0, $auth = "", $params = array()) {
 		global $pauth;
 		if (!$referer) {
@@ -202,14 +198,16 @@ if (! defined ( 'RAPIDLEECH' ))
 			($_POST ["uploadlater"] ? "&uploadlater=".$_POST["uploadlater"]."&uploadtohost=".urlencode($_POST['uploadtohost']) : "").
 			($_POST ['autoclose'] ? "&autoclose=1" : "").
 			(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") . $addon;
-		
+
 		insert_location ( $loc );
 	}
 
-/**************************************************\  
-FIXED by kaox 04/07/2009
-FIXED and RE-WRITTEN by rajmalhotra on 10 Jan 2010
-FIXED by rajmalhotra on 12 Feb 2010 => FIXED downloading from Premium Account
-\**************************************************/	
 
+/* * ************************************************\
+  FIXED by kaox 04/07/2009
+  FIXED and RE-WRITTEN by rajmalhotra on 10 Jan 2010
+  FIXED by rajmalhotra on 12 Feb 2010 => FIXED downloading from Premium Account
+  FIXED by vdhdevil on 01 Dec 2010 => Fixed Premium for v42
+  FIXED by Ruud v.Tony on 6 Feb 2011 => Fixed the free codes, my first rapidleech code made, lol :D
+  \************************************************* */
 ?>

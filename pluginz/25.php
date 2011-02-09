@@ -1,55 +1,52 @@
-<?php
-if (! defined ( 'RAPIDLEECH' ))
-{
-	require_once ("404.php");
-	exit ();
+<?php    
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
 }
+	  
+	Download( $LINK );
+    function Download($link) {
+        if ($_POST["step"] == 1) {
+            $dlink = $_POST["link"];
+            $cookies = $_POST['cookie'];
+            $Referer = $_Post['referer'];
+            $FileName = $_POST['filename'];
+            $Url=parse_url($dlink);
+            $FileName=$FileName?$FileName:basename($Url['path']);
+            RedirectDownload($dlink, $FileName, $cookies, 0, $Referer, $FileName);
+        } else {
+            $page = GetPage($link);
+            is_present($page, "File does not exist on this server", "File does not exist on this server");
+            if (preg_match("#<title>Zippyshare.com - (.*)</title>#", $page, $temp)) {
+                $FileName = $temp[1];
+            }
+            $cookies = GetCookies($page);
+            if (!preg_match("#var zipdata = .*#", $page, $data)) {
+                html_error("Error 1: Plugin is out of date");
+            }
+            if (!preg_match("#var fulllink = .*#", $page, $fulllink)) {
+                html_error("Error 2: Plugin is out of date");
+            }
+            $jscript = $data[0] . $fulllink[0];
+            $ss = <<<HTML
+<html>
+<head>
+<title>FormLogin</title>
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<form method="post" name="plink" action="$PHP_SELF">
+<input id="link" name="link" type="hidden">
+<input type="hidden" name="cookie" value="$cookies" >
+<input type="hidden" name="referer" value="$link" >
+<input type="hidden" name="step" value="1" >
+<input type="hidden" name="filename" value="$FileName">
+</form>
+HTML;
+            $script = $ss . '<script language="Javascript">' . $jscript . 'document.getElementById("link").value=fulllink; document.plink.submit();</script>';
+            echo ($script);
+        }
+    }
 
-$link = $LINK;
-Download( $link );
-
-	function Download( $link )
-	{
-		global $premium_acc;
-		DownloadFree($link);
-	}
-
-	function DownloadFree($link)
-	{
-		$Referer = $link;
-		$page = GetPage( $link );
-
-		is_present($page,"This file has been deleted");
-		is_present($page,"file does not exist", "The requsted file does not exist on this server.", 0);
-		
-		preg_match('/^HTTP\/1\.0|1 ([0-9]+) .*/',$page,$status);
-		if($status[1] != "200"){
-		  $Links = parse_url( $link );
-		  $path = basename($Links["path"]);
-		  $newlink = "http://" . $Links["host"] ."/v/". substr($path, 0, strrpos($path, ".") ) . "/file.html";		  
-		}
-		
-		$cookie = GetCookies( $page );
-		
-	 	preg_match("/var\spong\s=\s\'(.*)\'\;/i", $page, $pong);
-        $Href = urldecode(str_replace("serwus", "zippyshare", $pong[1]));
-        $Url=parse_url($Href);
-        $pongs = explode("/", $Url["path"]);
-        $FileName="file_".$pongs[count($pongs)-1];
-
-		RedirectDownload($Href, $FileName, $cookie, 0, $Referer );
-		exit ();
-	}
-	
-	/**
-	 * You can use this function to retrieve pages without parsing the link
-	 * 
-	 * @param string $link The link of the page to retrieve
-	 * @param string $cookie The cookie value if you need
-	 * @param array $post name=>value of the post data
-	 * @param string $referer The referer of the page, it might be the value you are missing if you can't get plugin to work
-	 * @param string $auth Page authentication, unneeded in most circumstances
-	 */
 	function GetPage($link, $cookie = 0, $post = 0, $referer = 0, $auth = 0) {
 		global $pauth;
 		if (!$referer) {
@@ -61,18 +58,7 @@ Download( $link );
 		is_page ( $page );
 		return $page;
 	}
-	
-	/**
-	 * Use this function instead of insert_location so that we can improve this feature in the future
-	 * 
-	 * @param string $link The download link of the file
-	 * @param string $FileName The name of the file
-	 * @param string $cookie The cookie value
-	 * @param array $post The post value will be serialized here
-	 * @param string $referer The page that refered to this link
-	 * @param string $auth In format username:password
-	 * @param array $params This parameter allows you to add extra _GET values to be passed on
-	 */
+
 	function RedirectDownload($link, $FileName, $cookie = 0, $post = 0, $referer = 0, $auth = "", $params = array()) {
 		global $pauth;
 		if (!$referer) {
@@ -110,8 +96,12 @@ Download( $link );
 			($_POST ["uploadlater"] ? "&uploadlater=".$_POST["uploadlater"]."&uploadtohost=".urlencode($_POST['uploadtohost']) : "").
 			($_POST ['autoclose'] ? "&autoclose=1" : "").
 			(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") . $addon;
-		
+
 		insert_location ( $loc );
 	}
-// Created by Idx on 13 Mar 2010
+
+/*
+ * By vdhdevil Jan-12-2011
+ * Rewrite into 36B by Ruud v.Tony
+ */
 ?>

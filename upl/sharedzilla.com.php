@@ -3,7 +3,7 @@
 <tr><td align=center>
 	
 <div id=info width=100% align=center>Retrive upload ID</div>
-<?php
+<?
 			$ref='http://sharedzilla.com/';
 			$page = geturl("sharedzilla.com", 80, "/", 0, 0, 0, 0, "");
 			is_page($page);
@@ -12,7 +12,7 @@
 <table width=600 align=center>
 </td></tr>
 <tr><td align=center>
-<?php
+<?
 
 			$post["upload_category_id"]='0';
 			$post["upload_description"]=$descript;
@@ -25,14 +25,14 @@
 ?>
 <script>document.getElementById('progressblock').style.display='none';</script>
 <div id=final width=100% align=center>Get final code</div>
-<?php		
+<?php
 			is_page($upfiles);
 			$tmp=cut_str($upfiles,'[URL=',']');
 			if (!$tmp) html_error ('Error upload file');
 			$download_link=$tmp;
 ?>
 <script>document.getElementById('final').style.display='none';</script>
-<?php
+<?
 
 // sert 31.10.2008
 ?>
