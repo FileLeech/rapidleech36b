@@ -386,6 +386,8 @@ if ($ContentDisposition && stristr($ContentDisposition, "filename="))
 	  if(preg_match("/UTF\-8\?B\?(.*)$/i", $FileName, $b64)){	    
 	    $FileName = preg_replace("/[^a-zA-Z0-9\-\.]/", "_", base64_decode($b64[1]));
 	  }
+	  if (strpos($FileName,"/")){$FileName=basename($FileName);
+	  }
 	  $saveToFile = dirname($saveToFile).PATH_SPLITTER.$FileName;
 	}
 
