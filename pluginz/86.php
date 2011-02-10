@@ -50,7 +50,7 @@ if (!defined('RAPIDLEECH')){
         $page = GetPage($link);
         is_present($page, "File not found", "File not found");
         $Cookies = GetCookies($page);
-        if (!preg_match("#Free Download - Waitingtime \((\d+)\)#", $page, $count)) {
+        if (!preg_match("#Free Download \((\d+)\)#", $page, $count)) {
             html_error("Error 0x01: Plugin is out of date");
         }
         insert_timer($count[1], "Timer 1:");
@@ -98,18 +98,18 @@ if (!defined('RAPIDLEECH')){
         $Cookies = GetCookies($page);
         $page = GetPage($link, $Cookies);
         is_present($page, "File not found", "File not found");
-        if (!preg_match('#http:\/\/dl.+duckload.com[^"]+#', $page, $dlink)) {
-            if (!preg_match("#http:\/\/.+download[^']+#", $page, $temp)) {
+        if (!preg_match('#Location: (.+)#', $page, $dlink)) {
+            if (!preg_match("#http://.+ddl=1#", $page, $temp)) {
                 html_error("Error 1x01: Plugin is out of date");
             }
             $page = GetPage($temp[0], $Cookies, 0, $link);
-            if (!preg_match("#http:\/\/dl.+duckload.com.+#", $page, $dlink)) {
+            if (!preg_match('#Location: (.+)#', $page, $dlink)) {
                 html_error("Error 1x02: Plugin is out of date");
             }
         }
-        $Url = parse_url(trim($dlink[0]));
+        $Url = parse_url(trim($dlink[1]));
         $FileName = basename($Url['path']);
-        RedirectDownload(trim($dlink[0]), $FileName, $Cookies, 0, $link, $FileName);
+        RedirectDownload(trim($dlink[1]), $FileName, $Cookies, 0, $link, $FileName);
         exit;
     }
 
@@ -169,7 +169,7 @@ if (!defined('RAPIDLEECH')){
 
 /*
  * Created by vdhdevil 30-Dec-2010
- * Updated 22-Jan: fixed free download
+ * Updated 10-Feb: fixed premium download problem
  * Rewrite into 36B by Ruud v.Tony
  */
 ?>

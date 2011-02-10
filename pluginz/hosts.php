@@ -91,7 +91,7 @@ $host = array(
 'duckload.com' =>'86.php',
 'muchshare.net' =>'87.php',
 'indowebster.com' =>'88.php',
-
+'filebase.to' =>'89.php',
 
 );
 ?>
