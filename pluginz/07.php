@@ -1,88 +1,91 @@
-<?php
-if (!defined('RAPIDLEECH'))
-  {require_once("404.php");exit;}
-
-$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), 0, 0, 0, 0, $_GET["proxy"] ,$pauth);
-is_page($page);
-
-if(preg_match('%- *(.+)</title>%', $page, $fn)){
-	$name = str_replace(array(" ", ".", "'", "&", "/"), '_', $fn[1]). ($_GET['ytube_mp4'] ? '_HQ.mp4' : '_LQ.flv');
-
-}elseif(preg_match("/name=\"title\"\scontent=\"(.*)\">/i", $page, $jd)){
-	$name = preg_replace("/[^a-zA-Z0-9\-]/", "_", ucwords(strtolower($jd[1]))) . ($_GET['ytube_mp4'] ? '_HQ.mp4' : '_LQ.flv');
-
+<?php    
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
 }
 
-if(preg_match('/, "t": "(.+?)",/', $page, $yt)){
-	$t = $yt[1];
-}
 
-if(preg_match('/"video_id": "(.+?)"/', $page, $yid)){
-	$id = $yid[1];
-}
+	$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), 0, 0, 0, 0, $_GET["proxy"] ,$pauth);
+	is_page($page);
 
-if($_GET['ytube_mp4']){
-	$directfile = 'http://youtube.com/get_video?video_id='.$id.'&t='.$t.'&fmt=18';
-}else{
-	$directfile = 'http://youtube.com/get_video?video_id='.$id.'&t='.$t;
-}
+	if (!preg_match('#fmt_url_map=(.+?)&#', $page, $fmt_url_map)) html_error('Video link not found.');
+	$fmt_url_maps = preg_split('%,%', urldecode($fmt_url_map[1]));
+	$fmts = array(22,35,18,34,6,5,0,17,13);
+	$yt_fmt = $_POST['yt_fmt'];
 
-$Url = parse_url($directfile);
+		if ($_POST['ytube_mp4'] == 'on')
+		{
+			foreach ($fmt_url_maps as $fmtlist)
+			{
+				$furlmap = preg_split('%\|%', $fmtlist);
+				$fmturlmaps[$furlmap[0]] = $furlmap[1];
+			}
 
-$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $Referer, 0, 0, 0, $_GET["proxy"],$pauth);
+			if ($yt_fmt == 'highest')
+			{
+				foreach ($fmts as $fmt)
+				{
+					if (in_array($fmt, array_keys($fmturlmaps)))
+					{
+						$furl = $fmturlmaps[$fmt];
+						break;
+					}
+				}
+			}
+			else
+			{
+				if (!$furl = $fmturlmaps[$yt_fmt])
+				{
+					preg_match ('/"t": "([^\"]+)/', $page, $video_t);
+					preg_match ('/"video_id": "([^\"]+)/', $page, $video_id);
+					preg_match ('%var swfUrl = canPlayV9Swf\(\) \? "(.+)\.swf" :%U', $page, $refmatch);
+					preg_match_all('/Set-Cookie: (.*);/U',$page,$temp);
+					$cookie = implode(';',$temp[1]);
+					$gurl = "http://www.youtube.com/get_video?video_id=" . $video_id [1] . "&t=" . $video_t [1] . "&el=detailpage&ps=&fmt=$yt_fmt";
+					$Url = parse_url($gurl);
+					$pagea = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $refmatch [1], $cookie, 0, 0, $_GET["proxy"] ,$pauth);
+					is_page($pagea);
+
+					if (! preg_match ('%ocation: (.+)\r\n%', $pagea, $durl)) html_error ('Specified video format not found');
+					$furl = $durl[1];
+				}
+			}
+		}
+		else
+		{
+			foreach ($fmt_url_maps as $fmtlist)
+			{
+				$furlmap = preg_split('%\|%', $fmtlist);
+				$fmturlmaps[] = $furlmap;
+			}
+			$fmt = $fmturlmaps[0][0];
+			$furl = $fmturlmaps[0][1];
+		}
+
+		if (preg_match ('%0|5|6|34|35%', $yt_fmt)) $ext = '.flv';
+		elseif (preg_match ('%18|22%', $yt_fmt)) $ext = '.mp4';
+		elseif (preg_match ('%13|17%', $yt_fmt)) $ext = '.3gp';
+		elseif (preg_match ('%highest%', $yt_fmt)) $ext = '.mp4';
+		else $ext = '.flv';
+
+		if (!preg_match('#<title>.*YouTube.*-(.*)</title>#Us', $page, $title)) html_error('No video title found! Download halted.');
+		if (!$video_id) preg_match ('#video_id=(.+?)&#', $page, $video_id);
+
+		$FileName = str_replace (Array ("\\", "/", ":", "*", "?", "\"", "<", ">", "|"), "_", html_entity_decode (trim($title[1]))) . (isset ($_POST ['yt_fmt']) && $_POST ['yt_fmt'] !== 'highest' ? '-[' . $video_id[1] . '][f' . $_POST ['yt_fmt'] . ']' : '-[' . $video_id[1] . '][f' . $fmt . ']') . $ext;
+
+		if ($_POST ['ytdirect'] == 'on')
+		{
+			echo "<br /><br /><h4><a style='color:yellow' href='" . urldecode($furl) . "'>Click here or copy the link to your download manager to download</a></h4>";
+			echo "<input name='dlurl' style='width: 1000px; border: 1px solid #55AAFF; background-color: #FFFFFF; padding:3px' value='" . urldecode($furl) . "' onclick='javascript:this.select();' readonly></input>";
+		}
+		else
+		{
+			$Referer = $refmatch [1];			
+			$force_name = $FileName;
+			$Url = parse_url($furl);
+insert_location("$PHP_SELF?filename=".urlencode($FileName)."&force_name=".urlencode($force_name)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($refmatch [1])."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").($pauth ? "&pauth=$pauth" : ""));
+
+		}
 
 
-if(preg_match_all('/Set-Cookie: (.*)/i', $page, $cook)){
-	$cookie = implode(";", $cook[1]);
-}
-$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $directfile, $cookie, 0, 0, $_GET["proxy"],$pauth);
-if(preg_match('/ocation: (.+)/i', $page, $loc)){
-	$directlink = trim($loc[1]);
-}else{
-	echo "Error[getLOCATION1]";
-	die;
-}
-$Url = parse_url($directlink);
-$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $directlink, $cookie, 0, 0, $_GET["proxy"],$pauth);
-if(preg_match('/ocation: (.+)/i', $page, $loc)){
-	$directlink = trim($loc[1]);
-}else{
-	echo "Error[getLOCATION1]";
-	die;
-}
-/*
-ob_start();
-if($ch = curl_init()){
-curl_setopt($ch, CURLOPT_HEADER, 1);
-curl_setopt($ch, CURLOPT_NOBODY, 0);
-curl_setopt($ch, CURLOPT_URL, $directlink);
-curl_exec($ch);
-curl_close($ch);
-$head_res = ob_get_contents();
-}
-ob_end_clean();
-if(preg_match('/ocation: (.+)/', $head_res, $location)){
-	$link = $location[1];
-	$Url = parse_url($link);
-	//die($head_res);
-}else{
-	$Url = parse_url($directlink);
-}
-*/
-$Url = parse_url($directlink);
-if($name){
-	$FileName = $name;
-}elseif($_GET['ytube_mp4']){
-	$FileName = basename($Url["path"]);
-}else{
-	$FileName = basename($Url["path"]).".flv";
-}
-if($_GET['ytube_mp4'])
-  {
-insert_location("$PHP_SELF?filename=".urlencode($FileName)."&force_name=".urlencode($name)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($directlink)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
-  }
-else
-  {
-insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($directlink)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
-  }
 ?>

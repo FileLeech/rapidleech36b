@@ -31,7 +31,7 @@ if (!defined('RAPIDLEECH')){
         $Cookies = GetCookies($page);
         $post = array();
         $post['dl_free'] = "1";
-        $page = GetPage($link . "/free/", $Cookies, $post, $link);
+        $page = GetPage(trim($link) . "/free/", $Cookies, $post, $link);
         is_present($page, "failure/full/", "No free slots for free users");
         if (!preg_match("#var wait=(\d+)#", $page, $count)) {
             html_error("Error 0x01: Plugin is out of date");
