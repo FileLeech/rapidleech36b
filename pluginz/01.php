@@ -58,8 +58,8 @@ if (!defined('RAPIDLEECH')){
 			html_error("Password is incorrect! Input link with password: Link|Password.");
         }
 		
-		//$countDown = trim ( cut_str ( $page, "count=",";" ) );
-		$countDown = rand(5, 10);
+		$countDown = trim ( cut_str ( $page, "count=",";" ) );
+		//$countDown = rand(5, 10);
 		insert_timer( $countDown, "<b>Megaupload Free User</b>.","",true );
 		
 		preg_match('/http:\/\/(.*)" class="down_butt1"/', $page, $match);

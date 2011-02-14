@@ -99,12 +99,14 @@ if (!defined('RAPIDLEECH')){
         $page = GetPage($link, $Cookies);
         is_present($page, "File not found", "File not found");
         if (!preg_match('#Location: (.+)#', $page, $dlink)) {
-            if (!preg_match("#http://.+ddl=1#", $page, $temp)) {
-                html_error("Error 1x01: Plugin is out of date");
-            }
-            $page = GetPage($temp[0], $Cookies, 0, $link);
-            if (!preg_match('#Location: (.+)#', $page, $dlink)) {
-                html_error("Error 1x02: Plugin is out of date");
+            if (!preg_match('#<form action="([^"]+)"#', $page, $dlink)) {
+                if (!preg_match("#http://.+ddl=1#", $page, $temp)) {
+                    html_error("Error 1x01: Plugin is out of date");
+                }
+                $page = GetPage($temp[0], $Cookies, 0, $link);
+                if (!preg_match('#Location: (.+)#', $page, $dlink)) {
+                    html_error("Error 1x02: Plugin is out of date");
+                }
             }
         }
         $Url = parse_url(trim($dlink[1]));
@@ -169,7 +171,7 @@ if (!defined('RAPIDLEECH')){
 
 /*
  * Created by vdhdevil 30-Dec-2010
- * Updated 10-Feb: fixed premium download problem
- * Rewrite into 36B by Ruud v.Tony
+ * Updated 14-Feb: updated non active direct link premium account
+ * Rewrite into 36B by Ruud v.Tony 14-Feb-2011
  */
 ?>
