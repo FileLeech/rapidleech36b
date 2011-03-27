@@ -337,28 +337,6 @@ pass: <input type="password" id="pass" name="pass">
 	<tr>
 	<td class="tdacc">
 <?php 
-  $shareonln=false;$chk='';
-  if($showpostn){
-    if(isset($_POST['share_online_premix']) && $_POST['share_online_premix']=='on')
-	  {$chk= ' checked';$shareonln=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['share_online'])))
-    {$chk= ' checked';$shareonln=true;} 
-?>
-
-<input type="checkbox" id="share_online_premix" name="share_online_premix" onClick="clk(this,'shobox','shoket','<?php echo $shareonln;?>');"<?php echo $chk;?>>
-<label for="share_online_premix">&nbsp;Share-Online.com</label>
-	</td>
-	<td class="tdacc">
-	<div id="shobox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrsho" name="usrsho" value="">&nbsp;
-	pass: <input type="password" id="passsho" name="passsho" value="">
-	</div>
-	<span id="shoket" ><?php if(!$shareonln){echo "<div>Share-Online premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-<?php 
   $vbulacc=false;$chk='';
    if($showpostn){
      if(isset($_POST['vBulletin_acc_premix']) && $_POST['vBulletin_acc_premix']=='on')
@@ -547,6 +525,133 @@ pass: <input type="password" id="pass" name="pass">
 	<span id="sendket" ><?php if(!$sendspace){echo "<div>sendspace Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
+	<tr>
+	<td class="tdacc">
+	<?php 
+  $fileserve=false; $chk='';
+  if($showpostn){
+   if(isset($_POST['fileserve_com_premix']) && $_POST['fileserve_com_premix']=='on')
+    {$chk= ' checked';$fileserve=true;}
+  }elseif((isset($premium_acc))&&(isset($premium_acc['fileserve_com'])))
+    {$chk= ' checked';$fileserve=true;} 
+	?>
+<input type="checkbox" id="fileserve_com_premix" name="fileserve_com_premix" onClick="clk(this,'fileservebox','fileserveket','<?php echo $fileserve;?>');"<?php echo $chk;?>>
+<label for="fileserve_com_premix">&nbsp;fileserve.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="fileservebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrfileserve" name="usrfileserve" value="">&nbsp;
+	pass: <input type="password" id="passfileserve" name="passfileserve" value="">
+	</div>
+	<span id="fileserveket" ><?php if(!$fileserve){echo "<div>fileserve.com Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	<tr>
+	<td class="tdacc">
+	<?php 
+  $filesonic=false; $chk='';
+  if($showpostn){
+   if(isset($_POST['filesonic_com_premix']) && $_POST['filesonic_com_premix']=='on')
+    {$chk= ' checked';$filesonic=true;}
+  }elseif((isset($premium_acc))&&(isset($premium_acc['filesonic_com'])))
+    {$chk= ' checked';$filesonic=true;} 
+	?>
+<input type="checkbox" id="filesonic_com_premix" name="filesonic_com_premix" onClick="clk(this,'filesonicbox','filesonicket','<?php echo $filesonic;?>');"<?php echo $chk;?>>
+<label for="filesonic_com_premix">&nbsp;filesonic.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="filesonicbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrfilesonic" name="usrfilesonic" value="">&nbsp;
+	pass: <input type="password" id="passfilesonic" name="passfilesonic" value="">
+	</div>
+	<span id="filesonicket" ><?php if(!$filesonic){echo "<div>filesonic.com Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	<tr>
+	<td class="tdacc">
+	<?php 
+  $oron=false; $chk='';
+  if($showpostn){
+   if(isset($_POST['oron_com_premix']) && $_POST['oron_com_premix']=='on')
+    {$chk= ' checked';$oron=true;}
+  }elseif((isset($premium_acc))&&(isset($premium_acc['oron_com'])))
+    {$chk= ' checked';$oron=true;} 
+	?>
+<input type="checkbox" id="oron_com_premix" name="oron_com_premix" onClick="clk(this,'oronbox','oronket','<?php echo $oron;?>');"<?php echo $chk;?>>
+<label for="oron_com_premix">&nbsp;oron.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="oronbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usroron" name="usroron" value="">&nbsp;
+	pass: <input type="password" id="passoron" name="passoron" value="">
+	</div>
+	<span id="oronket" ><?php if(!$oron){echo "<div>oron.com Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	<tr>
+	<td class="tdacc">
+	<?php 
+  $duckload=false; $chk='';
+  if($showpostn){
+   if(isset($_POST['duckload_com_premix']) && $_POST['duckload_com_premix']=='on')
+    {$chk= ' checked';$duckload=true;}
+  }elseif((isset($premium_acc))&&(isset($premium_acc['duckload_com'])))
+    {$chk= ' checked';$duckload=true;} 
+	?>
+<input type="checkbox" id="duckload_com_premix" name="duckload_com_premix" onClick="clk(this,'duckloadbox','duckloadket','<?php echo $duckload;?>');"<?php echo $chk;?>>
+<label for="duckload_com_premix">&nbsp;duckload.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="duckloadbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrduckload" name="usrduckload" value="">&nbsp;
+	pass: <input type="password" id="passduckload" name="passduckload" value="">
+	</div>
+	<span id="duckloadket" ><?php if(!$duckload){echo "<div>duckload.com Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	<tr>
+	<td class="tdacc">
+	<?php 
+  $shareonline=false; $chk='';
+  if($showpostn){
+   if(isset($_POST['shareonline_biz_premix']) && $_POST['shareonline_biz_premix']=='on')
+    {$chk= ' checked';$shareonline=true;}
+  }elseif((isset($premium_acc))&&(isset($premium_acc['shareonline_biz'])))
+    {$chk= ' checked';$shareonline=true;} 
+	?>
+<input type="checkbox" id="shareonline_biz_premix" name="shareonline_biz_premix" onClick="clk(this,'shareonlinebox','shareonlineket','<?php echo $shareonline;?>');"<?php echo $chk;?>>
+<label for="shareonline_biz_premix">&nbsp;shareonline.biz</label>
+	</td>
+	<td class="tdacc">
+	<div id="shareonlinebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrshareonline" name="usrshareonline" value="">&nbsp;
+	pass: <input type="password" id="passshareonline" name="passshareonline" value="">
+	</div>
+	<span id="shareonlineket" ><?php if(!$shareonline){echo "<div>shareonline.biz Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	<tr>
+	<td class="tdacc">
+	<?php 
+  $torrific=false; $chk='';
+  if($showpostn){
+   if(isset($_POST['torrific_com_premix']) && $_POST['torrific_com_premix']=='on')
+    {$chk= ' checked';$torrific=true;}
+  }elseif((isset($premium_acc))&&(isset($premium_acc['torrific_com'])))
+    {$chk= ' checked';$torrific=true;} 
+	?>
+<input type="checkbox" id="torrific_com_premix" name="torrific_com_premix" onClick="clk(this,'torrificbox','torrificket','<?php echo $torrific;?>');"<?php echo $chk;?>>
+<label for="torrific_com_premix">&nbsp;torrific.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="torrificbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrtorrific" name="usrtorrific" value="">&nbsp;
+	pass: <input type="password" id="passtorrific" name="passtorrific" value="">
+	</div>
+	<span id="torrificket" ><?php if(!$torrific){echo "<div>torrific.com Free ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+
 
 	</tbody></table>
 	</li></ul>
@@ -1387,6 +1492,11 @@ foreach($show_column_sfile as $kol => $kolval)
   <br/>(separate each IP by new line)
  </div>
 </td>
+</tr>
+
+<tr>
+<td class="tdacc"><div style="padding-left:5px;"><input type="text" name="secretkey" value="<?php if($showpostn){if(!empty($_POST['secretkey']))echo $_POST['secretkey'];}elseif(!empty($secretkey)) echo $secretkey; ?>">&nbsp;Secret Key</div></td>
+<td class="tdacc">Place your Secret Key</td>
 </tr>
 
 <tr>

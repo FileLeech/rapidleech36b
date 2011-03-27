@@ -33,7 +33,6 @@ $premium_acc["rs_com"] = array(
 //$premium_acc["megashare"] = array('user' => '', 'pass' => '');
 //$premium_acc["netload"] = array('user' => '', 'pass' => '');
 //$premium_acc["gigasize"] = array('user' => '', 'pass' => '');
-//$premium_acc["share_online"] = array('user' => '', 'pass' => '');
 //$premium_acc["vBulletin_acc"] = array('user' => '', 'pass' => '');
 //$premium_acc["uploaded_to"] = array('user' => '', 'pass' => '');
 //$premium_acc["easyshare"] = array('user' => '', 'pass' => '');
@@ -43,6 +42,12 @@ $premium_acc["rs_com"] = array(
 //$premium_acc["filefactory"] = array('user' => '', 'pass' => '');
 //$premium_acc["ifile_it"] = array('user' => '', 'pass' => '');
 //$premium_acc["sendspace"] = array('user' => '', 'pass' => '');
+//$premium_acc["fileserve_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["filesonic_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["oron_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["duckload_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["shareonline_biz"] = array('user' => '', 'pass' => '');
+//$premium_acc["torrific_com"] = array('user' => '', 'pass' => '');
 #Auto Download Premium Account #
 //$premium_acc_audl = false;
 
@@ -202,6 +207,7 @@ $autochecklink = true; // Auto check submited link in audl
 $mip_enabled= false; //If you need to disable multiple ip support, set to false
 $mip_arotate= true; //Auto change to next ip after start transload process
 
+$secretkey = '';//Place your Secret Key
 $iframealocate = 10;//how many iframe to allocate in audl for manual method.
 $pointboost = 0;//boost your RS-Point with this feature!!
 $autosubmit = true;

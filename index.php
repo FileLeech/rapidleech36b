@@ -17,7 +17,7 @@ error_reporting(6135);
 $nn = "\r\n";
 $fromaddr = "RapidLeech";
 $dev_name = 'eqbal';
-$rev_num = '36B.Rv7.3';
+$rev_num = '36B.Rv7.4 Unofficial';
 $RL_VER = 'Rx08.ii'.$rev_num;
 
 $PHP_SELF = !isset($PHP_SELF) ? $_SERVER["PHP_SELF"] : $PHP_SELF;
@@ -267,13 +267,13 @@ if(isset($_GET["useproxy"]) && (!$_GET["proxy"] || !strstr($_GET["proxy"], ":"))
       }
       	else
       {
-      	if (isset($_GET["pauth"]))
+      	if (!empty($_GET["pauth"]))
       		{
       			$pauth = $_GET["pauth"];
       		}
       			else
       		{
-      			$pauth = (isset($_GET["proxyuser"]) && isset($_GET["proxypass"])) ? base64_encode($_GET["proxyuser"].":".$_GET["proxypass"]) : "";
+      			$pauth = (!empty($_GET["proxyuser"]) && !empty($_GET["proxypass"])) ? base64_encode($_GET["proxyuser"].":".$_GET["proxypass"]) : "";
       		}
       }
 
@@ -322,7 +322,6 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 		  "megashare"=>"megashare.com",
 		  "netload"=>"netload.in",
 		  "gigasize"=>"gigasize.com",
-		  "share_online"=>"share_online.com",
 		  "uploaded_to"=>"uploaded.to",
 		  "easyshare"=>"easy-share.com",
 		  "depositfiles"=>"depositfiles.com",
@@ -330,6 +329,12 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 		  "uploading"=>"uploading.com",
 		  "filefactory"=>"filefactory.com",
 		  "ifile_it"=>"ifile.it",
+		  "fileserve_com"=>"Fileserve.com",
+		  "filesonic_com"=>"Filesonic.com",
+		  "oron_com"=>"Oron.com",
+		  "duckload_com"=>"Duckload.com",
+		  "shareonline_biz"=>"Shareonline.biz",
+		  "torrific_com"=>"torrific.com",
 		 );
 		 foreach($premium_acc as $host_acc => $val){
 		   $acc_txt.= (isset($premium_acc[$host_acc]["user"]) ? ($premium_acc[$host_acc]["user"]!=''&&$premium_acc[$host_acc]["pass"]!='' ? $ar_host_acc[$host_acc] . $spacer : '') : $ar_host_acc[$host_acc]." multi acc" . $spacer);
@@ -447,9 +452,20 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 				print "<html>$nn<head>$nn<title>".$txt['prep_dl']." $LINK</title>$nn<link rel=\"shortcut icon\" type=\"image/gif\" href=\"".IMAGE_DIR."rsload_2.gif\">$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn";
 				print "<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<center><img src='".IMAGE_DIR."rl_lgo.png'>";
 					require_once(CLASS_DIR."http.php");
+					require_once (CLASS_DIR. "DownloadClass.php");
 					require_once(HOST_DIR.$file);
-					exit;
-					
+					$class = substr($file, 0, -4);
+					$firstchar = substr($file, 0, 1);
+					if ($firstchar > 0)
+					{
+						$class = "d" . $class;
+					}
+					if (class_exists($class))
+					{
+						$hostClass = new $class();
+						$hostClass->Download($LINK);
+					}
+					exit ();
 					}
 				}
 		  }
@@ -466,7 +482,7 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 				html_error("You are not allowed to leech from <font color=black>".$mydomain." (".$myip.")</font>");
 			} */
              
-		$auth = ($Url["user"] && $Url["pass"]) ? "&auth=".base64_encode($Url["user"].":".$Url["pass"]) : "";
+		$auth = ($Url["user"] && $Url["pass"]) ? "&auth=".urlencode (encrypt (base64_encode($Url["user"].":".$Url["pass"]))) : "";
 		
 		insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&port=".$Url["port"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
   }
@@ -518,14 +534,14 @@ if($limitbyip){
 	    $_GET["link"] = urldecode(trim($_GET["link"]));
 		
 	    $_GET["post"] = $_GET["post"] ? unserialize(stripslashes(urldecode(trim($_GET["post"])))) : 0;
-	    $_GET["cookie"] = $_GET["cookie"] ? urldecode(trim($_GET["cookie"])) : 0;
+	    $_GET["cookie"] = $_GET["cookie"] ? decrypt(urldecode(trim($_GET["cookie"]))) : 0;
 	    //$resume_from = $_GET["resume"] ? intval(urldecode(trim($_GET["resume"]))) : 0;
 	    //if ($_GET["resume"]) {unset($_GET["resume"]);}
 
         $redirectto = "";
 	    
 	    $pauth = urldecode(trim($_GET["pauth"]));
-	    $auth = urldecode(trim($_GET["auth"]));
+	    $auth = decrypt(urldecode(trim($_GET["auth"])));
 
 	    if($_GET["auth"]){
 	      $AUTH["use"] = TRUE;

@@ -1517,4 +1517,45 @@ function getServerPlatf(){
 	return $server;
 }
 
+function encrypt($string){
+	global $secretkey;
+	if (empty($string)) {
+		return '';
+	}
+	if (!$secretkey) {
+		return html_error('Value for $secretkey is empty, please create a random one (56 chars max) in your config!', 0);
+	}
+	require_once 'class.pcrypt.php';
+	/*
+	MODE: MODE_ECB or MODE_CBC
+	ALGO: BLOWFISH
+	KEY:  Your secret key :) (max lenght: 56)
+	*/
+	$crypt = new pcrypt(MODE_CBC, "BLOWFISH", "$secretkey");
+
+	// Return encrypted string
+	return $crypt->encrypt($string);
+}
+
+function decrypt($string){
+	global $secretkey;
+	if (empty($string)) {
+		return '';
+	}
+	if (!$secretkey) {
+		return html_error('Value for $secretkey is empty, please create a random one (56 chars max) in your config!', 0);
+	}
+	require_once 'class.pcrypt.php';
+	/*
+	MODE: MODE_ECB or MODE_CBC
+	ALGO: BLOWFISH
+	KEY:  Your secret key :) (max lenght: 56)
+	*/
+	$crypt = new pcrypt(MODE_CBC, "BLOWFISH", "$secretkey");
+
+	// Return decrypted string
+	return $crypt->decrypt($string);
+}
+
+//Added default encrypt/decrypt function by Th3-882
 ?>

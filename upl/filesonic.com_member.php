@@ -36,30 +36,23 @@ if ($continue_up) {
 <tr><td align=center>
 <div id=info width=100% align=center>Connecting to filesonic.com</div>
 <?php
-	$Url=parse_url("http://www.filesonic.com/");
-	$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), 0, 0, 0, 0, $_GET["proxy"],$pauth);
-	$cookies=GetCookies($page);
-
 	if (empty($_REQUEST['my_login']) || empty($_REQUEST['my_pass'])) 
 		html_error('No entered Login/Password');
-	//
 	$Url=parse_url("http://www.filesonic.com/user/login/");
 	$post = array();
 	$post["rememberMe"] = "1";
 	$post["email"]=trim($_REQUEST['my_login']);
 	$post["password"]=trim($_REQUEST['my_pass']);
-	$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), "http://www.filesonic.com/", $cookies, $post, 0, $_GET["proxy"],$pauth);
+	$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), "http://www.filesonic.com/", 0, $post, 0, $_GET["proxy"],$pauth);
 	is_page($page);
-
+	
 	if(strpos($page,"nickname") !== false)
-		$cookies = GetCookies($page);
+		$tmparr=explode(";", GetCookies($page));
 	else
-		html_error("Can't use premium account!");
-
+		html_error("Can't use premium account!");        
+        $cookies=$tmparr[0]."; ".$tmparr[3]."; ".$tmparr[4]."; ".$tmparr[5]."; ".$tmparr[6]."; ".$tmparr[7]."; ".$tmparr[8];
 	$Url=parse_url("http://www.filesonic.com/");
 	$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), "http://www.filesonic.com/dashboard/", $cookies, 0, 0, $_GET["proxy"],$pauth);
-	$cookies .= GetCookies($page);
-
 	//Collection info...
 	$sessID = cut_str($cookies, 'PHPSESSID=', ';');
 	$originalAction = cut_str($page, 'class="webUpload" action="', '" method');
@@ -94,20 +87,13 @@ if ($continue_up) {
 
 		$Rid = cut_str($rawpage, '"linkId":"F', '"');
 		$Rname = cut_str($rawpage, '"filename":"', '"');
-		$Rstatus = (int) cut_str($rawpage, '"statusCode":', ',');
+		$Rstatus = cut_str($rawpage, '"statusCode":', ',');
 		$Rmessage = cut_str($rawpage, '"statusMessage":"', '"');
 		
-		if ($Rstatus !=0)
+		if ($Rstatus != '0')
 			html_error($Rmessage);
-		
-		$relink = 'http://www.filesonic.com/filesystem/generate-link/F' . $Rid;
-		$Url=parse_url($relink);
-		$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), 'http://www.filesonic.com/', $cookies, 0, 0, $_GET["proxy"],$pauth);
-		
-		if (strpos($page, 'Technical problem. Please try again!'))
-			html_error('Technical problem. Please try again!');
-		elseif (preg_match('/name="URL_(.*)" value="(.*)"/', $page, $matches))
-			$download_link = $matches[2];
+		else if (!empty($Rid) && !empty($Rname))
+			$download_link = 'http://www.filesonic.com/file/' . $Rid . '/' . $Rname;
 		else
 			html_error("Download link not found!");
 	} else
@@ -118,6 +104,7 @@ if ($continue_up) {
 <?php
 /* HISTORY: Filesonic Upload Plugin ===================
 2010.12.04: Written by thangbom40000 @ Share4u.vn
+2011.03.13: Fixed cookies by vdhdevil @ 
 			Upload plugin for free member.
 =====================================================*/
 ?>

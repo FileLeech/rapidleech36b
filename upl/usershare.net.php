@@ -1,8 +1,8 @@
 <?php 
 
 ####### Free Account Info. ###########
-$usershare_username="xxxxxx"; //  Set you username
-$usershare_password="xxxxxx"; //  Set your password
+$usershare_username=""; //  Set you username
+$usershare_password=""; //  Set your password
 ##############################
 
 $not_done=true;
@@ -53,7 +53,7 @@ if ($continue_up)
             $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $referrer, 0, $post, 0, $_GET["proxy"],$pauth);
 			is_page($page);
 			$cookie =GetCookies($page);
-			$Url = parse_url("http://usershare.net/");
+			$Url = parse_url("http://www.usershare.net/");
 			$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $referrer, $cookie, 0, 0, $_GET["proxy"],$pauth);
 			is_page($page);
                         is_notpresent($page,"Logout","Not logged in. Check your login details in usershare.net.php");

@@ -123,7 +123,6 @@ $ar_chkbox_acc = array(
  'megashare_premix',
  'netload_premix',
  'gigasize_premix', // index = 5
- 'share_online_premix', 
  'vBulletin_acc_premix',
  'uploaded_to_premix',
  'easyshare_premix',
@@ -133,6 +132,12 @@ $ar_chkbox_acc = array(
  'filefactory_premix',
  'ifile_it_premix',
  'sendspace_premix',
+ 'fileserve_com_premix',
+ 'filesonic_com_premix',
+ 'oron_com_premix',
+ 'duckload_com_premix',
+ 'shareonline_biz_premix',
+ 'torrific_com_premix',
 
 );
 
@@ -566,15 +571,22 @@ if(isset($_POST['submit'])){
 		fieldfilter($ar_chkbox_acc[3],'usrmega','passmega',$badpetik); 
 		fieldfilter($ar_chkbox_acc[4],'usrnet','passnet',$badpetik); 
 		fieldfilter($ar_chkbox_acc[5],'usrgz','passgz',$badpetik); 
-		fieldfilter($ar_chkbox_acc[6],'usrsho','passsho',$badpetik); 
-		fieldfilter($ar_chkbox_acc[7],'usrvbul','passvbul',$badpetik); 
-		fieldfilter($ar_chkbox_acc[8],'usrupto','passupto',$badpetik); 
-		fieldfilter($ar_chkbox_acc[9],'usreasy','passeasy',$badpetik); 
-		fieldfilter($ar_chkbox_acc[10],'usrdepos','passdepos',$badpetik); 
-		fieldfilter($ar_chkbox_acc[11],'usrhotfile','passhotfile',$badpetik);
-		fieldfilter($ar_chkbox_acc[12],'usruploading','passuploading',$badpetik); 
-		fieldfilter($ar_chkbox_acc[13],'usrfilefactory','passfilefactory',$badpetik); 
-		fieldfilter($ar_chkbox_acc[14],'usrifile','passifile',$badpetik); 
+		fieldfilter($ar_chkbox_acc[6],'usrvbul','passvbul',$badpetik); 
+		fieldfilter($ar_chkbox_acc[7],'usrupto','passupto',$badpetik); 
+		fieldfilter($ar_chkbox_acc[8],'usreasy','passeasy',$badpetik); 
+		fieldfilter($ar_chkbox_acc[9],'usrdepos','passdepos',$badpetik); 
+		fieldfilter($ar_chkbox_acc[10],'usrhotfile','passhotfile',$badpetik);
+		fieldfilter($ar_chkbox_acc[11],'usruploading','passuploading',$badpetik); 
+		fieldfilter($ar_chkbox_acc[12],'usrfilefactory','passfilefactory',$badpetik); 
+		fieldfilter($ar_chkbox_acc[13],'usrifile','passifile',$badpetik); 
+		fieldfilter($ar_chkbox_acc[14],'usrsendspace','passsendspace',$badpetik);
+		fieldfilter($ar_chkbox_acc[15],'usrfileserve','passfileserve',$badpetik);
+		fieldfilter($ar_chkbox_acc[16],'usrfilesonic','passfilesonic',$badpetik);
+		fieldfilter($ar_chkbox_acc[17],'usroron','passoron',$badpetik);
+		fieldfilter($ar_chkbox_acc[18],'usrduckload','passduckload',$badpetik);
+		fieldfilter($ar_chkbox_acc[19],'usrshareonline','passshareonline',$badpetik);
+		fieldfilter($ar_chkbox_acc[20],'usrtorrific','passtorrific',$badpetik);
+
 
 	} //-- end $_POST['usepcc']
 	else{
@@ -675,7 +687,7 @@ if(isset($_POST['submit'])){
 	 //===================
 	 
 	$upcc = '';
-	 if(empty($_POST['rs_com_premix'])&&empty($_POST['rs_de_premix'])&&empty($_POST['megaupload_premix'])&&empty($_POST['megashare_premix'])&&empty($_POST['netload_premix'])&&empty($_POST['gigasize_premix'])&&empty($_POST['share_online_premix'])&&empty($_POST['vBulletin_acc'])&&empty($_POST['uploaded_to_premix'])&&empty($_POST['easyshare_premix'])&&empty($_POST['depositfiles_premix'])&&empty($_POST['hotfile_com_premix'])&&empty($_POST['uploading_premix'])&&empty($_POST['filefactory_premix'])&&empty($_POST['ifile_it_premix'])&&empty($_POST['sendspace_premix'])&&empty($_POST['muhash_premix'])&&empty($_POST['hfhash_premix'])&&empty($_POST['rshash_premix'])&&empty($_POST['imghack_premix']))
+	 if(empty($_POST['rs_com_premix'])&&empty($_POST['rs_de_premix'])&&empty($_POST['megaupload_premix'])&&empty($_POST['megashare_premix'])&&empty($_POST['netload_premix'])&&empty($_POST['gigasize_premix'])&&empty($_POST['vBulletin_acc'])&&empty($_POST['uploaded_to_premix'])&&empty($_POST['easyshare_premix'])&&empty($_POST['depositfiles_premix'])&&empty($_POST['hotfile_com_premix'])&&empty($_POST['uploading_premix'])&&empty($_POST['filefactory_premix'])&&empty($_POST['ifile_it_premix'])&&empty($_POST['sendspace_premix'])&&empty($_POST['fileserve_com_premix'])&&empty($_POST['filesonic_com_premix'])&&empty($_POST['oron_com_premix'])&&empty($_POST['duckload_com_premix'])&&empty($_POST['shareonline_biz_premix'])&&empty($_POST['torrific_com_premix'])&&empty($_POST['muhash_premix'])&&empty($_POST['hfhash_premix'])&&empty($_POST['rshash_premix'])&&empty($_POST['imghack_premix']))
 	  { $upcc='//'; }
 	  
 	  
@@ -743,7 +755,6 @@ if(isset($_POST['submit'])){
 	 "megashare_premix" => array("megashare", "usrmega", "passmega"),
 	 "netload_premix" => array("netload", "usrnet", "passnet"),
 	 "gigasize_premix" => array("gigasize", "usrgz", "passgz"),
-	 "share_online_premix" => array("share_online", "usrsho", "passsho"),
 	 "vBulletin_acc_premix" => array("vBulletin_acc", "usrvbul", "passvbul"),
 	 "uploaded_to_premix" => array("uploaded_to", "usrupto", "passupto"),
 	 "easyshare_premix" => array("easyshare", "usreasy", "passeasy"),
@@ -753,7 +764,13 @@ if(isset($_POST['submit'])){
 	 "filefactory_premix" => array("filefactory", "usrfilefactory", "passfilefactory"),
 	 "ifile_it_premix" => array("ifile_it", "usrifile", "passifile"),
 	 "sendspace_premix" => array("sendspace", "usrsendspace", "passsendspace"),
-	);
+	 "fileserve_com_premix" => array("fileserve_com", "usrfileserve", "passfileserve"),
+	 "filesonic_com_premix" => array("filesonic_com", "usrfilesonic", "passfilesonic"),
+	 "oron_com_premix" => array("oron_com", "usroron", "passoron"),
+	 "duckload_com_premix" => array("duckload_com", "usrduckload", "passduckload"),
+	 "shareonline_biz_premix" => array("shareonline_biz", "usrshareonline", "passshareonline"),
+	 "torrific_com_premix" => array("torrific_com", "usrtorrific", "passtorrific"),
+	 );
 	$_config .= fillField_premium("premium_acc",$field, $upcc);
 		
 	$_config .= "#Auto Download Premium Account #\n";
@@ -911,6 +928,7 @@ if(isset($_POST['submit'])){
 	$_config .= "\$mip_enabled= ".(isset($_POST['mip_enabled']) && $_POST['mip_enabled']=='on'?'true':'false')."; //If you need to disable multiple ip support, set to false\n";
 	$_config .= "\$mip_arotate= ".(isset($_POST['mip_arotate']) && $_POST['mip_arotate']=='on'?'true':'false')."; //Auto change to next ip after start transload process\n\n";
 	
+	$_config .= "\$secretkey = '".$_POST['secretkey']."';//Place your Secret Key\n";
 	$_config .= "\$iframealocate = ".$_POST['iframealocate'].";//how many iframe to allocate in audl for manual method.\n";
 	$_config .= "\$pointboost = ".$_POST['pointbooster'].";//boost your RS-Point with this feature!!\n";
 	$_config .= "\$autosubmit = true;\n\n";

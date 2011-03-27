@@ -76,7 +76,7 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts']))
 			else{$return_msg = "<small>&nbsp;</small>"; }
 			$detil = "<th title='Expiration date'>Expired</th>";
 			if($authorized==0){$detil="";}
-			$return_msg.= "<table width=\"100%\" border=1 cellspacing=\"0\" cellpadding=\"2\"><tr bgcolor=\"#000\" valign=\"bottom\" align=\"center\" class=\"accnfo\"><th title='premium account rapidshare.com'>PremiX</th><th title='TrafficShare left'>Trafic</th>".$detil."<th title='Traffic Left'>Trafic&nbsp;left</th></tr>";		
+			$return_msg.= "<table width=\"100%\" border=1 cellspacing=\"0\" cellpadding=\"2\"><tr bgcolor=\"#000\" valign=\"bottom\" align=\"center\" class=\"accnfo\"><th title='premium account rapidshare.com'>PremiX</th>".$detil."<th title='Traffic Left'>Trafic&nbsp;left</th></tr>";		
 			}
 		else
 			{
@@ -90,7 +90,8 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts']))
 		{
 	    list($User, $Pass) = split(":", $value);
 	    if (empty($User)==FALSE || empty($Pass)==FALSE)
-			{	
+			{
+			/*
 			//if(!isset($_POST['useapi'])){
 			$uname = 'login=';
 			$hostrslink='premiumzone.cgi';
@@ -116,6 +117,7 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts']))
 			/* EDITED (again) by R0CKABILLY - 25 May 2010 */
 			/*--------------------------------------------*/
 			//get rapidshare details
+			/*
 			ereg("<td>TrafficShare left:</td><td align=right style=\"padding-right:20px;\"><b>([0-9\.]+) GB</b>", $pagedata, $traffic);
 			ereg("<td>Free RapidPoints:</td><td align=right style=\"padding-right:20px;\"><b><span id=\"rpo\">([0-9\.]+)</span></b>", $pagedata, $frpoints);
 			ereg("<td>Premium RapidPoints:</td><td align=right style=\"padding-right:20px;\"><b><span id=\"rppo\">([0-9\.]+)</span></b>", $pagedata, $ppoints);
@@ -124,18 +126,33 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts']))
 			//ereg("var refpoints = ([0-9]+);", $pagedata, $ref);
 			ereg("var email = \"([a-zA-Z\_0-9\ .,@-]+)\";", $pagedata, $emailnye);
 			ereg("schlosszu = \"([0-9])\"", $pagedata, $slock);
-			
+			*/
 			/* SMENTARA TIDAK ADA GUNANYA - 25 MAY 2010
 			$trafficlft=GetBetween($pagedata,"<td>Traffic left:</td><td align=right><b><script>","</script> MB</b></td>");
 			$trafficlft=GetBetween($trafficlft,'setzeTT(""+Math.ceil(',")));");
 			$tlpart = explode("/", trim($trafficlft));
 			if((int)$tlpart[1] != 0){$trafficlft = round((int)$tlpart[0]/(int)$tlpart[1], 1)."MB";}
 			*/
+			/*--------------------------------------------*/
+			/* Modified by haris182 - 19 Agustus 2010 */
+			/*--------------------------------------------*/
+			$text = "http://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails_v1&type=prem&login=".$User."&password=".$Pass;
+
+			$results = file_get_contents($text);
 	
+			preg_match("/tskb=(.*)/", $results, $traffic);
+			preg_match("/email=(.*)/", $results, $emailnye);
+			preg_match("/rsantihack=(.*)/", $results, $slock);
+			preg_match("/rapids=(.*)/", $results, $rapids);
+			preg_match("/username=(.*)/", $results, $name);
+			preg_match("/billeduntil=(.*)/", $results, $expirednya);
+			//($name[1]=="")?$User=$User:$User=$name[1]; //disable this kalo mao id nya instead username
+			($expirednya[1]=="0")?$valid[1] = "Dead":$valid[1] = Date('d M Y', $expirednya[1]);
+			$trafficlft = bytesToKbOrMbOrGb($traffic[1]*1024);
 			
 			//check if it's german rapidshare.com acc, by R0CKABILLY
 			if($traffic[1]=="") {
-				ereg("<td>TrafficShare &uuml;brig:</td><td align=right style=\"padding-right:20px;\"><b>([0-9\.]+) GB</b></td>", $pagedata, $traffic);
+				//ereg("<td>TrafficShare &uuml;brig:</td><td align=right style=\"padding-right:20px;\"><b>([0-9\.]+) GB</b></td>", $pagedata, $traffic);
 				//ereg("<td>G&uuml;ltig bis:</td><td style=\"padding-right:20px;\"><b>([a-zA-Z\_0-9\ .,]+)</b></td>", $pagedata, $valid);
 				
 				/* SMENTARA TIDAK ADA GUNANYA - 25 MAY 2010
@@ -166,6 +183,7 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts']))
 				if($accstatus==0) // RS Acc Checker
 					{
 					/* AMBIL EXPDATE, ditambah gara2 ada rule rapid 25 May 2010 */
+					/*
 					$sublink = "http://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails_v1&type=prem&login=".$User."&password=".$Pass;
 					$ch = curl_init();
 					curl_setopt($ch, CURLOPT_URL, $sublink);
@@ -176,8 +194,7 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts']))
 					$result = curl_exec($ch);
 					curl_close($ch);
 					$apiresult = parseResult($result);
-					$valid[1] = Date('d M Y', $apiresult[platinumuntil]);
-					$trafficlft = ($apiresult[dlkbleft]/1000)." MB";
+					*/
 					/* END OF AMBIL EXPDATE, ditambah gara2 ada rule rapid 25 May 2010 */
 	   
 					$loginfunc = "cz";
@@ -187,14 +204,17 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts']))
 						$szGb='&nbsp;GB';
 						$slipOut=$traffic[1].":".$valid[1].":".$trafficlft.":";
 						}
-					$ret_acc = ""; 
+					$ret_acc = "";
+					$frpoints[1] = "-";
+					//$rapids[1] = "-";
+					$rfpoints = "-";
 					$accauth = "<td><a href=\"javascript:void(0);\" onclick=\"login('".$User."','".$Pass."','".$loginfunc."');\">".$User."</a></td>".
-					"<td>".$Pass."</td><td align=center>".$frpoints[1]."</td><td align=center>".$ppoints[1]."</td><td align=center>".$rfpoints."</td>".
-					"<td align=right>".$traffic[1].$szGB."</td>".
+					"<td>".$Pass."</td><td align=center>".$frpoints[1]."</td><td align=center>".$rapids[1]."</td><td align=center>".$rfpoints."</td>".
+					"<td align=right>".bytesToKbOrMbOrGb($traffic[1]*1024)."</td>".
 					"<td align=right>".$valid[1]."</td>";
 					$rpu = "<td align=center><span title='Security&nbsp;Lock'>".$slocktext."</span></td><td><span>".$emailnye[1]."</span></td>";
 					$trhead = "<tr class=\"acc_chk\"";
-					$ret_acc= $User.":".$Pass.":".$frpoints[1].":".$slipOut.$emailnye[1].":";
+					$ret_acc= $User.":".$Pass.":".$rapids[1].":".$slipOut.$emailnye[1].":";
 					$ret_acc.=($slock[1]=="1")?"secured":"UNSECURE";
 					}  // end RS Acc Checker
 				else
@@ -203,10 +223,10 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts']))
 					$pjgusr = strlen($User); $star = "********************************************";
 					$detilusr = ($pjgusr>3?(($pjgusr-3)>6?'*****':substr($star,0,$pjgusr-3)).substr($User, -3):$User);
 					if($authorized==0){$detil="";}
-					$accauth="<td align=center>".$detilusr."</td>"."<td align=right>$traffic[1]</td>".$detil;
+					$accauth="<td align=center>".$detilusr."</td>".$detil;
 					$trhead = "<tr class=\"accnfo\"";
 					}	   
-				$return_msg.= $trhead." bgcolor=\"#620000\" onMouseOver=\"this.bgColor='#970000';\" onMouseOut=\"this.bgColor='#620000';\">".$accauth."<td align=right>$trafficlft</td>".$rpu."</tr>";  
+				$return_msg.= $trhead." bgcolor=\"#620000\" onMouseOver=\"this.bgColor='#970000';\" onMouseOut=\"this.bgColor='#620000';\">".$accauth."<td align=right>".$trafficlft."</td>".$rpu."</tr>";  
 				$validrs[] = $User . ":" . $Pass;
 				}
 			if($accstatus==0 && empty($emailnye[1])==FALSE)
