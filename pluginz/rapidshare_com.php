@@ -5,6 +5,7 @@ if (!defined('RAPIDLEECH')){
 }
 
 class rapidshare_com extends DownloadClass {
+
 //Force disable SSL downloads...
 public $DisSSL = false; // If you get "Couldn't connect to rsXXXXX.rapidshare.com at port 443", change it to true.
 
@@ -124,7 +125,7 @@ private function DownloadFree($link) {
         }
 }
 private function DownloadPremium($link, $cookie = false) {
-        global $premium_acc, $DisSSL;
+        global $premium_acc;
         $URl = parse_url(trim($link));
         if (preg_match("/!download\|([^\|]+)\|(\d+)\|([^\|]+)/i", $URl["fragment"], $m)) {
                 $fileid = $m[2];
@@ -167,7 +168,6 @@ private function DownloadPremium($link, $cookie = false) {
         }
 
         $this->Check_Limit($page);
-
         if (is_array($premium_acc["rs_com"][0])) {
                 $totalpremium = count($premium_acc["rs_com"]);
                 $success = 0;
@@ -188,7 +188,7 @@ private function DownloadPremium($link, $cookie = false) {
 
                         if (stristr($page, "Location:")) {
                                 $Href = trim(cut_str($page, "Location:", "\n"));
-                        if (stristr($Href, "https://") && ($DisSSL == true || !extension_loaded('openssl'))) {
+                        if (stristr($Href, "https://") && ($this->DisSSL == true || !extension_loaded('openssl'))) {
                                 $Href = str_replace('https://', 'http://', $Href);
                         }
 
@@ -236,7 +236,7 @@ private function DownloadPremium($link, $cookie = false) {
 
                 if (stristr($page, "Location:")) {
                         $Href = trim(cut_str($page, "Location:", "\n"));
-                        if (stristr($Href, "https://") && ($DisSSL == true || !extension_loaded('openssl'))) {
+                        if (stristr($Href, "https://") && ($this->DisSSL == true || !extension_loaded('openssl'))) {
                                 $Href = str_replace('https://', 'http://', $Href);
                         }
                         if (function_exists('encrypt')) {
@@ -249,7 +249,6 @@ private function DownloadPremium($link, $cookie = false) {
         }
 }
 private function PremiumCookieDownload($fileid, $filename, $cookie) {
-        global $DisSSL;
         $this->ChkAccInfo($cookie);
         $cookie = "enc=$cookie;";
 
@@ -260,7 +259,7 @@ private function PremiumCookieDownload($fileid, $filename, $cookie) {
 
         if (stristr($page, "Location:")) {
                 $Href = trim(cut_str($page, "Location:", "\n"));
-                if (stristr($Href, "https://") && ($DisSSL == true || !extension_loaded('openssl'))) {
+                if (stristr($Href, "https://") && ($this->DisSSL == true || !extension_loaded('openssl'))) {
                         $Href = str_replace('https://', 'http://', $Href);
                 }
 

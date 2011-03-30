@@ -6,7 +6,7 @@ if (!defined('RAPIDLEECH')){
 
 class hotfile_com extends DownloadClass {
 	public function Download($link) {
-		global $premium_acc;
+		global $premium_acc, $hf_cookie_auth_value;
 
 		if (!$_GET["step"]) { // Check link
 			if (preg_match("/hotfile\.com\/dl\/(\d+\/\w+)\/(.+)?/i", $link, $l)) {
@@ -31,8 +31,14 @@ class hotfile_com extends DownloadClass {
 			unset($page);
 		}
 
-		if (($_REQUEST["cookieuse"] == "on" && preg_match("/auth\s?=\s?(\w{64})/i", $_REQUEST["cookie"], $c)) || ($_REQUEST["premium_acc"] == "on" && $premium_acc["hotfile_com"]["cookie"])) {
-			$cookie = (empty($c[1]) ? $premium_acc["hotfile_com"]["cookie"] : $c[1]);
+        if ($_REQUEST["hf_acc"] == "on" && (!empty($_GET["hf_cookie"]) || !empty($_GET["hf_hash"]) || !empty($hf_cookie_auth_value))) {
+                if (!empty($_GET["hf_cookie"])) {
+                        $cookie = $_GET["hf_cookie"];
+                } elseif (!empty($_GET["hf_hash"])) {
+                        $cookie = strrev(dcd($_GET["hf_hash"]));
+                } else {
+                        $cookie = $hf_cookie_auth_value;
+                }
 			$this->DownloadPremium($link, $cookie);
 		} elseif (($_REQUEST["premium_acc"] == "on" && $_REQUEST["premium_user"] && $_REQUEST["premium_pass"]) ||
 			($_REQUEST["premium_acc"] == "on" && $premium_acc["hotfile_com"]["user"] && $premium_acc["hotfile_com"]["pass"])) {

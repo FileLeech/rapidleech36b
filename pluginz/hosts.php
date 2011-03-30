@@ -41,6 +41,7 @@ $host = array(
 'ifolder.ru' => 'ifolder_ru.php',
 'imageshack.us' => 'imageshack_us.php',
 'indowebster.com' =>'indowebster_com.php',
+'jumbofiles.com' => 'jumbofiles_com.php',
 'kewlshare.com' => 'kewlshare_com.php',
 'kickload.com' =>'kickload_com.php',
 'letitbit.net' => 'letitbit_net.php',

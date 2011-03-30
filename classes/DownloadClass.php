@@ -16,7 +16,7 @@ class DownloadClass {
 		echo('<td align="center">');
 		echo('<div id="mesg" width="100%" align="center">Retrieving download page</div>');
 	}
-	
+
 	/**
 	 * You can use this function to retrieve pages without parsing the link
 	 * 
@@ -33,11 +33,11 @@ class DownloadClass {
 			$referer = $Referer;
 		}
 		$Url = parse_url(trim($link));
-		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $referer, $cookie, $post, 0, $_GET ["proxy"], $pauth, $auth );
+		$page = geturl ($Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $referer, $cookie, $post, 0, $_GET ["proxy"], $pauth, $auth, $Url ["scheme"]);
 		is_page ( $page );
 		return $page;
 	}
-	
+
 	/**
 	 * Use this function instead of insert_location so that we can improve this feature in the future
 	 * 
@@ -55,11 +55,9 @@ class DownloadClass {
 			global $Referer;
 			$referer = $Referer;
 		}
-    if (function_exists('encrypt') && !empty($cookie)) {
-      $cookie = encrypt($cookie);
-    }
+
 		$Url = parse_url($link);
-		if (substr($auth,0,6) != "&auth=") $auth = "&auth=" . $auth;
+
 		if (!is_array($params)) {
 			// Some problems with the plugin, quit it
 			html_error('Plugin problem! Please report, error: "The parameter passed must be an array"');
@@ -81,9 +79,9 @@ class DownloadClass {
 			"&partSize=" . ($_GET ["split"] ? $_GET ["partSize"] : "") . "&method=" . $_GET ["method"] .
 			"&proxy=" . ($_GET ["useproxy"] ? $_GET ["proxy"] : "") . "&saveto=" . $_GET ["path"] .
 			"&link=" . urlencode ( $link ) . ($_GET ["add_comment"] == "on" ? "&comment=" .
-			urlencode ( $_GET ["comment"] ) : "") . $auth . ($pauth ? "&pauth=$pauth" : "") .
+			urlencode ( $_GET ["comment"] ) : "") . ($auth ? '&auth=' . (urlencode($auth)) : "") . ($pauth ? "&pauth=$pauth" : "") .
 			($_GET ["uploadlater"] ? "&uploadlater=".$_GET["uploadlater"]."&uploadtohost=".$_GET['uploadtohost'] : "") .
-			"&cookie=" . ($cookie ? urlencode($cookie) : 0).
+			"&cookie=" . ($cookie ? urlencode(encrypt($cookie)) : 0).
 			"&post=" . urlencode ( serialize ( $post ) ) .
 			($_POST ["uploadlater"] ? "&uploadlater=".$_POST["uploadlater"]."&uploadtohost=".urlencode($_POST['uploadtohost']) : "").
 			($_POST ['autoclose'] ? "&autoclose=1" : "").
@@ -117,11 +115,11 @@ class DownloadClass {
 		}
 
 		echo "<form action='audl.php?GO=GO' method='post' >\n";
-		echo "<input type='hidden' name='links' value='" . $links . "'>\n";
+		echo "<input type='hidden' name='links' value='" . $links . "' />\n";
 		$key_array = array ( "useproxy", "proxy", "proxyuser", "proxypass" );
 		foreach ( $key_array as $v )
-		echo "<input type='hidden' name='" . $v . "' value='" . $_GET [$v] . "' >\n";
-		echo "<script language='JavaScript'>void(document.forms[0].submit());</script>\n";
+		echo "<input type='hidden' name='" . $v . "' value='" . $_GET [$v] . "' />\n";
+		echo "<script type='text/javascript'>void(document.forms[0].submit());</script>\n";
 		echo "</form>\n";
 		flush();
 		exit();
@@ -130,7 +128,7 @@ class DownloadClass {
 	public function CountDown($countDown) {
 		insert_timer ( $countDown, "Waiting link timelock" );
 	}
-	
+
 	public function EnterCaptcha( $captchaImg, $inputs, $captchaSize = '5' ) 
 	{
 		$defaultParam_array = array();
@@ -141,8 +139,8 @@ class DownloadClass {
 		$defaultParam_array["proxy"] = $_GET ["proxy"];
 		$defaultParam_array["proxyuser"] = $_GET ["proxyuser"];
 		$defaultParam_array["proxypass"] = $_GET ["proxypass"];
-		$defaultParam_array["path"] = $_GET ["path"];			
-		
+		$defaultParam_array["path"] = $_GET ["path"];
+
 		$this->EnterCaptchaDefault( $captchaImg, $inputs, $captchaSize, $defaultParam_array );
 	}
 
@@ -163,13 +161,13 @@ class DownloadClass {
 		echo('</body>');
 		echo('</html>');
 	}
-	
+
 	public function changeMesg($mesg) {
 		echo('<script>document.getElementById(\'mesg\').innerHTML=\''.stripslashes($mesg).'\';</script>');
 	}
 }
 
-/**********************************************************	
+/**********************************************************
 Added support of force_name in RedirectDownload function by Raj Malhotra on 02 May 2010
 Fixed  EnterCaptcha function ( Re-Write )  by Raj Malhotra on 16 May 2010
 Added auto-encryption system (szal) 14 June 2010

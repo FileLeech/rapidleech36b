@@ -1,179 +1,130 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
+<?php
+if (!defined('RAPIDLEECH')) {
+	require('../404.php');
+	exit;
+}
+if ((
+        $_GET["premium_acc"] == "on" && $_GET["premium_user"] && $_GET["premium_pass"]) || ($_GET["premium_acc"] == "on" && $premium_acc["fileserve_com"]["user"] && $premium_acc["fileserve_com"]["pass"])) {
+    $user = ($_GET["premium_user"] ? $_GET["premium_user"] : $premium_acc["fileserve_com"]["user"]);
+    $pass = ($_GET["premium_pass"] ? $_GET["premium_pass"] : $premium_acc["fileserve_com"]["pass"]);
+    $ref = "http://www.fileserve.com/login.php";
+    $Url = parse_url($ref);
+    $post['loginUserName'] = $user;
+    $post['loginUserPassword'] = $pass;
+    $post['autoLogin'] = '';
+    $post['loginFormSubmit'] = "Login";
+    $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), $ref, $cookie, $post, 0, $_GET["proxy"], $pauth);
+    is_page($page);
+    $cookie = GetCookies($page);
+    $Url = parse_url($LINK);
+    $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), 0, $cookie, 0, 0, $_GET["proxy"], $pauth);
+    is_page($page);
+    is_present($page, "File not available", "strerror", 0);
+    preg_match('/^HTTP\/1\.0|1 ([0-9]+) .*/', $page, $status);
+    if ($status[1] == 200) {
+        unset($post);
+        $post["download"] = "premium";
+        $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), $LINK, $cookie, $post, 0, $_GET["proxy"], $pauth);
+        is_page($page);
+    }
+    $cookie .= "; " . GetCookies($page);
+    $locat = cut_str($page, "Location: ", "\r");
+    $Url = parse_url($locat);
+    $FileName = basename($locat);
+    if (function_exists(encrypt) && $cookie != "") {
+        $cookie = encrypt($cookie);
+    }
+    $loc = "$PHP_SELF?filename=" . urlencode($FileName) . "&force_name=" . urlencode($FileName) . "&host=" . $Url ["host"] . "&port=" . $Url ["port"] . "&path=" . urlencode($Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : "")) . "&referer=" . urlencode($Referer) . "&email=" . ($_GET ["domail"] ? $_GET ["email"] : "") . "&partSize=" . ($_GET ["split"] ? $_GET ["partSize"] : "") . "&method=" . $_GET ["method"] . "&proxy=" . ($_GET ["useproxy"] ? $_GET ["proxy"] : "") . "&saveto=" . $_GET ["path"] . "&link=" . urlencode($LINK) . ($_GET ["add_comment"] == "on" ? "&comment=" . urlencode($_GET ["comment"]) : "") . $auth . ($pauth ? "&pauth=$pauth" : "") . (isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") . "&cookie=" . urlencode($cookie);
+    insert_location($loc);
+} else {
+    if ($_POST['step'] == "1") {
+        @unlink(urldecode($_POST["delete"]));
+        $post = unserialize(urldecode($_POST['post']));
+        $cookie = urldecode($_POST["cookie"]);
+        $recaptcha_shortencode_field = cut_str($LINK, 'file/', '/');
+        $recaptcha_shortencode_field = str_replace("/", "", $recaptcha_shortencode_field);
+        $post["recaptcha_shortencode_field"] = $recaptcha_shortencode_field;
+        $post["recaptcha_response_field"] = urldecode($_POST["captcha"]);
+        $Referer = $_POST["link"];
+        $Url = parse_url("http://www.fileserve.com/checkReCaptcha.php");
+        $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), "http://www.fileserve.com/landing/DL13/download_captcha.js", $cookie, $post, 0, $_GET["proxy"], $pauth);
+        is_page($page);
+        if (strpos($page, "success") !== false) {
+
+        } else {
+            html_error("Wrong code.", 0);
+        }
+        $Url = parse_url("http://www.fileserve.com/file/" . $recaptcha_shortencode_field);
+        unset($post);
+        $post["downloadLink"] = "wait";
+        $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), $LINK, $cookie, $post, 0, $_GET["proxy"], $pauth);
+        is_page($page);
+        insert_timer(40);
+        unset($post);
+        $post["downloadLink"] = "show";
+        $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), $LINK, $cookie, $post, 0, $_GET["proxy"], $pauth);
+        is_page($page);
+        unset($post);
+        $post["download"] = "normal";
+        $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), $LINK, $cookie, $post, 0, $_GET["proxy"], $pauth);
+        is_page($page);
+        if (stristr($page, "You need to wait") != false or stristr($page, "Bitte warten") != false) {
+            $wait_delay = cut_str($page, "You need to wait ", " seconds to start another download");
+            insert_timer($wait_delay);
+        }
+        if (stristr($page, "has expired") != false) {
+            html_error("Download Link expired");
+        }
+        $locat = cut_str($page, "Location: ", "\r");
+        if (!$locat) {
+            html_error("Download link not found ", 0);
+        }
+        $Url = parse_url($locat);
+        $FileName = basename($Url["path"]);
+        if (function_exists(encrypt) && $cookie != "") {
+            $cookie = encrypt($cookie);
+        }
+        $loc = "$PHP_SELF?filename=" . urlencode($FileName) . "&force_name=" . urlencode($FileName) . "&host=" . $Url ["host"] . "&port=" . $Url ["port"] . "&path=" . urlencode($Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : "")) . "&referer=" . urlencode($Referer) . "&email=" . ($_GET ["domail"] ? $_GET ["email"] : "") . "&partSize=" . ($_GET ["split"] ? $_GET ["partSize"] : "") . "&method=" . $_GET ["method"] . "&proxy=" . ($_GET ["useproxy"] ? $_GET ["proxy"] : "") . "&saveto=" . $_GET ["path"] . "&link=" . urlencode($LINK) . ($_GET ["add_comment"] == "on" ? "&comment=" . urlencode($_GET ["comment"]) : "") . $auth . ($pauth ? "&pauth=$pauth" : "") . (isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") . "&cookie=" . urlencode($cookie);
+        insert_location($loc);
+    } else {
+        $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), 0, 0, 0, 0, $_GET["proxy"], $pauth);
+        is_page($page);
+        $cookie = GetCookies($page);
+        $Url = parse_url("http://www.google.com/recaptcha/api/challenge?k=6LdSvrkSAAAAAOIwNj-IY-Q-p90hQrLinRIpZBPi");
+        $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), 0, 0, 0, 0, $_GET["proxy"], $pauth);
+        is_page($page);
+        $cookieApi = GetCookies($page);
+        $ch = cut_str($page, "challenge : '", "'");
+        if ($ch) {
+            $Url = parse_url("http://www.google.com/recaptcha/api/image?c=" . $ch);
+            $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), 0, $cookieApi, 0, 0, $_GET["proxy"], $pauth);
+            is_page($page);
+            $headerend = strpos($page, "\r\n\r\n");
+            $pass_img = substr($page, $headerend + 4);
+            $imgfile = $download_dir . "fileserve_captcha.jpg";
+            if (file_exists($imgfile)) {
+                unlink($imgfile);
+            }
+            write_file($imgfile, $pass_img);
+        } else {
+            html_error("Error get captcha", 0);
+        }
+        $post['recaptcha_challenge_field'] = $ch;
+        print "<form method=\"post\" action=\"" . $PHP_SELF . (isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") . "\">$nn";
+        print "<h4>Enter <img src=\"$imgfile\"> here:</h4><input name=\"captcha\" type=\"text\" >$nn";
+        print "<input name=\"link\" value=\"$Referer\" type=\"hidden\">$nn";
+        print '<input type="hidden" name="post" value="' . urlencode(serialize($post)) . '">' . $nn;
+        print "<input name=\"step\" value=\"1\" type=\"hidden\">$nn";
+        print "<input type=\"hidden\" name=\"cookie\"  value=\"" . urlencode($cookie) . "\" >" . $nn;
+        print "<input type=\"hidden\" name=\"delete\"  value=\"" . urlencode($imgfile) . "\" >" . $nn;
+        print "<input name=\"Submit\" value=\"Submit\" type=\"submit\"></form>";
+    }
 }
 
-class fileserve_com extends DownloadClass {
-
-	public function Download($link) {
-		global $premium_acc;
-                if (strstr($link,"list")){
-                $page = $this->GetPage( $link, 0, 0, 0);
-                is_page($page);
-                preg_match_all("%href=\"\/file\/([0-9A-Za-z]+)%i", $page, $fs, PREG_SET_ORDER);
-                $all_fs = array();
-                foreach($fs as $link2)
-                {
-                $all_fs[] = str_ireplace("href=\"", "", "http://www.fileserve.com$link2[0]");
-                }
-                if(!$all_fs){
-                html_error('File not found on Fileserve.com. Please check the download link!');
-                }
-                $Href=str_replace("'","http://www.fileserve.com",$all_fs);
-                if (!is_file("audl.php")) html_error('audl.php not found');
-	        echo "<form action=\"audl.php?GO=GO\" method=post>\n";
-	        echo "<input type=hidden name=links value='".implode("\r\n",$all_fs)."'>\n";
-	        foreach (array ("useproxy","proxy","proxyuser","proxypass") as $v)
-		echo "<input type=hidden name=$v value=".$_GET[$v].">\n";
-	        echo "<script language=\"JavaScript\">void(document.forms[0].submit());</script>\n</form>\n";
-	        flush();
-	        exit();
-                }
-
-                if ( ($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) ||
-		   ( $_REQUEST ["premium_acc"] == "on" && $premium_acc ["fileserve_com"] ["user"] && $premium_acc ["fileserve_com"] ["pass"] ) ) 
-                      
-		{
-			$this->DownloadPremium($link);
-                }
-                else
-                {
-                        $this->DownloadFree($link);
-                }               	
-	}
-	private function DownloadFree($link) {
-                global $Referer,$options;
-
-                if( $_POST['wait'] == "wait") {
-                $link= $_POST['link'];
-                $cookie= $_POST['cookie'];
-		$post["downloadLink"]="show";
-                $page = $this->GetPage($link,$cookie,$post,$Referer."\r\nX-Requested-With: XMLHttpRequest");
-                is_page($page);
-                unset($post);
-		$post["download"]="normal";
-                $page = $this->GetPage($link,$cookie,$post,$Referer);
-                is_page($page);
-                is_present($page,"Your download link has expired.", "Your download link has expired!. Please try again later!.", 0);
-                if (stristr ( $page, "Location:" )) {
-                $Href = trim ( cut_str ( $page, "Location: ", "\n" ) );
-                $Url=parse_url($Href);
-	        $FileName = basename($Url["path"]);
-                //if (function_exists(encrypt) && $cookie!="") {$cookie=encrypt($cookie);};
-                $this->RedirectDownload($Href,$FileName,$cookie);exit;
-                }else{html_error ( "Download link not found", 0 );}  
-                }
-
-                if( $_POST['captcha'] == "ok") {
-		$post["recaptcha_challenge_field"] =$_POST["recaptcha_challenge_field"];
-		$post["recaptcha_response_field"] = $_POST["recaptcha_response_field"];
-                $post["recaptcha_shortencode_field"] =$_POST["recaptcha_shortencode_field"];
-                $link = $_POST["link"];
-                $cookie = $_POST["cookie"];
-		$page = $this->GetPage("http://www.fileserve.com/checkReCaptcha.php",$cookie,$post,$Referer."\r\nX-Requested-With: XMLHttpRequest");
-		is_page($page);
-                if (stristr($page,'error":"incorrect-captcha-sol"')){
-                echo  ("<center><font color=red><b>Entered code was incorrec. Please re-enter</b></font></center>");
-                }
-                if (stristr($page,'success":1')){
-                unset($post);
-                $post["downloadLink"] = "wait";
-                $page = $this->GetPage($link,$cookie,$post,$Referer."\r\nX-Requested-With: XMLHttpRequest");
-                is_page($page);
-                preg_match('/\r\n(.*)\r\n(.*)\r\n0/i', $page, $match);
-                $countDown = $match[2];
-                if ($countDown) {                
-                ?>
-                <center><div id="cnt"><h4>ERROR: Please enable JavaScript.</h4></div></center>
-                <form action="<?php echo $PHP_SELF; ?>" method="post">
-                <input type="hidden" name="link" value="<?php echo $link; ?>">
-                <input type="hidden" name="cookie" value="<?php echo $cookie; ?>">
-                <input type="hidden" name="wait" value="wait">
-                <script language="JavaScript">
-                var c = <?php echo $countDown; ?>;
-                fcwait();
-                function fcwait() {
-	        if(c>0) {
-		if(c>60){dt ="<font color=red>You reached your traffic limit_FileServe Free User</font>";}else{dt ="<font color=yellow>FileServe Free User</font>";}
-		document.getElementById("cnt").innerHTML = "<b>" + dt + "</b><br>Please wait <b>" + c + "</b> seconds...";
-		c = c - 1;
-		setTimeout("fcwait()", 1000);
-		}else {
-		document.getElementById("cnt").style.display="none";
-		void(document.forms[0].submit());}
-	        }
-                </script>
-                </form></body></html>
-                <?php
-                exit;}}
-                }
-                
-                $page = $this->GetPage( $link, 0, 0, 0);
-                is_page($page);
-                $cookie = GetCookies($page);
-                is_present($page,"File not available", "File not available. Please check download link!", 0);
-                $k = cut_str ( $page ,"var reCAPTCHA_publickey='","';");
-                $post["checkDownload"] = "check";
-		$page = $this->GetPage( $link, $cookie, $post, $Referer."\r\nX-Requested-With: XMLHttpRequest");
-                is_page($page);
-                is_present($page,"timeLimit", "Your download link has expired!. Please try again later!.", 0);
-                is_present($page,"captchaFail", "Your IP has failed the captcha too many times. Please retry later.!", 0);
-                $showCaptcha = cut_str ( $page ,'success":"','"}');
-                if($showCaptcha =="showCaptcha"){
-                $recaptcha_shortencode_field = cut_str($link, 'file/', '/');
-                $recaptcha_shortencode_field = str_replace("/", "", $recaptcha_shortencode_field);
-                ?>
-                <form action="" method="post">
-                <br>
-                <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=<?php echo $k;?>"></script>
-                <noscript>
-                <iframe src="http://www.google.com/recaptcha/api/noscript?k=<?php echo $k;?>"
-                height="300" width="500" frameborder="0"></iframe><br>
-                <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-                <input type="hidden" name="recaptcha_response_field" value="manual_challenge">  
-                </noscript>
-                <br>
-                <input type="hidden" name="recaptcha_shortencode_field" value="<?php echo $recaptcha_shortencode_field;?>">
-                <input type="hidden" name="link" value="<?php echo $link;?>">
-                <input type="hidden" name="cookie" value="<?php echo $cookie;?>">
-                <input type="hidden" name="captcha" value="ok">
-                <input type="Submit" name="Submit" value="Download Now" >
-                </form> 
-                <?php
-                exit;
-                }   
-	}
-	private function DownloadPremium($link) {
-		global $Referer, $premium_acc;
-                
-                $page = $this->GetPage( "http://www.fileserve.com/index.php", 0, 0, "http://www.fileserve.com/index.php");
-                is_page($page);
-                $cookie = GetCookies($page);
-                $post = array ();
-                $post ["loginUserName"] = $_GET ["premium_user"] ? $_GET ["premium_user"] : $premium_acc ["fileserve_com"] ["user"];
-                $post ["loginUserPassword"] = $_GET ["premium_pass"] ? $_GET ["premium_pass"] : $premium_acc ["fileserve_com"] ["pass"];
-                $post ["autoLogin"] = 'on';
-                $post ["loginFormSubmit"] = 'Login';
-                $page = $this->GetPage( "http://www.fileserve.com/login.php", $cookie, $post, "http://www.fileserve.com/index.php");
-                is_page($page);
-                $cookie = GetCookies($page);
-                unset($post);
-		$post["download"]="premium";
-                $page = $this->GetPage( $link, $cookie, $post, $Referer);
-                is_page($page);
-                is_present($page,"File not available", "File not available. Please check download link!", 0); 
-                $cookie = GetCookies($page);
-                if (stristr ( $page, "Location:" )) {
-                $Href = trim ( cut_str ( $page, "Location: ", "\n" ) );
-                $Url=parse_url($Href);
-	        $FileName = basename($Url["path"]);
-                //if (function_exists(encrypt) && $cookie!="") {$cookie=encrypt($cookie);};
-                $this->RedirectDownload($Href,$FileName,$cookie);
-                }else{
-                html_error ( "Download link not found", 0 );
-                }   
-        }     
-}
-// Written by VinhNhaTrang 24.12.2010
+/* * ***********************************
+ * Written by kaox    21-jun-2010     *
+ * Updated by Jueki   19-August-2010  *
+ * Updated by Jueki   06-October-2010 *
+ * Fixed free download by vdhdevil    *
+ * *********************************** */
 ?>
