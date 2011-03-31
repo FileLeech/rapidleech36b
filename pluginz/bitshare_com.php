@@ -18,7 +18,7 @@ class bitshare_com extends DownloadClass {
     }
 
     private function Retrieve($link) {
-        global $options;
+        global $download_dir;
         $page = $this->GetPage($link);
         is_present($page, "Error - File not available", "Error - File not available");
         if (preg_match('#<span id="blocktimecounter">(\d+) seconds#', $page, $wait)) {
