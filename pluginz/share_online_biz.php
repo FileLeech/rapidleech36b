@@ -71,6 +71,7 @@ class share_online_biz extends DownloadClass {
 <html>
 <head>
 <title>Form</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 </head>
 <body bgcolor="#FFFFFF" text="#000000">
 <form method="post" name="plink" action="index.php">
