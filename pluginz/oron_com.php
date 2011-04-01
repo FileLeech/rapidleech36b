@@ -56,7 +56,7 @@ class oron_com extends DownloadClass {
     }
 
     private function Retrieve($link) {
-        global $Referer;
+        global $Referer, $download_dir;
         $page = $this->GetPage($link);
         is_present($page,"403 Forbidden","Oron banned this server");
         is_present($page, "File Not Found", "File Not Found", 0);

@@ -16,7 +16,7 @@ if (!defined('RAPIDLEECH')){
   exit;
 }
 
-class megaupload_com extends DownloadClass {
+class megaupload extends DownloadClass {
 	
 	public function Download($link) {
 		global $premium_acc, $mu_cookie_user_value;
@@ -38,8 +38,8 @@ class megaupload_com extends DownloadClass {
 		}
 		//Redirect
         if ( ($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) ||
-			($_REQUEST ["premium_acc"] == "on" && $premium_acc ["megaupload_com"] ["user"] && $premium_acc ["megaupload_com"] ["pass"] ) ||
-			($mu_cookie_user_value))        
+			($_REQUEST ["premium_acc"] == "on" && $premium_acc ["megaupload"] ["user"] && $premium_acc ["megaupload"] ["pass"] ) ||
+			($_REQUEST ["mu_acc"] == "on" && ($_REQUEST ["mu_cookie"] || $_REQUEST["mu_hash"] || $_REQUEST["auth_hash"] || $mu_cookie_user_value)) )
 		{
 			$this->DownloadPremium($link);
 		} 
@@ -100,24 +100,30 @@ class megaupload_com extends DownloadClass {
 		
 		$post = array();
 		$post ['login'] = 1;
-		$post ["username"] = $_GET ["premium_user"] ? $_GET ["premium_user"] : $premium_acc ["megaupload_com"] ["user"];
-		$post ["password"] = $_GET ["premium_pass"] ? $_GET ["premium_pass"] : $premium_acc ["megaupload_com"] ["pass"];
+		
+		if(isset($_GET["auth_hash"])){
+		 require_once("other.php");
+		 $split_hash = explode(":", strrev(dcd($_GET["auth_hash"])));
+		 if(count($split_hash)>1)
+		 {
+			$_GET["premium_user"] = $split_hash[0];
+			$_GET["premium_pass"] = $split_hash[1];
+		 }
+		}
+		
+		$post ["username"] = $_GET ["premium_user"] ? $_GET ["premium_user"] : $premium_acc ["megaupload"] ["user"];
+		$post ["password"] = $_GET ["premium_pass"] ? $_GET ["premium_pass"] : $premium_acc ["megaupload"] ["pass"];
 		$page = $this->GetPage('http://www.megaupload.com/?c=login',0,$post,'http://www.megaupload.com');
 		is_page($page);
-		if ($premium_cookie = cut_str($page, 'user=', ';') ) 
-		{
-			$premium_cookie = 'user=' . $premium_cookie;
-		} 
-		elseif ( $mu_cookie_user_value ) 
-		{
+		$premium_cookie = trim ( cut_str ( $page, "Set-Cookie:", ";" ) );
+                   
+		if ($mu_cookie_user_value) {
 			$premium_cookie = 'user=' . $mu_cookie_user_value;
-		} 
-		elseif ( $_GET ["mu_acc"] == "on" && $_GET ["mu_cookie"] ) 
-		{
+		} elseif ($_GET ["mu_acc"] == "on" && $_GET ["mu_cookie"]) {
 			$premium_cookie = 'user=' . $_GET ["mu_cookie"];
-		} 
-		elseif ( ! stristr ( $premium_cookie, "user" ) ) 
-		{
+		} elseif ($_GET["mu_hash"]) {
+			$premium_cookie = 'user=' . strrev(dcd($_GET["mu_hash"]));             
+		} elseif (! stristr ( $premium_cookie, "user" )) {
 			html_error ( "Cannot use premium account", 0 );
 		}
 	
