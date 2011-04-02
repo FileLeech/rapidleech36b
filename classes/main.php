@@ -144,6 +144,7 @@ if($navi_left["showaudl"]){
 }
 if($navi_left["showauul"]){
 ?>
+
 <a href="auul.php" target="_blank" title="<?php echo "AutoUpload";?>"><div id="left_auul"></div></a>
 <?php
 }
@@ -153,7 +154,8 @@ if($navi_left["showlynx"]){
 <?php
 }
 ?>
-
+<br />
+<a href="mtn.php"><img src="misc/tpl/_default/mtn.png" alt="MTN" /></a>
 </td>
 </tr></table>
 </td>
