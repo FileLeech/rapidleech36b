@@ -49,6 +49,7 @@ allow from all
 <files ajax_lnk.php>
 allow from all
 </files>
+
 <files ajax_main.php>
 allow from all
 </files>
@@ -56,11 +57,16 @@ allow from all
 <files hash.php>
 allow from all
 </files>
+
 <files del.php>
 allow from all
 </files>
 
 <files 404.php>
+allow from all
+</files>
+
+<files mtn.php>
 allow from all
 </files>
 
