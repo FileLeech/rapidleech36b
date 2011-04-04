@@ -43,6 +43,7 @@ $host = array(
 'indowebster.com' =>'indowebster_com.php',
 'jumbofiles.com' => 'jumbofiles_com.php',
 'kewlshare.com' => 'kewlshare_com.php',
+'kickload.com' => 'kickload_com.php',
 'kickload.com' =>'kickload_com.php',
 'letitbit.net' => 'letitbit_net.php',
 'mediafire.com' => 'mediafire_com.php',

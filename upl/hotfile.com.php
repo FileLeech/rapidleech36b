@@ -1,8 +1,11 @@
 <?php 
 
 ####### Free Account Info. ###########
-$hotfile_username=""; //  Set you username
-$hotfile_password=""; //  Set your password
+//$hotfile_username=""; //  Set you username
+//$hotfile_password=""; //  Set your password
+
+$hotfile_username = $upload_acc["hf_com"]["user"]; 
+$hotfile_password = $upload_acc["hf_com"]["pass"]; 
 ##############################
 
 $not_done=true;

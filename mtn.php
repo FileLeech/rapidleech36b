@@ -193,12 +193,12 @@ if ($tx==""){
 	
 	if ($_POST['todo']=="no"){
 	
-	exec("".$dirhome."/mtn -f ".$dirhome."/tahomabd.ttf -F ".$n.":".$m." -k ".$f." -c ".$c." -j ".$j." -r ".$r." ".$i." ".$I." ".$t." -D ".$d." ".$texto." ".$dirhome."/files/".$archivo.""); 
+	exec("".$dirhome."/mtn -f ".$dirhome."/tahomabd.ttf -F ".$n.":".$m." -k ".$f." -c ".$c." -j ".$j." -r ".$r." ".$i." ".$I." ".$t." -D ".$d." ".$texto." ".$dirhome."/0x14/".$archivo.""); 
 
 	$ext=strtolower(strrchr($archivo,'.'));
 	$vdofile=str_ireplace($ext,"_s.jpg",$archivo);
-	if (file_exists(getcwd()."/files/".$vdofile)){	
-		echo '<br><br><img src="files/'.$vdofile.'" /><BR />';
+	if (file_exists(getcwd()."/0x14/".$vdofile)){	
+		echo '<br><br><img src="0x14/'.$vdofile.'" /><BR />';
 	}
 	else
 	{
@@ -208,7 +208,7 @@ if ($tx==""){
 	}
 	
 	if ($_POST['todo']=="si"){
-	exec("".$dirhome."/mtn -f ".$dirhome."/tahomabd.ttf -F ".$n.":".$m." -k ".$f." -c ".$c." -r ".$r." -j ".$j." ".$i." ".$I." ".$t." -D ".$d." ".$texto." ".$dirhome."/files/*.wmv ".$dirhome."/files/*.mpeg ".$dirhome."/files/*.mov ".$dirhome."/files/*.mp4 ".$dirhome."/files/*.flv ".$dirhome."/files/*.avi ".$dirhome."/files/*.mkv ".$dirhome."/files/*.3gp ".$dirhome."/files/*.f4v ".$dirhome."/files/*.mpg ".$dirhome."/files/*.swf ".$dirhome."/files/*.asf ".$dirhome."/files/*.3g2 ".$dirhome."/files/*.divx ".$dirhome."/files/*.dsm ".$dirhome."/files/*.evo ".$dirhome."/files/*.m1v ".$dirhome."/files/*.m2ts ".$dirhome."/files/*.vob");
+	exec("".$dirhome."/mtn -f ".$dirhome."/tahomabd.ttf -F ".$n.":".$m." -k ".$f." -c ".$c." -r ".$r." -j ".$j." ".$i." ".$I." ".$t." -D ".$d." ".$texto." ".$dirhome."/0x14/*.wmv ".$dirhome."/0x14/*.mpeg ".$dirhome."/0x14/*.mov ".$dirhome."/0x14/*.mp4 ".$dirhome."/0x14/*.flv ".$dirhome."/0x14/*.avi ".$dirhome."/0x14/*.mkv ".$dirhome."/0x14/*.3gp ".$dirhome."/0x14/*.f4v ".$dirhome."/0x14/*.mpg ".$dirhome."/0x14/*.swf ".$dirhome."/0x14/*.asf ".$dirhome."/0x14/*.3g2 ".$dirhome."/0x14/*.divx ".$dirhome."/0x14/*.dsm ".$dirhome."/0x14/*.evo ".$dirhome."/0x14/*.m1v ".$dirhome."/0x14/*.m2ts ".$dirhome."/0x14/*.vob");
 	  
 	   echo "<br><br><font size=\"2\" color=\"#9FFF9F\" face=\"Arial\"><b>Thumbnails Successfully Created.</b></font><br>";
 
@@ -222,14 +222,7 @@ if ($tx==""){
 <font size="2" face="Arial"><b><u>Notes:</u></b> <br>* To take thumbnails of an individual file, it can not contain special characters such as spaces, ( ), %, ?, &iquest;, ", etc, in name of the file.<br> 
 * To take thumbnails of all video files there is no character restrictions.<br>
 * To save thumbnails in separate files is recommended to set columns to 1 to conserve original resolution of video.<br>
-**MADE BY Sakib [<a href="http://www.itleech.com">ITLEECH</a>] For OLC MOD**
+**MADE BY Sakib [<a href="http://www.itleech.com">ITLEECH</a>] For OLC Mods Script**
 <br><br></font>
 <br>
 </center></body></html>
-
-<?php
-/* BY SaKIB
-   itleech.com
-   Visit US
-*/   
-?>

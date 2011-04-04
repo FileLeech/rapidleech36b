@@ -8,9 +8,13 @@ class megavideo_com extends DownloadClass {
 	
 	public function Download($link) {
 		global $premium_acc, $mu_cookie_user_value;
+		$code=file_get_contents($link);
+		$id=explode('previewplayer/?v=',$code);
+		$id=explode('&width=',$id[1]);
 
-		if (preg_match ( "/v=(\w+)/", $link, $matches )) {
-			$vid = $matches[1];
+		
+		$vid = $id[0];
+		if ($vid!='') {
 			//Direct download type...
 			if ( ($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) ||
 				($_REQUEST ["premium_acc"] == "on" && $premium_acc ["megaupload_com"]["user"] && $premium_acc ["megaupload_com"]["pass"] ) ||
