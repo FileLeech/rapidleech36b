@@ -17,7 +17,8 @@ error_reporting(6135);
 $nn = "\r\n";
 $fromaddr = "RapidLeech";
 $dev_name = 'eqbal';
-$rev_num = '36B.Rv7.4 Unofficial';
+$rev_num = '36B.Rv7.4';
+$plusrar_v = '4.1';
 $RL_VER = 'Rx08.ii'.$rev_num;
 
 $PHP_SELF = !isset($PHP_SELF) ? $_SERVER["PHP_SELF"] : $PHP_SELF;
@@ -31,8 +32,11 @@ define('CONFIG_DIR', './');
 define('LANG_DIR', 'languages/');
 
 define('BUILD', '23082007');
+//START PROTECTED AREA!!!
 define('CREDITS', '<a href="http://www.rapidleech.com/" style="text-decoration:none"><b>RL</b></a>&nbsp;<b class="footer1">PlugMod rev. '.$rev_num.'</b> <span class="footer2">by '.$dev_name.'</span><br><small class="footer2">Credits to Pramode &amp; Checkmate &amp; Kloon. Mod by: MsNeil &amp; Idoenk</small>');
 define('VERSION', '<small class="footer3"><span>[ olc | ccpb | kaskus ]</span><BR>[ Shout: Viant77, Jujuan, Huka, Limpy ]</small>');
+//END PROTECTED AREA!!!
+//ADD YOUR FOOTER HERE, EXAMPLE UR WEBSITE, DONT REMOVE THE PROTECTED AREA OR U DEAD!!!
 
 require_once(CONFIG_DIR."config.php");
 require_once(CLASS_DIR."other.php");

@@ -501,7 +501,7 @@ pass: <input type="password" id="pass" name="pass">
 	user: <input type="text" id="usrifile" name="usrifile" value="">&nbsp;
 	pass: <input type="password" id="passifile" name="passifile" value="">
 	</div>
-	<span id="ifket" ><?php if(!$ifit){echo "<div>ifile.it Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="ifket" ><?php if(!$ifit){echo "<div>ifile.it Free ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	<tr>
@@ -1224,6 +1224,10 @@ if(!file_exists($geo_class) || !file_exists($geo_db)) {
 <li class="ndot">
 <input type="checkbox" id="act_pack" name="act_pack"<?php if($showpostn){if(isset($_POST['act_pack']) && $_POST['act_pack']=='on')echo ' checked';}elseif($disable_to["act_pack"]) echo ' checked'; ?>><label for=act_pack>&nbsp;Disable Pack</label></li>
 <li class="ndot">
+<input type="checkbox" id="act_rar" name="act_rar"<?php if($showpostn){if($_POST['act_rar']=='on')echo ' checked';}elseif($disable_to["act_rar"]) echo ' checked'; ?>><label for=act_rar>&nbsp;Disable RAR Files</label></li>
+<li class="ndot">
+<input type="checkbox" id="act_unrar" name="act_unrar"<?php if($showpostn){if($_POST['act_unrar']=='on')echo ' checked';}elseif($disable_to["act_unrar"]) echo ' checked'; ?>><label for=act_unrar>&nbsp;Disable UnRAR Files</label></li>
+<li class="ndot">
 <input type="checkbox" id="act_zip" name="act_zip"<?php if($showpostn){if(isset($_POST['act_zip']) && $_POST['act_zip']=='on')echo ' checked';}elseif($disable_to["act_zip"]) echo ' checked'; ?>><label for=act_zip>&nbsp;Disable Zip</label></li>
 <li class="ndot">
 <input type="checkbox" id="act_unzip" name="act_unzip"<?php if($showpostn){if(isset($_POST['act_unzip']) && $_POST['act_unzip']=='on')echo ' checked';}elseif($disable_to["act_unzip"]) echo ' checked'; ?>><label for=act_unzip>&nbsp;Disable UnZip</label></li>
@@ -1251,6 +1255,10 @@ Disallow users Split files</li>
 Disallow users Merge files</li>
 <li>
 Disallow users MD5 View/Change</li>
+<li>
+Disallow users RAR files</li>
+<li>
+Disallow users UnRAR files</li>
 <li>
 Disallow users Pack files</li>
 <li>

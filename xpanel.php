@@ -861,7 +861,7 @@ if(isset($_POST['submit'])){
 		
 	$_config .= "\$disable_to = array( // disabled action files properties\n";	
 	
-	$field = array("act_upload", "act_ftp", "act_mail", "act_boxes", "act_split", "act_merge", "act_md5", "act_pack", "act_zip", "act_unzip", "act_rename", "act_mrename", "act_delete");
+	$field = array("act_upload", "act_ftp", "act_mail", "act_boxes", "act_split", "act_merge", "act_md5", "act_rar", "act_unrar", "act_pack", "act_zip", "act_unzip", "act_rename", "act_mrename", "act_delete");
 	$_config .= fillField($field);
 	$_config .= ");\n\n";
 	

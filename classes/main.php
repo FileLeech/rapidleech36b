@@ -572,6 +572,8 @@ if($list)
   (!$disable_to["act_split"]?'<option value="split">'.$txt['act_split'].'</option>':'').
   (!$disable_to["act_merge"]?'<option value="merge">'.$txt['act_merge'].'</option>':'').
   (!$disable_to["act_md5"]?'<option value="md5">'.$txt['act_md5']." / Changer".'</option>':'').
+	(!$disable_to["act_rar"]&&(substr(PHP_OS, 0, 3) != "WIN" && @file_exists(CLASS_DIR."rar.php")) ? "<option value=\"rar\">".$txt['act_rar']."</option>$nn" : "").
+	(!$disable_to["act_unrar"]&&(@file_exists(ROOT_DIR.'/rar/rar')||@file_exists(ROOT_DIR.'/rar/unrar')) ? "<option value=\"unrar\">".$txt['act_unrar']."</option>$nn" : "").
   (!$disable_to["act_pack"]&&(@file_exists(CLASS_DIR."pear.php")||@file_exists(CLASS_DIR."tar.php")) ? "<option value=\"pack\">".$txt['act_pack']."</option>$nn" : "").
   (!$disable_to["act_zip"]&&(@file_exists(CLASS_DIR."pclzip.php"))?"<option value=\"zip\">".$txt['act_zip']."</option>$nn" : "").
   (!$disable_to["act_unzip"]&&(@file_exists(CLASS_DIR."unzip.php"))?"<option value=\"unzip\">".$txt['act_unzip']."</option>$nn" : "").
@@ -997,3 +999,13 @@ echo "<div style='padding-left:5px;'><small>{$server['property']}<br>Page Load: 
 <?php } ?>
 </body>
 </html>
+<?php
+if ($_GET["act"] == 'unrar_go') {
+  require_once(CLASS_DIR."options/unrar.php");
+  unrar_go_go();
+}
+elseif ($_GET["act"] == 'rar_go') {
+  require_once(CLASS_DIR."options/rar.php");
+  rar_go_go();
+}
+?>
