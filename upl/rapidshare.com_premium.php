@@ -1,8 +1,11 @@
 <?php
 
 ####### Premium Account Info. ###########
-$rapidshare_login = ""; //Set your username
-$rapidshare_pass = ""; //Set your password
+//$rapidshare_login = ""; //Set your username
+//$rapidshare_pass = ""; //Set your password
+
+$rapidshare_login = $upload_acc["rs_com_pre"]["user"]; 
+$rapidshare_pass = $upload_acc["rs_com_pre"]["pass"]; 
 ##############################
 
 $not_done=true;

@@ -5,9 +5,9 @@ WRITTEN by Raj Malhotra on 06 Feb 2011
 \******************mediafire.com****************************/
 
 ####### Free Account Info. ###########
-$mediafire_login = "";
-$mediafire_pass = "";
-######################################
+$mediafire_login = $upload_acc["mediafire_up"]["user"]; 
+$mediafire_pass = $upload_acc["mediafire_up"]["pass"];
+##############################
 
 processUpload($mediafire_login, $mediafire_pass, $lfile, $lname);
 

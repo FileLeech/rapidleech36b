@@ -718,17 +718,6 @@ function cut_str($str, $left, $right)
   return $str;
   }
 
-function cutter($str, $left, $right,$cont=1)
-	{
-    for($iii=1;$iii<=$cont;$iii++){
-	$str = substr ( stristr ( $str, $left ), strlen ( $left ) );
-	}
-    $leftLen = strlen ( stristr ( $str, $right ) );
-    $leftLen = $leftLen ? - ($leftLen) : strlen ( $str );
-    $str = substr ( $str, 0, $leftLen );
-    return $str;
-}
-
 function write_file($file_name, $data, $trunk = 1)
   {
   if($trunk == 1)
@@ -1474,40 +1463,6 @@ function is__writable($path)
     return true;
 }
 
-function link_for_file($filename, $only_link = FALSE, $style = '') {
-	$inCurrDir = strstr(dirname($filename), ROOT_DIR) ? TRUE : FALSE;
-	$PHP_SELF = !$PHP_SELF ? $_SERVER ["PHP_SELF"] : $PHP_SELF;
-	if ($inCurrDir) {
-		$Path = parse_url($PHP_SELF);
-		$Path = substr($Path["path"], 0, strlen($Path["path"]) - strlen(strrchr($Path["path"], "/")));
-		$Path = str_replace('\\', '/', $Path.substr(dirname($filename), strlen(ROOT_DIR)));
-	}
-	elseif (dirname($PHP_SELF.'safe') != '/') {
-		$in_webdir_path = dirname(str_replace('\\', '/', $PHP_SELF.'safe'));
-		$in_webdir_sub = substr_count($in_webdir_path, '/');
-		$in_webdir_root = ROOT_DIR.'/';
-		for ($i=1; $i <= $in_webdir_sub; $i++) {
-			$in_webdir_path = substr($in_webdir_path, 0, strrpos($in_webdir_path, '/'));
-			$in_webdir_root = realpath($in_webdir_root.'/../').'/';
-			$in_webdir = (strpos(str_replace('\\', '/', dirname($filename).'/'), str_replace('\\', '/', $in_webdir_root)) === 0) ? TRUE : FALSE;
-			if ($in_webdir) {
-				$Path = dirname($in_webdir_path.'/'.substr($filename, strlen($in_webdir_root)));
-				break;
-			}
-		}
-
-	}
-	else {
-		$Path = FALSE;
-		if ($only_link) { return ''; }
-	}
-	$basename = htmlentities(basename($filename));
-	$Path = htmlentities($Path).'/'.rawurlencode(basename($filename));
-	if ($only_link) { return 'http://'.urldecode($_SERVER['HTTP_HOST']).$Path; }
-	elseif ($Path === FALSE) { return '<span>'.$basename.'</span>'; }
-	else { return '<a href="'.$Path.'"'.($style !== '' ? ' '.$style : '').'>'.$basename.'</a>'; }
-}
-
  // XML Entity Mandatory Escape Characters
 function xmlentities ( $string , $entities=true){
    $string = ($entities ? htmlentities($string) : $string);
@@ -1568,7 +1523,7 @@ function encrypt($string){
 		return '';
 	}
 	if (!$secretkey) {
-		return html_error('Value for $secretkey is empty, please create a random one (56 chars max) in config.php or u can set directly from xpanel.php!', 0);
+		return html_error('Value for $secretkey is empty, please create a random one (56 chars max) in your config!', 0);
 	}
 	require_once 'class.pcrypt.php';
 	/*

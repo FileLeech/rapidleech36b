@@ -1,10 +1,12 @@
 <?php
+##########################################
+//$mega_login = ""; // login
+//$mega_pass = ""; // password
+$mega_login = $upload_acc["mu_pre"]["user"]; 
+$mega_pass = $upload_acc["mu_pre"]["pass"]; 
 
-####### Account Info. ###########
-$mega_login = ""; // login
-$mega_pass = ""; // password
-##############################
-
+$mega_desc="Uploaded from rapidleech";  // Descriptions default
+##########################################
 $not_done=true;
 $continue_up=false;
 if ($mega_login && $mega_pass){

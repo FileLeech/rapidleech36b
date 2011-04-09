@@ -79,7 +79,7 @@ $limitbyip = false; //limit RL by IP; dont forget chmod 777 to folder tmp
 $maximum_free_downloads = 5; //how many times it'll granted?
 $delay_per_ip = 12; //(in hour) recycle allowable IP
 
-$auto_del_time = 0; //(in hour) delete leeched file
+$auto_del_time = 12; //(in hour) delete leeched file
 $limitsize = 0; //(in MB) limit upper-bound of filesize
 $lowlimitsize = 0; //(in MB) limit lower-bound of filesize
 
@@ -90,7 +90,7 @@ $downloadsPerIP = 2; //how many times it'll granted?
 $downloadDelayPerIP = 3600; //(in second)
 
 $audl = 0; //how many link allow to auto-download work ?
-$auul = 0; //how many file allow to auto-upload work ?
+$auul = 5; //how many file allow to auto-upload work ?
 
 $limitbytraffic = false; //limit RL by Traffic Flow
 $max_trafic = 81920; // (in MB). eg: 1 GB = 1 * (1024) MB
@@ -135,8 +135,6 @@ $disable_to = array( // disabled action files properties
  'act_split' => false,
  'act_merge' => false,
  'act_md5' => false,
- 'act_rar' => false,
- 'act_unrar' => false,
  'act_pack' => false,
  'act_zip' => false,
  'act_unzip' => false,

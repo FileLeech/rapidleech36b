@@ -1,8 +1,10 @@
 <?php
-
 ####### Premium Account Info. ###########
-$rapidshare_clogin = ""; //Set your RS collector account username
-$rapidshare_cpass = ""; //Set your RS collector account password
+//$rapidshare_clogin = ""; //Set your RS collector account username
+//$rapidshare_cpass = ""; //Set your RS collector account password
+
+$rapidshare_clogin = $upload_acc["rs_com_coll"]["user"]; 
+$rapidshare_cpass = $upload_acc["rs_com_coll"]["pass"]; 
 ##############################
 
 $not_done=true;

@@ -18,7 +18,6 @@ $nn = "\r\n";
 $fromaddr = "RapidLeech";
 $dev_name = 'eqbal';
 $rev_num = '36B.Rv7.4';
-$plusrar_v = '4.1';
 $RL_VER = 'Rx08.ii'.$rev_num;
 
 $PHP_SELF = !isset($PHP_SELF) ? $_SERVER["PHP_SELF"] : $PHP_SELF;
@@ -31,12 +30,11 @@ define('CLASS_DIR', 'classes/');
 define('CONFIG_DIR', './');
 define('LANG_DIR', 'languages/');
 
+//PROTECTED AREA, PLEASE DONT REMOVE OR CHANGE ANYTHING!
 define('BUILD', '23082007');
-//START PROTECTED AREA!!!
 define('CREDITS', '<a href="http://www.rapidleech.com/" style="text-decoration:none"><b>RL</b></a>&nbsp;<b class="footer1">PlugMod rev. '.$rev_num.'</b> <span class="footer2">by '.$dev_name.'</span><br><small class="footer2">Credits to Pramode &amp; Checkmate &amp; Kloon. Mod by: MsNeil &amp; Idoenk</small>');
 define('VERSION', '<small class="footer3"><span>[ olc | ccpb | kaskus ]</span><BR>[ Shout: Viant77, Jujuan, Huka, Limpy ]</small>');
-//END PROTECTED AREA!!!
-//ADD YOUR FOOTER HERE, EXAMPLE UR WEBSITE, DONT REMOVE THE PROTECTED AREA OR U DEAD!!!
+//END OF PROTECTED AREA, U CAN ADD UR CUSTOMIZATION HERE
 
 require_once(CONFIG_DIR."config.php");
 require_once(CLASS_DIR."other.php");
@@ -456,7 +454,7 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 				print "<html>$nn<head>$nn<title>".$txt['prep_dl']." $LINK</title>$nn<link rel=\"shortcut icon\" type=\"image/gif\" href=\"".IMAGE_DIR."rsload_2.gif\">$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn";
 				print "<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<center><img src='".IMAGE_DIR."rl_lgo.png'>";
 					require_once(CLASS_DIR."http.php");
-					require_once (CLASS_DIR. "DownloadClass.php");
+					require_once (HOST_DIR. "DownloadClass.php");
 					require_once(HOST_DIR.$file);
 					$class = substr($file, 0, -4);
 					$firstchar = substr($file, 0, 1);
