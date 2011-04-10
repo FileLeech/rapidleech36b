@@ -18,7 +18,7 @@ clearstatcache();
 $PHP_SELF = !isset($PHP_SELF) ? $_SERVER["PHP_SELF"] : $PHP_SELF;
 
 $nn = "\r\n";
-$rev_num = '36B.Rv7.3';
+$rev_num = '36B.Rv7.4';
 $RL_VER = 'Rx08.ii'.$rev_num;
 
 require_once(CONFIG_DIR."config.php");
@@ -149,11 +149,11 @@ if (isset($_REQUEST["crot"]) && $_REQUEST["crot"] == "step2" && isset($_POST["li
 		$getlinks=explode("\r\n",trim($_POST["links"]));
 		foreach($getlinks as $key => $value)
 		{
-			//if(empty($getlinks[$key])) unset($getlinks[$key]);
-			$getlinks[$key] = urlcleaner($getlinks[$key]);
+			if(empty($getlinks[$key])) unset($getlinks[$key]);
+/*			$getlinks[$key] = urlcleaner($getlinks[$key]);
 			if(!preg_match("/^(http(s?):\/\/|ftp:\/\/{1})+[A-Za-z0-9\-_]+\\.+[A-Za-z0-9\.\/%&=\?\-_]+$/i", trim($getlinks[$key]), $mathces)){
 			  unset($getlinks[$key]);			  
-			}
+			}*/
 		}
 		$getlinks = array_values($getlinks);
 		if (!count($getlinks) || (trim($_POST["links"]) == ""))
