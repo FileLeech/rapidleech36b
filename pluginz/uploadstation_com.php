@@ -1,8 +1,8 @@
 <?php
 
-if (!defined('RAPIDLEECH')) {
-	require_once ("index.html");
-	exit;
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
 }
 
 class uploadstation_com extends DownloadClass {

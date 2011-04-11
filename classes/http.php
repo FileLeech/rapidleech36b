@@ -672,13 +672,13 @@ $bound="--------".substr(md5(time()),-8);
 $saveToFile=0;
 
 unset($postdata);
-foreach ($post as $key => $value)
-	{
-		$postdata.="--".$bound.$nn;
-		$postdata.="Content-Disposition: form-data; name=\"$key\"".$nn.$nn;
-		$postdata.=$value.$nn;
-	}
-
+        if ($post) {
+                foreach ( $post as $key => $value ) {
+                        $postdata .= "--" . $bound . $nn;
+                        $postdata .= 'Content-Disposition: form-data; name="'.$key.'"' . $nn . $nn;
+                        $postdata .= $value . $nn;
+                }
+        }
 $fileSize = getSize($file);
 
 $fieldname = $fieldname ? $fieldname : file.md5($filename);

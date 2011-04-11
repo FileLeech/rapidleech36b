@@ -4,60 +4,74 @@ if (!defined('RAPIDLEECH')){
   exit;
 }
 
-if ($_GET ["step"] != "second") {
+class azsharing_com extends DownloadClass {
 
-$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), 0, 0, 0, 0, $_GET["proxy"],$pauth);
-is_page($page);
-	is_present($page,"filename mismatched or file does not exist", "FileId and filename mismatched or file does not exist!");
-	is_present($page,"You are trying to download file larger than", "Only premium members may download file larger than 400MB.");
-	is_present($page,"existing download session", "You have an existing download session.<br>As a free member you can download only 1 file at a time.");
+    public function Download($link) {
+        global $premium_acc;
+        if (($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) || ($_REQUEST ["premium_acc"] == "on" && $premium_acc ["azsharing_com"] ["user"] && $premium_acc ["azsharing_com"] ["pass"])) {
+            $this->DownloadPremium($link);
+        } elseif ($_POST['step'] == "1") {
+            $this->DownloadFree($link);
+        } else {
+            $this->PrepareFree($link);
+        }
+    }
 
-	preg_match_all('/Set-Cookie: (.*);/U',$page,$temp);
-	$cookie = implode(';',$temp[1]);
-	$cookie = urlencode($cookie);
-	$wait = cut_str($page,"countdown({seconds: ",",");
+    private function PrepareFree($link) {
+        $page = $this->GetPage($link);
+        is_present($page, "File Not Found", "The file you were looking for could not be found, sorry for any inconvenience.");
 
-        echo "<center>$nn";
-        echo "<form method=\"post\" action=\"$PHP_SELF\">$nn";
-	echo "<input type=hidden name=step value=second>\n";
-	echo "<input type=hidden name=wait value=$wait>\n";
-        echo "<b>Please enter code:</b><br>$nn";
-        echo "<img src=\"http://azsharing.com/captchas/" . rand() . "\" ><br>$nn";
-        echo "<input name=\"link\" value=\"$LINK\" type=\"hidden\">$nn";
-        echo "<input name=\"referer\" value=\"$Referer\" type=\"hidden\">$nn";
-        echo "<input name=\"cookie\" value=\"$cookie\" type=\"hidden\">$nn";
-        echo "<input name=\"captcha\" type=\"text\" >";
-        echo "<input name=\"Submit\" value=\"Submit\" type=\"submit\"></form></center>";
+        $id = cut_str($page, 'name="id" value="','"');
+        $fname = cut_str($page, 'name="fname" value="','"');
 
-}else{
+        $post = array();
+        $post['op'] = "download1";
+        $post['usr_login'] = "";
+        $post['id'] = $id;
+        $post['fname'] = $fname;
+        $post['referer'] = $link;
+        $post['method_free'] = "Free Download";
+        $page = $this->GetPage($link, 0, $post, $link);
+        if (preg_match('%<span id="countdown">([0-9]+)</span>%', $page, $countd)) {
+            $this->CountDown($countd[1]);
+        }
+        $rand = cut_str($page, 'name="rand" value="','"');
+        $temp = cut_str($page, '<img alt="captcha" src="','" />');
+        $data = array();
+        $data['step'] = "1";
+        $data['link'] = $link;
+        $data['id'] = $id;
+        $data['rand'] = $rand;
+        $data['referer'] = $link;
+        $this->EnterCaptcha($temp, $data);
+        exit;
+    }
 
-	$post = array();
-	$post['ugfCaptchaKey'] = $_POST['captcha'];
-	$post["referer"] = $_POST["referer"];
-	$wait = $_POST["wait"];
-	$cookie = urldecode($_POST["cookie"]);
-	$lica = "http://azsharing.com/captcha?key=#".$post['ugfCaptchaKey']."";
+    private function DownloadFree($link) {
+        $post = array();
+        $post['op'] = "download2";
+        $post['id'] = $_POST['id'];
+        $post['rand'] = $_POST['rand'];
+        $post['referer'] = $link;
+        $post['method_free'] = "Free Download";
+        $post['method_premium'] = "";
+        $post['code'] = $_POST['captcha'];
+        $post['down_direct'] = "1";
+        $page = $this->GetPage($link, 0, $post, $link);
+        if (!preg_match('#http://www\d+[^"]+#', $page, $dlink)) {
+            html_error("Error, Download link not found");
+        }
+        $dlink = trim($dlink[0]);
+        $Url = parse_url($dlink);
+        $FileName = basename($Url['path']);
+        $this->RedirectDownload($dlink, $FileName, 0, 0, $link);
+        exit;
+    }
 
-	$Url = parse_url($lica);
-	$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $LINK, $cookie, array(captchacode=>$_POST['captchacode']), 0, $_GET["proxy"],$pauth);
-	is_page($page);
-
-	is_present($page,'Session Expired!');
-	is_present($page,'invalid key');
-	insert_timer($wait, "Getting link.");
-
-	$Href ="http://azsharing.com/file/get-file";
-	$Url = parse_url($Href);
-	$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $LINK, $cookie, array(captchacode=>$_POST['captchacode']), 0, $_GET["proxy"],$pauth);
-	is_page($page);
-	preg_match('/http:\/\/.+azsharing\.com\/d\/[^\'"]+/i', $page, $down);   
-	$Url=parse_url($down[0]);
-
-
-
-	$FileName = basename($Url["path"]);
-
-insert_location("$PHP_SELF?cookie=".urlencode($cookie)."&filename=".urlencode($FileName)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "")."&auth=".$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
-
+    private function DownloadPremium($link) {
+        html_error("Not supported now, please donate your premium account to support premium!");
+    }
 }
+
+//Azsharing Download Plugin by Ruud v.Tony 11-04-2011
 ?>

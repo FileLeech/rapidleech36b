@@ -1,8 +1,7 @@
-<?php
-
-if (! defined ( 'RAPIDLEECH' )) {
-        require_once ("index.html");
-        exit ();
+<?php    
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
 }
 
 class cramit_in extends DownloadClass {

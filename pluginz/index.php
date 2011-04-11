@@ -1,6 +1,6 @@
 <?php
 $nn = "\r\n";
-$rev_num = '36B';
+$rev_num = '36B.Rv7.4';
 $RL_VER = 'Rx08.ii'.$rev_num;
 define('IMAGE_DIR', '../misc/');
 define('csstype', 'default');

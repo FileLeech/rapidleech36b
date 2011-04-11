@@ -104,20 +104,15 @@ class megaupload_com extends DownloadClass {
 		$post ["password"] = $_GET ["premium_pass"] ? $_GET ["premium_pass"] : $premium_acc ["megaupload"] ["pass"];
 		$page = $this->GetPage('http://www.megaupload.com/?c=login',0,$post,'http://www.megaupload.com');
 		is_page($page);
-		if ($premium_cookie = cut_str($page, 'user=', ';') ) 
-		{
-			$premium_cookie = 'user=' . $premium_cookie;
-		} 
-		elseif ( $mu_cookie_user_value ) 
-		{
+		$premium_cookie = trim ( cut_str ( $page, "Set-Cookie:", ";" ) );
+		
+		if ($mu_cookie_user_value) {
 			$premium_cookie = 'user=' . $mu_cookie_user_value;
-		} 
-		elseif ( $_GET ["mu_acc"] == "on" && $_GET ["mu_cookie"] ) 
-		{
+		} elseif ($_GET ["mu_acc"] == "on" && $_GET ["mu_cookie"]) {
 			$premium_cookie = 'user=' . $_GET ["mu_cookie"];
-		} 
-		elseif ( ! stristr ( $premium_cookie, "user" ) ) 
-		{
+		} elseif ($_GET["mu_hash"]) {
+			$premium_cookie = 'user=' . strrev(dcd($_GET["mu_hash"]));		
+		} elseif (! stristr ( $premium_cookie, "user" )) {
 			html_error ( "Cannot use premium account", 0 );
 		}
 	

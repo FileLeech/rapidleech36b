@@ -64,15 +64,16 @@ class megavideo_com extends DownloadClass {
 		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), 'http://www.megaupload.com', 0, $post, 0, $_GET ["proxy"], $pauth );
 		is_page($page);
 		
-		if ($premium_cookie = cut_str($page, 'user=', ';')) {
-			//...
-		} elseif ($mu_cookie_user_value) {
-			$premium_cookie = $mu_cookie_user_value;
+		$premium_cookie = trim ( cut_str ( $page, "Set-Cookie:", ";" ) );
+		
+		if ($mu_cookie_user_value) {
+			$premium_cookie = 'user=' . $mu_cookie_user_value;
 		} elseif ($_GET ["mu_acc"] == "on" && $_GET ["mu_cookie"]) {
-			$premium_cookie = $_GET ["mu_cookie"];
-		}
-		if (empty($premium_cookie)) {
-			html_error ("Cannot use premium account!", 0);
+			$premium_cookie = 'user=' . $_GET ["mu_cookie"];
+		} elseif ($_GET["mu_hash"]) {
+			$premium_cookie = 'user=' . strrev(dcd($_GET["mu_hash"]));		
+		} elseif (! stristr ( $premium_cookie, "user" )) {
+			html_error ( "Cannot use premium account", 0 );
 		}
 
 		//GetInfo...
