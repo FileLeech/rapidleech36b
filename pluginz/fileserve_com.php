@@ -30,7 +30,7 @@ if ((
     $cookie .= "; " . GetCookies($page);
     $locat = cut_str($page, "Location: ", "\r");
     $Url = parse_url($locat);
-    $FileName = basename($locat);
+    $FileName = str_replace(" ", "", urldecode(basename($Url['path'])));
     if (function_exists(encrypt) && $cookie != "") {
         $cookie = encrypt($cookie);
     }
@@ -80,7 +80,7 @@ if ((
             html_error("Download link not found ", 0);
         }
         $Url = parse_url($locat);
-        $FileName = basename($Url["path"]);
+        $FileName = str_replace(" ", "", urldecode(basename($Url['path'])));
         if (function_exists(encrypt) && $cookie != "") {
             $cookie = encrypt($cookie);
         }
