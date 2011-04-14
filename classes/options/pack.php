@@ -1,5 +1,5 @@
 <?php
-function pack() {
+function rl_pack() {
 	global $optxt,$list;
 	if (count ( $_GET ["files"] ) < 1) {
 		echo $optxt['select_one_file']."<br><br>";
@@ -14,21 +14,25 @@ function pack() {
         {
           $file = $list[$_GET["files"][$i]];
           ?>
+
           <input type="hidden" name="files[]" value="<?php echo $_GET["files"][$i]; ?>">
           <b><?php echo basename($file["name"]); ?></b><?php echo $i == count($_GET["files"]) - 1 ? "." : ",&nbsp;";
         }
       ?><br><br>
+
        <table align="center">
          <tr>
            <td>
              <?php echo $optxt['_arcv_name'];?>:&nbsp;<input type="text" name="arc_name" size="30">
            </td>
            <td>
+
              <input type="submit" value="Pack">
            </td>
          </tr>
          <tr>
            <td>
+
              <?php echo $optxt['saveto'];?>:&nbsp;<input type="text" name="path" size="30" value="<?php echo ($_COOKIE["path"] ? $_COOKIE["path"] : (strstr(ROOT_DIR, "\\") ? addslashes(dirname(__FILE__)) : dirname(__FILE__))); ?>">
            </td>
          </tr>
@@ -38,6 +42,9 @@ function pack() {
           <td>
             <?php echo $optxt['compress_notice_1'];?><br>
             <?php echo $optxt['compress_notice_2'];?><br>
+
+
+
           </td>
         </tr>
        </table>
@@ -52,24 +59,14 @@ function pack_go() {
   if(count($_GET["files"]) < 1)
    { echo $optxt['select_one_file']."<br><br>"; break; }
 
+
+
   $arc_name=$_GET["arc_name"];
   if (!$arc_name)
    { echo $optxt['enter_arc_name']."<br><br>"; break; };
 
   if (file_exists($arc_name))
    { echo "File <b>".$arc_name."</b> ".$optxt['ready_exist']."<br><br>"; break; }
-
-	$part_ext = explode(".", $arc_name); $restrict = false; $i = 0;
-	while(!$restrict && ($i < count($part_ext)))
-	{
-		$restrict = in_array(".".$part_ext[$i], $forbidden_filetypes);
-		$i= $i + 1;
-	}
-	if ($restrict)
-	{
-		print "<b class=\"r\">".$optxt['_error']."</b> ".$optxt['arcv_not_created']."<br><br>"; break;
-	}
-	
 
   for($i = 0; $i < count($_GET["files"]); $i++)
    {
@@ -79,11 +76,15 @@ function pack_go() {
       $v_list[] = $file["name"];
      } else
      {
+
        echo "File <b>".$file["name"]."</b> ".$optxt['not_found']."<br><br>";
      }
    }
   if (!$v_list)
    { echo "<b class=\"r\">".$optxt['error_occur']."</b><br><br>"; break; }
+
+
+
   $arc_name = $path.'/'.$arc_name;
   //$arc_name = dirname($arc_name).PATH_SPLITTER.$arc_name;
 
@@ -100,8 +101,18 @@ function pack_go() {
       for ($i=0; $i<sizeof($v_list); $i++)
        {
          echo $optxt['_file']." ".$v_list[$i]["filename"]." ".$optxt['was_pack']." <br>";
+
+
        }
       echo $optxt['pack_in_arcv']." <b>$arc_name</b><br>";
+
+
+
+
+
+
+
+
 
 
       $stmp=strtolower($arc_name);
@@ -109,7 +120,10 @@ function pack_go() {
          {  $arc_method="Tar.gz"; }
   elseif (strrchr($stmp,"tar.bz2" )+6==strlen($stmp))
          {  $arc_method="Tar.bz2";}
+
   else   {  $arc_method="Tar";    };
+
+
       unset($stmp);
 
       $time = explode(" ", microtime());
@@ -120,9 +134,13 @@ function pack_go() {
                            "link"    => "",
                            "comment" => "archive ".$arc_method);
     } else { echo "<b class=\"r\">".$optxt['_error']."</b> ".$optxt['arcv_empty']."<br><br>"; }
+
+
+
   if(!updateListInFile($list))
     {
      echo $optxt['couldnt_upd']."<br><br>";
+
     }
 }
 ?>

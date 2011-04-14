@@ -501,7 +501,7 @@ pass: <input type="password" id="pass" name="pass">
 	user: <input type="text" id="usrifile" name="usrifile" value="">&nbsp;
 	pass: <input type="password" id="passifile" name="passifile" value="">
 	</div>
-	<span id="ifket" ><?php if(!$ifit){echo "<div>ifile.it Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="ifket" ><?php if(!$ifit){echo "<div>ifile.it Free Member ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	<tr>
@@ -543,7 +543,7 @@ pass: <input type="password" id="pass" name="pass">
 	user: <input type="text" id="usrfileserve" name="usrfileserve" value="">&nbsp;
 	pass: <input type="password" id="passfileserve" name="passfileserve" value="">
 	</div>
-	<span id="fileserveket" ><?php if(!$fileserve){echo "<div>fileserve.com Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="fileserveket" ><?php if(!$fileserve){echo "<div>fileserve.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	<tr>
@@ -564,7 +564,7 @@ pass: <input type="password" id="pass" name="pass">
 	user: <input type="text" id="usrfilesonic" name="usrfilesonic" value="">&nbsp;
 	pass: <input type="password" id="passfilesonic" name="passfilesonic" value="">
 	</div>
-	<span id="filesonicket" ><?php if(!$filesonic){echo "<div>filesonic.com Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="filesonicket" ><?php if(!$filesonic){echo "<div>filesonic.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	<tr>
@@ -585,7 +585,7 @@ pass: <input type="password" id="pass" name="pass">
 	user: <input type="text" id="usroron" name="usroron" value="">&nbsp;
 	pass: <input type="password" id="passoron" name="passoron" value="">
 	</div>
-	<span id="oronket" ><?php if(!$oron){echo "<div>oron.com Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="oronket" ><?php if(!$oron){echo "<div>oron.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	<tr>
@@ -606,7 +606,7 @@ pass: <input type="password" id="pass" name="pass">
 	user: <input type="text" id="usrduckload" name="usrduckload" value="">&nbsp;
 	pass: <input type="password" id="passduckload" name="passduckload" value="">
 	</div>
-	<span id="duckloadket" ><?php if(!$duckload){echo "<div>duckload.com Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="duckloadket" ><?php if(!$duckload){echo "<div>duckload.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	<tr>
@@ -627,7 +627,7 @@ pass: <input type="password" id="pass" name="pass">
 	user: <input type="text" id="usrshareonline" name="usrshareonline" value="">&nbsp;
 	pass: <input type="password" id="passshareonline" name="passshareonline" value="">
 	</div>
-	<span id="shareonlineket" ><?php if(!$shareonline){echo "<div>shareonline.biz Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="shareonlineket" ><?php if(!$shareonline){echo "<div>shareonline.biz premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	<tr>
@@ -648,7 +648,28 @@ pass: <input type="password" id="pass" name="pass">
 	user: <input type="text" id="usrtorrific" name="usrtorrific" value="">&nbsp;
 	pass: <input type="password" id="passtorrific" name="passtorrific" value="">
 	</div>
-	<span id="torrificket" ><?php if(!$torrific){echo "<div>torrific.com Free ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="torrificket" ><?php if(!$torrific){echo "<div>torrific.com Free Member ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	<tr>
+	<td class="tdacc">
+	<?php 
+  $animeground=false; $chk='';
+  if($showpostn){
+   if(isset($_POST['animeground_com_premix']) && $_POST['animeground_com_premix']=='on')
+    {$chk= ' checked';$animeground=true;}
+  }elseif((isset($premium_acc))&&(isset($premium_acc['animeground_com'])))
+    {$chk= ' checked';$animeground=true;} 
+	?>
+<input type="checkbox" id="animeground_com_premix" name="animeground_com_premix" onClick="clk(this,'animebox','animeket','<?php echo $animeground;?>');"<?php echo $chk;?>>
+<label for="animeground_com_premix">&nbsp;animeground.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="animebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usranimeground" name="usranimeground" value="">&nbsp;
+	pass: <input type="password" id="passanimeground" name="passanimeground" value="">
+	</div>
+	<span id="animeket" ><?php if(!$animeground){echo "<div>Animeground.com Free Member ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 
@@ -1228,6 +1249,10 @@ if(!file_exists($geo_class) || !file_exists($geo_db)) {
 <li class="ndot">
 <input type="checkbox" id="act_unzip" name="act_unzip"<?php if($showpostn){if(isset($_POST['act_unzip']) && $_POST['act_unzip']=='on')echo ' checked';}elseif($disable_to["act_unzip"]) echo ' checked'; ?>><label for=act_unzip>&nbsp;Disable UnZip</label></li>
 <li class="ndot">
+<input type="checkbox" id="act_rar" name="act_rar"<?php if($showpostn){if($_POST['act_rar']=='on')echo ' checked';}elseif($disable_to["act_rar"]) echo ' checked'; ?>><label for=act_rar>&nbsp;Disable RAR Files</label></li>
+<li class="ndot">
+<input type="checkbox" id="act_unrar" name="act_unrar"<?php if($showpostn){if($_POST['act_unrar']=='on')echo ' checked';}elseif($disable_to["act_unrar"]) echo ' checked'; ?>><label for=act_unrar>&nbsp;Disable UnRAR Files</label></li>
+<li class="ndot">
 <input type="checkbox" id="act_rename" name="act_rename"<?php if($showpostn){if(isset($_POST['act_rename']) && $_POST['act_rename']=='on')echo ' checked';}elseif($disable_to["act_rename"]) echo ' checked'; ?>><label for=act_rename>&nbsp;Disable Rename</label></li>
 <li class="ndot">
 <input type="checkbox" id="act_mrename" name="act_mrename"<?php if($showpostn){if(isset($_POST['act_mrename']) && $_POST['act_mrename']=='on')echo ' checked';}elseif($disable_to["act_mrename"]) echo ' checked'; ?>><label for=act_mrename>&nbsp;Disable Mass-Rename</label></li>
@@ -1257,6 +1282,10 @@ Disallow users Pack files</li>
 Disallow users Zip files</li>
 <li>
 Disallow users UnZip files</li>
+<li>
+Disallow users RAR files</li>
+<li>
+Disallow users UnRAR files</li>
 <li>
 Disallow users Rename files</li>
 <li>

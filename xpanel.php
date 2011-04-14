@@ -586,6 +586,7 @@ if(isset($_POST['submit'])){
 		fieldfilter($ar_chkbox_acc[18],'usrduckload','passduckload',$badpetik);
 		fieldfilter($ar_chkbox_acc[19],'usrshareonline','passshareonline',$badpetik);
 		fieldfilter($ar_chkbox_acc[20],'usrtorrific','passtorrific',$badpetik);
+		fieldfilter($ar_chkbox_acc[21],'usranimeground','passanimeground',$badpetik);
 
 
 	} //-- end $_POST['usepcc']
@@ -687,7 +688,7 @@ if(isset($_POST['submit'])){
 	 //===================
 	 
 	$upcc = '';
-	 if(empty($_POST['rs_com_premix'])&&empty($_POST['rs_de_premix'])&&empty($_POST['megaupload_premix'])&&empty($_POST['megashare_premix'])&&empty($_POST['netload_premix'])&&empty($_POST['gigasize_premix'])&&empty($_POST['vBulletin_acc'])&&empty($_POST['uploaded_to_premix'])&&empty($_POST['easyshare_premix'])&&empty($_POST['depositfiles_premix'])&&empty($_POST['hotfile_com_premix'])&&empty($_POST['uploading_premix'])&&empty($_POST['filefactory_premix'])&&empty($_POST['ifile_it_premix'])&&empty($_POST['sendspace_premix'])&&empty($_POST['fileserve_com_premix'])&&empty($_POST['filesonic_com_premix'])&&empty($_POST['oron_com_premix'])&&empty($_POST['duckload_com_premix'])&&empty($_POST['shareonline_biz_premix'])&&empty($_POST['torrific_com_premix'])&&empty($_POST['muhash_premix'])&&empty($_POST['hfhash_premix'])&&empty($_POST['rshash_premix'])&&empty($_POST['imghack_premix']))
+	 if(empty($_POST['rs_com_premix'])&&empty($_POST['rs_de_premix'])&&empty($_POST['megaupload_premix'])&&empty($_POST['megashare_premix'])&&empty($_POST['netload_premix'])&&empty($_POST['gigasize_premix'])&&empty($_POST['vBulletin_acc'])&&empty($_POST['uploaded_to_premix'])&&empty($_POST['easyshare_premix'])&&empty($_POST['depositfiles_premix'])&&empty($_POST['hotfile_com_premix'])&&empty($_POST['uploading_premix'])&&empty($_POST['filefactory_premix'])&&empty($_POST['ifile_it_premix'])&&empty($_POST['sendspace_premix'])&&empty($_POST['fileserve_com_premix'])&&empty($_POST['filesonic_com_premix'])&&empty($_POST['oron_com_premix'])&&empty($_POST['duckload_com_premix'])&&empty($_POST['shareonline_biz_premix'])&&empty($_POST['torrific_com_premix'])&&empty($_POST['animeground_com_premix'])&&empty($_POST['muhash_premix'])&&empty($_POST['hfhash_premix'])&&empty($_POST['rshash_premix'])&&empty($_POST['imghack_premix']))
 	  { $upcc='//'; }
 	  
 	  
@@ -770,6 +771,7 @@ if(isset($_POST['submit'])){
 	 "duckload_com_premix" => array("duckload_com", "usrduckload", "passduckload"),
 	 "shareonline_biz_premix" => array("shareonline_biz", "usrshareonline", "passshareonline"),
 	 "torrific_com_premix" => array("torrific_com", "usrtorrific", "passtorrific"),
+	 "animeground_com_premix" => array("animeground_com", "usranimeground", "passanimeground"),
 	 );
 	$_config .= fillField_premium("premium_acc",$field, $upcc);
 		
@@ -861,7 +863,7 @@ if(isset($_POST['submit'])){
 		
 	$_config .= "\$disable_to = array( // disabled action files properties\n";	
 	
-	$field = array("act_upload", "act_ftp", "act_mail", "act_boxes", "act_split", "act_merge", "act_md5", "act_pack", "act_zip", "act_unzip", "act_rename", "act_mrename", "act_delete");
+	$field = array("act_upload", "act_ftp", "act_mail", "act_boxes", "act_split", "act_merge", "act_md5", "act_pack", "act_zip", "act_unzip", "act_rar", "act_unrar", "act_rename", "act_mrename", "act_delete");
 	$_config .= fillField($field);
 	$_config .= ");\n\n";
 	

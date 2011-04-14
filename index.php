@@ -18,6 +18,7 @@ $nn = "\r\n";
 $fromaddr = "RapidLeech";
 $dev_name = 'eqbal';
 $rev_num = '36B.Rv7.4';
+$plusrar_v = '4.1';
 $RL_VER = 'Rx08.ii'.$rev_num;
 
 $PHP_SELF = !isset($PHP_SELF) ? $_SERVER["PHP_SELF"] : $PHP_SELF;
@@ -337,6 +338,7 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 		  "duckload_com"=>"Duckload.com",
 		  "shareonline_biz"=>"Shareonline.biz",
 		  "torrific_com"=>"torrific.com",
+		  "animeground_com"=>"Animeground.com",
 		 );
 		 foreach($premium_acc as $host_acc => $val){
 		   $acc_txt.= (isset($premium_acc[$host_acc]["user"]) ? ($premium_acc[$host_acc]["user"]!=''&&$premium_acc[$host_acc]["pass"]!='' ? $ar_host_acc[$host_acc] . $spacer : '') : $ar_host_acc[$host_acc]." multi acc" . $spacer);

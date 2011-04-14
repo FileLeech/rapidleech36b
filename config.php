@@ -48,6 +48,7 @@ $premium_acc["rs_com"] = array(
 //$premium_acc["duckload_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["shareonline_biz"] = array('user' => '', 'pass' => '');
 //$premium_acc["torrific_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["animeground_com"] = array('user' => '', 'pass' => '');
 #Auto Download Premium Account #
 //$premium_acc_audl = false;
 
@@ -79,7 +80,7 @@ $limitbyip = false; //limit RL by IP; dont forget chmod 777 to folder tmp
 $maximum_free_downloads = 5; //how many times it'll granted?
 $delay_per_ip = 12; //(in hour) recycle allowable IP
 
-$auto_del_time = 12; //(in hour) delete leeched file
+$auto_del_time = 0; //(in hour) delete leeched file
 $limitsize = 0; //(in MB) limit upper-bound of filesize
 $lowlimitsize = 0; //(in MB) limit lower-bound of filesize
 
@@ -89,7 +90,7 @@ $downloadLimitbyip = false; //limit RL by IP
 $downloadsPerIP = 2; //how many times it'll granted?
 $downloadDelayPerIP = 3600; //(in second)
 
-$audl = 0; //how many link allow to auto-download work ?
+$audl = 5; //how many link allow to auto-download work ?
 $auul = 5; //how many file allow to auto-upload work ?
 
 $limitbytraffic = false; //limit RL by Traffic Flow
@@ -138,6 +139,8 @@ $disable_to = array( // disabled action files properties
  'act_pack' => false,
  'act_zip' => false,
  'act_unzip' => false,
+ 'act_rar' => false,
+ 'act_unrar' => false,
  'act_rename' => false,
  'act_mrename' => false,
  'act_delete' => false,
