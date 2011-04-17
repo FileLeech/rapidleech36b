@@ -7,6 +7,7 @@ if (!defined('RAPIDLEECH')){
 
 class uploadstation_com extends DownloadClass {
 	public function Download($link) {
+		global $premium_acc;
 		if (!$_REQUEST["step"]) { // Check link
 			$this->page = $this->GetPage($link);
 			is_present($page, "The file could not be found.", "The file could not be found. Please check the download link.");
@@ -14,11 +15,65 @@ class uploadstation_com extends DownloadClass {
 		}
 
 		$this->link = $link;
-		if ($_REQUEST['step'] == 1) {
+		if (($_REQUEST["premium_acc"] == "on" && $_REQUEST["premium_user"] && $_REQUEST["premium_pass"]) ||
+			($_REQUEST["premium_acc"] == "on" && $premium_acc["uploadstation_com"]["user"] && $premium_acc["uploadstation_com"]["pass"])) {
+			return $this->Download_Premium();
+		} elseif ($_REQUEST['step'] == 1) {
 			return $this->Check_Captcha();
 		} else {
 			return $this->Prepare_Free();
 		}
+	}
+
+	private function Download_Premium() {
+		$cookie = $this->Login();
+		$page = $this->GetPage($this->link, $cookie);
+
+		if (stristr($page, "HTTP/1.1 200 OK\r\n")) {
+			$page = $this->GetPage($this->link, $cookie, array('download'=>'premium'));
+		}
+		if (preg_match('/Location: (http:\/\/d\d+.uploadstation.com[^\r\n]+)/i', $page, $D)) {
+			$dllink = $D[1];
+		} else {
+			is_present($page, "You are not able to download", "Error: Account isn't premium. [P6c]");
+			html_error("Download-link not found. [P7]");
+		}
+
+		$filename = parse_url($dllink);
+		$filename = urldecode(basename($filename["path"]));
+		$this->RedirectDownload($dllink, $filename, $cookie);
+	}
+
+	private function Login() {
+		global $premium_acc;
+
+		$pA = ($_REQUEST["premium_user"] && $_REQUEST["premium_pass"] ? true : false);
+		$user = ($pA ? $_REQUEST["premium_user"] : $premium_acc["uploadstation_com"]["user"]);
+		$pass = ($pA ? $_REQUEST["premium_pass"] : $premium_acc["uploadstation_com"]["pass"]);
+		if (empty($user) || empty($pass)) {
+			html_error("Login Failed: Username or Password is empty. Please check login data. [P1]");
+		}
+
+		$postURL = "http://www.uploadstation.com/login.php";
+		$post['loginUserName'] = $user;
+		$post['loginUserPassword'] = $pass;
+		$post['autoLogin'] = 'on';
+		$post['loginFormSubmit'] = 'Login';
+
+		$page = $this->GetPage($postURL, 0, $post, 'http://www.uploadstation.com/');
+		is_present($page, "should be larger than or equal to 6", "Username or password too short. [P2]");
+		is_present($page, "Username doesn't exist.", "Username doesn't exist. [P3]");
+		is_present($page, "Wrong password.", "Wrong password. [P4]");
+		is_notpresent($page, "Logging in", "Login error. [P5]");
+
+		$cookie = GetCookies($page);
+		is_notpresent($cookie, "Cookie=", "Login error. Cookie not found. [P5b]");
+
+		$page = $this->GetPage("http://www.uploadstation.com/dashboard.php", $cookie, 0, 'http://www.uploadstation.com/');
+		is_present($page, "acctype_free", "Login error. Account isn't premium. [P6]");
+		is_notpresent($page, "Expiry date: ", "Login error. Account isn't premium? [P6b]");
+
+		return $cookie;
 	}
 
 	private function Prepare_Free() {
@@ -144,5 +199,6 @@ class uploadstation_com extends DownloadClass {
 
 //[08-4-2011]  Written by Th3-822 (Free download only).
 //[09-4-2011]  Added & checked error msgs && 2 more secs to the countdown (no more error F10 (old F9)). - Th3-822.
+//[16-4-2011]  Added support for download with Premium Account. - Th3-822.
 
 ?>

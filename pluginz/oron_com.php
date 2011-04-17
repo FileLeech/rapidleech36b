@@ -1,5 +1,4 @@
-<?php
-
+<?php    
 if (!defined('RAPIDLEECH')){
   require_once("404.php");
   exit;
@@ -102,10 +101,11 @@ class oron_com extends DownloadClass {
         $post['op'] = "login";
         $post['redirect'] = $link;
         $post['rand']="";
-        $page = $this->GetPage("http://oron.com/", 0, $post, "http://oron.com/login.html");
+        $page = $this->GetPage("http://oron.com/login", 0, $post, "http://oron.com/login.html");
         is_present($page,"403 Forbidden","Oron banned this server");
         $cookie = GetCookies($page);
         is_notpresent($cookie, "login", "Login Failed , Bad username/password combination");
+        
         $page = $this->GetPage($link, $cookie, 0, $Referer);
         is_present($page, "File could not be found due to its possible expiration or removal by the file owner.", "File could not be found due to its possible expiration or removal by the file owner.");
         is_present($page, "You have reached the download limit: 15000 Mb ", "You have reached the download limit: 15000 Mb ");
@@ -123,6 +123,7 @@ class oron_com extends DownloadClass {
         $post['method_premium'] = '1';
         $post['down_direct'] = '1';
         $page = $this->GetPage($link, $cookie, $post, $Referer);
+        $cookie.="; ".GetCookies($page);
         if (preg_match('#http://(\w+).oron.com[/\w\d.%)( -]+#', $page, $prelink)) {
             $FileName = basename($prelink[0]);
             $this->RedirectDownload($prelink[0], $FileName, $cookie);

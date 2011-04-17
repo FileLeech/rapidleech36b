@@ -11,10 +11,11 @@ class DownloadClass {
 	 * @return void
 	 */
 	public function __construct() {
+    global $htxt;
 		echo('<table width="600" align="center">');
 		echo('<tr>');
 		echo('<td align="center">');
-		echo('<div id="mesg" width="100%" align="center">Retrieving download page</div>');
+		echo('<div id="mesg" width="100%" align="center"><b>'.$htxt['_retrieving'].'</b></div>');
 	}
 
 	/**
@@ -145,11 +146,12 @@ class DownloadClass {
 	}
 
 	public function EnterCaptchaDefault($captchaImg, $inputs) {
+    global $htxt;
 		echo('<form name="dl" action="'.$_SERVER['PHP_SELF'].'" method="post">');
 		foreach ($inputs as $name => $input) {
 			echo('<input type="hidden" name="'.$name.'" id="'.$name.'" value="'.$input.'" />');
 		}
-		echo('<h4>Enter<img src="'.$captchaImg.'" />Here: <input type="text" name="captcha" size="5" />&nbsp;&nbsp;<input type="submit" onclick="return check();" value="Transload File" /></h4>');
+		echo('<h4><b>'.$htxt['_enter'].' </b><img src="'.$captchaImg.'" /><b>'.$htxt['_here'].':</b><input type="text" name="captcha" size="5" />&nbsp;&nbsp;<input type="submit" onclick="return check();" value="Transload File" /></h4>');
 		echo('<script type="text/javascript">');
 		echo('function check() {');
 		echo('var captcha=document.dl.captcha.value;');

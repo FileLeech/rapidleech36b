@@ -268,6 +268,9 @@ switch($vpage)
      '_max_filesize' => 'MAX Filesize:',
      '_min_filesize' => 'MIN Filesize:',
      '_storage_limit' => 'Storage Limit:',
+     '_retrieving' => 'Retrieving download page',
+     '_enter' => 'Enter',
+     '_here' => 'here',
 
 	 'zzzzz' => ''	 
      );	 

@@ -36,9 +36,9 @@ function unrar_setCheckboxes(act, filestounrar) {
                 <input type="hidden" name="files[<?php echo $i; ?>]" value="<?php echo $_GET["files"][$i]; ?>" />
                 <?php printf($optxt['_filefr'],htmlentities(basename($file["name"]))); ?>
                 <br />
-                <a href="javascript:unrar_setCheckboxes(1, <?php echo $i;?>);"><?php echo $txt['chk_all']; ?></a> |
-                <a href="javascript:unrar_setCheckboxes(0, <?php echo $i;?>);"><?php echo $txt['chk_unchk']; ?></a> |
-                <a href="javascript:unrar_setCheckboxes(2, <?php echo $i;?>);"><?php echo $txt['chk_invert']; ?></a>
+                <a href="javascript:void(0);" onclick="unrar_setCheckboxes(1, <?php echo $i;?>);"><?php echo $txt['chk_all']; ?></a> |
+                <a href="javascript:void(0);" onclick="unrar_setCheckboxes(0, <?php echo $i;?>);"><?php echo $txt['chk_unchk']; ?></a> |
+                <a href="javascript:void(0);" onclick="unrar_setCheckboxes(2, <?php echo $i;?>);"><?php echo $txt['chk_invert']; ?></a>
               </td>
             </tr>
             <tr>

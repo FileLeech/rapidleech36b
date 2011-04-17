@@ -263,6 +263,9 @@ switch($vpage)
      '_max_filesize' => 'حداکثر حجم فایل:',
      '_min_filesize' => 'حداقل حجم فایل :',
      '_storage_limit' => 'محدودیت فضا :',
+     '_retrieving' => 'در حال دريافت صفحه دانلود',
+     '_enter' => 'وارد كنيد',
+     '_here' => 'در اينجا',
 
 	 'zzzzz' => ''	 
      );	 

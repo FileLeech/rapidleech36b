@@ -263,6 +263,9 @@ switch($vpage)
      '_max_filesize' => 'MAX ukuran file:',
      '_min_filesize' => 'MIN ukuran file:',
      '_storage_limit' => 'Batas Penyimpanan:',
+     '_retrieving' => 'Memindai halaman pengunduhan',
+     '_enter' => 'Masukan',
+     '_here' => 'disini',
 
 	 'zzzzz' => ''	 
      );

@@ -19,7 +19,7 @@ class easy_share_com extends DownloadClass {
     }
 
     private function Retrieve($link) {
-      global $Referer;
+      global $Referer, $download_dir;
         $page = $this->GetPage($link);
         is_present($page, "The file could not be found", "The file could not be found. Please check the download link.");
         is_present($page, "File not available", "File not available");
