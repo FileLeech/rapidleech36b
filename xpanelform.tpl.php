@@ -367,14 +367,14 @@ pass: <input type="password" id="pass" name="pass">
     {$chk= ' checked';$upl_to=true;} 
 ?>
 <input type="checkbox" id="uploaded_to_premix" name="uploaded_to_premix" onClick="clk(this,'uptobox','uptoket','<?php echo $upl_to;?>');"<?php echo $chk;?>>
-<label for="uploaded_to_premix">&nbsp;Upload.to</label>
+<label for="uploaded_to_premix">&nbsp;Uploaded.to</label>
 	</td>
 	<td class="tdacc">
 	<div id="uptobox"<?php echo $styledisplay;?> class="float">
 	user: <input type="text" id="usrupto" name="usrupto" value="">&nbsp;
 	pass: <input type="password" id="passupto" name="passupto" value="">
 	</div>
-	<span id="uptoket" ><?php if(!$upl_to){echo "<div>Upload.to premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="uptoket" ><?php if(!$upl_to){echo "<div>Uploaded.to premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	

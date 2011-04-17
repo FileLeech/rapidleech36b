@@ -511,7 +511,8 @@ else
   $page = $header;
   }
 
-	do {
+	while(!feof($fp))
+		{
 	 	$data = @fgets($fp, 8192);
 	 	if($saveToFile)
 	    {
@@ -549,7 +550,7 @@ else
 	    {
 	    $page.= $data;
 	    }
-	  }while( strlen($data)> 0 );
+	  }
 	
 
 	if($saveToFile)

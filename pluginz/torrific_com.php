@@ -184,17 +184,16 @@ class torrific_com extends DownloadClass
 		if ( totalCheckedLinks == 1 )
 		{
 				// only one link to download, so rl can download it.
-				document.write('<form id="downloadFormId" name="downloadForm" action="index.php" method="post">');
-				document.write('<input type="hidden" name="link" value= "' + lks + '" />');  
+				document.write('<form id="downloadFormId" name="downloadForm" action=index.php method=post>');
+				document.write('<input type=Hidden name=link value= "' + lks + '" />');  
 				// document.write('<center><input type="submit" name="submitButton" value="Step2 click for download" /></center>');   
 				document.write('</form>');
 		}
 		else
 		{
 				// morethan one link to download, so autodownloader will download it.
-				document.write('<form id="downloadFormId" name="downloadForm" action="audl.php?crot=step2" method="post">');
-				document.write('<input type="hidden" name="links" value="' + lks + '" />');
-				document.write('<input type="hidden" name="autochk_lnk" value="off" />'); 
+				document.write('<form id="downloadFormId" name="downloadForm" action=audl.php?crot=step2 method=post>');
+				document.write('<input type=Hidden name=links value="' + lks + '" />');
 				// document.write('<center><Input type=submit name=submit value="Step2 click for send selected to Autodownloader"></center>');  
 				document.write('</form>');
 		}
