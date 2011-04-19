@@ -1,8 +1,6 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
-}
+<?php 
+ if(!defined('RAPIDLEECH'))
+  { require_once("404.php"); exit; }
 
 function mf_str_conv($str_or)
 {
@@ -52,7 +50,7 @@ if (stristr ( $page, "Eo();  dh('')" )) {
 	exit ();
 }
 
-if (!$pagea = cut_str($page, 'style.display="none";}}}', 'h.random')) html_error('Error 1.0');
+if (!$pagea = cut_str($page, 'Eo();', 'if(')) html_error('Error 1.0');
 $pagea = mf_str_conv($pagea);
 if (!preg_match("/=\W?(\w+)[\('\"]+(\w+)[,'\"]+(\w+)/", $pagea, $eb)) html_error('Error 1.1');
 if (!$pageb = cut_str($page, $eb[1].'(', ';}}')) html_error('Error 1.2');

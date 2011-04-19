@@ -55,7 +55,7 @@ class filesonic_com extends DownloadClass {
                 }               	
 	}
 	private function DownloadFree($link) {
-                global $Referer;
+                global $Referer, $download_dir;
                
                 if( $_POST['captcha'] == "ok") {
 		@unlink(urldecode($_POST["delete"]));

@@ -154,8 +154,7 @@ if($navi_left["showlynx"]){
 <?php
 }
 ?>
-<br />
-<a href="mtn.php"><img src="misc/tpl/_default/mtn.png" alt="MTN" /></a>
+
 </td>
 </tr></table>
 </td>

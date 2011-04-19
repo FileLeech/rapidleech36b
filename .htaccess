@@ -66,10 +66,6 @@ allow from all
 allow from all
 </files>
 
-<files mtn.php>
-allow from all
-</files>
-
 <files ~ "^\.">
 deny from all
 </files>
