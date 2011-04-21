@@ -904,22 +904,22 @@ if(isset($_POST['submit'])){
     $_config .= "####-MOVIE-THUMBNAILER-CONFIG\n";
     $_config .= "\$col_row = array(\n";
     
-    $_config .= "'colums' => ".(!empty($_POST['cs'])?$_POST['cs']:'3').",\n";
-    $_config .= "'rows' => ".(!empty($_POST['rs'])?$_POST['rs']:'3').",\n";
+    $_config .= "'colums' => ".(!empty($_POST['cs'])?$_POST['mtn_cs']:'3').",\n";
+    $_config .= "'rows' => ".(!empty($_POST['rs'])?$_POST['mtn_rs']:'3').",\n";
     $_config .= ");\n";
-    $_config .= "\$text = '".$_POST['text']."';\n";
+    $_config .= "\$ad_text = '".$_POST['ad_text']."';\n";
     $_config .= "\$bgcolor = '".$_POST['bgcolor']."';\n";
     $_config .= "\$quality = ".$_POST['quality'].";\n";
-    $_config .= "\$edge = ".(!empty($_POST['edge'])?$_POST['edge']:'0').";\n";
+    $_config .= "\$edge = ".(!empty($_POST['mtn_edge'])?$_POST['mtn_edge']:'0').";\n";
     $_config .= "\$video = array(\n";
     $_config .= "'enable' => ".($_POST['video_option'] == 'on'?'true':'false').",\n";
     $_config .= "'font' => '".$_POST['font']."',\n";
     $_config .= "'color' => '".$_POST['txtcolor']."',\n";
-    $_config .= "'size' => ".(!empty($_POST['size'])?$_POST['size']:'10').",\n";
+    $_config .= "'size' => ".(!empty($_POST['text_size'])?$_POST['text_size']:'10').",\n";
     $_config .= ");\n";
     $_config .= "\$time = array(\n";
     $_config .= "'enable' => ".($_POST['time'] == 'on'?'true':'false').",\n";
-    $_config .= "'color' => '".$_POST['timecolor']."'\n";
+    $_config .= "'color' => '".$_POST['timecolor']."',\n";
     $_config .= ");\n";
     $_config .= "\n\n";
     

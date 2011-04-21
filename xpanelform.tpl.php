@@ -1443,9 +1443,9 @@ foreach($show_column_sfile as $kol => $kolval)
                         Columns x Rows :
                     </td>
                     <td class="tdacc">
-                        <input type="text" size="1" name="cs" value="<? echo $col_row['colums'];?>"/>
+                        <input type="text" size="1" name="mtn_cs" value="<? if ($showpostn){if(!empty($_POST['mtn_cs']))echo $_POST['mtn_cs'];}else {echo $col_row['colums'];};?>"/>
                         x 
-                        <input type="text" size="1" name="rs" value="<? echo $col_row['rows'];?>"/>
+                        <input type="text" size="1" name="mtn_rs" value="<? if ($showpostn){if(!empty($_POST['mtn_rs']))echo $_POST['mtn_rs'];}else {echo $col_row['rows'];};?>"/>
                     </td>
                 </tr>
                 <tr>
@@ -1453,7 +1453,7 @@ foreach($show_column_sfile as $kol => $kolval)
                         Text <span class="nav_text" onmouseover="document.getElementById('help_text').style.display='block'" onmouseout="document.getElementById('help_text').style.display='none'" style="cursor:help"> [?]</span> :
                     </td>
                     <td class="tdacc">
-                        <input type="text" size="15" name="text" value="<? echo $text;?>"/>
+                        <input type="text" size="15" name="ad_text" value="<? if ($showpostn){if(!empty($_POST['ad_text']))echo $_POST['ad_text'];}else {echo $ad_text;};?>" />
                     </td>
                 </tr>
                 <tr>
@@ -1481,7 +1481,7 @@ foreach($show_column_sfile as $kol => $kolval)
                         Edge <span class="nav_text" onmouseover="document.getElementById('help_text1').style.display='block'" onmouseout="document.getElementById('help_text1').style.display='none'" style="cursor:help"> [?]</span> : 
                     </td>
                     <td class="tdacc">
-                        <input type="text" size="1" name="edge" value="<? echo $edge;?>"/> &nbsp;(set 0 or blank to disable)
+                        <input type="text" size="1" name="mtn_edge" value="<? if ($showpostn){if (!empty($_POST['mtn_edge']))echo $_POST['mtn_edge'];} else {echo $edge;}?>"/> &nbsp;(set 0 or blank to disable)
                     </td>
                 </tr>
                 <tr>
@@ -1508,7 +1508,7 @@ foreach($show_column_sfile as $kol => $kolval)
                             <option value="tahomabd.ttf" <? echo($video['font'] == 'palab.ttf'?'selected="true"':'');?>>Tahomabd</option>
                             <option value="xsuni.ttf" <? echo($video['font'] == 'palab.ttf'?'selected="true"':'');?>>Xsuni</option>
                         </select><br />
-                        Size : <input type="text" size="1" name="size" value="<? echo $video['size'];?>"/>
+                        Size : <input type="text" size="1" name="text_size" value="<? if ($showpostn){if (!empty($_POST['text_size']))echo $_POST['text_size'];}else {echo $video['text_size'];}?>"/>
                     </td>
                 </tr>
                 <tr>

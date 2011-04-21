@@ -1,6 +1,6 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-	require('../index.php');
+	require('../404.php');
 	exit;
 }
 if ($col_row['colums']>0 && $col_row['colums']<6)

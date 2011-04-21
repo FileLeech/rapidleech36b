@@ -183,8 +183,30 @@ $navi_left = array(
  'showaudl' => true,
  'showauul' => true,
  'showlynx' => true,
+ 'showmtn' => true,
  'server_info' => true,
 );
+
+####-MOVIE-THUMBNAILER-CONFIG
+$col_row = array(
+'colums' => 3,
+'rows' => 3,
+);
+$text = 'Create By Movie Thumbnailer';
+$bgcolor = '000000';
+$quality = 90;
+$edge = 0;
+$video = array(
+'enable' => true,
+'font' => 'blue.ttf',
+'color' => 'FF9195',
+'size' => 10,
+);
+$time = array(
+'enable' => true,
+'color' => 'FFFFFF',
+);
+
 
  $forbid_audl = false;
  $forbid_auul = false;
