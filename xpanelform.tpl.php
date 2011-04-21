@@ -5,6 +5,7 @@ if (!defined('RAPIDLEECH'))
 if($ajax_serverfiles){
 ?>
 <script type="text/javascript" language="javascript" src="rsajax.js"></script>
+<script type="text/javascript" src="jscolor/jscolor.js"></script>
 <?php } ?>
 
 
@@ -1304,7 +1305,7 @@ $kolshowall = true;
 foreach($show_column_sfile as $kol => $kolval)
 { $kolshowall = $kolshowall && $kolval; }
 ?>
-<input type="checkbox" id="show_column_sfile" name="show_column_sfile" onClick="var displ=this.checked?'none':'';document.getElementById('col_sfile').style.display=displ; document.getElementById('col_dis1').style.display=displ;"<?php if(isset($_POST['show_column_sfile']) && $_POST['show_column_sfile']=='on'){echo ' checked';$kolshowall=true;}elseif($kolshowall){echo ' checked';} ?>><label for="show_column_sfile">&nbsp;Server Files Column. <b>Checked: Show All</b></label></td>
+<input type="checkbox" id="show_column_sfile" name="show_column_sfile" onclick="var displ=this.checked?'none':'';document.getElementById('col_sfile').style.display=displ; document.getElementById('col_dis1').style.display=displ;"<?php if(isset($_POST['show_column_sfile']) && $_POST['show_column_sfile']=='on'){echo ' checked';$kolshowall=true;}elseif($kolshowall){echo ' checked';} ?>><label for="show_column_sfile">&nbsp;Server Files Column. <b>Checked: Show All</b></label></td>
 <td class="tdacc">Customized Server Files table column</td>
 </tr>
 
@@ -1328,11 +1329,11 @@ foreach($show_column_sfile as $kol => $kolval)
 <td class="tdacc" id="col_dis1" style="display:<?php echo ($kolshowall?'none':'');?>">
 <div style="padding:0 0 0 10px; margin:-5px 0 -10px 0;"><ul>
 <li>
-<span>Show MD5 column</span><br></li>
+<span>Show MD5 column</span><br/></li>
 <li style="padding:5px 0 0 0;">
-<span>Show Download_Link column</span><br></li>
+<span>Show Download_Link column</span><br/></li>
 <li style="padding:5px 0 0 0;">
-<span>Show Comments column</span><br></li>
+<span>Show Comments column</span><br/></li>
 <li style="padding:5px 0 0 0;">
 <span>Show Date column</span></li>
 <li style="padding:5px 0 0 0;">
@@ -1349,7 +1350,7 @@ foreach($show_column_sfile as $kol => $kolval)
 
 
 <tr>
-<td class="tdacc"><input type="checkbox" id="bandwidthsave" name="bandwidthsave"<?php if($showpostn){if(isset($_POST['bandwidthsave']) && $_POST['bandwidthsave']=='on')echo ' checked';}elseif($bw_save) echo ' checked'; ?>><label for=bandwidthsave>&nbsp;Bandwidth saving</label></td>
+<td class="tdacc"><input type="checkbox" id="bandwidthsave" name="bandwidthsave"<?php if($showpostn){if(isset($_POST['bandwidthsave']) && $_POST['bandwidthsave']=='on')echo ' checked';}elseif($bw_save) echo ' checked'; ?>><label for="bandwidthsave">&nbsp;Bandwidth saving</label></td>
 <td class="tdacc">To save bandwidth, if the file name is exist, then stop leeching</td>
 </tr>
 <tr>
@@ -1361,7 +1362,7 @@ foreach($show_column_sfile as $kol => $kolval)
 
 
 
-<tr><td colspan="2"><div><hr id="grs1"></div></td></tr>
+<tr><td colspan="2"><div><hr id="grs1"/></div></td></tr>
 
 
 
@@ -1406,19 +1407,138 @@ foreach($show_column_sfile as $kol => $kolval)
 </td>
 <td class="tdacc" id="auulforbidket" style="display:<?php echo ($navi_left["showauul"]?'none':'');?>">Restrict access to Auto Upload</td>
 </tr>
+<tr>
+    <td class="tdacc">
+        <label for="showlynx"><input type="checkbox" id="showlynx" name="showlynx" onClick="var displ=this.checked?'none':'';d.getElementById('lynxforbid').style.display=displ;d.getElementById('lynxforbidket').style.display=displ;"<?php if($showpostn){if(isset($_POST['showlynx']) && $_POST['showlynx']=='on')echo ' checked';}elseif($navi_left["showlynx"]) echo ' checked'; ?>>&nbsp;Show Listed Files</label></td>
+    <td class="tdacc">
+        Show Listed Files Button <?php echo ($forbid_lynx? "<b class='r'>LYNX DISABLED</b>":"");?>
+    </td>
+</tr>
+<tr>
+    <td class="tdacc" id="lynxforbid" style="display:<?php echo ($navi_left["showlynx"]?'none':'');?>">
+        <div style="padding-left:15px;">
+            <input type="checkbox" id="forbid_lynx" name="forbid_lynx"<?php if($showpostn){if(isset($_POST['forbid_lynx']) && $_POST['forbid_lynx']=='on')echo ' checked';}elseif($forbid_lynx) echo ' checked'; ?>/>
+            <label for="forbid_lynx">
+                &nbsp;*&nbsp;Forbidden to Listed&nbsp;Files
+            </label>
+        </div>
+    </td>
+    <td class="tdacc" id="lynxforbidket" style="display:<?php echo ($navi_left["showlynx"]?'none':'');?>">
+        Restrict access to Listed&nbsp;Files
+    </td>
+</tr>
+<tr>
+    <td class="tdacc">
+        <label for="showmtn"><input type="checkbox" id="showmtn" name="showmtn" onclick="var displ=this.checked?'':'none';d.getElementById('mtn_user_config').style.display=displ;d.getElementById('mtnsetting').style.display=displ;"<?php if($showpostn){if(isset($_POST['showmtn']) && $_POST['showmtn']=='on')echo ' checked="true"';}elseif($navi_left["showmtn"]) echo ' checked="true"'; ?>>&nbsp;Show Movie Thumbnailer</label></td>
+    <td class="tdacc">
+        Show Movie Thumbnailer Button
+    </td>
+</tr>
+<tr id="mtnsetting" style="display:<?php echo ($navi_left["showmtn"]?'':'none');?>">
+    <td class="tdacc">
+        <div style="padding-left:15px;">
+            <table>
+                <tr>
+                    <td class="tdacc">
+                        Columns x Rows :
+                    </td>
+                    <td class="tdacc">
+                        <input type="text" size="1" name="cs" value="<? echo $col_row['colums'];?>"/>
+                        x 
+                        <input type="text" size="1" name="rs" value="<? echo $col_row['rows'];?>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdacc">
+                        Text <span class="nav_text" onmouseover="document.getElementById('help_text').style.display='block'" onmouseout="document.getElementById('help_text').style.display='none'" style="cursor:help"> [?]</span> :
+                    </td>
+                    <td class="tdacc">
+                        <input type="text" size="15" name="text" value="<? echo $text;?>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdacc">
+                        Background Color : 
+                    </td>
+                    <td class="tdacc">
+                        <input class="color" name="bgcolor" value="<? echo (!empty($bgcolor)?$bgcolor:'000000');?>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdacc">
+                        Jpeg Quality : 
+                    </td>
+                    <td class="tdacc">
+                        <select name="quality">
+                            <option value="80" <? echo ($quality == 80 ? 'selected="true"':'false');?>> Low </option>
+                            <option value="90" <? echo ($quality == 90 ? 'selected="true"':'false');?>> Normal </option>
+                            <option value="100" <? echo ($quality == 100 ? 'selected="true"':'false');?>> Hight </option>
+                        </select>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdacc">
+                        Edge <span class="nav_text" onmouseover="document.getElementById('help_text1').style.display='block'" onmouseout="document.getElementById('help_text1').style.display='none'" style="cursor:help"> [?]</span> : 
+                    </td>
+                    <td class="tdacc">
+                        <input type="text" size="1" name="edge" value="<? echo $edge;?>"/> &nbsp;(set 0 or blank to disable)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdacc">
+                        Video Info : 
+                    </td>
+                    <td class="tdacc">
+                        <input type="checkbox" name="video_option" onclick="var displ=this.checked?'':'none';d.getElementById('videoinfo').style.display=displ;" <? if($video['enable'] == true){echo 'checked="true"';}?>/>&nbsp; On  
+                    </td>
+                </tr>
+                <tr id="videoinfo" style="display:<? echo ($video['enable']?'yes':'none');?>;">
+                    <td class="tdacc"></td>
+                    <td class="tdacc">
+                    Color : <input class="color" name="txtcolor" size="5" value="<? echo $video['color']?>"/><br />
+                        Font : 
+                        <select name="font">
+                            <option value="blue.ttf" <? echo($video['font'] == 'blue.ttf'?'selected="true"':'');?>>Blue</option>
+                            <option value="georgia.ttf" <? echo($video['font'] == 'palab.ttf'?'selected="true"':'');?>>Georgia</option>
+                            <option value="lsansuni.ttf" <? echo($video['font'] == 'palab.ttf'?'selected="true"':'');?>>Lsansuni</option>
+                            <option value="pala.ttf" <? echo($video['font'] == 'palab.ttf'?'selected="true"':'');?>>Pala</option>
+                            <option value="palab.ttf" <? echo($video['font'] == 'palab.ttf'?'selected="true"':'');?>>Palab</option>
+                            <option value="palabi.ttf" <? echo($video['font'] == 'palab.ttf'?'selected="true"':'');?>>Palabi</option>
+                            <option value="palai.ttf" <? echo($video['font'] == 'palab.ttf'?'selected="true"':'');?>>Palai</option>
+                            <option value="tahomabd.ttf" <? echo($video['font'] == 'palab.ttf'?'selected="true"':'');?>>Tahomabd</option>
+                            <option value="xsuni.ttf" <? echo($video['font'] == 'palab.ttf'?'selected="true"':'');?>>Xsuni</option>
+                        </select><br />
+                        Size : <input type="text" size="1" name="size" value="<? echo $video['size'];?>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdacc">
+                        Time :
+                    </td>
+                    <td class="tdacc">
+                        <input type="checkbox" name="time" onclick="var displ=this.checked?'':'none';d.getElementById('tcolor').style.display=displ;" <? if($time['enable'] == true){echo 'checked="true"';}?>/>&nbsp; On
+                    </td>
+                    <tr id="tcolor" style="display: <? echo ($time['enable']?'yes':'none');?>;">
+                        <td class="tdacc"></td>
+                        <td  class="tdacc">
+                            <input class="color" name="timecolor" size="5" value="<? echo (!empty($time['color'])?$time['color']:'FFFFFF')?>"/> Color <br />
+                        </td>
+                    </tr>
+                </tr>
+				<tr>
+					<td colspan="2">
+						<span id="help_text" style="display:none">Add text above output image</span>
+						<span id="help_text1" style="display:none">Gap between each shot</span>
+					</td>
+				</tr>
+            </table>
+        </div> 
+    </td>
+</tr>
 
-<tr>
-<td class="tdacc"><label for="showlynx"><input type="checkbox" id="showlynx" name="showlynx" onClick="var displ=this.checked?'none':'';d.getElementById('lynxforbid').style.display=displ;d.getElementById('lynxforbidket').style.display=displ;"<?php if($showpostn){if(isset($_POST['showlynx']) && $_POST['showlynx']=='on')echo ' checked';}elseif($navi_left["showlynx"]) echo ' checked'; ?>>&nbsp;Show Listed Files</label></td>
-<td class="tdacc">Show Listed Files Button <?php echo ($forbid_lynx? "<b class='r'>LYNX DISABLED</b>":"");?></td>
-</tr>
-<tr>
-<td class="tdacc" id="lynxforbid" style="display:<?php echo ($navi_left["showlynx"]?'none':'');?>">
-<div style="padding-left:15px;">
-<input type="checkbox" id="forbid_lynx" name="forbid_lynx"<?php if($showpostn){if(isset($_POST['forbid_lynx']) && $_POST['forbid_lynx']=='on')echo ' checked';}elseif($forbid_lynx) echo ' checked'; ?>><label for="forbid_lynx">&nbsp;*&nbsp;Forbidden to Listed&nbsp;Files</label>
-</div>
-</td>
-<td class="tdacc" id="lynxforbidket" style="display:<?php echo ($navi_left["showlynx"]?'none':'');?>">Restrict access to Listed&nbsp;Files</td>
-</tr>
+
+
+
 
 <tr>
 <td class="tdacc"><input type="checkbox" id="server_info" name="server_info" onclick="var displ=this.checked?'':'none';document.getElementById('cpu_nfo').style.display=displ;document.getElementById('cpu_nfoket').style.display=displ;"<?php if($showpostn){if(isset($_POST['server_info']) && $_POST['server_info']=='on')echo ' checked';}elseif($navi_left["server_info"]) echo ' checked'; ?>><label for="server_info">&nbsp;Show server info</label></td>

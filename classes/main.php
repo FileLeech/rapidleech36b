@@ -153,8 +153,12 @@ if($navi_left["showlynx"]){
 <a href="lynx.php" target="_blank"><img src="<?php echo IMAGE_DIR.'listedfile.gif'?>" alt="List Files"></a>
 <?php
 }
+if($navi_left["showmtn"]){
+?><br />
+<a href="mtn.php" target="_blank"><img src="<?php echo IMAGE_DIR.'mtn.png'?>" alt="Movie Thumbnailer"></a>
+<?php
+}
 ?>
-
 </td>
 </tr></table>
 </td>
