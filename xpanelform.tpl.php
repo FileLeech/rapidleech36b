@@ -1501,14 +1501,14 @@ foreach($show_column_sfile as $kol => $kolval)
                         Font : 
                         <select name="font">
                             <option value="blue.ttf" <? echo($video['txtfont'] == 'blue.ttf'?'selected="true"':'');?>>Blue</option>
-                            <option value="georgia.ttf" <? echo($video['txtfont'] == 'palab.ttf'?'selected="true"':'');?>>Georgia</option>
-                            <option value="lsansuni.ttf" <? echo($video['txtfont'] == 'palab.ttf'?'selected="true"':'');?>>Lsansuni</option>
-                            <option value="pala.ttf" <? echo($video['txtfont'] == 'palab.ttf'?'selected="true"':'');?>>Pala</option>
+                            <option value="georgia.ttf" <? echo($video['txtfont'] == 'georgia.ttf'?'selected="true"':'');?>>Georgia</option>
+                            <option value="lsansuni.ttf" <? echo($video['txtfont'] == 'lsansuni.ttf'?'selected="true"':'');?>>Lsansuni</option>
+                            <option value="pala.ttf" <? echo($video['txtfont'] == 'pala.ttf'?'selected="true"':'');?>>Pala</option>
                             <option value="palab.ttf" <? echo($video['txtfont'] == 'palab.ttf'?'selected="true"':'');?>>Palab</option>
-                            <option value="palabi.ttf" <? echo($video['txtfont'] == 'palab.ttf'?'selected="true"':'');?>>Palabi</option>
-                            <option value="palai.ttf" <? echo($video['txtfont'] == 'palab.ttf'?'selected="true"':'');?>>Palai</option>
-                            <option value="tahomabd.ttf" <? echo($video['txtfont'] == 'palab.ttf'?'selected="true"':'');?>>Tahomabd</option>
-                            <option value="xsuni.ttf" <? echo($video['txtfont'] == 'palab.ttf'?'selected="true"':'');?>>Xsuni</option>
+                            <option value="palabi.ttf" <? echo($video['txtfont'] == 'palabi.ttf'?'selected="true"':'');?>>Palabi</option>
+                            <option value="palai.ttf" <? echo($video['txtfont'] == 'palai.ttf'?'selected="true"':'');?>>Palai</option>
+                            <option value="tahomabd.ttf" <? echo($video['txtfont'] == 'tahomabd.ttf'?'selected="true"':'');?>>Tahomabd</option>
+                            <option value="xsuni.ttf" <? echo($video['txtfont'] == 'xsuni.ttf'?'selected="true"':'');?>>Xsuni</option>
                         </select>&nbsp;
                         Size : <input type="text" size="1" id="txtsize" name="txtsize" value="<? if ($showpostn){if (!empty($_POST['txtsize']))echo $_POST['txtsize'];}else {echo $video['txtsize'];}?>"/>
                     </td>
