@@ -8,6 +8,19 @@ Latest Revision
 ## Lic Code: GNU General Public License v3
 ---------------
 
+Rv.7.4:
+* [SECURITY] WARNING: Bug found due to the insert_location() function (download system) which reveals premium cookies and base_64 encoded auth-strings to end user(s). The premium accounts of rapidleech servers providing premium-account downloads to public, are in danger of having their premium accounts compromised! Private rapidleech servers are safe for now, but are strongly encouraged to upgrade - Szalinski, Th3-882
+* [SECURITY] New premium cookie encryption system implemented (due to the complexity of cookie system and to keep load on 3rd-party servers to a minimum, cookies are encrypted instead, and then decrypted when needed) - Szalinski, Th3-882
+* [SECURITY] New $secretkey in config.php,which is used for cookie encryption. A standard key is included, but you must create your own random string, max 56 characters in length, customized to be user friendly in xpanel - Szalinski, viant77
+* [FEATURE] Add rar/unrar support, customized in xpanel, fix the deletion time when we use autodelete system - Danielx_x, Darknight, Th3-882
+* [FEATURE] Add Movie Thumbnailer, customized in xpanel - Sakib, Slider324, jmsmarcello, Darknight
+* [FEATURE] Add persian language - Dverbame
+* [FEATURE] Fix the link checker for newly filehost - Idoenx
+* [PLUGIN] Added some newly plugin for new filehost - Th3-882, vdhdevil, Se7en.7x, Vinhatrang_LV, Raj Malhotra, Shy2ply, Rockabilly, Blackriderz
+* [PLUGIN] Fix the existing broken plugin - Th3-882, vdhdevil, Se7en.7x, Vinhatrang_LV, Raj Malhotra, Shy2ply, Slider234, Luft-On
+* [PLUGIN] Add Downloadclass for supporting OOP format - TheOnly92, Szalinski, Raj Malhotra, Th3-882
+* [PLUGIN] Modify hosts.php to support directly new download plugin name which is pretty annoyin' to rename with number :hammer: - Szalinski, Se7en.7x
+
 Rv.7.3:
  * Fix Traffic update
  * Fix update FILES_LST after deleteIt

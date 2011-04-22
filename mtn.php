@@ -9,7 +9,7 @@ require_once(CONFIG_DIR."config.php");
 require_once(CLASS_DIR."other.php");
 
 define ( 'TEMPLATE_DIR', 'misc/tpl/'.$csstype.'/' );
-define ('CREDITS', '<small class="small-credits">By jmsmarcelo | Edit by DarkNight</small><br />');
+define ('CREDITS', '<small class="small-credits">Sakib Hossain | Slider234 | jmsmarcelo | DarkNight</small><br />');
 ?>
 <html>
 <head>

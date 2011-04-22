@@ -186,25 +186,24 @@ $navi_left = array(
  'showmtn' => true,
  'server_info' => true,
 );
-
 ####-MOVIE-THUMBNAILER-CONFIG
 $col_row = array(
-'colums' => 3,
-'rows' => 3,
+'mtn_colums' => 3,
+'mtn_rows' => 3,
 );
-$text = 'Create By Movie Thumbnailer';
+$mtn_text = '';
 $bgcolor = '000000';
-$quality = 90;
+$quality = 80;
 $edge = 0;
 $video = array(
 'enable' => true,
-'font' => 'blue.ttf',
-'color' => 'FF9195',
-'size' => 10,
+'txtfont' => 'blue.ttf',
+'txtcolor' => 'FFFFFF',
+'txtsize' => 10,
 );
 $time = array(
 'enable' => true,
-'color' => 'FFFFFF',
+'tcolor' => 'FFFFFF',
 );
 
 

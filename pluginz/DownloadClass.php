@@ -34,8 +34,8 @@ class DownloadClass {
 			$referer = $Referer;
 		}
 		$Url = parse_url(trim($link));
-		$page = geturl ($Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $referer, $cookie, $post, 0, $_GET ["proxy"], $pauth, $auth, $Url ["scheme"]);
-		is_page ( $page );
+    $page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $referer, $cookie, $post, 0, $_GET ["proxy"], $pauth, $auth, $Url ["scheme"] );
+    is_page ( $page );
 		return $page;
 	}
 

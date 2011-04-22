@@ -1,30 +1,31 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-	require('../404.php');
+	require('../index.php');
 	exit;
 }
-if ($col_row['colums']>0 && $col_row['colums']<6)
+if ($col_row['mtn_colums']>0 && $col_row['mtn_colums']<6)
 {
-	$c=$col_row['colums'];
+	$c=$col_row['mtn_colums'];
 }
 else
 {
 	$c=" 1";
 }
-if ($col_row['rows']>0 && $_col_row['rows']<11)
+if ($col_row['mtn_rows']>0 && $_col_row['mtn_rows']<11)
 {
-	$r=$col_row['rows'];
+	$r=$col_row['mtn_rows'];
 }
 else
 {
 	$r=" 1";
 }
+$text = $mtn_text;
 $videoenable = $video['enable'];
 $timeenable = $time['enable'];
-$font = $video['font'];
-$infocolor = $video['color'];
-$size = $video['size'];
-$tcolor = $time['color'];
+$font = $video['txtfont'];
+$infocolor = $video['txtcolor'];
+$size = $video['txtsize'];
+$tcolor = $time['tcolor'];
 $ed = $edge;
 $bg = $bgcolor;
 $q = $quality;

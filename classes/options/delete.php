@@ -45,17 +45,17 @@ function delete_go() {
             {
               if(@unlink($file["name"]))
                 {
-                  echo $optxt['_file']." <b>".htmlspecialchars($file["name"])."</b> ".$optxt['_deleted']."<br><br>";
+                  echo $optxt['_file']." <b>".htmlspecialchars(basename($file["name"]))."</b> ".$optxt['_deleted']."<br><br>";
                   unset($list[$_GET["files"][$i]]);
                 }
               else
                 {
-                  echo "<b class=\"r\">".$optxt['error_delete']."</b> the file <b>".htmlspecialchars($file["name"])."</b>!<br><br>";
+                  echo "<b class=\"r\">".$optxt['error_delete']."</b> the file <b>".htmlspecialchars(basename($file["name"]))."</b>!<br><br>";
                 }
             }
           else
             {
-              echo $optxt['_file']." <b>".htmlspecialchars($file["name"])."</b> <b class=\"r\">".$optxt['not_found']."</b><br><br>";
+              echo $optxt['_file']." <b>".htmlspecialchars(basename($file["name"]))."</b> <b class=\"r\">".$optxt['not_found']."</b><br><br>";
             }
         }
       if(!updateListInFile($list))

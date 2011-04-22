@@ -900,34 +900,31 @@ if(isset($_POST['submit'])){
 	$field = array("showcpanel", "showplugins", "showaudl", "showauul", "showlynx", "showmtn", "server_info");
 	$_config .= fillField($field);
 	$_config .= ");\n\n";
-    
+	
     $_config .= "####-MOVIE-THUMBNAILER-CONFIG\n";
     $_config .= "\$col_row = array(\n";
     
-    $_config .= "'colums' => ".(!empty($_POST['cs'])?$_POST['mtn_cs']:'3').",\n";
-    $_config .= "'rows' => ".(!empty($_POST['rs'])?$_POST['mtn_rs']:'3').",\n";
+    $_config .= "'mtn_colums' => ".(!empty($_POST['cs'])?$_POST['mtn_cs']:'3').",\n";
+    $_config .= "'mtn_rows' => ".(!empty($_POST['rs'])?$_POST['mtn_rs']:'3').",\n";
     $_config .= ");\n";
-    $_config .= "\$ad_text = '".$_POST['ad_text']."';\n";
+    $_config .= "\$mtn_text = '".$_POST['mtn_text']."';\n";
     $_config .= "\$bgcolor = '".$_POST['bgcolor']."';\n";
     $_config .= "\$quality = ".$_POST['quality'].";\n";
     $_config .= "\$edge = ".(!empty($_POST['mtn_edge'])?$_POST['mtn_edge']:'0').";\n";
     $_config .= "\$video = array(\n";
     $_config .= "'enable' => ".($_POST['video_option'] == 'on'?'true':'false').",\n";
-    $_config .= "'font' => '".$_POST['font']."',\n";
-    $_config .= "'color' => '".$_POST['txtcolor']."',\n";
-    $_config .= "'size' => ".(!empty($_POST['text_size'])?$_POST['text_size']:'10').",\n";
+    $_config .= "'txtfont' => '".$_POST['font']."',\n";
+    $_config .= "'txtcolor' => '".$_POST['txtcolor']."',\n";
+    $_config .= "'txtsize' => ".(!empty($_POST['text_size'])?$_POST['text_size']:'10').",\n";
     $_config .= ");\n";
     $_config .= "\$time = array(\n";
     $_config .= "'enable' => ".($_POST['time'] == 'on'?'true':'false').",\n";
-    $_config .= "'color' => '".$_POST['timecolor']."',\n";
+    $_config .= "'tcolor' => '".$_POST['tcolor']."',\n";
     $_config .= ");\n";
     $_config .= "\n\n";
-    
-	
+
 	$field = array("forbid_audl", "forbid_auul", "forbid_lynx");
 	$_config .= fillField($field, 1); // not an array sets
-    
-
 
 	$_config .= " \$cpuUsageNFO = ".(isset($_POST['cpuUsageNFO']) && $_POST['cpuUsageNFO']=='on'?'true':'false').";  // require server_info = true\n";
 	
@@ -1061,7 +1058,8 @@ echo "<hr width=\"800\">\r\n<small>".VERSION."</small>";
 </td>
 </tr>
 </table>
-<br/><img src="http://notepad-plus.sourceforge.net/commun/images/npp.animated.logo.gif" alt="notepad++">
+<br><img src="http://notepad-plus.sourceforge.net/commun/images/npp.animated.logo.gif" alt="notepad++">
 </center>
 </body>
 </html>
+<br>
