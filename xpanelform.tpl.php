@@ -743,9 +743,9 @@ pass: <input type="password" id="pass" name="pass">
 </td>
 <td class="tdacc">
 	<div id="rsacchash"<?php echo $styledisplay;?> class="float">
-	auth= <input type="text" id="rshashcookie" name="rshashcookie" value="" size="40">
+	enc= <input type="text" id="rshashcookie" name="rshashcookie" value="" size="40">
 	</div>
-	<span id="rsket2"><?php if(!$rscook){echo "<span>Hotfile.com premiX ACC cookie.</span>";}else{echo CK_EMBED;}?></span>
+	<span id="rsket2"><?php if(!$rscook){echo "<span>Rapidshare premiX ACC cookie.</span>";}else{echo CK_EMBED;}?></span>
 </td>
 </tr>
 

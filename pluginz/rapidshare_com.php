@@ -68,7 +68,7 @@ class rapidshare_com extends DownloadClass {
 			$this->lastmesg = $htxt['_retrieving']."<br />RS Premium Download [Cookie]";
 			$this->changeMesg($this->lastmesg);
 			return $this->PremiumCookieDownload($cookie);
-		}elseif (!empty($_POST["sssid"]) || ($_REQUEST["premium_acc"] == "on" && (($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"])) || (!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) || ((!empty($premium_acc["rs_com"]['user']) && !empty($premium_acc["rs_com"]['pass'])) || is_array($premium_acc["rs_com"][0]))))) {
+		}elseif (!empty($_POST["sssid"]) || ($_REQUEST["premium_acc"] == "on" && (($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"])) || (!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) || (!empty($premium_acc["rs_com"]['user']) && !empty($premium_acc["rs_com"]['pass']))))) {
 			$this->lastmesg = $htxt['_retrieving']."<br />RS Premium Download";
 			$this->changeMesg($this->lastmesg);
 			return $this->DownloadPremium();
@@ -141,64 +141,35 @@ class rapidshare_com extends DownloadClass {
 	private function DownloadPremium() {
 		global $premium_acc;
 
-		if (is_array($premium_acc["rs_com"][0])) {
-			$totalpremium = count($premium_acc["rs_com"]);
-			$success = 0;
-			for ($i = 0; $i < $totalpremium; $i++) {
-				$acc = $premium_acc["rs_com"][$i]['user'];
-				$pass = $premium_acc["rs_com"][$i]['pass'];
-				$auth = base64_encode($acc . ":" . $pass);
-				$page = $this->GetPageS("https://rapidshare.com/files/{$this->fileid}/{$this->filename}", 0, 0, 0, $auth);
-
-				if (stristr($page, "ERROR: Login failed.")) continue;
-				//if (stristr($page, "ERROR: No traffic left.")) continue;
-				if (stristr($page, "ERROR: RapidPro expired.")) continue;
-
-				$this->Check_Limit($page);
-
-				if (stristr($page, "Location:")) {
-					$Href = $this->ReLocation($page);
-					$success = 1;
-					if (function_exists('encrypt')) $auth = encrypt($auth);
-					$this->RedirectDownload($Href, $filename, 0, 0, 0, 0, $auth);
-					break;
-				}
+		if (($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"])) || (!empty($_POST["sssid"]))) {
+			$ahash = (($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"])) ? $_GET["auth_hash"] : $_POST["sssid"]);
+			$ahash = explode(":", base64_decode(utf8_strrev(dcd($ahash))));
+			if(count($ahash) == 2 && (!empty($ahash[0]) && !empty($ahash[1]))) {
+				$_REQUEST["premium_user"] = $ahash[0];
+				$_REQUEST["premium_pass"] = $ahash[1];
 			}
-			if (!$success) html_error("No usable premium account", 0);
-        } else {
-			if (($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"])) || (!empty($_POST["sssid"]))) {
-				$ahash = (($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"])) ? $_GET["auth_hash"] : $_POST["sssid"]);
-				$ahash = explode(":", base64_decode(utf8_strrev(dcd($ahash))));
-				if(count($ahash) == 2 && (!empty($ahash[0]) && !empty($ahash[1]))) {
-					$_REQUEST["premium_user"] = $ahash[0];
-					$_REQUEST["premium_pass"] = $ahash[1];
-				}
-				unset($ahash);
-			}
-			if (!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) {
-				$auth = base64_encode($_REQUEST["premium_user"] . ":" . $_REQUEST["premium_pass"]);
-			} else {
-				$auth = base64_encode($premium_acc["rs_com"]["user"] . ":" . $premium_acc["rs_com"]["pass"]);
-			}
+			unset($ahash);
+		}
+		if (!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) {
+			$user = $_REQUEST["premium_user"];
+			$pass = $_REQUEST["premium_pass"];
+		} else {
+			$user = $premium_acc["rs_com"]["user"];
+			$pass = $premium_acc["rs_com"]["pass"];
+		}
 
-			$page = $this->GetPageS("https://rapidshare.com/files/{$this->fileid}/{$this->filename}", 0, 0, 0, $auth);
+		$cookie = $this->ChkAccInfo('login', $user, $pass);
+		$cookie = "enc=$cookie;";
 
-			is_present($page, "ERROR: Login failed. Password incorrect.", "Login failed. User/Password incorrect.");
-			is_present($page, "ERROR: Login failed. Password incorrect or account not found.", "Login failed. User/Password incorrect or could not be found.");
-			is_present($page, "ERROR: Login failed. Account not validated.", "Login failed. Account not validated.");
-			is_present($page, "ERROR: Login failed. Account locked.", "Login failed. Your account has been locked.");
- 			//is_present($page, "ERROR: No traffic left.", "You don't have enough traffic to download this file.");
-			is_present($page, "ERROR: RapidPro expired.", "RapidPro has expired or is inactive.");
+		$page = $this->GetPageS("https://rapidshare.com/files/{$this->fileid}/{$this->filename}", $cookie);
+		$this->Check_Limit($page);
+		//is_present($page, "ERROR: No traffic left.", "You don't have enough traffic to download this file.");
 
-			$this->Check_Limit($page);
-
-			if (stristr($page, "Location:")) {
-				$Href = $this->ReLocation($page);
-				if (function_exists('encrypt')) $auth = encrypt($auth);
-				$this->RedirectDownload($Href, $filename, 0, 0, 0, 0, $auth);
-			} else {
-				html_error("Cannot use premium account", 0);
-			}
+		if (stristr($page, "Location:")) {
+			$Href = $this->ReLocation($page);
+			$this->RedirectDownload($Href, $this->filename, $cookie);
+		} else {
+			html_error("Cannot use premium account", 0);
 		}
 	}
 	private function PremiumCookieDownload($cookie) {
@@ -234,19 +205,27 @@ class rapidshare_com extends DownloadClass {
 			return $page;
 		}
 	}
-	private function ChkAccInfo($cookie) {
-		$page = $this->Check_Limit($this->GetPageS("https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&cookie=" . $cookie), 1);
+	private function ChkAccInfo($cookie, $user='', $pass='') {
+		if ($cookie != "login") {
+			$page = $this->Check_Limit($this->GetPageS("https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&cookie=" . $cookie), 1);
+			$t1 = 'Cookie';$t2 = 'cookie';
+		} elseif (!empty($user) && !empty($pass)) {
+			$user = urlencode($user);
+			$pass = urlencode($pass);
+			$page = $this->Check_Limit($this->GetPageS("https://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&withcookie=1&login=$user&password=$pass"), 1);
+			$t1 = 'Error';$t2 = 'login details';
+		} else html_error("Login failed. User/Password empty.");
 
 		is_present($page, "ERROR: Login failed. Login data invalid.",
-			"[Cookie] Invalid cookie.");
+			"[$t1] Invalid $t2.");
 		is_present($page, "ERROR: Login failed. Password incorrect or account not found.",
-			"[Cookie] Login failed. User/Password incorrect or could not be found.");
+			"[$t1] Login failed. User/Password incorrect or could not be found.");
 		is_present($page, "ERROR: Login failed. Account not validated.",
-			"[Cookie] Login failed. Account not validated.");
+			"[$t1] Login failed. Account not validated.");
 		is_present($page, "ERROR: Login failed. Account locked.",
-			"[Cookie] Login failed. Account locked.");
+			"[$t1] Login failed. Account locked.");
 		is_present($page, "ERROR: Login failed.",
-			"[Cookie] Login failed. Invalid cookie?");
+			"[$t1] Login failed. Invalid $t2?");
 
 		$arr1 = explode("\n", $page);
 		$info = array();
@@ -273,6 +252,7 @@ class rapidshare_com extends DownloadClass {
 			}
 			$this->changeMesg($this->lastmesg.'<br />Direct downloads has been enabled in your account');
 		}
+		if ($cookie == "login") return $info['cookie'];
 	}
 	private function ReLocation($page, $stop=1) {
 		if (!preg_match('@Location: https?://((\w+\.)?rapidshare.com/[^\r|\n]+)@i', $page, $rloc)) {
@@ -336,5 +316,6 @@ class rapidshare_com extends DownloadClass {
 //[19-APR-11]  Plugin checked & fixed for work with new changes at RS && SSL support is needed (It will show error if OpenSSL isn't loaded)... Including for get data in Free download :( . - Th3-822
 //[20-APR-11]  FreeDL: Added new functions for use https with cURL if OpenSSL isn't loaded. - Th3-822
 //[21.APR-11]  Plugin edited to work in 36B (With cookies & hashes) && Fixed $post in cURL function. (Oops, but isn't used by the plugin)... - Th3-822
+//[23.APR-11]  Premium: Removed support for multi RS logins & changed the login process using 'ChkAccInfo'. - Th3-822
 
 ?>

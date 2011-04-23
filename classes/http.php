@@ -601,7 +601,7 @@ else
 }
 
 //simple curl function for https:// logins
-function sslcurl($link, $post = 0, $cookie = 0, $refer = 0)
+function sslcurl($link, $cookie = 0, $post = 0, $refer = 0)
 {
 	$mm = !empty($post) ? 1 : 0;
 	$ch = curl_init();
@@ -619,7 +619,7 @@ function sslcurl($link, $post = 0, $cookie = 0, $refer = 0)
 	curl_setopt($ch, CURLOPT_COOKIE, $cookie) ;
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 	// curl_setopt ( $ch , CURLOPT_TIMEOUT, 15);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 	$contents .= curl_exec($ch);
 	// $info = curl_getinfo($ch);
 	// $stat = $info['http_code'];
@@ -755,7 +755,7 @@ echo "File <b>".$filename."</b>, size <b>".bytesToKbOrMb($fileSize)."</b>...<br>
 
 global $id;
 $id = md5 ( time () * rand ( 0, 10 ) );
-require_once(CLASS_DIR.'uploadui.php');
+require (CLASS_DIR.'uploadui.php');
 flush();
 
 $timeStart=getmicrotime();

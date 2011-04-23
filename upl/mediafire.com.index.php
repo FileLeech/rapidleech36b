@@ -1,7 +1,7 @@
 <?php
-$upload_services[]="mediafire.com_member";
-$max_file_size["mediafire.com_member"]=200;
-$page_upload["mediafire.com_member"] = "mediafire.com_member.php";
+$upload_services[]="mediafire.com";
+$max_file_size["mediafire.com"]=200;
+$page_upload["mediafire.com"] = "mediafire.com.php";
 
 /******************mediafire.com****************************\
 mediafire.com Member Upload Plugin

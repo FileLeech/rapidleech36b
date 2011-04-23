@@ -21,7 +21,7 @@ class enterupload_com extends DownloadClass {
         $post['fname']= $fname;
         $post['referer'] = "";
         $post['method_free']= "Free Download";
-        $page = $this->GetPage($link, 0, $post, 0);
+        $page = $this->GetPage($link, 0, $post, $link);
         is_present($page,"You can download files up to 400 Mb only","You can download files up to 400 Mb only");
         if (preg_match("#You have to wait (\d+) minutes, (\d+) seconds till next download#",$page,$message)){
             html_error($message[0]);
@@ -41,15 +41,15 @@ class enterupload_com extends DownloadClass {
         $post['method_premium']="";
         $post['down_direct']="1";
         $page = $this->GetPage($link, 0, $post, $link);
-        if (preg_match('#(http://.*:8080.*)" #', $page, $dlink)){
+        if (preg_match('#(http:\/\/serv\d+\.enterupload\.com(:\d+)\/d\/.*)" #', $page, $dlink)){
             $dwn = trim($dlink[1]);
         } else {
-            html_error("Download Link Not Found");
+            html_error("Error: Plugin out of date!!!");
         }
 
         $Url=parse_url($dwn);
         $FileName=basename($Url['path']);
-        $this->RedirectDownload($dwn, $FileName, 0, 0, $link, $FileName);
+        $this->RedirectDownload($dwn, $FileName, 0, 0, $link);
         exit;
 
     }
@@ -57,4 +57,5 @@ class enterupload_com extends DownloadClass {
 }
 
 //Enterupload free download plugin by Ruud v.Tony 28 Feb 2011
+//Fixed invalid character in regex by Ruud v.Tony 24 April 2011
 ?>

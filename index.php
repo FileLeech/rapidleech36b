@@ -589,6 +589,7 @@ if($limitbyip){
 			    list($_GET["filename"],$tmp) = explode('?',basename($redirectto));
 				$_GET["host"] = $purl["host"];
     			$_GET["path"] = $purl["path"].($purl["query"] ? "?".$purl["query"] : "");
+				$_GET ['port'] = $purl ['port'] ? $purl ['port'] : 80;
     			$lastError = "";
 			}
 	    

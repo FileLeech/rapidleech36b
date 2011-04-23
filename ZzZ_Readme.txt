@@ -16,10 +16,9 @@ Rv.7.4:
 * [FEATURE] Add Movie Thumbnailer, customized in xpanel - Sakib, Slider324, jmsmarcello, Darknight
 * [FEATURE] Add persian language - Dverbame
 * [FEATURE] Fix the link checker for newly filehost - Idoenx
-* [PLUGIN] Added some newly plugin for new filehost - Th3-882, vdhdevil, Se7en.7x, Vinhatrang_LV, Raj Malhotra, Shy2ply, Rockabilly, Blackriderz
-* [PLUGIN] Fix the existing broken plugin - Th3-882, vdhdevil, Se7en.7x, Vinhatrang_LV, Raj Malhotra, Shy2ply, Slider234, Luft-On
+* [PLUGIN] Added some newly download & upload plugin for new filehost - Th3-882, vdhdevil, Se7en.7x, Vinhatrang_LV, Raj Malhotra, Shy2ply, Rockabilly, Blackriderz
+* [PLUGIN] Fix the existing broken download & upload plugin - Th3-882, vdhdevil, Se7en.7x, Vinhatrang_LV, Raj Malhotra, Shy2ply, Slider234, Luft-On
 * [PLUGIN] Add Downloadclass for supporting OOP format - TheOnly92, Szalinski, Raj Malhotra, Th3-882
-* [PLUGIN] Modify hosts.php to support directly new download plugin name which is pretty annoyin' to rename with number :hammer: - Szalinski, Se7en.7x
 
 Rv.7.3:
  * Fix Traffic update

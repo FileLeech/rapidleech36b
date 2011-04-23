@@ -11,7 +11,7 @@ class DownloadClass {
 	 * @return void
 	 */
 	public function __construct() {
-    global $htxt;
+		global $htxt;
 		echo('<table width="600" align="center">');
 		echo('<tr>');
 		echo('<td align="center">');
@@ -34,8 +34,8 @@ class DownloadClass {
 			$referer = $Referer;
 		}
 		$Url = parse_url(trim($link));
-    $page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $referer, $cookie, $post, 0, $_GET ["proxy"], $pauth, $auth, $Url ["scheme"] );
-    is_page ( $page );
+		$page = geturl ( $Url ["host"], $Url ["port"] ? $Url ["port"] : 80, $Url ["path"] . ($Url ["query"] ? "?" . $Url ["query"] : ""), $referer, $cookie, $post, 0, $_GET ["proxy"], $pauth, $auth, $Url ["scheme"] );
+		is_page ( $page );
 		return $page;
 	}
 
@@ -96,7 +96,7 @@ class DownloadClass {
 		insert_location ( $loc );
 	}
 
-	function moveToAutoDownloader( $link_array )
+  public function moveToAutoDownloader( $link_array )
 	{
 		global $nn;
 		if ( count( $link_array ) == 0 )
@@ -115,7 +115,7 @@ class DownloadClass {
 			$links .= $value . $nn;
 		}
 
-		echo "<form action='audl.php?GO=GO' method='post' >\n";
+		echo "<form action='audl.php?crot=step2' method='post' >\n";
 		echo "<input type='hidden' name='links' value='" . $links . "' />\n";
 		$key_array = array ( "useproxy", "proxy", "proxyuser", "proxypass" );
 		foreach ( $key_array as $v )
@@ -146,7 +146,7 @@ class DownloadClass {
 	}
 
 	public function EnterCaptchaDefault($captchaImg, $inputs) {
-    global $htxt;
+		global $htxt;
 		echo('<form name="dl" action="'.$_SERVER['PHP_SELF'].'" method="post">');
 		foreach ($inputs as $name => $input) {
 			echo('<input type="hidden" name="'.$name.'" id="'.$name.'" value="'.$input.'" />');
