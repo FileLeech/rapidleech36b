@@ -613,9 +613,9 @@ if($limitbyip){
         print "File <b>".($inCurrDir ? "<a href=\"".$Path."/".substr(dirname($pathWithName), strlen(ROOT_DIR) + 1)."/".basename($file["file"])."\">" : "<a href=\"".$cl_Path["root"]."/".$cl_Path["download"].basename($file["file"])."\">").basename($file["file"])."</a>"."</b> (<b>".$file["size"]."</b>) ".$txt['_saved']."<br>Time: <b>".$file["time"]."</b> | ".$txt['_avg_spd']." <b>".$file["speed"]." KB/s</b><br>";
 		
 		if($inCurrDir){
-		 $unix_zone = filectime(substr(dirname($pathWithName), strlen(ROOT_DIR) + 1)."/".basename($file["file"]));
+		 $unix_zone = filemtime(substr(dirname($pathWithName), strlen(ROOT_DIR) + 1)."/".basename($file["file"]));
 		}else{
-		 $unix_zone = filectime(DOWNLOAD_DIR.basename($file["file"]));
+		 $unix_zone = filemtime(DOWNLOAD_DIR.basename($file["file"]));
 		}
 		$unix_zone = ( $unix_zone - date("Z") + (3600 * $timezone));
 		$file["date"] = $unix_zone;

@@ -1283,7 +1283,7 @@ function purge_files_ip($delay)
 		foreach ($files_lst AS $files_line)
 		{
 			$files_data = unserialize(trim($files_line));
-			$filedate = @filectime($files_data["name"]);
+			$filedate = @filemtime($files_data["name"]);
 			$unix_zone_filedate = ( $filedate - date("Z") + (3600 * $timezone));
 			if ($unix_now - $unix_zone_filedate >= ($delay*3600))
 			{
