@@ -1557,5 +1557,28 @@ function decrypt($string){
 	return $crypt->decrypt($string);
 }
 
+function vidlist($dir,$exts) 
+{
+	$results = array();
+	$handler = opendir($dir);
+	while ($file = readdir($handler)) 
+	{
+		if (strrchr($file,'.')!="")
+		{
+			$ext=strtolower(strrchr($file,'.'));
+		}
+		else
+		{
+			$ext = '';
+		}
+		if ($file != '.' && $file != '..' && in_array($ext,$GLOBALS["exts"]))
+		{
+			$results[] = $file;
+		}
+	}
+	closedir($handler);
+	sort($results);
+	return $results;
+}
 //Added default encrypt/decrypt function by Th3-882
 ?>

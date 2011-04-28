@@ -186,19 +186,20 @@ $navi_left = array(
  'showmtn' => true,
  'server_info' => true,
 );
-####-MOVIE-THUMBNAILER-CONFIG
+
+###-MOVIE-THUMBNAILER-CONFIG
 $col_row = array(
 'mtn_colums' => 3,
 'mtn_rows' => 3,
 );
 $mtn_text = '';
 $bgcolor = '000000';
-$quality = 80;
-$edge = 0;
-$video = array(
+$mtn_quality = 80;
+$mtn_edge = 0;
+$video_option = array (
 'enable' => true,
-'txtfont' => 'blue.ttf',
 'txtcolor' => 'FFFFFF',
+'txtfont' => 'Blue.ttf',
 'txtsize' => 10,
 );
 $time = array(

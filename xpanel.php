@@ -901,25 +901,24 @@ if(isset($_POST['submit'])){
 	$_config .= fillField($field);
 	$_config .= ");\n\n";
 	
-    $_config .= "####-MOVIE-THUMBNAILER-CONFIG\n";
+	$_config .= "###-MOVIE-THUMBNAILER-CONFIG\n";
     $_config .= "\$col_row = array(\n";
-    
-    $_config .= "'mtn_colums' => ".(!empty($_POST['cs'])?$_POST['mtn_cs']:'3').",\n";
-    $_config .= "'mtn_rows' => ".(!empty($_POST['rs'])?$_POST['mtn_rs']:'3').",\n";
+    $_config .= "'mtn_colums' => ".($_POST['mtn_cs'] == ''?'3':$_POST['mtn_cs']).",\n";
+    $_config .= "'mtn_rows' => ".($_POST['mtn_rs'] == ''?'3':$_POST['mtn_rs']).",\n";
     $_config .= ");\n";
     $_config .= "\$mtn_text = '".$_POST['mtn_text']."';\n";
-    $_config .= "\$bgcolor = '".$_POST['bgcolor']."';\n";
-    $_config .= "\$quality = ".$_POST['quality'].";\n";
-    $_config .= "\$edge = ".(!empty($_POST['mtn_edge'])?$_POST['mtn_edge']:'0').";\n";
-    $_config .= "\$video = array(\n";
+    $_config .= "\$bgcolor = '".($_POST['bgcolor'] == ''?'000000':$_POST['bgcolor'])."';\n";
+    $_config .= "\$mtn_quality = ".$_POST['mtn_quality'].";\n";
+    $_config .= "\$mtn_edge = ".($_POST['mtn_edge'] == ''?'0':$_POST['mtn_edge']).";\n";
+    $_config .= "\$video_option = array (\n";
     $_config .= "'enable' => ".($_POST['video_option'] == 'on'?'true':'false').",\n";
-    $_config .= "'txtfont' => '".$_POST['font']."',\n";
-    $_config .= "'txtcolor' => '".$_POST['txtcolor']."',\n";
-    $_config .= "'txtsize' => ".(!empty($_POST['text_size'])?$_POST['text_size']:'10').",\n";
+    $_config .= "'txtcolor' => '".($_POST['txtcolor'] == ''?'FFFFFF':$_POST['txtcolor'])."',\n";
+    $_config .= "'txtfont' => '".$_POST['txtfont']."',\n";
+    $_config .= "'txtsize' => ".($_POST['txtsize'] == '' ? '10': $_POST['txtsize']).",\n";
     $_config .= ");\n";
     $_config .= "\$time = array(\n";
-    $_config .= "'enable' => ".($_POST['time'] == 'on'?'true':'false').",\n";
-    $_config .= "'tcolor' => '".$_POST['tcolor']."',\n";
+    $_config .= "'enable' => ".($_POST['mtn_time'] == 'on'?'true':'false').",\n";
+    $_config .= "'tcolor' => '".($_POST['tcolor'] == ''?'FFFFFF':$_POST['txtcolor'])."',\n";
     $_config .= ");\n";
     $_config .= "\n\n";
 

@@ -153,7 +153,7 @@ if($navi_left["showlynx"]){
 <a href="lynx.php" target="_blank"><img src="<?php echo IMAGE_DIR.'listedfile.gif'?>" alt="List Files"></a>
 <?php
 }
-if($navi_left["showmtn"]){
+if($navi_left["showmtn"] && file_exists("mtn.php")){
 ?><br />
 <a href="mtn.php" target="_blank"><img src="<?php echo IMAGE_DIR.'mtn.png'?>" alt="Movie Thumbnailer"></a>
 <?php

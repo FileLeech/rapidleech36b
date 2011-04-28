@@ -1,11 +1,12 @@
 <?php
 if (!defined('RAPIDLEECH'))
   { require_once("404.php"); exit; }
-  
+
+require_once(CLASS_DIR."other.php");
 if($ajax_serverfiles){
 ?>
 <script type="text/javascript" language="javascript" src="rsajax.js"></script>
-<script type="text/javascript" src="jscolor/jscolor.js"></script>
+<script type="text/javascript" src="mtn/jscolor/jscolor.js"></script>
 <?php } ?>
 
 
@@ -1430,114 +1431,83 @@ foreach($show_column_sfile as $kol => $kolval)
 </tr>
 
 <tr>
-    <td class="tdacc">
-        <label for="showmtn"><input type="checkbox" id="showmtn" name="showmtn" onclick="var displ=this.checked?'':'none';d.getElementById('mtnsetting').style.display=displ;"<?php if($showpostn){if(isset($_POST['showmtn']) && $_POST['showmtn']=='on')echo ' checked="true"';}elseif($navi_left["showmtn"]) echo ' checked="true"'; ?>>&nbsp;Show Movie Thumbnailer</label></td>
-    <td class="tdacc">
-        Show Movie Thumbnailer Button
-    </td>
+<td class="tdacc"><label for="showmtn"><input type="checkbox" id="showmtn" name="showmtn" onclick="var displ=this.checked?'':'none';d.getElementById('video_option').style.display=displ;" <?if ($showpostn) {if (isset($_POST['showmtn']) && $_POST['showmtn'] = 'on')echo 'checked="true"';} elseif ($navi_left['showmtn']){echo 'checked="true"';}?>/></label> Show Movie Thumbnailer</td>
+<td class="tdacc"> Show Movie Thumbnailer Button</td>
 </tr>
-<tr id="mtnsetting" style="display:<?php echo ($navi_left["showmtn"]?'':'none');?>">
-    <td class="tdacc" colspan="2">
-        <div style="padding-left:15px;">
-            <table>
-                <tr>
-                    <td class="tdacc" width="100">
-                        Columns x Rows :
-                    </td>
-                    <td class="tdacc">
-                        <input type="text" size="1" id="mtn_cs" name="mtn_cs" value="<? if ($showpostn){if(!empty($_POST['mtn_cs']))echo $_POST['mtn_cs'];}else {echo $col_row['mtn_colums'];};?>"/>
-                        x 
-                        <input type="text" size="1" id="mtn_rs" name="mtn_rs" value="<? if ($showpostn){if(!empty($_POST['mtn_rs']))echo $_POST['mtn_rs'];}else {echo $col_row['mtn_rows'];};?>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdacc">
-                        Text <span class="nav_text" onmouseover="document.getElementById('help_text').style.display='block'" onmouseout="document.getElementById('help_text').style.display='none'" style="cursor:help"> [?]</span> :
-                    </td>
-                    <td class="tdacc">
-                        <input type="text" size="25" id="mtn_text" name="mtn_text" value="<? if ($showpostn){if(!empty($_POST['mtn_text']))echo $_POST['mtn_text'];}else {echo $mtn_text;};?>" />
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdacc">
-                        Background Color : 
-                    </td>
-                    <td class="tdacc">
-                        <input class="color" name="bgcolor" size="5" value="<? echo (!empty($bgcolor)?$bgcolor:'000000');?>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdacc">
-                        Jpeg Quality : 
-                    </td>
-                    <td class="tdacc">
-                        <select name="quality">
-                            <option value="80" <? echo ($quality == 80 ? 'selected="true"':'false');?>> Low </option>
-                            <option value="90" <? echo ($quality == 90 ? 'selected="true"':'false');?>> Normal </option>
-                            <option value="100" <? echo ($quality == 100 ? 'selected="true"':'false');?>> Hight </option>
-                        </select>                        
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdacc">
-                        Edge <span class="nav_text" onmouseover="document.getElementById('help_text1').style.display='block'" onmouseout="document.getElementById('help_text1').style.display='none'" style="cursor:help"> [?]</span> : 
-                    </td>
-                    <td class="tdacc">
-                        <input type="text" size="1" id="mtn_edge" name="mtn_edge" value="<? if ($showpostn){if (!empty($_POST['mtn_edge']))echo $_POST['mtn_edge'];} else {echo $edge;}?>"/> &nbsp;(set 0 or blank to disable)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdacc">
-                        Video Info : 
-                    </td>
-                    <td class="tdacc">
-                        <input type="checkbox" name="video_option" onclick="var displ=this.checked?'':'none';d.getElementById('videooption').style.display=displ;" <? if($video['enable'] == true){echo 'checked="true"';}?>/>&nbsp; On  
-                    </td>
-                </tr>
-                <tr id="videooption" style="display:<? echo ($video['enable']?'':'none');?>;">
-                    <td class="tdacc"></td>
-                    <td class="tdacc">
-                    Color : <input class="color" name="txtcolor" size="5" value="<? echo $video['txtcolor']?>"/> &nbsp;
-                        Font : 
-                        <select name="font">
-                            <option value="blue.ttf" <? echo($video['txtfont'] == 'blue.ttf'?'selected="true"':'');?>>Blue</option>
-                            <option value="georgia.ttf" <? echo($video['txtfont'] == 'georgia.ttf'?'selected="true"':'');?>>Georgia</option>
-                            <option value="lsansuni.ttf" <? echo($video['txtfont'] == 'lsansuni.ttf'?'selected="true"':'');?>>Lsansuni</option>
-                            <option value="pala.ttf" <? echo($video['txtfont'] == 'pala.ttf'?'selected="true"':'');?>>Pala</option>
-                            <option value="palab.ttf" <? echo($video['txtfont'] == 'palab.ttf'?'selected="true"':'');?>>Palab</option>
-                            <option value="palabi.ttf" <? echo($video['txtfont'] == 'palabi.ttf'?'selected="true"':'');?>>Palabi</option>
-                            <option value="palai.ttf" <? echo($video['txtfont'] == 'palai.ttf'?'selected="true"':'');?>>Palai</option>
-                            <option value="tahomabd.ttf" <? echo($video['txtfont'] == 'tahomabd.ttf'?'selected="true"':'');?>>Tahomabd</option>
-                            <option value="xsuni.ttf" <? echo($video['txtfont'] == 'xsuni.ttf'?'selected="true"':'');?>>Xsuni</option>
-                        </select>&nbsp;
-                        Size : <input type="text" size="1" id="txtsize" name="txtsize" value="<? if ($showpostn){if (!empty($_POST['txtsize']))echo $_POST['txtsize'];}else {echo $video['txtsize'];}?>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdacc">
-                        Time :
-                    </td>
-                    <td class="tdacc">
-                        <input type="checkbox" id="time" name="time" onclick="var displ=this.checked?'':'none';d.getElementById('tcolor').style.display=displ;" <? if($time['enable'] == true){echo 'checked="true"';}?>/>&nbsp; On
-                    </td>
-                    <tr id="tcolor" style="display: <? echo ($time['enable']?'yes':'none');?>;">
-                        <td class="tdacc"></td>
-                        <td  class="tdacc">
-                            Color : <input class="color" name="tcolor" size="5" value="<? echo (!empty($time['tcolor'])?$time['tcolor']:'FFFFFF')?>"/><br />
-                        </td>
-                    </tr>
-                </tr>
-				<tr>
-					<td colspan="2">
-						<span id="help_text" style="display:none">Add text above output image</span>
-						<span id="help_text1" style="display:none">Gap between each shot</span>
-					</td>
-				</tr>
-            </table>
-        </div> 
-    </td>
+
+<?if (file_exists('mtn.php'))
+{?>
+<tr id="video_option" style="display:<? echo ($navi_left['showmtn']?'':'none')?>;">
+<td class="tdacc" colspan="2">
+<div style="padding-left: 15px;">
+<table>
+<tr>
+<td class="tdacc" width="100" style="padding-left: 10px;">Columns x Rows :
+<input type="text" size="1" id="mtn_cs" name="mtn_cs" value="<? if ($showpostn){if(!empty($_POST['mtn_cs']))echo $_POST['mtn_cs'];}else {echo $col_row['mtn_colums'];};?>"/>x 
+<input type="text" size="1" id="mtn_rs" name="mtn_rs" value="<? if ($showpostn){if(!empty($_POST['mtn_rs']))echo $_POST['mtn_rs'];}else {echo $col_row['mtn_rows'];};?>"/></td>
 </tr>
-<tr><td class="tdacc"><input type="checkbox" id="server_info" name="server_info" onclick="var displ=this.checked?'':'none';document.getElementById('cpu_nfo').style.display=displ;document.getElementById('cpu_nfoket').style.display=displ;"<?php if($showpostn){if(isset($_POST['server_info']) && $_POST['server_info']=='on')echo ' checked';}elseif($navi_left["server_info"]) echo ' checked'; ?>><label for="server_info">&nbsp;Show server info</label></td>
+<tr>
+<td class="tdacc" style="padding-left: 10px;">Text <span class="nav_text" onmouseover="document.getElementById('help_text').style.display='block'" onmouseout="document.getElementById('help_text').style.display='none'" style="cursor:help"> [?]</span> :
+<input type="text" size="25" id="mtn_text" name="mtn_text" value="<? if ($showpostn){if(!empty($_POST['mtn_text']))echo $_POST['mtn_text'];}else {echo $mtn_text;};?>" />
+</td>
+</tr>
+<tr>
+<td class="tdacc" style="padding-left: 10px;">Background Color :
+<input class="color" name="bgcolor" size="5" value="<? echo (!empty($bgcolor)?$bgcolor:'000000');?>"/>
+</td>
+</tr>
+<tr>
+<td class="tdacc" style="padding-left: 10px;">Jpeg Quality :
+                        <select name="mtn_quality">
+                            <option value="80" <? echo ($mtn_quality == 80 ? 'selected="true"':'false');?>> Low </option>
+                            <option value="90" <? echo ($mtn_quality == 90 ? 'selected="true"':'false');?>> Normal </option>
+                            <option value="100" <? echo ($mtn_quality == 100 ? 'selected="true"':'false');?>> Hight </option>
+                        </select></td>
+</tr>
+<tr>
+<td class="tdacc" style="padding-left: 10px;">Edge <span class="nav_text" onmouseover="document.getElementById('help_text1').style.display='block'" onmouseout="document.getElementById('help_text1').style.display='none'" style="cursor:help"> [?]</span> :
+<input type="text" size="1" id="mtn_edge" name="mtn_edge" value="<? if ($showpostn){if (!empty($_POST['mtn_edge']))echo $_POST['mtn_edge'];} else {echo $mtn_edge;}?>"/> &nbsp;(set 0 or blank to disable)
+</td>
+</tr>
+<tr>
+<td class="tdacc" style="width: 240px;"><input type="checkbox" name="video_option" id="video_option" onclick="var displ=this.checked?'':'none';d.getElementById('video_info_setting').style.display=displ;" <?if ($showpostn) {if (isset($_POST['video_info']) && $_POST['video_info'] = 'on')echo 'checked="true"';} elseif ($video_option['enable']){echo 'checked="true"';}?>/>Video Info</td>
+</tr>
+<tr id="video_info_setting" style="display:<? echo ($video_option['enable']?'':'none')?>;">
+<td style="padding-left: 30px;" class="tdacc">Color : <input class="color" name="txtcolor" size="4" value="<? echo $video_option['txtcolor']?>"/> &nbsp;<br />
+Font : <select name="txtfont">
+                        <?PHP
+                        $exts=array(".ttf");
+                        $ext="";
+                        $fontdir = "mtn/font/";
+                        $fonts = vidlist($fontdir,$exts);
+                        foreach($fonts as $font)
+                        {
+                        	echo '<option value="'.$font.'" '.($video_option['txtfont'] == $font?'selected="true"':'').'>'.str_replace('.ttf','',$font).'</option>';
+                        }
+                        ?>
+                        </select>&nbsp;<br />
+                        Size : <input type="text" size="1" id="txtsize" name="txtsize" value="<? if ($showpostn){if (!empty($_POST['txtsize']))echo $_POST['txtsize'];}else {echo $video_option['txtsize'];}?>"/>
+</td>
+</tr>
+<tr>
+<td class="tdacc"><input type="checkbox" id="mtn_time" name="mtn_time" onclick="var displ=this.checked?'':'none';d.getElementById('tcolor').style.display=displ;" <? if($time['enable'] == true){echo 'checked="true"';}?>/> Time</td>
+</tr>
+<tr id="tcolor" style="display: <? echo ($time['enable']?'yes':'none');?>;">
+<td  class="tdacc" style="padding-left: 30px;">Color : <input class="color" name="tcolor" size="5" value="<? echo (!empty($time['tcolor'])?$time['tcolor']:'FFFFFF')?>"/></td>
+</tr>
+<tr>
+<td colspan="2">
+<span id="help_text" style="display:none">Add text above output image.</span>
+<span id="help_text1" style="display:none">Gap between each shot.</span>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<?}?>
+
+<tr><td class="tdacc"><input type="checkbox" id="server_info" name="server_info" onclick="var displ=this.checked?'':'none';document.getElementById('cpu_nfo').style.display=displ;document.getElementById('cpu_nfoket').style.display=displ;"<?php if($showpostn){if(isset($_POST['server_info']) && $_POST['server_info']=='on')echo ' checked';}elseif($navi_left["server_info"]) echo ' checked'; ?>><label for="server_info">&nbsp;Show Server info</label></td>
 <td class="tdacc">Disk space &amp; Time Info</td>
 </tr>
 <tr>
