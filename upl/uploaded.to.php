@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 ####### Free Account Info. ###########
 $uploaded_username = ""; //  Set you username
 $uploaded_password = ""; //  Set your password
@@ -125,18 +126,19 @@ if ($continue_up)
     function getDlLink($cookie, $lname) {
         $referrer = "http://uploaded.to/me";
         $Url = parse_url("http://uploaded.to/io/me/list/files");
+        $search['dir'] = 'desc';
         $search['page'] = 0;
-        $search['limit'] = 5;
+        $search['limit'] = 11;
         $search['order'] = 'date';
         $search['search'] = $lname;
         $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), $referrer, $cookie, $search, 0, $_GET["proxy"], $pauth);
         is_page($page);
-        $json = substr($page, strpos($page, '{"list'));
-        $linkInfo = json_decode(trim($json));
-        $linkInfo = $linkInfo->list[0];
-        if (empty($linkInfo->id))
+        $id = substr($page, strpos($page, '"id":'),strpos($page,',"date"')-strpos($page, '"id":'));
+        $id=substr($id,6,-1);
+        if(strpos($page, '"id":')!==false)
+            return 'http://ul.to/' . $id;
+        else
             return null;
-        return 'http://ul.to/' . $linkInfo->id;
     }
 
     /**     * **********************\

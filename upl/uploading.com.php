@@ -1,8 +1,8 @@
 <?php
 
 ####### Account Info. ###########
-$uploading_com_login = "xxxxxx"; //Set you username : email
-$uploading_com_pass = "xxxxxx"; //Set your password
+$uploading_com_login = $upload_acc["uploading_up"]["user"]; //Set you username
+$uploading_com_pass = $upload_acc["uploading_up"]["pass"]; //Set your password
 ##############################
 
 $not_done=true;

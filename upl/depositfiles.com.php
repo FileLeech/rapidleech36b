@@ -1,8 +1,7 @@
 <?php
-
 ####### Account Info. ###########
-$depositfiles_com_login = ""; //Set you username
-$depositfiles_com_pass = ""; //Set your password
+$depositfiles_com_login = $upload_acc["deposit_up"]["user"]; //Set you username
+$depositfiles_com_pass = $upload_acc["deposit_up"]["pass"]; //Set your password
 ##############################
 
 $not_done=true;

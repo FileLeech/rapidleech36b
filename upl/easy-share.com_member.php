@@ -1,6 +1,6 @@
 <?php
-$easy_login = ""; // login
-$easy_pass = ""; // password
+$easy_login = $upload_acc["easysh_mem"]["user"]; 
+$easy_pass = $upload_acc["easysh_mem"]["pass"]; 
 $not_done = true;
 $continue_up = false;
 $cook = "";
