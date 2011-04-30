@@ -7,9 +7,13 @@ define('CLASS_DIR', 'classes/');
 define('CONFIG_DIR', './');
 require_once(CONFIG_DIR."config.php");
 require_once(CLASS_DIR."other.php");
-
 define ( 'TEMPLATE_DIR', 'misc/tpl/'.$csstype.'/' );
 define ('CREDITS', '<small class="small-credits">Sakib Hossain | Slider234 | jmsmarcelo | DarkNight</small><br />');
+$nn = "\r\n";
+$rev_num = '36B.Rv7.4 Unofficial';
+$RL_VER = 'Rx08.ii'.$rev_num;
+$charSet = 'UTF-8';
+require_once(LANG_DIR."language.$lang.inc.php");
 ?>
 <html>
 <head>
@@ -21,15 +25,21 @@ define ('CREDITS', '<small class="small-credits">Sakib Hossain | Slider234 | jms
 <body>
 <center><a href="index.php"><img src="misc/tpl/<? echo $csstype;?>/rl_lgo.png" alt="RapidLeech" border="0" /></a><br /><br /><br />
 <?
+if($limited_edition || $limited_area)
+{
+  $dlimitation = array($limited_edition, $limited_area);
+  require_once("limit_district.php");
+}
+if($limit_timework)
+{  
+    $is_worktime = cek_worktime($workstart, $workend); 
+    exit("<h1>".$gtxt['worktime_alert']."</h1>");
+}
 if (!$navi_left['showmtn'])
 {
-?>
-<font color="red" color="red" size="20"><b>Movie Thumbnailer is Disable</b></font>    
-<?
+    exit("<h1>Movie Thumbnailer is Disable</h1>");
 }
-else
-{
-    ?>
+?>
 <font size="6" face="Arial">Movie Thumbnailer</font><br /><br /><br />
 
 <form method="post">
@@ -42,25 +52,7 @@ else
 <?PHP
 $exts=array(".3gp", ".3g2", ".asf", ".avi", ".dat", ".divx", ".dsm", ".evo", ".flv", ".m1v", ".m2ts", ".m2v", ".m4a", ".mj2", ".mjpg", ".mjpeg", ".mkv", ".mov", ".moov", ".mp4", ".mpg", ".mpeg", ".mpv", ".nut", ".ogg", ".ogm", ".qt", ".swf", ".ts", ".vob", ".wmv", ".xvid");
 $ext="";
-function vidlist($dir) 
-{
-	$results = array();
-	$handler = opendir($dir);
-	while ($file = readdir($handler)) 
-	{
-		if (strrchr($file,'.')!="")
-		{
-			$ext=strtolower(strrchr($file,'.'));
-		}
-		if ($file != '.' && $file != '..' && in_array($ext,$GLOBALS["exts"]))
-		{
-				$results[] = $file;
-		}
-	}
-closedir($handler);
-sort($results);
-return $results;
-}
+
 $files = vidlist($download_dir);
 foreach($files as $file)
 {
@@ -86,7 +78,7 @@ foreach($files as $file)
 	</tr>
 </table>
 </form>
-<?php include('mtn/config.php');}?>
+<?php include('mtn/create.php');?>
 <br /><?php
 echo CREDITS;?>
 <br />
