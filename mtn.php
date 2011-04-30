@@ -5,15 +5,16 @@ set_time_limit(0);
 session_start();
 define('CLASS_DIR', 'classes/');
 define('CONFIG_DIR', './');
-require_once(CONFIG_DIR."config.php");
-require_once(CLASS_DIR."other.php");
+define('LANG_DIR', 'languages/');
 define ( 'TEMPLATE_DIR', 'misc/tpl/'.$csstype.'/' );
 define ('CREDITS', '<small class="small-credits">Sakib Hossain | Slider234 | jmsmarcelo | DarkNight</small><br />');
+require_once(CONFIG_DIR."config.php");
+require_once(CLASS_DIR."other.php");
+require_once(LANG_DIR."language.$lang.inc.php");
 $nn = "\r\n";
 $rev_num = '36B.Rv7.4 Unofficial';
 $RL_VER = 'Rx08.ii'.$rev_num;
 $charSet = 'UTF-8';
-require_once(LANG_DIR."language.$lang.inc.php");
 ?>
 <html>
 <head>
@@ -25,6 +26,14 @@ require_once(LANG_DIR."language.$lang.inc.php");
 <body>
 <center><a href="index.php"><img src="misc/tpl/<? echo $csstype;?>/rl_lgo.png" alt="RapidLeech" border="0" /></a><br /><br /><br />
 <?
+if ($login===true){
+if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === false)
+	{
+		header('WWW-Authenticate: Basic realm="Rx08"');
+		header('HTTP/1.0 401 Unauthorized');
+		exit("<h1>$RL_VER: NuLL</h1>");
+	}
+}
 if($limited_edition || $limited_area)
 {
   $dlimitation = array($limited_edition, $limited_area);
