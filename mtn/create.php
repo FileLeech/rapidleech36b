@@ -43,16 +43,16 @@ foreach ($video as $vdo)
 	shell_exec($cmd);
 	$ext=strtolower(strrchr($vdo,'.'));
 	$vdofile=str_ireplace($ext,"_s.jpg",$vdo);
-	if (file_exists(getcwd()."/$files/".$vdofile))
+	if (file_exists(getcwd()."/$download_dir/".$vdofile))
 	{
-        $image = $download_dir."$vdofile";
+        		$image = $download_dir."$vdofile";
 		echo '<h2><a href="'.$download_dir.''.$vdofile.'">'.$vdo.'</a></h2>';
+		echo "<img src=\"$image\">";
 	}
 	else
 	{
 		echo '<BR />Error in generating <b><i>'.$vdo.'</i></b> <BR />';
 	}
-                echo "<img src=\"$image\">";
 }
 }
 ?>
