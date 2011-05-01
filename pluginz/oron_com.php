@@ -124,7 +124,7 @@ class oron_com extends DownloadClass {
         $post['down_direct'] = '1';
         $page = $this->GetPage($link, $cookie, $post, $Referer);
         $cookie.="; ".GetCookies($page);
-        if (preg_match('#http://(\w+).oron.com[/\w\d.%)( -]+#', $page, $prelink)) {
+        if (preg_match('#http://(\w+).oron.com[^"]+#', $page, $prelink)) {
             $FileName = basename($prelink[0]);
             $this->RedirectDownload($prelink[0], $FileName, $cookie);
         }

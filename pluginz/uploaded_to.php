@@ -18,7 +18,7 @@ class uploaded_to extends DownloadClass {
     }
 
     private function Retrieve($link) {
-		global $Referer;
+		global $Referer, $download_dir;
 		$page = $this->GetPage($link);
 
 		is_present($page, "uploaded.to/404", "File not found");
@@ -97,6 +97,8 @@ class uploaded_to extends DownloadClass {
         $page = $this->GetPage("http://uploaded.to/io/login", 0, $post, $link);
         $Cookies = GetCookies($page);
         $page = $this->GetPage($link, $Cookies, 0, $link);
+		is_present($page, "/404", "File not found");
+		is_present($page,"Traffic exhausted","Premium account is out of Bandwidth");
         if (!preg_match('#http://.+/dl?[^\r"]+#', $page, $dlink)) {
             html_error("Error 1x01: Plugin is out of date");
         }
@@ -108,5 +110,6 @@ class uploaded_to extends DownloadClass {
 /*
  * free code by Th3-882 14-March-2011
  * premium code by vdhdevil 15-March-2011
+ * Updated 01-May-2011
  */
 ?>

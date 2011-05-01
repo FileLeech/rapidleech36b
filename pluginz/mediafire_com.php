@@ -50,11 +50,11 @@ if (stristr ( $page, "Eo();  dh('')" )) {
 	exit ();
 }
 
-if (!$pagea = cut_str($page, 'Eo();', 'if(')) html_error('Error 1.0');
-$pagea = mf_str_conv($pagea);
-if (!preg_match("/=\W?(\w+)[\('\"]+(\w+)[,'\"]+(\w+)/", $pagea, $eb)) html_error('Error 1.1');
+$pages = explode("eval(", $page);
+$page = "";
+foreach ($pages as $v) $page .= mf_str_conv($v."eval");
+if (!preg_match("/=\W?(\w+)[\('\"]+(\w{11,})[,'\"]+([0-9a-f]{33,})/i", $page, $eb)) html_error('Error 1.1');
 if (!$pageb = cut_str($page, $eb[1].'(', ';}}')) html_error('Error 1.2');
-$pageb = mf_str_conv($pageb);
 if (!preg_match("|getElementById\(.([0-9a-f]{32}).|", $pageb, $match)) html_error('Error 1.3');
 if (!$pKr = cut_str($page, "pKr='", "'")) html_error('Error 1.4');
 
