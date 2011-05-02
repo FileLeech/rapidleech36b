@@ -78,6 +78,7 @@ $host = array(
 'sourceforge.net' => 'sourceforge_net.php',
 'speedyshare.com' => 'speedyshare_com.php',
 'stagevu.com' => 'stagevu_com.php',
+'storage.to' => 'kickload_com.php',
 'torrific.com' =>'torrific_com.php',
 'tube8.com' =>'tube8_com.php',
 'turbobit.net' =>'turbobit_net.php',

@@ -110,7 +110,7 @@ if($giga == "ok"){
 	$Url = parse_url(trim($redir[1]));
 	$FileName = basename($Url["path"]);
 
-insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&cookie=".urlencode($cookie)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").($pauth ? "&pauth=$pauth" : "").(isset($_GET["audl"]) ? "&audl=doum" : ""));
+insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&cookie=".urlencode($cookie)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
 
 }else{
 	$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $Referer, 0, 0, 0, $_GET["proxy"],$pauth);
@@ -119,7 +119,7 @@ insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]
 	preg_match_all('/Set-Cookie: *(.+);/', $page, $cook);
 	$cookie = implode(';', $cook[1]);
 	
-	print 	"<form method=\"post\" action=\"".$PHP_SELF.(isset($_GET["audl"]) ? "?audl=doum" : "")."\">$nn";
+	print 	"<form method=\"post\" action=\"".$PHP_SELF.(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "")."\">$nn";
 	print	"<b>Please enter code:</b><br>$nn";
 	print	"<img src=\"http://www.gigasize.com/randomImage.php\" >$nn";
 	print	"<input name=\"link\" value=\"$LINK\" type=\"hidden\">$nn";
