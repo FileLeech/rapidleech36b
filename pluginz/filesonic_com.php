@@ -59,7 +59,7 @@ class filesonic_com extends DownloadClass {
     }
 
     private function PrepareFree($link) {
-        global $Referer, $download_dir;
+        global $Referer;
 
         $page = $this->GetPage($link);
         preg_match('%<a href="(.*)" id="free_download">%', $page, $match);
@@ -78,7 +78,7 @@ class filesonic_com extends DownloadClass {
         $post['tm'] = $tm;
         $post['tm_hash'] = $tm_hash;
         $page = $this->GetPage($link, 0, $post, $referer);
-        if (stristr ( $page, "Enter Password" )) {
+        if (stristr ( $page, "Please Enter Password" )) {
             preg_match('%<form enctype="application/x-www-form-urlencoded" action="(.*)" method="post">%', $page, $match);
             $linkpw = "http://www.filesonic.com".$match[1];
             echo "\n" . '<form name="seven_cute" action="' . $PHP_SELF . '" method="post" >' . "\n"; //Dont protest for the form name, :D
@@ -89,7 +89,7 @@ class filesonic_com extends DownloadClass {
             echo "</form>\n</body>\n</html>";
             exit;
         }
-        if (stristr ( $page, "Enter Captcha" )) {
+        if (stristr ( $page, "Please Enter Captcha" )) {
             if (preg_match('/Recaptcha\.create\("([^"]+)/i', $page, $k)) {
                 $k = $k[1];
                 $cachestop = rand();
@@ -102,7 +102,7 @@ class filesonic_com extends DownloadClass {
                 $img = "http://www.google.com/recaptcha/api/image?c=".$ch;
                 $page = $this->GetPage($img);
                 $capt_img = substr($page, strpos($page, "\r\n\r\n") + 4);
-                $imgfile = $download_dir."filesonic_captcha.jpg";
+                $imgfile = DOWNLOAD_DIR."filesonic_captcha.jpg";
                 if (file_exists($imgfile)) {
                     unlink($imgfile);
                 }
@@ -115,7 +115,6 @@ class filesonic_com extends DownloadClass {
             $data['step'] = '1';
             $data['link'] = $link;
             $data['recaptcha_challenge_field'] = $ch;
-            $data['delete'] = urlencode($imgfile);
             $this->EnterCaptcha($imgfile, $data, 20);
             exit();
         }
@@ -124,7 +123,6 @@ class filesonic_com extends DownloadClass {
     private function DownloadFree($link) {
         global $Referer;
 
-        @unlink(urldecode($_POST["delete"]));
         $post = array();
         $post['recaptcha_challenge_field'] = $_POST["recaptcha_challenge_field"];
         $post['recaptcha_response_field'] = $_POST["captcha"];
@@ -162,7 +160,7 @@ class filesonic_com extends DownloadClass {
             $page = $this->GetPage($home, $cookie, 0, $Referer);
         }
         $page = $this->GetPage($link, $cookie);
-        if (stristr ( $page, "Enter Password" )) {
+        if (stristr ( $page, "Please Enter Password" )) {
             preg_match('%<form enctype="application/x-www-form-urlencoded" action="(.*)" method="post">%', $page, $match);
             $linkpw = "http://www.filesonic.com".$match[1];
             echo "\n" . '<form name="seven_cute" action="' . $PHP_SELF . '" method="post" >' . "\n"; //Dont protest for the form name, :D

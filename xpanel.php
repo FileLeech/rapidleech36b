@@ -146,10 +146,14 @@ $ar_chkbox_up_acc = array(
  'rs_com_coll_upload',
  'rs_com_pre_upload',
  'mu_pre_upload',
+ 'mu_mem_upload',
  'hf_com_upload',
  'easysh_mem_upload',
  'deposit_up_upload',
  'uploading_up_upload'
+ 'fileserve_pre_upload',
+ 'fileserve_mem_upload',
+ 'ul_up_upload',
 );
 
 
@@ -607,10 +611,14 @@ if(isset($_POST['submit'])){
 		fieldfilter($ar_chkbox_up_acc[1],'usrrs_com_coll_up','passrs_com_coll_up',$badpetik,"acc_UL");
 		fieldfilter($ar_chkbox_up_acc[2],'usrrs_com_pre_up','passusrrs_com_pre_up',$badpetik,"acc_UL");
 		fieldfilter($ar_chkbox_up_acc[3],'usrmu_pre_up','passmu_pre_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[4],'usrhf_com_up','passhf_com_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[5],'usreasysh_mem_up','passeasysh_mem_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[6],'usrdeposit_up_up','passdeposit_up_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[7],'usruploading_up_up','passuploading_up_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[4],'usrmu_mem_up','passmu_mem_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[5],'usrhf_com_up','passhf_com_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[6],'usreasysh_mem_up','passeasysh_mem_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[7],'usrdeposit_up_up','passdeposit_up_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[8],'usruploading_up_up','passuploading_up_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[9],'usrfileserve_pre_up','passfileserve_pre_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[10],'usrfileserve_mem_up','passfileserve_mem_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[11],'usrul_up_up','passul_up_up',$badpetik,"acc_UL");
 	}
 	
 	
@@ -642,6 +650,10 @@ if(isset($_POST['submit'])){
 	$_POST['dl_limit_max'] = filterNumericFld('dl_limit_max', 'Max Download per IP', 5);
 	$_POST['dl_per_ip'] = filterNumericFld('dl_per_ip', 'Delay Download per IP', 3600);
 	
+	$_POST['mtn_cs'] = filterNumericFld('mtn_cs','Colums Of Screenshot',3);
+    $_POST['mtn_rs'] = filterNumericFld('mtn_rs','Rows Of Screenshot',3);
+    $_POST['mtn_edge'] = filterNumericFld('mtn_edge','Gap Between each shot',0);
+    $_POST['txtsize'] = filterNumericFld('txtsize','Size Of Video Info',10);
 	$_POST['language'] = (is_numeric($_POST['language'])?(($_POST['language']>=0)&&($_POST['language']<count($arlang))?$_POST['language']:0):0);
 	
 	 
@@ -694,7 +706,7 @@ if(isset($_POST['submit'])){
 	  
 	$useulcc = '';
 	if(isset($_POST['useulcc']) && $_POST['useulcc']=='on'){
-	 if(empty($_POST['mediafire_up_upload'])&&empty($_POST['rs_com_coll_upload'])&&empty($_POST['rs_com_pre_upload'])&&empty($_POST['mu_pre_upload'])&&empty($_POST['hf_com_upload'])&&empty($_POST['easysh_mem_upload'])&&empty($_POST['uploading_up_upload'])&&empty($_POST['deposit_up_upload']))
+	 if(empty($_POST['mediafire_up_upload'])&&empty($_POST['rs_com_coll_upload'])&&empty($_POST['rs_com_pre_upload'])&&empty($_POST['mu_pre_upload'])&&empty($_POST['mu_mem_upload'])&&empty($_POST['hf_com_upload'])&&empty($_POST['easysh_mem_upload'])&&empty($_POST['uploading_up_upload'])&&empty($_POST['deposit_up_upload'])&&empty($_POST['fileserve_pre_upload'])&&empty($_POST['fileserve_mem_upload'])&&empty($_POST['ul_up_upload']))
 	  { $useulcc='//'; }
 	}else
 	  { $useulcc='//';}
@@ -797,10 +809,14 @@ if(isset($_POST['submit'])){
 	 "rs_com_coll_upload" => array("rs_com_coll", "usrrs_com_coll_up", "passrs_com_coll_up"),
 	 "rs_com_pre_upload" => array("rs_com_pre", "usrrs_com_pre_up", "passrs_com_pre_up"),
 	 "mu_pre_upload" => array("mu_pre", "usrmu_pre_up", "passmu_pre_up"),
+	 "mu_mem_upload" => array("mu_mem", "usrmu_mem_up", "passmu_mem_up"),
 	 "hf_com_upload" => array("hf_com", "usrhf_com_up", "passhf_com_up"),
 	 "easysh_mem_upload" => array("easysh_mem", "usreasysh_mem_up", "passeasysh_mem_up"),
 	 "deposit_up_upload" => array("deposit_up", "usrdeposit_up_up", "passdeposit_up_up"),
 	 "uploading_up_upload" => array("uploading_up", "usruploading_up_up", "passuploading_up_up"),
+	 "fileserve_pre_upload" => array("fileserve_pre", "usrfileserve_pre_up", "passfileserve_pre_up"),
+	 "fileserve_mem_upload" => array("fileserve_mem", "usrfileserve_mem_up", "passfileserve_mem_up"),
+	 "ul_up_upload" => array("ul_up", "usrul_up_up", "passul_up_up"),
 	);
 	$_config .= fillField_premium("upload_acc",$field, $useulcc);
 	$_config .= "\n\n";	
@@ -903,22 +919,22 @@ if(isset($_POST['submit'])){
 	
 	$_config .= "###-MOVIE-THUMBNAILER-CONFIG\n";
     $_config .= "\$col_row = array(\n";
-    $_config .= "'mtn_colums' => ".($_POST['mtn_cs'] == ''?'3':$_POST['mtn_cs']).",\n";
-    $_config .= "'mtn_rows' => ".($_POST['mtn_rs'] == ''?'3':$_POST['mtn_rs']).",\n";
+    $_config .= "'mtn_colums' => ".$_POST['mtn_cs'].",\n";
+    $_config .= "'mtn_rows' => ".$_POST['mtn_rs'].",\n";
     $_config .= ");\n";
     $_config .= "\$mtn_text = '".$_POST['mtn_text']."';\n";
-    $_config .= "\$bgcolor = '".($_POST['bgcolor'] == ''?'000000':$_POST['bgcolor'])."';\n";
+    $_config .= "\$bgcolor = '".$_POST['bgcolor']."';\n";
     $_config .= "\$mtn_quality = ".$_POST['mtn_quality'].";\n";
-    $_config .= "\$mtn_edge = ".($_POST['mtn_edge'] == ''?'0':$_POST['mtn_edge']).";\n";
+    $_config .= "\$mtn_edge = ".$_POST['mtn_edge'].";\n";
     $_config .= "\$video_option = array (\n";
     $_config .= "'enable' => ".($_POST['video_option'] == 'on'?'true':'false').",\n";
-    $_config .= "'txtcolor' => '".($_POST['txtcolor'] == ''?'FFFFFF':$_POST['txtcolor'])."',\n";
+    $_config .= "'txtcolor' => '".$_POST['txtcolor']."',\n";
     $_config .= "'txtfont' => '".$_POST['txtfont']."',\n";
-    $_config .= "'txtsize' => ".($_POST['txtsize'] == '' ? '10': $_POST['txtsize']).",\n";
+    $_config .= "'txtsize' => ".$_POST['txtsize'].",\n";
     $_config .= ");\n";
     $_config .= "\$time = array(\n";
     $_config .= "'enable' => ".($_POST['mtn_time'] == 'on'?'true':'false').",\n";
-    $_config .= "'tcolor' => '".($_POST['tcolor'] == ''?'FFFFFF':$_POST['txtcolor'])."',\n";
+    $_config .= "'tcolor' => '".$_POST['txtcolor']."',\n";
     $_config .= ");\n";
     $_config .= "\n\n";
 

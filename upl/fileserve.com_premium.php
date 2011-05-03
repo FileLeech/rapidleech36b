@@ -7,8 +7,10 @@
 /************************************************************
 * Enter your default Login & Password below (if applicable) *
 *************************************************************/
-$fs_login = ""; // Username
-$fs_pass = ""; // Password
+//$fs_login = ""; // Username
+//$fs_pass = ""; // Password
+$fs_login = $upload_acc["fileserve_pre"]["user"]; 
+$fs_pass = $upload_acc["fileserve_pre"]["pass"]; 
 
 $continue_up = false;
 

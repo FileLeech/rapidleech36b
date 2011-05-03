@@ -12,7 +12,7 @@ require_once(CONFIG_DIR."config.php");
 require_once(CLASS_DIR."other.php");
 require_once(LANG_DIR."language.$lang.inc.php");
 $nn = "\r\n";
-$rev_num = '36B.Rv7.4 Unofficial';
+$rev_num = '36B.Rv7.4';
 $RL_VER = 'Rx08.ii'.$rev_num;
 $charSet = 'UTF-8';
 ?>
@@ -26,6 +26,10 @@ $charSet = 'UTF-8';
 <body>
 <center><a href="index.php"><img src="misc/tpl/<? echo $csstype;?>/rl_lgo.png" alt="RapidLeech" border="0" /></a><br /><br /><br />
 <?
+if (!$navi_left['showmtn'])
+{
+    exit("<h1>Movie Thumbnailer is Disable</h1>");
+}
 if ($login===true){
 if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === false)
 	{
@@ -44,10 +48,10 @@ if($limit_timework)
     $is_worktime = cek_worktime($workstart, $workend); 
     exit("<h1>".$gtxt['worktime_alert']."</h1>");
 }
-if (!$navi_left['showmtn'])
-{
-    exit("<h1>Movie Thumbnailer is Disable</h1>");
-}
+
+
+
+
 ?>
 <font size="6" face="Arial">Movie Thumbnailer</font><br /><br /><br />
 

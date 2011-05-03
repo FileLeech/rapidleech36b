@@ -16,7 +16,7 @@ define('CLASS_DIR', 'classes/');
 define('CONFIG_DIR', './');
 
 $nn = "\r\n";
-$rev_num = '36B.Rv7.3';
+$rev_num = '36B.Rv7.4';
 $RL_VER = 'Rx08.ii'.$rev_num;
 
 // Some configuration

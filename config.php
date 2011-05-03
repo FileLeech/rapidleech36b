@@ -183,7 +183,7 @@ $navi_left = array(
  'showaudl' => true,
  'showauul' => true,
  'showlynx' => true,
- 'showmtn' => true,
+ 'showmtn' => false,
  'server_info' => true,
 );
 
@@ -193,17 +193,17 @@ $col_row = array(
 'mtn_rows' => 3,
 );
 $mtn_text = '';
-$bgcolor = '000000';
+$bgcolor = '3A9191';
 $mtn_quality = 80;
 $mtn_edge = 0;
 $video_option = array (
-'enable' => true,
+'enable' => false,
 'txtcolor' => 'FFFFFF',
 'txtfont' => 'Blue.ttf',
 'txtsize' => 10,
 );
 $time = array(
-'enable' => true,
+'enable' => false,
 'tcolor' => 'FFFFFF',
 );
 

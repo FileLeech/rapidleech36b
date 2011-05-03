@@ -1,9 +1,11 @@
 <?php
 error_reporting(E_ALL);
 ####### Free Account Info. ###########
-$uploaded_username = ""; //  Set you username
-$uploaded_password = ""; //  Set your password
+//$uploaded_username = ""; //  Set you username
+//$uploaded_password = ""; //  Set your password
 ##############################
+$uploaded_username = $upload_acc["ul_up"]["user"]; 
+$uploaded_password = $upload_acc["ul_up"]["pass"]; 
 
 $not_done = true;
 $continue_up = false;

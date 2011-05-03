@@ -910,6 +910,28 @@ setTimeout("stacc()",100);
 	<tr>
 	<td class="tdacc">
 <?php 
+  $mu_mem_up=false;$chk='';
+  if($showpostn){
+    if(isset($_POST['mu_mem_upload']) && $_POST['mu_mem_upload']=='on')
+	  {$chk= ' checked';$mu_mem_up=true;}
+  }elseif(isset($upload_acc['mu_mem']))
+      {$chk= ' checked';$mu_mem_up=true;} 
+?>
+
+<input type="checkbox" id="mu_mem_upload" name="mu_mem_upload" onClick="clk(this,'mu_mem_box','mu_mem_ket','<?php echo $mu_mem_up;?>');"<?php echo $chk;?>>
+<label for="mu_mem_upload">&nbsp;Megaupload.com Mem</label>
+	</td>
+	<td class="tdacc">
+	<div id="mu_mem_box"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrmu_mem_up" name="usrmu_mem_up" value="">&nbsp;
+	pass: <input type="password" id="passmu_mem_up" name="passmu_mem_up" value="">
+	</div>
+	<span id="mu_mem_ket" ><?php if(!$mu_mem_up){echo "<div>Megaupload.com Mem Upload ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	<tr>
+	<td class="tdacc">
+<?php 
   $hf_com_up=false;$chk='';
   if($showpostn){
     if(isset($_POST['hf_com_upload']) && $_POST['hf_com_upload']=='on')
@@ -990,6 +1012,69 @@ setTimeout("stacc()",100);
 	pass: <input type="password" id="passuploading_up_up" name="passuploading_up_up" value="">
 	</div>
 	<span id="uploading_up_ket" ><?php if(!$uploading_up_up){echo "<div>uploading.com Upload ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	<tr>
+	<td class="tdacc">
+<?php 
+  $fileserve_pre_up=false;$chk='';
+   if($showpostn){
+     if(isset($_POST['fileserve_pre_upload']) && $_POST['fileserve_pre_upload']=='on')
+	  {$chk= ' checked';$fileserve_pre_up=true;}
+     }elseif(isset($upload_acc['fileserve_pre']))
+      {$chk= ' checked';$fileserve_pre_up=true;} 
+?>
+<input type="checkbox" id="fileserve_pre_upload" name="fileserve_pre_upload" onClick="clk(this,'fileserve_pre_box','fileserve_pre_ket','<?php echo $fileserve_pre_up;?>');"<?php echo $chk;?>>
+<label for="fileserve_pre_upload">&nbsp;fileserve.com Pre</label>
+	</td>
+	<td class="tdacc">
+	<div id="fileserve_pre_box"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="fileserve_pre_up" name="fileserve_pre_up" value="">&nbsp;
+	pass: <input type="password" id="passfileserve_pre_up" name="passfileserve_pre_up" value="">
+	</div>
+	<span id="fileserve_pre_ket" ><?php if(!$fileserve_pre_up){echo "<div>fileserve.com Pre Upload ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	<tr>
+	<td class="tdacc">
+	<?php 
+  $fileserve_mem_up=false;$chk='';
+   if($showpostn){
+     if(isset($_POST['fileserve_mem_upload']) && $_POST['fileserve_mem_upload']=='on')
+	  {$chk= ' checked';$fileserve_mem_up=true;}
+     }elseif(isset($upload_acc['fileserve_mem']))
+      {$chk= ' checked';$fileserve_mem_up=true;} 
+?>
+<input type="checkbox" id="fileserve_mem_upload" name="fileserve_mem_upload" onClick="clk(this,'fileserve_mem_box','fileserve_mem_ket','<?php echo $fileserve_mem_up;?>');"<?php echo $chk;?>>
+<label for="fileserve_mem_upload">&nbsp;fileserve.com Mem</label>
+	</td>
+	<td class="tdacc">
+	<div id="fileserve_mem_box"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="fileserve_mem_up" name="fileserve_mem_up" value="">&nbsp;
+	pass: <input type="password" id="passfileserve_mem_up" name="passfileserve_mem_up" value="">
+	</div>
+	<span id="fileserve_mem_ket" ><?php if(!$fileserve_mem_up){echo "<div>fileserve.com Mem Upload ACC</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	<tr>
+	<td class="tdacc">
+<?php 
+  $ul_up_up=false;$chk='';
+   if($showpostn){
+     if(isset($_POST['ul_up_upload']) && $_POST['ul_up_upload']=='on')
+	  {$chk= ' checked';$ul_up_up=true;}
+     }elseif(isset($upload_acc['ul_up']))
+      {$chk= ' checked';$ul_up_up=true;} 
+?>
+<input type="checkbox" id="ul_up_upload" name="ul_up_upload" onClick="clk(this,'ul_up_box','ul_up_ket','<?php echo $ul_up_up;?>');"<?php echo $chk;?>>
+<label for="ul_up_upload">&nbsp;uploaded.to</label>
+	</td>
+	<td class="tdacc">
+	<div id="ul_up_box"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="ul_up_up" name="ul_up_up" value="">&nbsp;
+	pass: <input type="password" id="passul_up_up" name="passul_up_up" value="">
+	</div>
+	<span id="ul_up_ket" ><?php if(!$ul_up_up){echo "<div>uploaded.to Upload ACC</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	</tbody></table>
@@ -1431,49 +1516,51 @@ foreach($show_column_sfile as $kol => $kolval)
 </tr>
 
 <tr>
-<td class="tdacc"><label for="showmtn"><input type="checkbox" id="showmtn" name="showmtn" onclick="var displ=this.checked?'':'none';d.getElementById('video_option').style.display=displ;" <?if ($showpostn) {if (isset($_POST['showmtn']) && $_POST['showmtn'] = 'on')echo 'checked="true"';} elseif ($navi_left['showmtn']){echo 'checked="true"';}?>/></label> Show Movie Thumbnailer</td>
+<td class="tdacc">
+<label for="showmtn">
+<input type="checkbox" id="showmtn" name="showmtn" onClick="var displ=this.checked?'':'none';d.getElementById('video_option').style.display=displ;" <?php if($showpostn) {if (isset($_POST['showmtn']) && $_POST['showmtn'] == 'on')echo 'checked';} elseif ($navi_left['showmtn']){echo ' checked';}?>>&nbsp; Show Movie Thumbnailer</label></td>
 <td class="tdacc"> Show Movie Thumbnailer Button</td>
 </tr>
 
 <?if (file_exists('mtn.php'))
 {?>
-<tr id="video_option" style="display:<? echo ($navi_left['showmtn']?'':'none')?>;">
+<tr id="video_option" style="display:<?php echo ($navi_left['showmtn']?'':'none')?>;">
 <td class="tdacc" colspan="2">
 <div style="padding-left: 15px;">
 <table>
 <tr>
 <td class="tdacc" width="100" style="padding-left: 10px;">Columns x Rows :
-<input type="text" size="1" id="mtn_cs" name="mtn_cs" value="<? if ($showpostn){if(!empty($_POST['mtn_cs']))echo $_POST['mtn_cs'];}else {echo $col_row['mtn_colums'];};?>"/>x 
-<input type="text" size="1" id="mtn_rs" name="mtn_rs" value="<? if ($showpostn){if(!empty($_POST['mtn_rs']))echo $_POST['mtn_rs'];}else {echo $col_row['mtn_rows'];};?>"/></td>
+<input type="text" size="1" id="mtn_cs" name="mtn_cs" value="<?php if ($showpostn){if(!empty($_POST['mtn_cs']))echo $_POST['mtn_cs'];}else {echo $col_row['mtn_colums'];};?>">x 
+<input type="text" size="1" id="mtn_rs" name="mtn_rs" value="<?php if ($showpostn){if(!empty($_POST['mtn_rs']))echo $_POST['mtn_rs'];}else {echo $col_row['mtn_rows'];};?>"></td>
 </tr>
 <tr>
 <td class="tdacc" style="padding-left: 10px;">Text <span class="nav_text" onmouseover="document.getElementById('help_text').style.display='block'" onmouseout="document.getElementById('help_text').style.display='none'" style="cursor:help"> [?]</span> :
-<input type="text" size="25" id="mtn_text" name="mtn_text" value="<? if ($showpostn){if(!empty($_POST['mtn_text']))echo $_POST['mtn_text'];}else {echo $mtn_text;};?>" />
+<input type="text" size="25" id="mtn_text" name="mtn_text" value="<?php if ($showpostn){if(!empty($_POST['mtn_text']))echo $_POST['mtn_text'];}else {echo $mtn_text;};?>" />
 </td>
 </tr>
 <tr>
 <td class="tdacc" style="padding-left: 10px;">Background Color :
-<input class="color" name="bgcolor" id="bgcolor" size="5" value="<? if ($showpostn) {if (!empty($_POST['bgcolor']))echo $_POST['bgcolor'];} else {echo $bgcolor;};?>"/>
+<input class="color" name="bgcolor" id="bgcolor" size="5" value="<?php if ($bgcolor == null) {echo '000000';} else {echo $bgcolor;};?>"/>
 </td>
 </tr>
 <tr>
 <td class="tdacc" style="padding-left: 10px;">Jpeg Quality :
                         <select name="mtn_quality">
-                            <option value="80" <? echo ($mtn_quality == 80 ? 'selected="true"':'false');?>> Low </option>
-                            <option value="90" <? echo ($mtn_quality == 90 ? 'selected="true"':'false');?>> Normal </option>
-                            <option value="100" <? echo ($mtn_quality == 100 ? 'selected="true"':'false');?>> Hight </option>
+                            <option value="80" <?php if ($mtn_quality == 80) echo 'selected';?>> Low </option>
+                            <option value="90" <?php if ($mtn_quality == 90) echo 'selected';?>> Normal </option>
+                            <option value="100" <?php if ($mtn_quality == 100) echo 'selected';?>> Hight </option>
                         </select></td>
 </tr>
 <tr>
 <td class="tdacc" style="padding-left: 10px;">Edge <span class="nav_text" onmouseover="document.getElementById('help_text1').style.display='block'" onmouseout="document.getElementById('help_text1').style.display='none'" style="cursor:help"> [?]</span> :
-<input type="text" size="1" id="mtn_edge" name="mtn_edge" value="<? if ($showpostn){if (!empty($_POST['mtn_edge']))echo $_POST['mtn_edge'];} else {echo $mtn_edge;}?>"/> &nbsp;(set 0 or blank to disable)
+<input type="text" size="1" id="mtn_edge" name="mtn_edge" value="<?php if ($showpostn){if (!empty($_POST['mtn_edge']))echo $_POST['mtn_edge'];} else {echo $mtn_edge;}?>"/> &nbsp;(set 0 or blank to disable)
 </td>
 </tr>
 <tr>
-<td class="tdacc" style="width: 240px;"><input type="checkbox" name="video_option" id="video_option" onclick="var displ=this.checked?'':'none';d.getElementById('video_info_setting').style.display=displ;" <?if ($showpostn) {if (isset($_POST['video_info']) && $_POST['video_info'] = 'on')echo 'checked="true"';} elseif ($video_option['enable']){echo 'checked="true"';}?>/>Video Info</td>
+<td class="tdacc" style="width: 240px;"><input type="checkbox" name="video_option" id="video_option" onclick="var displ=this.checked?'':'none';d.getElementById('video_info_setting').style.display=displ;" <?php if ($showpostn) {if (isset($_POST['video_info']) && $_POST['video_info'] = 'on')echo 'checked';} elseif ($video_option['enable']){echo 'checked';}?>/>Video Info</td>
 </tr>
-<tr id="video_info_setting" style="display:<? echo ($video_option['enable']?'':'none')?>;">
-<td style="padding-left: 30px;" class="tdacc">Color : <input class="color" id="txtcolor" name="txtcolor" size="4" value="<? if ($showpostn) {if (!empty($_POST['txtcolor']))echo $_POST['txtcolor'];} else {echo $video_option['txtcolor'];};?>"/> &nbsp;<br />
+<tr id="video_info_setting" style="display:<?php echo ($video_option['enable']?'':'none')?>;">
+<td style="padding-left: 30px;" class="tdacc">Color : <input class="color" id="txtcolor" name="txtcolor" size="4" value="<?php if ($showpostn) {if (!empty($_POST['txtcolor']))echo $_POST['txtcolor'];} else {echo $video_option['txtcolor'];};?>"/> &nbsp;<br />
 Font : <select name="txtfont">
                         <?PHP
                         $exts=array(".ttf");
@@ -1486,14 +1573,14 @@ Font : <select name="txtfont">
                         }
                         ?>
                         </select>&nbsp;<br />
-                        Size : <input type="text" size="1" id="txtsize" name="txtsize" value="<? if ($showpostn){if (!empty($_POST['txtsize']))echo $_POST['txtsize'];}else {echo $video_option['txtsize'];}?>"/>
+                        Size : <input type="text" size="1" id="txtsize" name="txtsize" value="<?php if ($showpostn){if (!empty($_POST['txtsize']))echo $_POST['txtsize'];}else {echo $video_option['txtsize'];}?>"/>
 </td>
 </tr>
 <tr>
-<td class="tdacc"><input type="checkbox" id="mtn_time" name="mtn_time" onclick="var displ=this.checked?'':'none';d.getElementById('tcolor').style.display=displ;" <? if($time['enable'] == true){echo 'checked="true"';}?>/> Time</td>
+<td class="tdacc"><input type="checkbox" id="mtn_time" name="mtn_time" onclick="var displ=this.checked?'':'none';d.getElementById('tcolor').style.display=displ;" <?php if($time['enable'] == true){echo 'checked';}?>/> Time</td>
 </tr>
-<tr id="tcolor" style="display: <? echo ($time['enable']?'yes':'none');?>;">
-<td  class="tdacc" style="padding-left: 30px;">Color : <input class="color" id="tcolor" name="tcolor" size="5" value="<? if ($showpostn) {if (!empty($_POST['tcolor']))echo $_POST['tcolor'];} else {echo $time['tcolor'];};?>"/></td>
+<tr id="tcolor" style="display: <?php echo ($time['enable']?'yes':'none');?>;">
+<td  class="tdacc" style="padding-left: 30px;">Color : <input class="color" id="tcolor" name="tcolor" size="5" value="<?php if ($showpostn) {if (!empty($_POST['tcolor']))echo $_POST['tcolor'];} else {echo $time['tcolor'];};?>"/></td>
 </tr>
 <tr>
 <td colspan="2">
