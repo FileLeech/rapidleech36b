@@ -150,7 +150,7 @@ $ar_chkbox_up_acc = array(
  'hf_com_upload',
  'easysh_mem_upload',
  'deposit_up_upload',
- 'uploading_up_upload'
+ 'uploading_up_upload',
  'fileserve_pre_upload',
  'fileserve_mem_upload',
  'ul_up_upload',
@@ -649,7 +649,6 @@ if(isset($_POST['submit'])){
 	$_POST['auul'] = filterNumericFld('auul', 'Maximum Links Auul', 0);
 	$_POST['dl_limit_max'] = filterNumericFld('dl_limit_max', 'Max Download per IP', 5);
 	$_POST['dl_per_ip'] = filterNumericFld('dl_per_ip', 'Delay Download per IP', 3600);
-	
 	$_POST['mtn_cs'] = filterNumericFld('mtn_cs','Colums Of Screenshot',3);
     $_POST['mtn_rs'] = filterNumericFld('mtn_rs','Rows Of Screenshot',3);
     $_POST['mtn_edge'] = filterNumericFld('mtn_edge','Gap Between each shot',0);

@@ -19,13 +19,13 @@ $charSet = 'UTF-8';
 <html>
 <head>
 <title>Movie Thumbnailer</title>
-<link href="misc/tpl/<? echo $csstype;?>/style_sujancok_default.css" rel="stylesheet" type="text/css" />
+<link href="misc/tpl/<?php echo $csstype;?>/style_sujancok_default.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="jscolor/jscolor.js"></script>
 <script type="text/javascript" language="javascript" src="rsajax.js"></script>
 </head>
 <body>
-<center><a href="index.php"><img src="misc/tpl/<? echo $csstype;?>/rl_lgo.png" alt="RapidLeech" border="0" /></a><br /><br /><br />
-<?
+<center><a href="index.php"><img src="misc/tpl/<?php echo $csstype;?>/rl_lgo.png" alt="RapidLeech" border="0" /></a><br /><br /><br />
+<?php
 if (!$navi_left['showmtn'])
 {
     exit("<h1>Movie Thumbnailer is Disable</h1>");
@@ -48,10 +48,6 @@ if($limit_timework)
     $is_worktime = cek_worktime($workstart, $workend); 
     exit("<h1>".$gtxt['worktime_alert']."</h1>");
 }
-
-
-
-
 ?>
 <font size="6" face="Arial">Movie Thumbnailer</font><br /><br /><br />
 
