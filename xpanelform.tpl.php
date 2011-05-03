@@ -1453,7 +1453,7 @@ foreach($show_column_sfile as $kol => $kolval)
 </tr>
 <tr>
 <td class="tdacc" style="padding-left: 10px;">Background Color :
-<input class="color" name="bgcolor" size="5" value="<? echo (!empty($bgcolor)?$bgcolor:'000000');?>"/>
+<input class="color" name="bgcolor" id="bgcolor" size="5" value="<? if ($showpostn) {if (!empty($_POST['bgcolor']))echo $_POST['bgcolor'];} else {echo $bgcolor;};?>"/>
 </td>
 </tr>
 <tr>
@@ -1473,7 +1473,7 @@ foreach($show_column_sfile as $kol => $kolval)
 <td class="tdacc" style="width: 240px;"><input type="checkbox" name="video_option" id="video_option" onclick="var displ=this.checked?'':'none';d.getElementById('video_info_setting').style.display=displ;" <?if ($showpostn) {if (isset($_POST['video_info']) && $_POST['video_info'] = 'on')echo 'checked="true"';} elseif ($video_option['enable']){echo 'checked="true"';}?>/>Video Info</td>
 </tr>
 <tr id="video_info_setting" style="display:<? echo ($video_option['enable']?'':'none')?>;">
-<td style="padding-left: 30px;" class="tdacc">Color : <input class="color" name="txtcolor" size="4" value="<? echo $video_option['txtcolor']?>"/> &nbsp;<br />
+<td style="padding-left: 30px;" class="tdacc">Color : <input class="color" id="txtcolor" name="txtcolor" size="4" value="<? if ($showpostn) {if (!empty($_POST['txtcolor']))echo $_POST['txtcolor'];} else {echo $video_option['txtcolor'];};?>"/> &nbsp;<br />
 Font : <select name="txtfont">
                         <?PHP
                         $exts=array(".ttf");
@@ -1493,7 +1493,7 @@ Font : <select name="txtfont">
 <td class="tdacc"><input type="checkbox" id="mtn_time" name="mtn_time" onclick="var displ=this.checked?'':'none';d.getElementById('tcolor').style.display=displ;" <? if($time['enable'] == true){echo 'checked="true"';}?>/> Time</td>
 </tr>
 <tr id="tcolor" style="display: <? echo ($time['enable']?'yes':'none');?>;">
-<td  class="tdacc" style="padding-left: 30px;">Color : <input class="color" name="tcolor" size="5" value="<? echo (!empty($time['tcolor'])?$time['tcolor']:'FFFFFF')?>"/></td>
+<td  class="tdacc" style="padding-left: 30px;">Color : <input class="color" id="tcolor" name="tcolor" size="5" value="<? if ($showpostn) {if (!empty($_POST['tcolor']))echo $_POST['tcolor'];} else {echo $time['tcolor'];};?>"/></td>
 </tr>
 <tr>
 <td colspan="2">
