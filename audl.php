@@ -794,6 +794,15 @@ function highlight(field) {
 		  "uploading"=>"uploading.com",
 		  "filefactory"=>"filefactory.com",
 		  "ifile_it"=>"ifile.it",
+		  "4shared_com"=>"4shared.com",
+		  "fileserve_com"=>"Fileserve.com",
+		  "filesonic_com"=>"Filesonic.com",
+		  "oron_com"=>"Oron.com",
+		  "duckload_com"=>"Duckload.com",
+		  "shareonline_biz"=>"Shareonline.biz",
+		  "torrific_com"=>"Torrific.com",
+		  "animeground_com"=>"Animeground.com",
+		  "turbobit_net"=>"Turbobit.net",
 		 );
 $ada_acc = (isset($premium_acc) && is_array($premium_acc));
  if($ada_acc){
