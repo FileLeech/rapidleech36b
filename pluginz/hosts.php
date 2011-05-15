@@ -97,6 +97,7 @@ $host = array(
 'videozer.com' => 'videozer_com.php',
 'vimeo.com' =>'vimeo_com.php',
 'vip-file.com' => 'vip_file_com.php',
+'wupload.com' => 'wupload_com.php',
 'x7.to' =>'x7_to.php',
 'youload.to' => 'youload_to.php',
 'youtube.com' => 'youtube_com.php',
