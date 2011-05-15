@@ -27,7 +27,7 @@ class megashare_vn extends DownloadClass {
         $post["lt"]=$lt;
         $post["_eventId"]="submit";
         $post["submit"]="%C3%90%C4%82NG+NH%E1%BA%ACP+";
-        $page=sslcurl("https://id.megaplus.vn/login?service=http%3A%2F%2Fshare.vnn.vn%2Fmegavnnplus.php%3Fservice%3Dlogin", $post,$Cookies);
+        $page=sslcurl("https://id.megaplus.vn/login?service=http%3A%2F%2Fshare.vnn.vn%2Fmegavnnplus.php%3Fservice%3Dlogin", $Cookies, $post);
         $Cookies.="; ".GetCookies($page);
         if (!preg_match("#Location: (.*)#i", $page, $tlink)){
             html_error("Error 1x01: Plugin is out of date");

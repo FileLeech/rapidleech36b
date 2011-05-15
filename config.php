@@ -40,7 +40,7 @@ $premium_acc["rs_com"] = array(
 //$premium_acc["hotfile_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["uploading"] = array('user' => '', 'pass' => '');
 //$premium_acc["filefactory"] = array('user' => '', 'pass' => '');
-//$premium_acc["ifile_it"] = array('user' => '', 'pass' => '');
+//$premium_acc["4shared_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["sendspace"] = array('user' => '', 'pass' => '');
 //$premium_acc["fileserve_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["filesonic_com"] = array('user' => '', 'pass' => '');
@@ -49,6 +49,9 @@ $premium_acc["rs_com"] = array(
 //$premium_acc["shareonline_biz"] = array('user' => '', 'pass' => '');
 //$premium_acc["torrific_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["animeground_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["turbobit_net"] = array('pass' => '');
+//$premium_acc["enterupload_com"] = array('user' => '', 'pass' => '');
+
 #Auto Download Premium Account #
 //$premium_acc_audl = false;
 

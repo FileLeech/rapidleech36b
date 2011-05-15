@@ -261,7 +261,7 @@ if (!empty($_GET["image"]))
 	{
 	require_once(CLASS_DIR."http.php");
 	require_once(CLASS_DIR."image.php");
-	exit;
+	exit ();
 	}
 
 if(isset($_GET["useproxy"]) && (!$_GET["proxy"] || !strstr($_GET["proxy"], ":")))
@@ -319,26 +319,28 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 	     $acc_txt = '';		
 		 $spacer = '<div class="dv_embed_acc" style="padding-top:.1em;"></div>';
 		 $ar_host_acc = array(
-		  "rs_com"=>"rapidshare.com",
-		  "rs_de"=>"rapidshare.de",
-		  "megaupload"=>"megaupload.com",
-		  "megashare"=>"megashare.com",
-		  "netload"=>"netload.in",
-		  "gigasize"=>"gigasize.com",
-		  "uploaded_to"=>"uploaded.to",
-		  "easyshare"=>"easy-share.com",
-		  "depositfiles"=>"depositfiles.com",
-		  "hotfile_com"=>"hotfile.com",
-		  "uploading"=>"uploading.com",
-		  "filefactory"=>"filefactory.com",
-		  "ifile_it"=>"ifile.it",
+		  "rs_com"=>"Rapidshare.com",
+		  "rs_de"=>"Rapidshare.de",
+		  "megaupload"=>"Megaupload.com",
+		  "megashare"=>"Megashare.com",
+		  "netload"=>"Netload.in",
+		  "gigasize"=>"Gigasize.com",
+		  "uploaded_to"=>"Uploaded.to",
+		  "easyshare"=>"Easy-share.com",
+		  "depositfiles"=>"Depositfiles.com",
+		  "hotfile_com"=>"Hotfile.com",
+		  "uploading"=>"Uploading.com",
+		  "filefactory"=>"Filefactory.com",
+		  "4shared_com"=>"4shared.com",
 		  "fileserve_com"=>"Fileserve.com",
 		  "filesonic_com"=>"Filesonic.com",
 		  "oron_com"=>"Oron.com",
 		  "duckload_com"=>"Duckload.com",
 		  "shareonline_biz"=>"Shareonline.biz",
-		  "torrific_com"=>"torrific.com",
+		  "torrific_com"=>"Torrific.com",
 		  "animeground_com"=>"Animeground.com",
+		  "turbobit_net"=>"Turbobit.net",
+		  "enterupload_com"=>"Enterupload.com",
 		 );
 		 foreach($premium_acc as $host_acc => $val){
 		   $acc_txt.= (isset($premium_acc[$host_acc]["user"]) ? ($premium_acc[$host_acc]["user"]!=''&&$premium_acc[$host_acc]["pass"]!='' ? $ar_host_acc[$host_acc] . $spacer : '') : $ar_host_acc[$host_acc]." multi acc" . $spacer);
@@ -445,7 +447,7 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 			print "<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<br>$nn";
 			require_once(CLASS_DIR."http.php");
 			require_once(HOST_DIR."vBulletin_plug.php");
-			exit;
+			exit();
 		  }
 		else
 		  {
@@ -478,14 +480,14 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 		print "<html>$nn<head>$nn<title>".$txt['leeching']." $LINK</title>$nn<link rel=\"shortcut icon\" type=\"image/gif\" href=\"".IMAGE_DIR."rsload_2.gif\">$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn</head>$nn<body>$nn";
     
 		$Url = parse_url($LINK);
-		$FileName = !$FileName ? basename($Url["path"]) : $FileName;
-		/* $mydomain = $_SERVER['SERVER_NAME'];
+		$FileName = basename ($Url ["path"]);
+		$mydomain = $_SERVER['SERVER_NAME'];
 		$myip = $_SERVER['SERVER_ADDR'];
-		if($bw_antileech && preg_match("/($mydomain|$myip)/i", $Url["host"]))
+		if($bw_save && preg_match("/($mydomain|$myip)/i", $Url["host"]))
 			{
 				html_error("You are not allowed to leech from <font color=black>".$mydomain." (".$myip.")</font>");
-			} */
-             
+			} 
+			             
 		$auth = ($Url["user"] && $Url["pass"]) ? "&auth=".urlencode (encrypt (base64_encode($Url["user"].":".$Url["pass"]))) : "";
 		
 		insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&port=".$Url["port"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
@@ -538,7 +540,7 @@ if($limitbyip){
 	    $_GET["link"] = urldecode(trim($_GET["link"]));
 		
 	    $_GET["post"] = $_GET["post"] ? unserialize(stripslashes(urldecode(trim($_GET["post"])))) : 0;
-	    $_GET["cookie"] = $_GET["cookie"] ? decrypt(urldecode(trim($_GET["cookie"]))) : 0;
+	    $_GET ["cookie"] = $_GET ["cookie"] ? decrypt(urldecode(trim($_GET["cookie"]))) : "";
 	    //$resume_from = $_GET["resume"] ? intval(urldecode(trim($_GET["resume"]))) : 0;
 	    //if ($_GET["resume"]) {unset($_GET["resume"]);}
 
@@ -584,10 +586,11 @@ if($limitbyip){
 			{
 				$redirectto = trim(cut_str($lastError,$txt['_error']." ".$txt['_redirect_to']." [","]"));
 				print $txt['_redirecting_to']." <b>$redirectto</b> ... <br>$nn";
+				$_GET ["referer"] = $_GET ["link"];
 				$_GET["link"] = $redirectto;
 				$purl = parse_url($redirectto);
 			    list($_GET["filename"],$tmp) = explode('?',basename($redirectto));
-				$_GET["host"] = $purl["host"];
+				$_GET ["host"] = ($purl ["host"]) ? $purl ["host"] : $_GET ["host"];
     			$_GET["path"] = $purl["path"].($purl["query"] ? "?".$purl["query"] : "");
 				$_GET ['port'] = $purl ['port'] ? $purl ['port'] : 80;
     			$lastError = "";

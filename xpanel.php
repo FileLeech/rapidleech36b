@@ -130,7 +130,7 @@ $ar_chkbox_acc = array(
  'hotfile_com_premix', 
  'uploading_premix',
  'filefactory_premix',
- 'ifile_it_premix',
+ '4shared_premix',
  'sendspace_premix',
  'fileserve_com_premix',
  'filesonic_com_premix',
@@ -138,6 +138,10 @@ $ar_chkbox_acc = array(
  'duckload_com_premix',
  'shareonline_biz_premix',
  'torrific_com_premix',
+ 'animeground_com_premix',
+ 'turbobit_premix',
+ 'enterupload_premix',
+
 
 );
 
@@ -582,7 +586,7 @@ if(isset($_POST['submit'])){
 		fieldfilter($ar_chkbox_acc[10],'usrhotfile','passhotfile',$badpetik);
 		fieldfilter($ar_chkbox_acc[11],'usruploading','passuploading',$badpetik); 
 		fieldfilter($ar_chkbox_acc[12],'usrfilefactory','passfilefactory',$badpetik); 
-		fieldfilter($ar_chkbox_acc[13],'usrifile','passifile',$badpetik); 
+		fieldfilter($ar_chkbox_acc[13],'usr4shared','pass4shared',$badpetik); 
 		fieldfilter($ar_chkbox_acc[14],'usrsendspace','passsendspace',$badpetik);
 		fieldfilter($ar_chkbox_acc[15],'usrfileserve','passfileserve',$badpetik);
 		fieldfilter($ar_chkbox_acc[16],'usrfilesonic','passfilesonic',$badpetik);
@@ -591,6 +595,8 @@ if(isset($_POST['submit'])){
 		fieldfilter($ar_chkbox_acc[19],'usrshareonline','passshareonline',$badpetik);
 		fieldfilter($ar_chkbox_acc[20],'usrtorrific','passtorrific',$badpetik);
 		fieldfilter($ar_chkbox_acc[21],'usranimeground','passanimeground',$badpetik);
+		fieldfilter($ar_chkbox_acc[22],'passturbobit',$badpetik);
+		fieldfilter($ar_chkbox_acc[23],'usrenterupload','passenterupload',$badpetik);
 
 
 	} //-- end $_POST['usepcc']
@@ -699,7 +705,7 @@ if(isset($_POST['submit'])){
 	 //===================
 	 
 	$upcc = '';
-	 if(empty($_POST['rs_com_premix'])&&empty($_POST['rs_de_premix'])&&empty($_POST['megaupload_premix'])&&empty($_POST['megashare_premix'])&&empty($_POST['netload_premix'])&&empty($_POST['gigasize_premix'])&&empty($_POST['vBulletin_acc'])&&empty($_POST['uploaded_to_premix'])&&empty($_POST['easyshare_premix'])&&empty($_POST['depositfiles_premix'])&&empty($_POST['hotfile_com_premix'])&&empty($_POST['uploading_premix'])&&empty($_POST['filefactory_premix'])&&empty($_POST['ifile_it_premix'])&&empty($_POST['sendspace_premix'])&&empty($_POST['fileserve_com_premix'])&&empty($_POST['filesonic_com_premix'])&&empty($_POST['oron_com_premix'])&&empty($_POST['duckload_com_premix'])&&empty($_POST['shareonline_biz_premix'])&&empty($_POST['torrific_com_premix'])&&empty($_POST['animeground_com_premix'])&&empty($_POST['muhash_premix'])&&empty($_POST['hfhash_premix'])&&empty($_POST['rshash_premix'])&&empty($_POST['imghack_premix']))
+	 if(empty($_POST['rs_com_premix'])&&empty($_POST['rs_de_premix'])&&empty($_POST['megaupload_premix'])&&empty($_POST['megashare_premix'])&&empty($_POST['netload_premix'])&&empty($_POST['gigasize_premix'])&&empty($_POST['vBulletin_acc'])&&empty($_POST['uploaded_to_premix'])&&empty($_POST['easyshare_premix'])&&empty($_POST['depositfiles_premix'])&&empty($_POST['hotfile_com_premix'])&&empty($_POST['uploading_premix'])&&empty($_POST['filefactory_premix'])&&empty($_POST['4shared_premix'])&&empty($_POST['sendspace_premix'])&&empty($_POST['fileserve_com_premix'])&&empty($_POST['filesonic_com_premix'])&&empty($_POST['oron_com_premix'])&&empty($_POST['duckload_com_premix'])&&empty($_POST['shareonline_biz_premix'])&&empty($_POST['torrific_com_premix'])&&empty($_POST['animeground_com_premix'])&&empty($_POST['turbobit_premix'])&&empty($_POST['enterupload_premix'])&&empty($_POST['muhash_premix'])&&empty($_POST['hfhash_premix'])&&empty($_POST['rshash_premix'])&&empty($_POST['imghack_premix']))
 	  { $upcc='//'; }
 	  
 	  
@@ -774,7 +780,7 @@ if(isset($_POST['submit'])){
 	 "hotfile_com_premix" => array("hotfile_com", "usrhotfile", "passhotfile"),
 	 "uploading_premix" => array("uploading", "usruploading", "passuploading"),
 	 "filefactory_premix" => array("filefactory", "usrfilefactory", "passfilefactory"),
-	 "ifile_it_premix" => array("ifile_it", "usrifile", "passifile"),
+	 "4shared_premix" => array("4shared_com", "usr4shared", "pass4shared"),
 	 "sendspace_premix" => array("sendspace", "usrsendspace", "passsendspace"),
 	 "fileserve_com_premix" => array("fileserve_com", "usrfileserve", "passfileserve"),
 	 "filesonic_com_premix" => array("filesonic_com", "usrfilesonic", "passfilesonic"),
@@ -783,6 +789,8 @@ if(isset($_POST['submit'])){
 	 "shareonline_biz_premix" => array("shareonline_biz", "usrshareonline", "passshareonline"),
 	 "torrific_com_premix" => array("torrific_com", "usrtorrific", "passtorrific"),
 	 "animeground_com_premix" => array("animeground_com", "usranimeground", "passanimeground"),
+	 "turbobit_premix" => array("turbobit_net", "passturbobit"),
+	 "enterupload_premix" => array("enterupload_com", "usrenterupload", "passenterupload"),
 	 );
 	$_config .= fillField_premium("premium_acc",$field, $upcc);
 		

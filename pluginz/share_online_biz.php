@@ -53,7 +53,7 @@ class share_online_biz extends DownloadClass {
         $post["user"] = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["shareonline_biz"] ["user"];
         $post["pass"] = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["shareonline_biz"] ["pass"];
         $post["l_rememberme"] = "1";
-        $page = sslcurl("https://www.share-online.biz/user/login", $post, 0, "http://www.share-online.biz/");
+        $page = sslcurl("https://www.share-online.biz/user/login", 0, $post, "http://www.share-online.biz/");
         $Cookies = GetCookies($page);
         $page = $this->GetPage($link, $Cookies);
         if (preg_match("#Location: (.+)#", $page, $temp)) {

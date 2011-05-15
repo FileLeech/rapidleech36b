@@ -780,20 +780,18 @@ function highlight(field) {
             <?php
                     }
 		 $ar_host_acc = array(
-		  "rs_com"=>"rapidshare.com",
-		  "rs_de"=>"rapidshare.de",
-		  "megaupload"=>"megaupload.com",
-		  "megashare"=>"megashare.com",
-		  "netload"=>"netload.in",
-		  "gigasize"=>"gigasize.com",
-		  "share_online"=>"share_online.com",
-		  "uploaded_to"=>"uploaded.to",
-		  "easyshare"=>"easy-share.com",
-		  "depositfiles"=>"depositfiles.com",
-		  "hotfile_com"=>"hotfile.com",
-		  "uploading"=>"uploading.com",
-		  "filefactory"=>"filefactory.com",
-		  "ifile_it"=>"ifile.it",
+		  "rs_com"=>"Rapidshare.com",
+		  "rs_de"=>"Rapidshare.de",
+		  "megaupload"=>"Megaupload.com",
+		  "megashare"=>"Megashare.com",
+		  "netload"=>"Netload.in",
+		  "gigasize"=>"Gigasize.com",
+		  "uploaded_to"=>"Uploaded.to",
+		  "easyshare"=>"Easy-share.com",
+		  "depositfiles"=>"Depositfiles.com",
+		  "hotfile_com"=>"Hotfile.com",
+		  "uploading"=>"Uploading.com",
+		  "filefactory"=>"Filefactory.com",
 		  "4shared_com"=>"4shared.com",
 		  "fileserve_com"=>"Fileserve.com",
 		  "filesonic_com"=>"Filesonic.com",
@@ -803,6 +801,7 @@ function highlight(field) {
 		  "torrific_com"=>"Torrific.com",
 		  "animeground_com"=>"Animeground.com",
 		  "turbobit_net"=>"Turbobit.net",
+		  "enterupload_com"=>"Enterupload.com",
 		 );
 $ada_acc = (isset($premium_acc) && is_array($premium_acc));
  if($ada_acc){
