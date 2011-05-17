@@ -125,6 +125,7 @@ else
     $content_tl = "";
   }
 
+$cookies = '';
 if ($cookie)
 	{
 		if (is_array($cookie))
@@ -190,17 +191,21 @@ if(isset($mip_enabled) && $mip_enabled){
 
 }else{
 
- $fp = fsockopen($proxyHost ? $scheme.$proxyHost : $scheme.$host, $proxyPort ? $proxyPort : $port, $errno, $errstr, 15);
+    $errno = 0;
+	$errstr = "";
+	$hosts = ($proxyHost ? $scheme . $proxyHost : $scheme . $host) . ':' . ($proxyPort ? $proxyPort : $port);
+	$fp = @stream_socket_client ( $hosts, $errno, $errstr, 120, STREAM_CLIENT_CONNECT );
 
 }
 
 
-if (!$fp)
-	{
-	html_error("Couldn't connect to ".($proxyHost ? $proxyHost : $host)." at port ".($proxyPort ? $proxyPort : $port), 0);
-	}
+if (!$fp) {
+    $dis_host = $proxyHost ? $proxyHost : $host;
+    $dis_port = $proxyPort ? $proxyPort : $port;
+    html_error("Couldn't connect to ".$dis_host." at port ".$dis_port, 0);
+}
 
-socket_set_timeout($fp, 120);
+
 
 if($errno || $errstr)
   {
@@ -228,9 +233,9 @@ fputs($fp,$request);
 fflush($fp);
 $timeStart = getmicrotime();
 
-do
-  {
-  $header.= @fgets($fp, 8192);
+$header = '';
+do {
+  $header .= fgets ( $fp, 16384 );
 } while (strpos($header, $nn.$nn) === false);
 
 #########################################################################
@@ -242,6 +247,7 @@ if (!$header)
   return false;
   }
 
+$responsecode = "";
 preg_match('/^HTTP\/1\.0|1 ([0-9]+) .*/',$header,$responsecode);
 if (($responsecode[1] == 404 || $responsecode[1] == 403) && $saveToFile)
 {
@@ -260,14 +266,13 @@ if (($responsecode[1] == 404 || $responsecode[1] == 403) && $saveToFile)
 
 if ($saveToFile)
   {
-  $bytesTotal = intval(trim(cut_str($header, "Content-Length:", "\n")));
+  $bytesTotal = trim(cut_str($header, "Content-Length:", "\n"));
   
   //check sizelimit feature  (it is in MB)
    if($limitsize>0){
     if ($bytesTotal > $limitsize*1024*1024)
 	{
 	  $lastError = $htxt['_sorry_tobig'].": ".$fileSize = bytesToKbOrMbOrGb($bytesTotal)." &gt;&gt; ".$htxt['_max_filesize']." ".$limitsize." MB";
-	  fclose($fp);
 	  return false;
 	}
   }
@@ -275,7 +280,6 @@ if ($saveToFile)
    if ($bytesTotal < $lowlimitsize*1024*1024)
    {
 	  $lastError = $htxt['_sorry_tosmall'].": ".$fileSize = bytesToKbOrMbOrGb($bytesTotal)." &gt;&gt; ".$htxt['_min_filesize']." ".$lowlimitsize." MB";
-	  fclose($fp);
 	  return false;	   
 	   
    }
@@ -286,7 +290,6 @@ if ($saveToFile)
     if (($curstorage + $bytesTotal) > $storage_limit*1024*1024)
 	{
 	  $lastError = $htxt['_sorry_insuficient_storage'].": ".$fileSize = bytesToKbOrMbOrGb($curstorage)." &gt;&gt; ".$htxt['_storage_limit']." ".$storage_limit." MB";
-	  fclose($fp);
 	  return false;
 	}  
   }
@@ -335,6 +338,7 @@ if ($saveToFile)
 		is_present($page_src,"To avoid creation of corrupted zip files, you cannot create a zip on this torrent until it is done downloading");
 	}
 
+    $redir = "";
 	if(trim(preg_match('/[^\-]Location: *(.+)(\r|\n)+/', $header, $redir)))
 	{
 		$redirect = $redir[1];
@@ -503,7 +507,8 @@ if ($Resume["use"] === TRUE)
 	{
 	$received = bytesToKbOrMbOrGb(filesize($saveToFile));
 	$percent = round($Resume["from"] / ($bytesTotal + $Resume["from"]) * 100, 2);
-	print "<script>pr('".$percent."', '".$received."', '0')</script>";
+	echo "<script type='text/javascript'>pr('" . $percent . "', '" . $received . "', '0');</script>";
+        flush ();
 	}
   }
 else
@@ -511,9 +516,10 @@ else
   $page = $header;
   }
 
-	while(!feof($fp))
-		{
-	 	$data = @fgets($fp, 8192);
+do {
+    $data = @fread ( $fp, ($saveToFile ? $chunkSize : 16384) );
+    if ($data == '')
+        break;
 	 	if($saveToFile)
 	    {
 	    $bytesSaved = fwrite($fs, $data);
@@ -542,7 +548,7 @@ else
 	      $chunkTime = $chunkTime ? $chunkTime : 1;
 	      $lastChunkTime = $time;
 	      $speed = @round($chunkSize / 1024 / $chunkTime, 2);
-	      echo "<script>pr('".$percent."', '".$received."', '".$speed."')</script>";
+	      echo "<script type='text/javascript'>pr('" . $percent . "', '" . $received . "', '" . $speed . "');</script>";
 	      $last = $bytesReceived;
 	      }
 	    }
@@ -550,7 +556,7 @@ else
 	    {
 	    $page.= $data;
 	    }
-	  }
+	  }while( strlen($data)> 0 );
 	
 
 	if($saveToFile)
@@ -577,8 +583,7 @@ else
 	  }
 	else
 	  {
-	  if ($NoDownload)
-	    {
+	if (isset($NoDownload) && $NoDownload) {
 	    if (stristr($host, "rapidshare"))
 	      {
 			is_present($page, "You have reached the limit for Free users", "You have reached the limit for Free users.", 0);
@@ -642,7 +647,7 @@ function GetCookies($content)
 	{
 	// The U option will make sure that it matches the first character
 	// So that it won't grab other information about cookie such as expire, domain and etc
-	preg_match_all('/Set-Cookie: (.*);/U',$content,$temp);
+	preg_match_all ( '/Set-Cookie: (.*)(;|\r\n)/U', $content, $temp );
 
 	$cookie = $temp[1];
 	$cook = implode('; ',$cookie);

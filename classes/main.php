@@ -4,10 +4,30 @@
   
   $show_w3c_validator = false; // show W3C validator link
 ?>
+<script type="text/javascript">
+if (window.top !== window.self) {
+    window.top.location.replace(window.self.location.href);
+    alert('For security reasons, frames are not allowed.');
+    setInterval(function(){document.body.innerHTML='';},1);
+}
+
+</script>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<style type="text/css">
+    html { visibility:hidden; }
+</style>
+<script language="javascript" type="text/javascript">
+    if ( self == top ) {
+	document.documentElement.style.visibility='visible';
+    } else {
+	top.location = self.location;
+    }
+</script>
+
 <meta http-equiv="Content-Type" content="text/html; <?php echo $charSet;?>">
 <title>:: <?php echo $RL_VER;?> ::</title>
 <link rel="shortcut icon" type="image/gif" href="<?php echo IMAGE_DIR.'ico_home.gif?'.rand(11,9999);?>">
