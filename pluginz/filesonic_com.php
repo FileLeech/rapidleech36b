@@ -37,7 +37,7 @@ class filesonic_com extends DownloadClass {
         } elseif ($_POST['pass_pre'] == "ok") {
             $post["passwd"]= $_POST['passwd'];
             $link = $_POST['link'];
-            $cookie = $_POST['cookie'];
+            $cookie = decrypt(urldecode(trim($_POST["cookie"])));
             $page = $this->GetPage($link, $cookie, $post);
             if (stristr ( $page, "Location:" )) {
                 $dlink = trim ( cut_str ( $page, "Location: ", "\n" ) );
@@ -152,7 +152,9 @@ class filesonic_com extends DownloadClass {
         $post['email'] = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["filesonic_com"] ["user"];
         $post['password'] = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["filesonic_com"] ["pass"];
         $page = $this->GetPage($loginurl, 0, $post, $Referer);
-        $cookie = GetCookies($page);
+        $cookies = array ();
+		if(preg_match_all("/Set-Cookie: (([^=]+)=[^;]*;)/", $page, $matches))foreach($matches[2] as $k=>$v)$cookies[$v]=$matches[1][$k];
+		$cookie = implode(" ",$cookies);
         is_present($cookie, 'role=free', "Account Free, Login not validated");
         is_notpresent($cookie, 'nickname=', "Error logging in - Account not found!");
         if (preg_match('/Location: (.*)/i', $page, $home)) {
@@ -165,7 +167,7 @@ class filesonic_com extends DownloadClass {
             $linkpw = "http://www.filesonic.com".$match[1];
             echo "\n" . '<form name="seven_cute" action="' . $PHP_SELF . '" method="post" >' . "\n"; //Dont protest for the form name, :D
             echo '<input type="hidden" name="link" value="' . $linkpw . '" />' . "\n";
-            echo '<input type="hidden" name="cookie" value="' . $cookie . '" />' . "\n";
+            echo '<input type="hidden" name="cookie" value="' . urlencode(encrypt($cookie)) . '" />' . "\n";
             echo '<input type="hidden" name="name" value="' . $filename . '" />' . "\n";
             echo '<input type="hidden" name="pass_pre" value="ok" />' . "\n";
             echo '<h4>Enter password here: <input type="text" name="passwd" id="filepass" size="13" />&nbsp;&nbsp;<input type="submit" onclick="return check()" value="Submit" /></h4>' . "\n";
@@ -185,4 +187,5 @@ class filesonic_com extends DownloadClass {
 // fix by VinhNhaTrang 21.11.2010
 // rewrite & fixed by Ruud v.Tony 29.04.2011, special credit to Th3-882 & vdhdevil, thx mate for teachin' me...
 // update & remove some unecessary function by Ruud v.Tony 01.05.2011
+// fixed cookie premium by Okoze/Kolp 17-05-2011
 ?>

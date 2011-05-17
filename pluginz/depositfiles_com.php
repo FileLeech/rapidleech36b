@@ -22,49 +22,52 @@ class depositfiles_com extends DownloadClass {
 
     private function DownloadFree($link) {
         global $Referer;
-        $page = $this->GetPage($link);
-        if (preg_match("/Location: *(.+)/i", $page, $loc)) {
-            $link = "http://depositfiles.com$loc[1]";
+
             $page = $this->GetPage($link);
-        }
-        $tcookies = GetCookies($page);
-        $cookie = $tcookies;
-        is_present($page, "Such file does not exist or it has been removed for infringement of copyrights.");
-        is_present($page, "Your IP is already downloading a file from our system.");
-        is_present($page, "We are sorry, but all downloading slots for your country are busy.");
+            if (preg_match("/Location: *(.+)/i", $page, $loc)) {
+                $link = "http://depositfiles.com$loc[1]";
+                $page = $this->GetPage($link);
+            }
+            $tcookies = GetCookies($page);
+            $cookie = $tcookies;
+            is_present($page, "Such file does not exist or it has been removed for infringement of copyrights.");
+            is_present($page, "Your IP is already downloading a file from our system.");
+            is_present($page, "We are sorry, but all downloading slots for your country are busy.");
 
-        $post = array();
-        $post['gateway_result'] = "1";
-        $page = $this->GetPage($link, $cookie, $post, $link);
-        $cookie = $tcookies . "; " . GetCookies($page);
-        if (stristr($page, 'You used up your limit for file downloading!')) {
-            preg_match('/([0-9]+) minute\(s\)/', $page, $minutes);
-            html_error("Download limit exceeded. Try again in " . trim($minutes [1]) . " minute(s)", 0);
-        } else {
-            preg_match('/<span id="download_waiter_remain">(.*)<\/span>/', $page, $countDown);
-            $countDown = (int) $countDown [1];
-            insert_timer($countDown, "The file is being prepared.", "", true);
-        }
-
-        if (!preg_match("#/get_file.php[^&|']+#", $page, $temp)) {
-            html_error("Error");
-        }
-        $tlink = "http://depositfiles.com" . $temp[0];
-        $cookie = $tcookies . "; " . GetCookies($page);
-        $page = $this->GetPage($tlink, $cookie, $post, $link);
-        if (preg_match("/Location: (.+)/i", $page, $linkdf)) {
-            $link = urldecode($linkdf[1]);
-            $link = "http://depositfiles.com$link";
+            if (preg_match('/<form action="(.*)" method="post" onsubmit/', $page, $match)) {
+                $link = "http://depositfiles.com$match[1]";
+            }
+            $post = array();
+            $post['gateway_result'] = "1";
             $page = $this->GetPage($link, $cookie, $post, $link);
-            preg_match('/<form action="(.*)" method="get"/U', $page, $dlink);
-            $Url = parse_url($dlink[1]);
-            $FileName = basename($Url['path']);
-            $this->RedirectDownload($dlink[1], $FileName, $cookie);
-            exit;
-        } else {
-            html_error("error");
-        }
-        exit;
+            $cookie = $tcookies . "; " . GetCookies($page);
+            if (stristr($page, 'You used up your limit for file downloading!')) {
+                preg_match('/([0-9]+) minute\(s\)/', $page, $minutes);
+                html_error("Download limit exceeded. Try again in " . trim($minutes [1]) . " minute(s)", 0);
+            } else {
+                preg_match('/<span id="download_waiter_remain">(.*)<\/span>/', $page, $wait);
+                $this->CountDown($wait[1]);
+            }
+
+            if (!preg_match("#/get_file.php[^&|']+#", $page, $temp)) {
+                html_error("Error");
+            }
+            $tlink = "http://depositfiles.com$temp[0]";
+            $cookie = $tcookies . "; " . GetCookies($page);
+            $page = $this->GetPage($tlink, $cookie, $post, $link);
+            if (preg_match("/Location: (.+)/i", $page, $linkdf)) {
+                $tlink = "http://depositfiles.com$linkdf[1]";
+                $page = $this->GetPage($tlink, $cookie, $post, $link);
+                preg_match('/<form action="(.*)" method="get"/U', $page, $dl);
+                $dlink = trim($dl[1]);
+                $Url = parse_url($dlink);
+                $FileName = basename($Url['path']);
+                $this->RedirectDownload($dlink, $FileName, $cookie);
+                exit();
+            } else {
+                html_error("error");
+            }
+            exit();
     }
 
     private function DownloadPremium($link,$lang) {
@@ -104,4 +107,5 @@ class depositfiles_com extends DownloadClass {
 
 //Depositfiles Download Plugin by vdhdevil & Ruud v.Tony 19-3-2011
 //Updated 30-April-2011: Updated Download Premium
+//Updated 16-May-2011: Updated Download Free
 ?>

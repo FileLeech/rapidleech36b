@@ -81,7 +81,7 @@ class uploaded_to extends DownloadClass {
 			html_error("Error validating CAPTCHA.");
 		}
 
-		if (!preg_match("@url:'(http://.+/dl/\w+)@i", $page, $dl)) {
+		if (!preg_match("@url:'(http://.+/dl/[^']+)@", $page, $dl)) {
 			html_error("Error: Download link not found.");
 		}
 
