@@ -15,6 +15,20 @@ echo "/*=====".$nn."JS Lib".$nn."Mode: ";
 echo ($req);
 echo "\r\n=====*/\r\n";
 ?>
+//DISABLE IFRAME
+if ( top != self )
+{
+	try {
+		if ( top.location.host != self.location.host )
+		{
+			top.location = self.location;
+		}
+	} catch( err )
+	{
+		top.location = self.location;
+	}
+}
+
 var d = document;
 function deleteCookie(name, path, domain)
   {
