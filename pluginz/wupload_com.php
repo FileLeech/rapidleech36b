@@ -90,9 +90,32 @@ class wupload_com extends DownloadClass {
     }
 
     private function DownloadPremium($link) {
-        html_error("Not supported now, please donate premium account to build premium plugin!");
+        global $premium_acc;
+        $post = array();
+        $post["email"] = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["wupload_com"] ["user"];
+        $post["redirect"] = "/";
+        $post["password"] = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["wupload_com"] ["pass"];
+        $post["rememberMe"] = 1;
+        $page = $this->GetPage("http://www.wupload.com/account/login", 0, $post, "http://www.wupload.com/");
+        preg_match('#Set-Cookie: PHPSESSID=([a-zA-Z0-9]+); expires=#', $page, $cookie4id);
+        $cookie1 = "lang=".cut_str($page,'Set-Cookie: lang=',";")."; ";
+        $cookie2 = "role=premium; ";
+        $cookie3 = "PHPSESSID=".$cookie4id[1]."; ";
+        $cookie4 = "rememberMe=".cut_str($page,'Set-Cookie: rememberMe=',";")."; ";
+        $cookie5 = "email=".cut_str($page,'Set-Cookie: email=',";")."; ";
+        $cookie6 = "nickname=".cut_str($page,'Set-Cookie: nickname=',";")."; ";
+        $cookie7 = "isAffiliate=".cut_str($page,'Set-Cookie: isAffiliate=',";")."; ";
+        $cookies = "$cookie1$cookie2$cookie3$cookie4$cookie5$cookie6$cookie7";
+        $page = $this->GetPage($link, $cookies, 0, 0);
+        if (!preg_match('#Location: (http:\/\/s([0-9]+)\.wupload\.com\/.+\/([a-z0-9]+))#', $page, $dlink)) {
+            html_error("Error 1x01: Plugin is out of date");
+        }
+        $this->RedirectDownload(trim($dlink[1]), "wupload", $cookies, 0, $link);
+        exit;
     }
+
 }
 
-//wupload download plugin by Ruud v.Tony 16-05-2011
+//wupload free download plugin by Ruud v.Tony 16-05-2011
+//updated by nastrove to support premium
 ?>

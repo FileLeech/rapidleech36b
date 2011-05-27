@@ -10,7 +10,7 @@ class zippyshare_com extends DownloadClass {
         $page = $this->GetPage($link);
         is_present($page, "File does not exist on this server", "File does not exist on this server");
         $cookies = GetCookies($page);
-        $FileName = trim(cut_str($page, 'data-text="', '"'));
+        $FileName = trim(cut_str($page, 'addthis:title=""','"'));
         if (preg_match_all("#var (\w) = (\d+);#", $page, $temp)){
             $a=$temp[2][0];
             $b=$temp[2][1];
@@ -23,7 +23,10 @@ class zippyshare_com extends DownloadClass {
             $dlink.=$temp[2];
             //html_error($dlink);
         } else if (preg_match("/url: '([^']+)', seed: (\d+)}/i", $page, $L)) {
-            $dlink = $L[1] . "&time=" . $L[2] * 6; //src= return 6 * param1 % 78678623;
+            $dlink = $L[1] . "&time=" . $L[2]; //src= return 6 * param1 % 78678623;
+		} else if (preg_match('/\/([0-9]+)\/"\+\(([0-9]+)\%([0-9]+) \+ ([0-9]+)\%([0-9]+)\)\+"\/(.+)";/', $page, $L)) {
+			$server = cut_str($link,'http://','.zippyshare.com');
+			$dlink = "http://" . $server . ".zippyshare.com/d/" . $L[1] . "/" . (($L[2]%$L[3])+($L[4]%$L[5])) . "/" . $L[6];
         } else {
             html_error("Error 0x02: Plugin is out of date");
         }
@@ -37,6 +40,7 @@ class zippyshare_com extends DownloadClass {
 /*
  * By vdhdevil Jan-12-2010
  * Updated March-8-2011
+ * Fixed Mai-22-2011 by defport
  * Credit to  Th3-822, motor
  */
 ?>

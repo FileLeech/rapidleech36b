@@ -9,7 +9,7 @@ class turbobit_net extends DownloadClass {
 
     public function Download($link) {
         global $premium_acc, $options;
-        if (($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_pass"]) || ($_REQUEST ["premium_acc"] == "on" && $premium_acc ["turbobit_net"] ["pass"])) {
+        if (($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) || ($_REQUEST ["premium_acc"] == "on" && $premium_acc ["turbobit_net"] ["user"] && $premium_acc ["turbobit_net"] ["pass"])) {
             $this->DownloadPremium($link);
         } elseif ($_POST['step'] == "1") {
             $this->DownloadFree($link);
@@ -19,18 +19,15 @@ class turbobit_net extends DownloadClass {
     }
 
     private function Retrieve($link) {
-        global $download_dir;
+        global $options;
         $page = $this->GetPage($link);
-        is_present($page, "The file you are looking for is not available", "The file has been deleted");
-        
         preg_match_all('#Set-Cookie: ([^;]+)#', $page, $tmp);
         $TmpCookies = $tmp[1][2];
         $Cookies = $tmp[1][1] . "; " . $tmp[1][2];
-        $tmp = cut_str($page, 'class="free wide" href="', '"');
-        if (!$tmp) {
-            html_error("Plugin is out of date");
-        }
-        $flink = "http://turbobit.net" . $tmp;
+		if (!preg_match('#class="free\W\w+" href="([^"]+)#',$page,$tmp)){
+			html_error("Plugin is out of date");
+		}
+        $flink = "http://turbobit.net" . $tmp[1];
         $page = $this->GetPage($flink, $Cookies, 0, $link);
         preg_match_all('#Set-Cookie: ([^;]+)#', $page, $tmp);
         $Cookies = $TmpCookies . "; " . $tmp[1][1];
@@ -38,7 +35,7 @@ class turbobit_net extends DownloadClass {
             html_error("You have reached the limit of connections,try downloading again after ".$count[1]." seconds");
         }
         if (!preg_match("#value = '(.*)' name = 'captcha_type'#", $page, $captcha_type)) {
-            html_error("Error 0x02:Plugin is out of date");
+			html_error("Error 0x02:Plugin is out of date");
         }
         if (!preg_match("#value = '(.*)' name = 'captcha_subtype'#", $page, $captcha_subtype)) {
             html_error("Error 0x03: Plugin is out of date");
@@ -59,8 +56,8 @@ class turbobit_net extends DownloadClass {
                 $page = $this->GetPage($img);
                 $headerend = strpos($page, "\r\n\r\n");
                 $pass_img = substr($page, $headerend + 4);
-                write_file($download_dir . "turbobit_captcha.jpg", $pass_img);
-                $img_src = $download_dir . "turbobit_captcha.jpg";
+                write_file($options['download_dir'] . "turbobit_captcha.jpg", $pass_img);
+                $img_src = $options['download_dir'] . "turbobit_captcha.jpg";
             }else
                 html_error("Error 0x03: Plugin is out of date");
         } else {
@@ -71,8 +68,8 @@ class turbobit_net extends DownloadClass {
                 $t=strpos($pass_img, "P");
                 $pass_img=ltrim(substr($pass_img, $t-2),"\r\n");
             }
-            write_file($download_dir . "turbobit_captcha.png", $pass_img);
-            $img_src = $download_dir . "turbobit_captcha.png";           
+            write_file($options['download_dir'] . "turbobit_captcha.png", $pass_img);
+            $img_src = $options['download_dir'] . "turbobit_captcha.png";           
         }
         $this->EnterCaptcha($img_src, $data, '10');
         exit;
@@ -110,40 +107,34 @@ class turbobit_net extends DownloadClass {
         $this->RedirectDownload(trim($rlink[1]), "turbobit", 0, 0, $dlink);
         exit;
     }
-
-    private function DownloadPremium($link) {
-        global $premium_acc;
-
-        $page = $this->GetPage('http://turbobit.net/');
-        preg_match_all('/Set-Cookie: (.*);/U',$page,$temp);
-        $cookie = $temp[1][2]."; ".$temp[1][1];
-        $page = $this->GetPage("http://turbobit.net/en", $cookie, 0, 0);
-
-        $post = array();
-        $post["code"] = ($_GET["premium_pass"] ? $_GET["premium_pass"] : $premium_acc["turbobit"]["pass"]);
-        $page = $this->GetPage("http://turbobit.net/payments/getaccess/", $cookie, $post, 0);
-        is_notpresent($page, "Turbo-access granted", "Invalid password");
-
-        $page = $this->GetPage($link, $cookie, 0, 0);
-        is_present($page, "The file you are looking for is not available", "The file has been deleted");
-        
-        $dsrg = cut_str($page,'<div class="download-file">','Download file');
-        $durl = cut_str($dsrg,'href="','"');
-        $link = "http://turbobit.net".$durl;
-        $page = $this->GetPage($link, $cookie, 0, 0);
-		
-		if (!stristr ( $page, "Location:" )) {
-			html_error("Error : Plugin out of date!");
-		}
-        $dlink = cut_str ($page ,"Location: ","\r");
-        $Url = parse_url($dlink);
-        $FileName = cut_str($dlink, 'name=','&');
-        $this->RedirectDownload($dlink, $FileName, $cookie);
-        exit();
-
+    private function DownloadPremium($link){
+		global $premium_acc;
+        $post=array();
+        $post["user[login]"]= $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["turbobit_net"] ["user"];
+        $post["user[pass]"]= $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["turbobit_net"] ["pass"];
+        $post["user[memory]"]="on";
+        $post["user[submit]"]="Login";
+        $page=$this->GetPage("http://turbobit.net/user/login", 0, $post, $link);
+        preg_match_all("#Set-Cookie: ([^;]+)#", $page, $tmp);
+        $Cookies=$tmp[1][1]."; ".$tmp[1][3]."; ".$tmp[1][4];
+        $page=$this->GetPage($link,$Cookies,0,$link);
+        $Cookies=$tmp[1][3]."; ".$tmp[1][4];
+        preg_match_all("#Set-Cookie: ([^;]+)#", $page, $tmp);
+        $Cookies.="; ".$tmp[1][1];
+        if (preg_match("#http.+download/redirect[^']+#", $page, $tmp)){
+            $page=$this->GetPage($tmp[0], $Cookies, 0, $link);
+            if (!(preg_match("#Location: (.+)#", $page,$dlink))){
+                html_error("Error 1x02: Plugin is out of date");
+            }
+            $this->RedirectDownload(trim($dlink[1]), "turbobit", $Cookies, 0, $link);
+        }else{
+            html_error("Error 1x01: Plugin is out of date");
+        }
+        exit;
     }
 
 }
-
-//Turbobit Download Plugin by vdhdevil & Ruud v.Tony 8-4-2011
+/*
+ * -- by vdhdevil --
+ */
 ?>

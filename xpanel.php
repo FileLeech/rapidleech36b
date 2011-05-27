@@ -595,7 +595,7 @@ if(isset($_POST['submit'])){
 		fieldfilter($ar_chkbox_acc[19],'usrshareonline','passshareonline',$badpetik);
 		fieldfilter($ar_chkbox_acc[20],'usrtorrific','passtorrific',$badpetik);
 		fieldfilter($ar_chkbox_acc[21],'usranimeground','passanimeground',$badpetik);
-		fieldfilter($ar_chkbox_acc[22],'passturbobit',$badpetik);
+		fieldfilter($ar_chkbox_acc[22],'usrturbobit','passturbobit',$badpetik);
 		fieldfilter($ar_chkbox_acc[23],'usrenterupload','passenterupload',$badpetik);
 
 

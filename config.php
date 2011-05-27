@@ -49,7 +49,7 @@ $premium_acc["rs_com"] = array(
 //$premium_acc["shareonline_biz"] = array('user' => '', 'pass' => '');
 //$premium_acc["torrific_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["animeground_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["turbobit_net"] = array('pass' => '');
+//$premium_acc["turbobit_net"] = array('user' => '', 'pass' => '');
 //$premium_acc["enterupload_com"] = array('user' => '', 'pass' => '');
 
 #Auto Download Premium Account #

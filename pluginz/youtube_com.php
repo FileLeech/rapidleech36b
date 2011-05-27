@@ -1,8 +1,7 @@
 <?php
-if (! defined ('RAPIDLEECH'))
-{
-	require_once ("index.html");
-	exit ();
+if (!defined('RAPIDLEECH')){
+  require_once("404.php");
+  exit;
 }
 
 class youtube_com extends DownloadClass
@@ -12,13 +11,18 @@ class youtube_com extends DownloadClass
 	public function Download($link)
 	{
 		$this->page = $this->GetPage($link);
+		if (preg_match('#^HTTP/1.(0|1) 404 Not Found#i', $this->page)) {
+				is_present($this->page, "The video you have requested is not available.");
+				is_present($this->page, "This video contains content from", "This video has content with copyright and it's blocked in this server's country.");
+				html_error('404 Page Not Found');
+		}				
 
 		if (preg_match('#Location: http://(www.)?youtube.com/das_captcha#', $this->page) || $_GET["step"]) {
 				$this->captcha($link);
 		}
-		if (!preg_match('#fmt_url_map=(.+?)&#', $this->page, $fmt_url_map)) html_error('Video link not found.');
-		$fmt_url_maps = preg_split('%,%', urldecode($fmt_url_map[1]));
-		//var_dump($fmt_url_maps); exit;
+		if (!preg_match('#fmt_url_map=(.+?);#', $this->page, $fmt_url_map)) html_error('Video link not found.');
+		$fmt_url_maps = preg_split('%,%', urldecode(str_replace('\u0026amp','', $fmt_url_map[1])));
+
 		$fmts = array(37,22,35,18,34,6,5,0,17,13);
 		$yt_fmt = $_POST['yt_fmt'];
 
@@ -74,10 +78,14 @@ class youtube_com extends DownloadClass
 		elseif (preg_match ('%highest%', $yt_fmt)) $ext = '.mp4';
 		else $ext = '.flv';
 
-		if (!preg_match('#<title>.*YouTube.*-(.*)</title>#Us', $this->page, $title)) html_error('No video title found! Download halted.');
-		if (!$video_id) preg_match ('/video_id=(.+?)(&|(\\\u0026))/', $this->page, $video_id);
+		if (!preg_match('#<title>\s*YouTube[\s\-]+(.*?)\s*</title>#', $this->page, $title)) html_error('No video title found! Download halted.');
+		if (!$video_id)
+		{
+			preg_match ('#video_id=(.+?);#', $this->page, $video_id);
+			$video_id = str_replace('\u0026amp', '', $video_id[1]);
+		}
 
-		$FileName = str_replace (Array ("\\", "/", ":", "*", "?", "\"", "<", ">", "|"), "_", html_entity_decode (trim($title[1]))) . (isset ($_POST ['yt_fmt']) && $_POST ['yt_fmt'] !== 'highest' ? '-[' . $video_id[1] . '][f' . $_POST ['yt_fmt'] . ']' : '-[' . $video_id[1] . '][f' . $fmt . ']') . $ext;
+		$FileName = str_replace (Array ("\\", "/", ":", "*", "?", "\"", "<", ">", "|"), "_", html_entity_decode (trim($title[1]))) . (isset ($_POST ['yt_fmt']) && $_POST ['yt_fmt'] !== 'highest' ? '-[' . $video_id . '][f' . $_POST ['yt_fmt'] . ']' : '-[' . $video_id . '][f' . $fmt . ']') . $ext;
 
 		if ($_POST ['ytdirect'] == 'on')
 		{
@@ -132,4 +140,5 @@ class youtube_com extends DownloadClass
 //updated 07 June 2010
 // [28-03-2011]  Fixed (!$video_id) regex. - Th3-822
 // [29-03-2011]  Added support for captcha. - Th3-822
+// [27-04-2011]  Added error message - Th3-822
 ?>

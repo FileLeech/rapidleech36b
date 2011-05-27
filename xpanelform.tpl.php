@@ -689,6 +689,7 @@ pass: <input type="password" id="pass" name="pass">
 	</td>
 	<td class="tdacc">
 	<div id="turbobox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrturbobit" name="usrturbobit" value="">&nbsp;
 	pass: <input type="password" id="passturbobit" name="passturbobit" value="">
 	</div>
 	<span id="turboket" ><?php if(!$turbobit){echo "<div>Turbobit.net Premix ACC</div>";}else{echo ACC_EMBED;}?></span>
