@@ -29,7 +29,6 @@
 	 '_show' => 'Show',
      '_downloaded' => 'Downloaded',
      '_everything' => 'Everything',	 
-
 	 
      '_maxfilesize' => 'MaxFilesize',
      '_minfilesize' => 'MinFilesize',
@@ -80,7 +79,6 @@
 	 'less_a_minute' => 'less than a minute',
 	 
      'unauthorized' => 'You\'re not authorized, Get Lost..!',
-
      'banned' => 'You\'re Banned, disappear now..!',
 	 
      'unauthorized_c' => 'Your country is not authorized, Get Lost..!',
@@ -104,7 +102,6 @@ switch($vpage)
      'premix_used_2'         => 'free PremiX per',
      'premix_used_3'         => 'hour(s)!',
      'premix_used_4'         => 'free files for today!',
-
      'sorry_inc'           => 'Sorry for this inconvenience!',
      'quote_alert'=> '&raquo; Quota Traffic Limit Alert..!',
      'quote_status'=> 'Sorry, The Quota Traffic status is:',
@@ -143,7 +140,6 @@ switch($vpage)
      'part_size' => 'Parts Size:',
 	 
 	 
-
      'save_sett' => 'Save Settings',
      'clear_sett' => 'Clear Current Settings',
 	 
@@ -172,11 +168,9 @@ switch($vpage)
      'act_split' => 'Split Files',
      'act_merge' => 'Merge Files',
      'act_md5' => 'MD5 Hash',
-     'act_rar' => 'RAR Files',
-     'act_unrar' => 'Unrar Files',
      'act_pack' => 'Pack Files',
      'act_zip' => 'ZIP Files',
-     'act_unzip' => 'Unzip Files',
+     'act_unzip' => 'Unzip Files (beta)',
      'act_rename' => 'Rename',
      'act_mrename' => 'Mass Rename',
      'act_delete' => 'Delete',
@@ -193,7 +187,6 @@ switch($vpage)
      'php_below_5' => 'PHP version 5 is recommended although it is not obligatory',
      'php_server_safemode' => 'Check if your safe mode is turned off as the script cannot work with safe mode on',
 	 	 
-
      'work_with' => 'Link Checker Works With',
      'link_only' => 'Display Links Only',
      'kill_link_only' => 'Kill Links Only',
@@ -238,7 +231,6 @@ switch($vpage)
 	 
      'mail_file_sent' => 'File was sent to this address',
      'mail_error_send' => 'Error sending file!',
-     'created_file' => 'File Created:',
      'delete_link' => 'Delete Link:',
      'delete_link_notice' => 'Use this delete link after you have finished downloading the file<br>free up space your hard disk for others.',
 	 'zzzzz' => ''
@@ -247,7 +239,6 @@ switch($vpage)
 	 
 	 $htxt = array(
   //http.php; it's load from index.php also
-
      '_pwait'       => 'Please wait',
      '_error_retrieve'       => 'Error retriving the link',
      '_error_redirectto'       => 'Error! it is redirected to',
@@ -257,20 +248,12 @@ switch($vpage)
      '_error_trychmod'       => 'Try to chmod the folder to 777',
      '_error_tryagain'       => 'Try again',
      '_error_imposible_record'       => 'It is not possible to carry out a record in the file',
-
      '_error_misc'       => 'Invalid URL or unknown error occured',
      '_con_proxy'       => 'Connected to proxy',
      '_con_to'       => 'Connected to',
      '_sorry_tobig'       => 'Sorry, your file is too big',
      '_sorry_tosmall'       => 'Sorry, your file is too small',
      '_sorry_quotafull'       => 'Sorry, insufficient traffic quota',
-     '_sorry_insuficient_storage' => 'Sorry, insufficient storage space',
-     '_max_filesize' => 'MAX Filesize:',
-     '_min_filesize' => 'MIN Filesize:',
-     '_storage_limit' => 'Storage Limit:',
-     '_retrieving' => 'Retrieving download page',
-     '_enter' => 'Enter',
-     '_here' => 'here',
 
 	 'zzzzz' => ''	 
      );	 
@@ -278,7 +261,6 @@ switch($vpage)
  
  // Un-translated :: $optxt
  	 $optxt = array(
-
      'no_support_upl_serv'   => 'No Supported Upload Services!',
      'select_one_file'       => 'Please select at least one file',
      'del_disabled'       	=> 'Delete Disabled',
@@ -313,20 +295,18 @@ switch($vpage)
      'del_source_aft_split'       => 'Delete source file after successful split',
      'start_split'       => 'Started to split file',
      'part_of'       => 'parts of',
-
      'use_method'       => 'Using Method',
      'tot_part'       => 'Total Parts',
      'crc_error'       => 'It is not possible to split the file. CRC Error',
      'crc_error_open'       => 'It is not possible to open source file',
      'split_error'       => 'It was not possible to split the file.',
-
-     'piece_exist'       => 'A piece already exists',
-     'crc_exist'       => 'CRC file already exists',
-     'src_notfound'       => 'Source file not found',
-     'dir_inexist'       => 'Directory doesn\'t exist',
-     'error_read_file'       => 'Error reading the file',
-     'error_open_file'       => 'Error opening file',
-     'error_write_file'       => 'Error writing the file',
+	 'piece_exist'       => 'A piece already exists',
+	 'crc_exist'       => 'CRC file already exists',
+	 'src_notfound'       => 'Source file not found',
+	 'dir_inexist'       => 'Directory doesn\'t exist',
+	 'error_read_file'       => 'Error reading the file',
+	 'error_open_file'       => 'Error opening file',
+	 'error_write_file'       => 'Error writing the file',
      'split_error_source_not_del'       => 'An error occured. Source file not deleted!',
      'source_del'       => 'Source file deleted.',
      'source_file_is'       => 'Source file is',
@@ -379,42 +359,7 @@ switch($vpage)
      'you_sure_ch_md5'       => 'Are you sure want to change MD5 of these file(s)?',
      'cur_md5'       => 'Current MD5',
      'new_md5'       => 'New MD5',
-     'change_md5'		=> 'Change&nbsp;MD5',
-
-//Additional language for RAR/UNRAR
-     'rar_disappear'		=> 'Can not find "rar"<br />You may need to download it and extract "rar" to "/rar/" directory',
-     '_filearcv'		=> 'Files that will be archived:',
-     '_namearcv'      => 'Archive name:',
-     '_raropt'      => 'Options:',  
-     '_rarcpr'		=> 'Compression level:',
-     '_store'     => 'Store',
-     '_fastest'      =>	'Fastest',
-     '_fast'      =>	'Fast',
-     '_normal'      =>	'Normal',
-     '_good'      =>	'Good',
-     '_best'      =>	'Best',
-     '_volumes'     =>	'Create volumes',
-     '_delarcv'      => 'Delete files after archiving',
-     '_solarcv'      =>	'Create solid archive',
-     '_recarcv'      =>	'Create recovery record',
-     '_testarcv'      =>	'Test archive after compression',
-     '_pasarcv'       => 'Use password',
-     '_encarcv'	      =>	'Encrypt file names',
-     '_patharcv'      =>	'Set path inside archive',
-     '_rar'	      =>	'Rar',
-     '_crearcv'	      =>	'Creating archive: <b>%1$s</b>',
-     '_wait'      =>	'Waiting...',
-     '_backlist'      =>	'Go back to file list',
-     '_filefr'      =>	'<b>Files from %1$s</b>:',
-     '_unrar'	      =>	'Can not find "unrar"',
-     '_passlist'	      =>	'Pasword needed to list files:',
-     '_passext'	      =>	'Pasword needed to extract files:',
-     '_unrarerr'      =>	'Error:%1$s',
-     '_trylist'	      =>	'Try to list again',
-     '_unrarsel'	      =>	'Unrar selected',
-     '_extracting'	      =>	'<b>Extracting files from %1$s</b>:',
-     '_stat'      =>	'Status:',
-     '_separcv'	      =>	'Put each file on a separated archive',
+     'change_md5'       => 'Change&nbsp;MD5',
 
 /*
 <?echo $optxt['crc32_unmatch'];?>
@@ -429,7 +374,6 @@ switch($vpage)
 	case "audl":
 	$atxt = array(
   //audl.php
-
      'not_link'       => 'Not LINK',
      '_link' 	=> 'Link',
      '_links' 	=> 'Links',
@@ -443,14 +387,14 @@ switch($vpage)
      'add_link' 	=> 'Add links',
      'acc_imgshack' 	=> 'Use Imageshack Account',
      'error_interval' 	=> 'Errors in the interval of delay (from 1 to 3600 seconds)',
-     'plugin_megaupl' => 'Cookie Megaupload.com',	 
-     'plugin_hotfile' => 'Cookie Hotfile.com',	 
-     'plugin_rs' => 'Cookie Rapidshare.com',	 
-     '_user' => 'user=',
+	 'plugin_megaupl' => 'Cookie Megaupload.com',	 
+	 'plugin_hotfile' => 'Cookie Hotfile.com',	 
+	 'plugin_rs' => 'Cookie Rapidshare.com',	 
+	 '_user' => 'user=',
      '_auth' => 'auth=',
      '_enc' => 'enc=',	 
-     'reach_lim_audl' => 'Sorry you can not proceed more than %link% Links at once.',
-     'auto_check_link' => 'Auto Check Links',
+	 'reach_lim_audl' => 'Sorry you can not proceed more than %link% Links at once.',
+	 'auto_check_link' => 'Auto Check Links',
 
 	 'zzzzz' => ''
 	 
@@ -475,14 +419,11 @@ switch($vpage)
 	case "del":
   $dtxt = array(
   //del.php; 
-
      '_rsure'       => 'Are you sure want to',
      '_todelete'       => 'delete this file',
      '_sucesdelete'       => 'successfully deleted!',
-
      '_thx'       => 'Thank you.',
      '_inexist'       => 'File inexistence',
-
 
 	 'zzzzz' => ''
 	 

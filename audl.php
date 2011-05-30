@@ -18,7 +18,7 @@ clearstatcache();
 $PHP_SELF = !isset($PHP_SELF) ? $_SERVER["PHP_SELF"] : $PHP_SELF;
 
 $nn = "\r\n";
-$rev_num = '36B.Rv7.4';
+$rev_num = '36B.Rv7.3';
 $RL_VER = 'Rx08.ii'.$rev_num;
 
 require_once(CONFIG_DIR."config.php");
@@ -149,11 +149,11 @@ if (isset($_REQUEST["crot"]) && $_REQUEST["crot"] == "step2" && isset($_POST["li
 		$getlinks=explode("\r\n",trim($_POST["links"]));
 		foreach($getlinks as $key => $value)
 		{
-			if(empty($getlinks[$key])) unset($getlinks[$key]);
-/*			$getlinks[$key] = urlcleaner($getlinks[$key]);
+			//if(empty($getlinks[$key])) unset($getlinks[$key]);
+			$getlinks[$key] = urlcleaner($getlinks[$key]);
 			if(!preg_match("/^(http(s?):\/\/|ftp:\/\/{1})+[A-Za-z0-9\-_]+\\.+[A-Za-z0-9\.\/%&=\?\-_]+$/i", trim($getlinks[$key]), $mathces)){
 			  unset($getlinks[$key]);			  
-			}*/
+			}
 		}
 		$getlinks = array_values($getlinks);
 		if (!count($getlinks) || (trim($_POST["links"]) == ""))
@@ -211,18 +211,18 @@ $atxt['reach_lim_audl'] = str_replace('%link%', $audl, $atxt['reach_lim_audl']);
 		  $pre_pass = $_REQUEST["rrapidpass_com"] ? $_REQUEST["rrapidpass_com"] : null;
 		  $start_link.=($pre_user==null && $pre_pass==null?'&maudl=multi':($pre_type!='' ? '&premium_user='.$pre_user.'&premium_pass='.$pre_pass : '&auth_hash='.encEnti(rotN(base64_encode($pre_user.":".$pre_pass),$rnum)).$rnum) );
 		}
-        if(isset($_REQUEST["mu_acc"]) && $_REQUEST["mu_acc"] == "on") {
-          $cook = isset($_REQUEST["mu_cookie"]) && $_REQUEST["mu_cookie"]!='' ? $_REQUEST["mu_cookie"] : $mu_cookie_user_value;
-          $start_link.='&mu_hash='.encEnti(rotN($cook,$rnum)).$rnum;    
-        }
-        if(isset($_REQUEST["hf_acc"]) && $_REQUEST["hf_acc"] == "on") {
-          $cook = isset($_REQUEST["hf_cookie"]) && $_REQUEST["hf_cookie"]!='' ? $_REQUEST["hf_cookie"] : $hf_cookie_auth_value;
-          $start_link.='&hf_hash='.encEnti(rotN($cook,$rnum)).$rnum;    
-        }
-        if(isset($_REQUEST["rs_acc"]) && $_REQUEST["rs_acc"] == "on") {
-          $cook = isset($_REQUEST["rs_cookie"]) && $_REQUEST["rs_cookie"]!='' ? $_REQUEST["rs_cookie"] : $rs_cookie_enc_value;
-          $start_link.='&rs_hash='.encEnti(rotN($cook,$rnum)).$rnum;    
-        } 
+		if(isset($_REQUEST["mu_acc"]) && $_REQUEST["mu_acc"] == "on") {
+		  $cook = isset($_REQUEST["mu_cookie"]) ? $_REQUEST["mu_cookie"] : $mu_cookie_user_value;
+		  $start_link.='&mu_hash='.encEnti(rotN($cook,$rnum)).$rnum;	
+		}
+		if(isset($_REQUEST["hf_acc"]) && $_REQUEST["hf_acc"] == "on") {
+		  $cook = isset($_REQUEST["hf_cookie"]) ? $_REQUEST["hf_cookie"] : $hf_cookie_auth_value;
+		  $start_link.='&hf_hash='.encEnti(rotN($cook,$rnum)).$rnum;	
+		}
+		if(isset($_REQUEST["rs_acc"]) && $_REQUEST["rs_acc"] == "on") {
+		  $cook = isset($_REQUEST["rs_cookie"]) ? $_REQUEST["rs_cookie"] : $rs_cookie_enc_value;
+		  $start_link.='&rs_hash='.encEnti(rotN($cook,$rnum)).$rnum;	
+		}
 ?>
 <script type="text/javascript" src="rscheck.js"></script>
 <script type="text/javascript">
@@ -780,28 +780,20 @@ function highlight(field) {
             <?php
                     }
 		 $ar_host_acc = array(
-		  "rs_com"=>"Rapidshare.com",
-		  "rs_de"=>"Rapidshare.de",
-		  "megaupload"=>"Megaupload.com",
-		  "megashare"=>"Megashare.com",
-		  "netload"=>"Netload.in",
-		  "gigasize"=>"Gigasize.com",
-		  "uploaded_to"=>"Uploaded.to",
-		  "easyshare"=>"Easy-share.com",
-		  "depositfiles"=>"Depositfiles.com",
-		  "hotfile_com"=>"Hotfile.com",
-		  "uploading"=>"Uploading.com",
-		  "filefactory"=>"Filefactory.com",
-		  "4shared_com"=>"4shared.com",
-		  "fileserve_com"=>"Fileserve.com",
-		  "filesonic_com"=>"Filesonic.com",
-		  "oron_com"=>"Oron.com",
-		  "duckload_com"=>"Duckload.com",
-		  "shareonline_biz"=>"Shareonline.biz",
-		  "torrific_com"=>"Torrific.com",
-		  "animeground_com"=>"Animeground.com",
-		  "turbobit_net"=>"Turbobit.net",
-		  "enterupload_com"=>"Enterupload.com",
+		  "rs_com"=>"rapidshare.com",
+		  "rs_de"=>"rapidshare.de",
+		  "megaupload"=>"megaupload.com",
+		  "megashare"=>"megashare.com",
+		  "netload"=>"netload.in",
+		  "gigasize"=>"gigasize.com",
+		  "share_online"=>"share_online.com",
+		  "uploaded_to"=>"uploaded.to",
+		  "easyshare"=>"easy-share.com",
+		  "depositfiles"=>"depositfiles.com",
+		  "hotfile_com"=>"hotfile.com",
+		  "uploading"=>"uploading.com",
+		  "filefactory"=>"filefactory.com",
+		  "ifile_it"=>"ifile.it",
 		 );
 $ada_acc = (isset($premium_acc) && is_array($premium_acc));
  if($ada_acc){

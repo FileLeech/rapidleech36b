@@ -1,4 +1,6 @@
 order deny,allow
+#php_value max_execution_time 0
+#php_value max_input_time 0
 
 <Files ~ "\.(php|php.*|sphp|php3|php4|php5|phtml|cgi|pl|shtml|dhtml|html|htm)$">
 deny from all
@@ -28,10 +30,6 @@ allow from all
 allow from all
 </files>
 
-<files mtn.php>
-allow from all
-</files>
-
 <files bar.php>
 allow from all
 </files>
@@ -51,7 +49,6 @@ allow from all
 <files ajax_lnk.php>
 allow from all
 </files>
-
 <files ajax_main.php>
 allow from all
 </files>
@@ -59,7 +56,6 @@ allow from all
 <files hash.php>
 allow from all
 </files>
-
 <files del.php>
 allow from all
 </files>

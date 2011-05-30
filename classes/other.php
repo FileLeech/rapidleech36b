@@ -1283,7 +1283,7 @@ function purge_files_ip($delay)
 		foreach ($files_lst AS $files_line)
 		{
 			$files_data = unserialize(trim($files_line));
-			$filedate = @filemtime($files_data["name"]);
+			$filedate = @filectime($files_data["name"]);
 			$unix_zone_filedate = ( $filedate - date("Z") + (3600 * $timezone));
 			if ($unix_now - $unix_zone_filedate >= ($delay*3600))
 			{
@@ -1517,68 +1517,4 @@ function getServerPlatf(){
 	return $server;
 }
 
-function encrypt($string){
-	global $secretkey;
-	if (empty($string)) {
-		return '';
-	}
-	if (!$secretkey) {
-		return html_error('Value for $secretkey is empty, please create a random one (56 chars max) in your config!', 0);
-	}
-	require_once 'class.pcrypt.php';
-	/*
-	MODE: MODE_ECB or MODE_CBC
-	ALGO: BLOWFISH
-	KEY:  Your secret key :) (max lenght: 56)
-	*/
-	$crypt = new pcrypt(MODE_CBC, "BLOWFISH", "$secretkey");
-
-	// Return encrypted string
-	return $crypt->encrypt($string);
-}
-
-function decrypt($string){
-	global $secretkey;
-	if (empty($string)) {
-		return '';
-	}
-	if (!$secretkey) {
-		return html_error('Value for $secretkey is empty, please create a random one (56 chars max) in your config!', 0);
-	}
-	require_once 'class.pcrypt.php';
-	/*
-	MODE: MODE_ECB or MODE_CBC
-	ALGO: BLOWFISH
-	KEY:  Your secret key :) (max lenght: 56)
-	*/
-	$crypt = new pcrypt(MODE_CBC, "BLOWFISH", "$secretkey");
-
-	// Return decrypted string
-	return $crypt->decrypt($string);
-}
-
-function vidlist($dir,$exts) 
-{
-	$results = array();
-	$handler = opendir($dir);
-	while ($file = readdir($handler)) 
-	{
-		if (strrchr($file,'.')!="")
-		{
-			$ext=strtolower(strrchr($file,'.'));
-		}
-		else
-		{
-			$ext = '';
-		}
-		if ($file != '.' && $file != '..' && in_array($ext,$GLOBALS["exts"]))
-		{
-			$results[] = $file;
-		}
-	}
-	closedir($handler);
-	sort($results);
-	return $results;
-}
-//Added default encrypt/decrypt function by Th3-882
 ?>

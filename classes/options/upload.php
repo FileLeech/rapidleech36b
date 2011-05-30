@@ -50,19 +50,18 @@ function upload() {
 			</script>
 			<table align="center">
 			<?php
-			//<input type="hidden" name="filename" value='. base64_encode(($file["name"])).'>
 			for($i = 0; $i < count($_GET["files"]); $i++)
 				{
 					$file = $list[($_GET["files"][$i])];
 					$tid=md5(time()."_file".$_GET["files"][$i]);
 			?>                                      
-			<tr><form action="upload.php" method="get" target="pop_<?php echo $tid ?>" onSubmit="return openwinup('pop_<?php echo $tid ?>');">
+			<tr><form action=upload.php method=get target=<?php echo $tid ?> onSubmit="return openwinup('<?php echo $tid ?>');">
 			<td><b><?php echo htmlspecialchars(basename($file["name"]))."</b>  , ". $file["size"] ?></td>
-			<td><select name="uploaded" id="d_<?php echo $tid; ?>"></select><script>fill_option('d_<?php echo $tid; ?>');</script></td>
-			<td><input type="submit" value="Upload"></td>
+			<td><select name=uploaded id=d_<?php echo $tid; ?>></select><script>fill_option('d_<?php echo $tid; ?>');</script></td>
+			<td><input type=submit value=Upload></td>
 			</tr>
 			<tr><td colspan="3" align="center">
-			
+			<input type="hidden" name="filename" value='<?php echo base64_encode(($file["name"])); ?>'>
 			<input type="hidden" name="filedate" value='<?php echo $file["date"]; ?>'>
 			</td>
 			</form></tr>

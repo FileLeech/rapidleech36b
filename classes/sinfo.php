@@ -28,45 +28,6 @@ function goforit(){
 <tr><td>
 
 <?php
-/*
-if ($servername == ""){  $theservername = $_SERVER['SERVER_NAME']; }
-else{  $theservername = $servername;}
-
-if ($customos == ""){
-     //$osname = checkos();
-}
-else{
-   $os = "nocpu";
-   $osname = $customos;
-}
-
-if (php_sapi_name() == "apache2handler"){
-    $httpapp = "Apache";
-}else{
-    $httpapp = php_sapi_name();
-}
-
-function checkos(){
-    if (substr(PHP_OS, 0, 3) == "WIN")
-    {   $osType = winosname();
-        $os = "windows";
-    } elseif (PHP_OS == "FreeBSD")
-    {   $os = "nocpu";
-        $osType = "FreeBSD";
-        $osbuild = php_uname('r');
-    } elseif (PHP_OS == "Darwin")
-    {   $os = "nocpu";
-        $osType = "Apple OS X";
-    } elseif (PHP_OS == "Linux")
-    {   $os = "linux";
-        $osType = "Linux";
-    } else {
-		$os = "nocpu";
-        $osType = "Unknown OS";
-    }
-    return $osType;
-}
-*/
 function sload_winosname() {
 	$wUnameB = php_uname ( "v" );
 	$wUnameBM = php_uname ( "r" );
@@ -89,26 +50,12 @@ function sload_winosname() {
 	return $wVer;
 }
 
-/*
-if (PHP_OS == "WINNT")
-{  $os = "windows";
-} elseif (PHP_OS == "Linux")
-{  $os = "linux";
-}
-else
-{  $os = "nocpu";
-   $osbuild = php_uname('r');
-}
-*/
 
 {
 	 global $timezone;
-	 //if(!isset($timezone)) $timezone = 7;
 	 $zone = 3600 * $timezone;
 	 $unix_now = strtotime(date("d M Y H:i:s", time() - date("Z") + $zone));
 	 $thetimeis = getdate($unix_now);
-	 //$thetimeis = getdate(date("d-m-Y H:i:s", $unix_now));
-     //$thetimeis = getdate(time()); 
      $thehour = $thetimeis['hours']; 
      $theminute = $thetimeis['minutes']; 
      $thesecond = $thetimeis['seconds']; 
@@ -121,7 +68,7 @@ else
 
  //if ($os == "windows"){
  if ($server["is_windows"]){
-	if($cpuUsageNFO){
+	if($cpuUsageNFO && isset($nocpus) && isset($loadcpu)){
 	 if($nocpus==0 || $loadcpu==''){
 	  $cpulast=0;
 	  $wmi = new COM("Winmgmts://");
@@ -142,6 +89,7 @@ else
  
  //elseif ($os == "linux"){
  elseif ($server["is_linux"]){
+   if($cpuUsageNFO && isset($nocpus) && isset($loadcpu)){
      function getStat($_statPath)
      {
          if (trim($_statPath) == '')
@@ -170,7 +118,8 @@ else
 
      function getCpuUsage($_statPath = '/proc/stat')
      {
-		$msge = "<div><small>getCpuUsage(): couldn't access STAT path or STAT file invalid</small></div>\n";
+		$msge = "<div id='getCpuUsage'><small class='r'>getCpuUsage():<br>couldn't access STAT path</small></div>
+<script type='text/javascript'>function killElement(){ document.getElementById('getCpuUsage').style.display='none'; } setTimeout('killElement()', 5000);</script>";
         $time1 = getStat($_statPath) or false;
         sleep(1);
         $time2 = getStat($_statPath) or false;
@@ -197,7 +146,7 @@ else
      } //--end getCpuUsage
 	
 
-	if($cpuUsageNFO){	
+	{
 	  $cpu = getCpuUsage();
 	  if($cpu!==false){
 		  echo '<div style="padding-top:3px;"></div><small><span class="c">';		  
@@ -220,6 +169,7 @@ else
 	  }
 	 
 	} //--end linux cpuUsageNFO
+   } //--end syarat
  } //--end linux os
 
  

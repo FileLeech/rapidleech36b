@@ -144,7 +144,6 @@ if($navi_left["showaudl"]){
 }
 if($navi_left["showauul"]){
 ?>
-
 <a href="auul.php" target="_blank" title="<?php echo "AutoUpload";?>"><div id="left_auul"></div></a>
 <?php
 }
@@ -153,13 +152,7 @@ if($navi_left["showlynx"]){
 <a href="lynx.php" target="_blank"><img src="<?php echo IMAGE_DIR.'listedfile.gif'?>" alt="List Files"></a>
 <?php
 }
-if($navi_left["showmtn"] && file_exists("mtn.php")){
-?><br />
-<a href="mtn.php" target="_blank"><img src="<?php echo IMAGE_DIR.'mtn.png'?>" alt="Movie Thumbnailer"></a>
-<?php
-}
 ?>
-
 
 </td>
 </tr></table>
@@ -580,8 +573,6 @@ if($list)
   (!$disable_to["act_pack"]&&(@file_exists(CLASS_DIR."pear.php")||@file_exists(CLASS_DIR."tar.php")) ? "<option value=\"pack\">".$txt['act_pack']."</option>$nn" : "").
   (!$disable_to["act_zip"]&&(@file_exists(CLASS_DIR."pclzip.php"))?"<option value=\"zip\">".$txt['act_zip']."</option>$nn" : "").
   (!$disable_to["act_unzip"]&&(@file_exists(CLASS_DIR."unzip.php"))?"<option value=\"unzip\">".$txt['act_unzip']."</option>$nn" : "").
-  (!$disable_to["act_rar"]&&(!$server["is_windows"] && @file_exists(CLASS_DIR."rar.php"))?"<option value=\"rar\">".$txt['act_rar']."</option>$nn" : "").
-  (!$disable_to["act_unrar"]&&(@file_exists(ROOT_DIR.'/rar/rar')||@file_exists(ROOT_DIR.'/rar/unrar'))?"<option value=]\"unrar\">".$txt['act_unrar']."</option>$nn" : "").
   (!$disable_to["act_rename"] ? "<option value=\"rename\">".$txt['act_rename']."</option>$nn" : "").
   (!$disable_to["act_mrename"] ? "<option value=\"mrename\">".$txt['act_mrename']."</option>$nn" : "").
   (!$disable_to["act_delete"] ? "<option value=\"delete\">".$txt['act_delete']."</option>$nn" : "").
@@ -1004,13 +995,3 @@ echo "<div style='padding-left:5px;'><small>{$server['property']}<br>Page Load: 
 <?php } ?>
 </body>
 </html>
-<?php
-if (($_GET["act"] == 'unrar_go') && !$disable_to["act_unrar"]) {
-  require_once(CLASS_DIR."options/unrar.php");
-  unrar_go_go();
-}
-elseif (($_GET["act"] == 'rar_go') && !$disable_to["act_rar"]) {
-  require_once(CLASS_DIR."options/rar.php");
-  rar_go_go();
-}
-?>

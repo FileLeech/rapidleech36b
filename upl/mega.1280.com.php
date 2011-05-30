@@ -22,7 +22,7 @@
 <table width=600 align=center>
 </td></tr>
 <tr><td align=center>
-<?
+<?php
 			$upfiles=upfile($url["host"],$url["port"] ? $url["port"] : 80, $url["path"].($url["query"] ? "?".$url["query"] : ""),$ref, 0, $post, $lfile, $lname, "fileupload");
 ?>
 <script>document.getElementById('progressblock').style.display='none';</script>

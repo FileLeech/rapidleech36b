@@ -5,7 +5,6 @@ if (!defined('RAPIDLEECH'))
 //for security reason we add this value so you just can set manualy directly to this file
 //whether you want disable/enable advanced editor in xpanel.
 $disableadvanceeditor = false;
-$xpanel_filename = 'xpanel.php'; // u need to allow this file in your htaccess if needed
 
 //set index filename, needed in audl incase you have a different name instead index.php
 $index_file = 'index.php';
@@ -33,6 +32,7 @@ $premium_acc["rs_com"] = array(
 //$premium_acc["megashare"] = array('user' => '', 'pass' => '');
 //$premium_acc["netload"] = array('user' => '', 'pass' => '');
 //$premium_acc["gigasize"] = array('user' => '', 'pass' => '');
+//$premium_acc["share_online"] = array('user' => '', 'pass' => '');
 //$premium_acc["vBulletin_acc"] = array('user' => '', 'pass' => '');
 //$premium_acc["uploaded_to"] = array('user' => '', 'pass' => '');
 //$premium_acc["easyshare"] = array('user' => '', 'pass' => '');
@@ -40,29 +40,14 @@ $premium_acc["rs_com"] = array(
 //$premium_acc["hotfile_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["uploading"] = array('user' => '', 'pass' => '');
 //$premium_acc["filefactory"] = array('user' => '', 'pass' => '');
-//$premium_acc["4shared_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["ifile_it"] = array('user' => '', 'pass' => '');
 //$premium_acc["sendspace"] = array('user' => '', 'pass' => '');
-//$premium_acc["fileserve_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["filesonic_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["oron_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["duckload_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["shareonline_biz"] = array('user' => '', 'pass' => '');
-//$premium_acc["torrific_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["animeground_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["turbobit_net"] = array('user' => '', 'pass' => '');
-//$premium_acc["enterupload_com"] = array('user' => '', 'pass' => '');
 
 #Auto Download Premium Account #
 //$premium_acc_audl = false;
 
 #Megaupload cookie #
 //$mu_cookie_user_value = '';
-
-#Hotfile cookie #
-//$hf_cookie_auth_value = '';
-
-#Rapidshare cookie #
-//$rs_cookie_enc_value = '';
 
 ###Imageshack Torrent Account ###
 //$imageshack_acc = array('user' => '', 'pass' => '');
@@ -77,13 +62,12 @@ $premium_acc["rs_com"] = array(
 //$upload_acc["deposit_up"] = array('user' => '', 'pass' => '');
 //$upload_acc["uploading_up"] = array('user' => '', 'pass' => '');
 
-
 #-LIMITATION-CONFIG
 $limitbyip = false; //limit RL by IP; dont forget chmod 777 to folder tmp
 $maximum_free_downloads = 5; //how many times it'll granted?
 $delay_per_ip = 12; //(in hour) recycle allowable IP
 
-$auto_del_time = 0; //(in hour) delete leeched file
+$auto_del_time = 12; //(in hour) delete leeched file
 $limitsize = 0; //(in MB) limit upper-bound of filesize
 $lowlimitsize = 0; //(in MB) limit lower-bound of filesize
 
@@ -93,16 +77,16 @@ $downloadLimitbyip = false; //limit RL by IP
 $downloadsPerIP = 2; //how many times it'll granted?
 $downloadDelayPerIP = 3600; //(in second)
 
-$audl = 5; //how many link allow to auto-download work ?
+$audl = 0; //how many link allow to auto-download work ?
 $auul = 5; //how many file allow to auto-upload work ?
 
 $limitbytraffic = false; //limit RL by Traffic Flow
 $max_trafic = 81920; // (in MB). eg: 1 GB = 1 * (1024) MB
 $date_trafic = '14/04/2020'; // (d-day traffic quota expired). date in dd/mm/YYYY 
-$day_reset_trafic = 1; // auto reset traffic. delay in days; 
+$day_reset_trafic = 0; // auto reset traffic. delay in days; 
 
 $limited_edition = false; // limit authorization RL by ip address (banned and allowd list) 
-$list_allow_ip = '127.0.0.1'; // White list ip. eg. 111.111.111.111, 255.*.*.*  //--never blank this shit if you set $limited_edition = true 
+$list_allow_ip = ''; // White list ip. eg. 111.111.111.111, 255.*.*.*  //--never blank this shit if you set $limited_edition = true 
 $list_baned_ip = ''; // blacklist ip, u think so?!. eg. 111.111.111.111, 222.*.*.*, 212.212.212.* 
 
 $limited_area = false; // limit authorization RL by ID Country
@@ -114,7 +98,7 @@ $workstart = '00:00:00'; // Your RL start to work
 $workend = '23:59:00'; // Your RL end to work
 
 $limit_cpuload = false; // limit cpu load and task server job
-  $ServerLoadAllowed = 0; // Maximum server load allowed; Disable = 0
+  $ServerLoadAllowed = 50; // Maximum server load allowed; Disable = 0
   $CpuLoadFormat = 'load'; // Value = 'load' for load format; 'percent' for percent format
   ((!function_exists('exec')&&!function_exists('shell_exec'))?$CpuLoadFormat = 'percent':null); //CpuLoadFormat must be in percent mode if required functions is not exists
   $passthru_allowed = (!function_exists('passthru')?false:true) OR FALSE; // Does your host allows passthru?
@@ -142,8 +126,6 @@ $disable_to = array( // disabled action files properties
  'act_pack' => false,
  'act_zip' => false,
  'act_unzip' => false,
- 'act_rar' => false,
- 'act_unrar' => false,
  'act_rename' => false,
  'act_mrename' => false,
  'act_delete' => false,
@@ -186,35 +168,13 @@ $navi_left = array(
  'showaudl' => true,
  'showauul' => true,
  'showlynx' => true,
- 'showmtn' => false,
  'server_info' => true,
 );
-
-###-MOVIE-THUMBNAILER-CONFIG
-$col_row = array(
-'mtn_colums' => 3,
-'mtn_rows' => 3,
-);
-$mtn_text = '';
-$bgcolor = '3A9191';
-$mtn_quality = 80;
-$mtn_edge = 0;
-$video_option = array (
-'enable' => false,
-'txtcolor' => 'FFFFFF',
-'txtfont' => 'Blue.ttf',
-'txtsize' => 10,
-);
-$time = array(
-'enable' => false,
-'tcolor' => 'FFFFFF',
-);
-
-
+ 
  $forbid_audl = false;
  $forbid_auul = false;
  $forbid_lynx = false;
- $cpuUsageNFO = true;  // require server_info = true
+ $cpuUsageNFO = false;
 $OnlineVisitor = true; //Show Online Visitor
 
 $premix_status = true; // enable acc premix status
@@ -232,10 +192,6 @@ $showautoclose= true;//autoclose popup when leeching in audl
 $timeautoclose= 250;
 $autochecklink = true; // Auto check submited link in audl
 
-$mip_enabled= false; //If you need to disable multiple ip support, set to false
-$mip_arotate= true; //Auto change to next ip after start transload process
-
-$secretkey = '';//Place your Secret Key
 $iframealocate = 10;//how many iframe to allocate in audl for manual method.
 $pointboost = 0;//boost your RS-Point with this feature!!
 $autosubmit = true;

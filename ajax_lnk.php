@@ -4,8 +4,6 @@ define('IMAGE_DIR', 'misc/');
 define('CLASS_DIR', 'classes/');
 require_once(CLASS_DIR."other.php");
 
-$isDEBUG = 0;
-
 // Initiate timer counter
   error_reporting(1);
   
@@ -41,37 +39,20 @@ $isDEBUG = 0;
   } //--end curl
 
   function check($link, $x, $regex, $szpatern='', $pattern='', $replace='') {
-		global $isDEBUG;
-
 		if(!empty($pattern)) 
 		{	$link = preg_replace($pattern, $replace, $link);	}
 		$page = curl($link);
-		// treat for rapidshare
-		if(preg_match("/https?:\/\/rapidshare\.com\/(?:(?:files\/(\d+))|(?:\W{2}download\|[^\|]+.(\d+)\|([^\|]+)))/",$link,$match) ){
-		   $files = ($match[1] ? $match[1] : $match[2]);
-		   $filename = (isset($match[3]) ? $match[3] : preg_replace("/\.html$/","",basename($link)) );
-		   $plink = "http://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=checkfiles&files=".$files."&filenames=".$filename."&cbid=0";
-		   $page = curl($plink);		   
-		   if(preg_match("/^(\d+),([^,]+),([^,]+),/",$page,$match)){
-		     $parts = explode(",",$page);
-			 $fsize = array(0,0);
-			 $fsize[1] = bytesToKbOrMbOrGb($parts[2]);
-		   }
-		   $page = "";
-		
-		}elseif(!empty($szpatern)){
-		  // already containing / and /
-		  preg_match("{$szpatern}", $page, $fsize);
-		  if(!$fsize){$fsize='';}
-		}
-		
-		if($isDEBUG) {
-		  echo htmlentities($link . "\n" .$plink. "\n" .$page ."\n" );
-		  exit;
-		}
 		$link = htmlentities($link, ENT_QUOTES);
 		flush();
 		ob_flush();
+		
+		
+		//$fsize=GetBetween($page,$pattern);
+		if(!empty($szpatern)){
+		  // already containing / and /
+		 preg_match("{$szpatern}", $page, $fsize);
+		 if(!$fsize){$fsize='';}
+		}
 		
 
 		$picEror = "<img width='13' alt='error link' src='".IMAGE_DIR."chk_error.png'>";
@@ -89,8 +70,6 @@ $isDEBUG = 0;
 			echo "<span class=\"g\">$picGood&nbsp;(".trim($fsize[1]).")</span>\n";  
 		} elseif(!$_POST['d'] && preg_match("/The file you are trying to access is temporarily unavailable./i", $page)) {
 			echo "<span class=\"y\">$picEror</span>\n";
-		} elseif(count($fsize) > 0) {
-			echo "<span class=\"g\">".$picGood."&nbsp;(".trim($fsize[1]).")</span>\n";  
 		} else {
 			echo "<span class=\"r\">$picEror</span>\n";
 		}
@@ -205,12 +184,12 @@ function getParam($key, $url){
 		$sites = 
 		array(
 			 array("rapidshare\.com\/files\/", 'class="downloadlink"', "/>\|\s(.*)</"),
-			 array("rapidshare\.com\/#", '', ""),
-			 array("megaupload\.com\/\?d=", "down_txt_pad1", '/<strong>File\s*size\:[^>]+.\s*([^<]+)/'),
+			 array("megaupload\.com/([a-z]{2}\/)?\?d=", "(Filename:)|(All download slots assigned to your country)", '/File size:<\/font>\s<font style="font-family:arial;\scolor:#000000; font-size:13px;">(.*)</'),
 			 array("megashares\.com\/\?d01=", "Click here to download", "/size:\s(.*)</"),
+			 //array("hotfile\.com\/dl\/", "Downloading", '/class="size">\|\s(.*)<\/span>/'),
 			 array("hotfile\.com\/dl\/", "Downloading", '/Downloading:(?:[^\|]+)\|<\/span>\s<strong>(.*)<\/strong/'),
 			array("2shared\.com\/file\/", "Download", '/File\ssize:<\/span>\s(.*)\s&nbsp;/'),
-			 array("4shared\.com\/file\/", "fileNameText", '/(?:Size|Ukuran|Saiz|Tamanho|Tamaño|Taille|Rozmiar|Boyut|ขนาด|Dimensione|サイズ|크기|Kích\scỡ|Размер)(?:\s*|):(?:\s*|)<\/b>.+(?:\r\n*|\r|\n|).+finforight(?:[^>])>(.*)</'),
+			 array("4shared\.com\/file\/", "Download Now", '/Size:</b>.*\">(.*)/s'),
 			 array("filefactory\.com\/file\/", "(download link)|(Please try again later)", '/\t<span>(.*)\sfile/'),
 			array("rapidshare\.de\/files\/", "You want to download"),
 			 array("mediafire\.com\/\?", "download_file_title", '/sharedtabsfileinfo1-fs.+?([0-9.]+\s\w+)">/'),
@@ -228,7 +207,7 @@ function getParam($key, $url){
 			 array("(d\.turboupload\.com\/)|(turboupload.com\/download\/)", "(Please wait while we prepare your file.)|(You have requested the file)", '/You\shave\srequested\s.*>\s\((.*)\)/'),
 			array("files\.to\/get\/", "You requested the following file"),
 			array("gigasize\.com\/get\.php\?d=", "Downloaded", '/Size:\s<span>(.*)</'),
-			 array("ziddu\.com\/", "Download Link",'/File\sSize\s:.*normal12black">([\d\.\s]+[\w]+)\s</s'),
+			 array("ziddu\.com\/", "Download Link",'/File\sSize\s:.*normal12black">(.*)\s</s'),
 			 array("zshare\.net\/(download|audio|video)\/", "Downloads:", '/File\sSize:.*">(.*)</'),
 			 array("uploaded\.to\/(\?id=|file\/)", "Filename:", '/Filesize:.*<td>[\s](.*)\t<\//'),
 			array("filefront\.com\/", "http://static4.filefront.com/ffv6/graphics/b_download_still.gif"),
@@ -254,7 +233,7 @@ function getParam($key, $url){
   array("getupload\.org\/en\/file\/", "File name"),
   array("uploadbox.com\/files\/", "File name"),
   array("vip-file\.com\/download\/", "File name"),
-  array("enterupload\.com\/", "file_download", '/>File\s*size\:[^\d]+([^<]+)/'),
+  array("enterupload\.com\/", "Download File"),
   array("share-now\.net\/files\/", "Download Now"),
   array("upit\.to\/file:", "Download"),                                
   array("netgull\.com\/?\?d=", "File name"),
@@ -263,7 +242,7 @@ function getParam($key, $url){
   array("sharebee\.com\/", "Filename"),
   array("sharecash\.org\/(download\.php)?\?id=", "File Info"),
 			array("speedshare\.org\/(download\.php)?\?id=", "Sie haben"),
-			array("letitbit\.net\/download\/", "File::", '/file\:\:(?:[^\s]+)(?:[\s|])(.+)\b<\//'),
+			array("letitbit\.net\/download\/", "File::"),
 			array("saveqube\.com\/getfile\/", "File size"),
 			array("friendlyfiles\.net\/download\/", "Download a file"),
 			array("qubefiles\.com\/?\?file=\/getfile\/", "File size"),
@@ -280,14 +259,7 @@ function getParam($key, $url){
 			array("storage\.to\/get\/", "Downloading:", '/Downloading:(?:[^\(]+)\((.*)\)/'),
 			array("zippyshare\.com\/v\/", "You have requested", '/Size:(?:[^>]+)>(.*)<\/font/'),
 			array("freakshare\.net\/files\/", "box_heading", '/box_heading.+\s-\s(.*)<\/h1/'),
-			
-			array("filesonic\.com\/file\/", "fileInfo", '/<span\s*class=[\'"][^\'"]+.>([^<]+)./'),
-			array("fileserve\.com\/file\/", "addthis_button", '/><strong>([^<]+).[^>]+.\s*\|\s?Upl/'),
-			array("oron\.com\/", "fname", '/File\ssize\:\s*([^<]+)/'),
-			array("shareflare\.net\/download\/", "file-desc", '/Size\:\s*([^<]+)/'),
-			array("bitshare\.com\/", "downloadbutton", '/<h1>[^-]+.\s*([^<]+)/'),
-			
-			
+			//<h1 class="box_heading" style="text-align:center;">
 			);
 		$LnkOccur = false;
 		foreach($sites as $site) {

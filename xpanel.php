@@ -123,6 +123,7 @@ $ar_chkbox_acc = array(
  'megashare_premix',
  'netload_premix',
  'gigasize_premix', // index = 5
+ 'share_online_premix', 
  'vBulletin_acc_premix',
  'uploaded_to_premix',
  'easyshare_premix',
@@ -130,18 +131,8 @@ $ar_chkbox_acc = array(
  'hotfile_com_premix', 
  'uploading_premix',
  'filefactory_premix',
- '4shared_premix',
+ 'ifile_it_premix',
  'sendspace_premix',
- 'fileserve_com_premix',
- 'filesonic_com_premix',
- 'oron_com_premix',
- 'duckload_com_premix',
- 'shareonline_biz_premix',
- 'torrific_com_premix',
- 'animeground_com_premix',
- 'turbobit_premix',
- 'enterupload_premix',
-
 
 );
 
@@ -150,14 +141,10 @@ $ar_chkbox_up_acc = array(
  'rs_com_coll_upload',
  'rs_com_pre_upload',
  'mu_pre_upload',
- 'mu_mem_upload',
  'hf_com_upload',
  'easysh_mem_upload',
  'deposit_up_upload',
- 'uploading_up_upload',
- 'fileserve_pre_upload',
- 'fileserve_mem_upload',
- 'ul_up_upload',
+ 'uploading_up_upload'
 );
 
 
@@ -579,25 +566,15 @@ if(isset($_POST['submit'])){
 		fieldfilter($ar_chkbox_acc[3],'usrmega','passmega',$badpetik); 
 		fieldfilter($ar_chkbox_acc[4],'usrnet','passnet',$badpetik); 
 		fieldfilter($ar_chkbox_acc[5],'usrgz','passgz',$badpetik); 
-		fieldfilter($ar_chkbox_acc[6],'usrvbul','passvbul',$badpetik); 
-		fieldfilter($ar_chkbox_acc[7],'usrupto','passupto',$badpetik); 
-		fieldfilter($ar_chkbox_acc[8],'usreasy','passeasy',$badpetik); 
-		fieldfilter($ar_chkbox_acc[9],'usrdepos','passdepos',$badpetik); 
-		fieldfilter($ar_chkbox_acc[10],'usrhotfile','passhotfile',$badpetik);
-		fieldfilter($ar_chkbox_acc[11],'usruploading','passuploading',$badpetik); 
-		fieldfilter($ar_chkbox_acc[12],'usrfilefactory','passfilefactory',$badpetik); 
-		fieldfilter($ar_chkbox_acc[13],'usr4shared','pass4shared',$badpetik); 
-		fieldfilter($ar_chkbox_acc[14],'usrsendspace','passsendspace',$badpetik);
-		fieldfilter($ar_chkbox_acc[15],'usrfileserve','passfileserve',$badpetik);
-		fieldfilter($ar_chkbox_acc[16],'usrfilesonic','passfilesonic',$badpetik);
-		fieldfilter($ar_chkbox_acc[17],'usroron','passoron',$badpetik);
-		fieldfilter($ar_chkbox_acc[18],'usrduckload','passduckload',$badpetik);
-		fieldfilter($ar_chkbox_acc[19],'usrshareonline','passshareonline',$badpetik);
-		fieldfilter($ar_chkbox_acc[20],'usrtorrific','passtorrific',$badpetik);
-		fieldfilter($ar_chkbox_acc[21],'usranimeground','passanimeground',$badpetik);
-		fieldfilter($ar_chkbox_acc[22],'usrturbobit','passturbobit',$badpetik);
-		fieldfilter($ar_chkbox_acc[23],'usrenterupload','passenterupload',$badpetik);
-
+		fieldfilter($ar_chkbox_acc[6],'usrsho','passsho',$badpetik); 
+		fieldfilter($ar_chkbox_acc[7],'usrvbul','passvbul',$badpetik); 
+		fieldfilter($ar_chkbox_acc[8],'usrupto','passupto',$badpetik); 
+		fieldfilter($ar_chkbox_acc[9],'usreasy','passeasy',$badpetik); 
+		fieldfilter($ar_chkbox_acc[10],'usrdepos','passdepos',$badpetik); 
+		fieldfilter($ar_chkbox_acc[11],'usrhotfile','passhotfile',$badpetik);
+		fieldfilter($ar_chkbox_acc[12],'usruploading','passuploading',$badpetik); 
+		fieldfilter($ar_chkbox_acc[13],'usrfilefactory','passfilefactory',$badpetik); 
+		fieldfilter($ar_chkbox_acc[14],'usrifile','passifile',$badpetik); 
 
 	} //-- end $_POST['usepcc']
 	else{
@@ -617,14 +594,10 @@ if(isset($_POST['submit'])){
 		fieldfilter($ar_chkbox_up_acc[1],'usrrs_com_coll_up','passrs_com_coll_up',$badpetik,"acc_UL");
 		fieldfilter($ar_chkbox_up_acc[2],'usrrs_com_pre_up','passusrrs_com_pre_up',$badpetik,"acc_UL");
 		fieldfilter($ar_chkbox_up_acc[3],'usrmu_pre_up','passmu_pre_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[4],'usrmu_mem_up','passmu_mem_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[5],'usrhf_com_up','passhf_com_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[6],'usreasysh_mem_up','passeasysh_mem_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[7],'usrdeposit_up_up','passdeposit_up_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[8],'usruploading_up_up','passuploading_up_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[9],'usrfileserve_pre_up','passfileserve_pre_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[10],'usrfileserve_mem_up','passfileserve_mem_up',$badpetik,"acc_UL");
-		fieldfilter($ar_chkbox_up_acc[11],'usrul_up_up','passul_up_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[4],'usrhf_com_up','passhf_com_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[5],'usreasysh_mem_up','passeasysh_mem_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[6],'usrdeposit_up_up','passdeposit_up_up',$badpetik,"acc_UL");
+		fieldfilter($ar_chkbox_up_acc[7],'usruploading_up_up','passuploading_up_up',$badpetik,"acc_UL");
 	}
 	
 	
@@ -655,10 +628,7 @@ if(isset($_POST['submit'])){
 	$_POST['auul'] = filterNumericFld('auul', 'Maximum Links Auul', 0);
 	$_POST['dl_limit_max'] = filterNumericFld('dl_limit_max', 'Max Download per IP', 5);
 	$_POST['dl_per_ip'] = filterNumericFld('dl_per_ip', 'Delay Download per IP', 3600);
-	$_POST['mtn_cs'] = filterNumericFld('mtn_cs','Colums Of Screenshot',3);
-    $_POST['mtn_rs'] = filterNumericFld('mtn_rs','Rows Of Screenshot',3);
-    $_POST['mtn_edge'] = filterNumericFld('mtn_edge','Gap Between each shot',0);
-    $_POST['txtsize'] = filterNumericFld('txtsize','Size Of Video Info',10);
+	
 	$_POST['language'] = (is_numeric($_POST['language'])?(($_POST['language']>=0)&&($_POST['language']<count($arlang))?$_POST['language']:0):0);
 	
 	 
@@ -705,13 +675,13 @@ if(isset($_POST['submit'])){
 	 //===================
 	 
 	$upcc = '';
-	 if(empty($_POST['rs_com_premix'])&&empty($_POST['rs_de_premix'])&&empty($_POST['megaupload_premix'])&&empty($_POST['megashare_premix'])&&empty($_POST['netload_premix'])&&empty($_POST['gigasize_premix'])&&empty($_POST['vBulletin_acc'])&&empty($_POST['uploaded_to_premix'])&&empty($_POST['easyshare_premix'])&&empty($_POST['depositfiles_premix'])&&empty($_POST['hotfile_com_premix'])&&empty($_POST['uploading_premix'])&&empty($_POST['filefactory_premix'])&&empty($_POST['4shared_premix'])&&empty($_POST['sendspace_premix'])&&empty($_POST['fileserve_com_premix'])&&empty($_POST['filesonic_com_premix'])&&empty($_POST['oron_com_premix'])&&empty($_POST['duckload_com_premix'])&&empty($_POST['shareonline_biz_premix'])&&empty($_POST['torrific_com_premix'])&&empty($_POST['animeground_com_premix'])&&empty($_POST['turbobit_premix'])&&empty($_POST['enterupload_premix'])&&empty($_POST['muhash_premix'])&&empty($_POST['hfhash_premix'])&&empty($_POST['rshash_premix'])&&empty($_POST['imghack_premix']))
+	 if(empty($_POST['rs_com_premix'])&&empty($_POST['rs_de_premix'])&&empty($_POST['megaupload_premix'])&&empty($_POST['megashare_premix'])&&empty($_POST['netload_premix'])&&empty($_POST['gigasize_premix'])&&empty($_POST['share_online_premix'])&&empty($_POST['vBulletin_acc'])&&empty($_POST['uploaded_to_premix'])&&empty($_POST['easyshare_premix'])&&empty($_POST['depositfiles_premix'])&&empty($_POST['hotfile_com_premix'])&&empty($_POST['uploading_premix'])&&empty($_POST['filefactory_premix'])&&empty($_POST['ifile_it_premix'])&&empty($_POST['sendspace_premix'])&&empty($_POST['muhash_premix'])&&empty($_POST['hfhash_premix'])&&empty($_POST['rshash_premix'])&&empty($_POST['imghack_premix']))
 	  { $upcc='//'; }
 	  
 	  
 	$useulcc = '';
 	if(isset($_POST['useulcc']) && $_POST['useulcc']=='on'){
-	 if(empty($_POST['mediafire_up_upload'])&&empty($_POST['rs_com_coll_upload'])&&empty($_POST['rs_com_pre_upload'])&&empty($_POST['mu_pre_upload'])&&empty($_POST['mu_mem_upload'])&&empty($_POST['hf_com_upload'])&&empty($_POST['easysh_mem_upload'])&&empty($_POST['uploading_up_upload'])&&empty($_POST['deposit_up_upload'])&&empty($_POST['fileserve_pre_upload'])&&empty($_POST['fileserve_mem_upload'])&&empty($_POST['ul_up_upload']))
+	 if(empty($_POST['mediafire_up_upload'])&&empty($_POST['rs_com_coll_upload'])&&empty($_POST['rs_com_pre_upload'])&&empty($_POST['mu_pre_upload'])&&empty($_POST['hf_com_upload'])&&empty($_POST['easysh_mem_upload'])&&empty($_POST['uploading_up_upload'])&&empty($_POST['deposit_up_upload']))
 	  { $useulcc='//'; }
 	}else
 	  { $useulcc='//';}
@@ -770,9 +740,10 @@ if(isset($_POST['submit'])){
 	$field = array(
 	 "rs_de_premix" => array("rs_de", "rplde", "rpplde"),
 	 "megaupload_premix" => array("megaupload", "usrmu", "passmu"),
-	 "megashare_premix" => array("megashare", "usrmega", "passmega"),
+	 "megashare_premix" => array("rs_de", "rplde", "rpplde"),
 	 "netload_premix" => array("netload", "usrnet", "passnet"),
 	 "gigasize_premix" => array("gigasize", "usrgz", "passgz"),
+	 "share_online_premix" => array("share_online", "usrsho", "passsho"),
 	 "vBulletin_acc_premix" => array("vBulletin_acc", "usrvbul", "passvbul"),
 	 "uploaded_to_premix" => array("uploaded_to", "usrupto", "passupto"),
 	 "easyshare_premix" => array("easyshare", "usreasy", "passeasy"),
@@ -780,18 +751,9 @@ if(isset($_POST['submit'])){
 	 "hotfile_com_premix" => array("hotfile_com", "usrhotfile", "passhotfile"),
 	 "uploading_premix" => array("uploading", "usruploading", "passuploading"),
 	 "filefactory_premix" => array("filefactory", "usrfilefactory", "passfilefactory"),
-	 "4shared_premix" => array("4shared_com", "usr4shared", "pass4shared"),
+	 "ifile_it_premix" => array("ifile_it", "usrifile", "passifile"),
 	 "sendspace_premix" => array("sendspace", "usrsendspace", "passsendspace"),
-	 "fileserve_com_premix" => array("fileserve_com", "usrfileserve", "passfileserve"),
-	 "filesonic_com_premix" => array("filesonic_com", "usrfilesonic", "passfilesonic"),
-	 "oron_com_premix" => array("oron_com", "usroron", "passoron"),
-	 "duckload_com_premix" => array("duckload_com", "usrduckload", "passduckload"),
-	 "shareonline_biz_premix" => array("shareonline_biz", "usrshareonline", "passshareonline"),
-	 "torrific_com_premix" => array("torrific_com", "usrtorrific", "passtorrific"),
-	 "animeground_com_premix" => array("animeground_com", "usranimeground", "passanimeground"),
-	 "turbobit_premix" => array("turbobit_net", "passturbobit"),
-	 "enterupload_premix" => array("enterupload_com", "usrenterupload", "passenterupload"),
-	 );
+	);
 	$_config .= fillField_premium("premium_acc",$field, $upcc);
 		
 	$_config .= "#Auto Download Premium Account #\n";
@@ -816,14 +778,10 @@ if(isset($_POST['submit'])){
 	 "rs_com_coll_upload" => array("rs_com_coll", "usrrs_com_coll_up", "passrs_com_coll_up"),
 	 "rs_com_pre_upload" => array("rs_com_pre", "usrrs_com_pre_up", "passrs_com_pre_up"),
 	 "mu_pre_upload" => array("mu_pre", "usrmu_pre_up", "passmu_pre_up"),
-	 "mu_mem_upload" => array("mu_mem", "usrmu_mem_up", "passmu_mem_up"),
 	 "hf_com_upload" => array("hf_com", "usrhf_com_up", "passhf_com_up"),
 	 "easysh_mem_upload" => array("easysh_mem", "usreasysh_mem_up", "passeasysh_mem_up"),
 	 "deposit_up_upload" => array("deposit_up", "usrdeposit_up_up", "passdeposit_up_up"),
 	 "uploading_up_upload" => array("uploading_up", "usruploading_up_up", "passuploading_up_up"),
-	 "fileserve_pre_upload" => array("fileserve_pre", "usrfileserve_pre_up", "passfileserve_pre_up"),
-	 "fileserve_mem_upload" => array("fileserve_mem", "usrfileserve_mem_up", "passfileserve_mem_up"),
-	 "ul_up_upload" => array("ul_up", "usrul_up_up", "passul_up_up"),
 	);
 	$_config .= fillField_premium("upload_acc",$field, $useulcc);
 	$_config .= "\n\n";	
@@ -886,7 +844,7 @@ if(isset($_POST['submit'])){
 		
 	$_config .= "\$disable_to = array( // disabled action files properties\n";	
 	
-	$field = array("act_upload", "act_ftp", "act_mail", "act_boxes", "act_split", "act_merge", "act_md5", "act_pack", "act_zip", "act_unzip", "act_rar", "act_unrar", "act_rename", "act_mrename", "act_delete");
+	$field = array("act_upload", "act_ftp", "act_mail", "act_boxes", "act_split", "act_merge", "act_md5", "act_pack", "act_zip", "act_unzip", "act_rename", "act_mrename", "act_delete");
 	$_config .= fillField($field);
 	$_config .= ");\n\n";
 	
@@ -920,31 +878,11 @@ if(isset($_POST['submit'])){
 	$_config .= "###-VIEW-CONFIG\n";
 	$_config .= "\$navi_left = array(\n";
 	
-	$field = array("showcpanel", "showplugins", "showaudl", "showauul", "showlynx", "showmtn", "server_info");
+	$field = array("showcpanel", "showplugins", "showaudl", "showauul", "showlynx", "server_info");
 	$_config .= fillField($field);
 	$_config .= ");\n\n";
 	
-	$_config .= "###-MOVIE-THUMBNAILER-CONFIG\n";
-    $_config .= "\$col_row = array(\n";
-    $_config .= "'mtn_colums' => ".$_POST['mtn_cs'].",\n";
-    $_config .= "'mtn_rows' => ".$_POST['mtn_rs'].",\n";
-    $_config .= ");\n";
-    $_config .= "\$mtn_text = '".$_POST['mtn_text']."';\n";
-    $_config .= "\$bgcolor = '".$_POST['bgcolor']."';\n";
-    $_config .= "\$mtn_quality = ".$_POST['mtn_quality'].";\n";
-    $_config .= "\$mtn_edge = ".$_POST['mtn_edge'].";\n";
-    $_config .= "\$video_option = array (\n";
-    $_config .= "'enable' => ".($_POST['video_option'] == 'on'?'true':'false').",\n";
-    $_config .= "'txtcolor' => '".$_POST['txtcolor']."',\n";
-    $_config .= "'txtfont' => '".$_POST['txtfont']."',\n";
-    $_config .= "'txtsize' => ".$_POST['txtsize'].",\n";
-    $_config .= ");\n";
-    $_config .= "\$time = array(\n";
-    $_config .= "'enable' => ".($_POST['mtn_time'] == 'on'?'true':'false').",\n";
-    $_config .= "'tcolor' => '".$_POST['txtcolor']."',\n";
-    $_config .= ");\n";
-    $_config .= "\n\n";
-
+	
 	$field = array("forbid_audl", "forbid_auul", "forbid_lynx");
 	$_config .= fillField($field, 1); // not an array sets
 
@@ -973,7 +911,6 @@ if(isset($_POST['submit'])){
 	$_config .= "\$mip_enabled= ".(isset($_POST['mip_enabled']) && $_POST['mip_enabled']=='on'?'true':'false')."; //If you need to disable multiple ip support, set to false\n";
 	$_config .= "\$mip_arotate= ".(isset($_POST['mip_arotate']) && $_POST['mip_arotate']=='on'?'true':'false')."; //Auto change to next ip after start transload process\n\n";
 	
-	$_config .= "\$secretkey = '".$_POST['secretkey']."';//Place your Secret Key\n";
 	$_config .= "\$iframealocate = ".$_POST['iframealocate'].";//how many iframe to allocate in audl for manual method.\n";
 	$_config .= "\$pointboost = ".$_POST['pointbooster'].";//boost your RS-Point with this feature!!\n";
 	$_config .= "\$autosubmit = true;\n\n";

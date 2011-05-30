@@ -65,14 +65,16 @@ if ($continue_up)
 <script>document.getElementById('info').style.display='none';</script>
 <?php 		
 			$url = parse_url($url_action);
-			$upfiles = upfile($url["host"],$url["port"] ? $url["port"] : 80, $url["path"].($url["query"] ? "?".$url["query"] : ""),0, 0, $post, $lfile, $lname, "filecontent", "", $proxy, $pauth);
+			$upagent = "RAPIDSHARE MANAGER Application Version: NOT INSTALLED VERSION STARTED";
+			$upfiles = upfile($url["host"],$url["port"] ? $url["port"] : 80, $url["path"].($url["query"] ? "?".$url["query"] : ""),0, 0, $post, $lfile, $lname, "filecontent");
 ?>
 <script>document.getElementById('progressblock').style.display='none';</script>
 <?php 	
 			is_page($upfiles);
 
-      preg_match('/File1\.1=([^\r|\n]+)/i', $upfiles, $flink);
-      preg_match('/File1\.2=([^\r|\n]+)/i', $upfiles, $dlink);
-      $download_link = trim($flink[1]);
-      $delete_link = trim($dlink[1]);	}
+			preg_match('%http://rapidshare\.com/((?!killcode).)+html%i', $upfiles, $flink);
+			preg_match('%http://rapidshare\.com/.*killcode.*%i', $upfiles, $dlink);
+			$download_link = trim($flink[0]);
+			$delete_link = trim($dlink[0]);
+	}
 ?>

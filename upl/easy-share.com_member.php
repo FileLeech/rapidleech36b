@@ -1,6 +1,10 @@
 <?php
+//$easy_login = ""; // login
+//$easy_pass = ""; // password
+
 $easy_login = $upload_acc["easysh_mem"]["user"]; 
 $easy_pass = $upload_acc["easysh_mem"]["pass"]; 
+
 $not_done = true;
 $continue_up = false;
 $cook = "";
@@ -27,8 +31,9 @@ if ($_REQUEST ['action'] == "FORM")
 		<td>&nbsp;<input type=password name=my_pass value='' style="width: 160px;" />&nbsp;	
 	</tr>	
 	<tr><td colspan=4 align=center><input type=submit value='Upload' /></tr>	
-</table>
 </form>
+</table>
+
 <?php
 }
 

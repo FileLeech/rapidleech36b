@@ -5,7 +5,7 @@ if (!defined('RAPIDLEECH'))
   exit;
   }
 
-if(isset($_COOKIE["clearsettings"]) && $_COOKIE["clearsettings"])
+if(isset($_COOKIE["clearsettings"]))
    {
 		setcookie("domail", "", time() - 3600);
 		setcookie("email", "", time() - 3600);
@@ -73,7 +73,7 @@ if(isset($_REQUEST["savesettings"]) && $_REQUEST["savesettings"] == "on")
 		if(isset($_REQUEST["saveto"]) && $_REQUEST["saveto"] == "on")
 			{
 				setcookie("saveto", TRUE,time()+800600);
-				if(isset($_REQUEST["path"]) && $_REQUEST["path"])
+				if(isset($_REQUEST["path"]))
 					{
 						setcookie("path", $_REQUEST["path"],time()+800600);
 					}
@@ -125,7 +125,7 @@ if(isset($_REQUEST["savesettings"]) && $_REQUEST["savesettings"] == "on")
 			if(isset($_REQUEST["premium_acc"]) && $_REQUEST["premium_acc"] == "on")
 			{
 				setcookie("premium_acc",$_REQUEST["premium_acc"],time()+800600);
-				if(isset($_REQUEST["premium_user"]) && $_REQUEST["premium_user"] && isset($_REQUEST["premium_pass"]) && $_REQUEST["premium_pass"])
+				if(isset($_REQUEST["premium_user"]) && isset($_REQUEST["premium_pass"]))
 					{
 						setcookie("premium_user", $_REQUEST["premium_user"],time()+800600);
 						setcookie("premium_pass", $_REQUEST["premium_pass"],time()+800600);

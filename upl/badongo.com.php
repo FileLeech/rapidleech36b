@@ -1,5 +1,4 @@
 <table width=600 align=center>
-</td></tr>
 <tr><td align=center>
 <div id=info width=100% align=center>Retrive upload ID</div>
 <?php

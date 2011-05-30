@@ -15,7 +15,7 @@ ignore_user_abort(1);
 clearstatcache();
 error_reporting(6135);
 $nn = "\r\n";
-$rev_num = '36B.Rv7.4';
+$rev_num = '36B.Rv7.3';
 $RL_VER = 'Rx08.ii'.$rev_num;
 
 require_once(CONFIG_DIR."config.php");
@@ -40,14 +40,12 @@ if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === 
 include(CLASS_DIR."http.php");
 
 if(!defined('CRLF')) define('CRLF',"\r\n");
-if (!$_REQUEST["uploaded"])
+if (!$_REQUEST[uploaded])
 	{
 		html_error("Not selected upload services", 0);
 	}
 
-// deprecated filename replaced with filedate
-//if (!$_REQUEST["filename"])
-if (!$_REQUEST["filedate"])
+if (!$_REQUEST["filename"])
 	{
 		html_error("Not select file to upload", 0);
 	}
@@ -62,7 +60,7 @@ $_REQUEST["uploaded"]=htmlentities(str_replace('/','',$_REQUEST["uploaded"]));
 /* Mod ~Idx */
 _create_list();
 if($list){
- $_REQUEST["filename"] = $list[$_REQUEST["filedate"]]["name"]; 
+ $_REQUEST["filename"] = $list[$_REQUEST["filedate"]][name]; 
 }else{
  html_error("ERROR: file not exist", 0);
 }
@@ -86,11 +84,9 @@ function highlight(field) { field.focus(); field.select(); }
 </head>
 <body>
 <center>
-
 <div class="head_container"><center>
-<div class="tdheadolgo"><a href="javascript:;" title="Rapidleech"><h1></h1></a></div>
-</center></div>
-
+<a href="<?php echo $index_file;?>" alt="Rapidleech 2.3"><div class="tdheadolgo">&nbsp;</div></a></center>
+</div>
 <?php
 if (!file_exists($_REQUEST["filename"]))
 	{

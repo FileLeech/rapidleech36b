@@ -2,9 +2,8 @@
 if (!defined('RAPIDLEECH'))
   { require_once("404.php"); exit; }
   
-if(!defined("LANG_DIR")) define("LANG_DIR", "languages/");
+define('LANG_DIR', 'languages/');
 require_once(LANG_DIR."language.$lang.inc.php");
-
 global $htxt, $gtxt;
 	
 function insert_timer($countd, $caption ="", $timeouttext = "", $hide = false){
@@ -111,6 +110,7 @@ global $nn, $lastError, $PHP_SELF, $AUTH, $IS_FTP, $FtpBytesTotal, $FtpBytesRece
 //die('saveToFile:'.$saveToFile);
 $scheme.= "://";
 
+
 if (($post !== 0) && ($scheme == "http://"))
   {
     $method = "POST";
@@ -125,7 +125,6 @@ else
     $content_tl = "";
   }
 
-$cookies = '';
 if ($cookie)
 	{
 		if (is_array($cookie))
@@ -148,14 +147,12 @@ if ($scheme == "https://")
 	$port = 443;
 	}
 
-if($proxy){
+if($proxy)
+	{
     list($proxyHost, $proxyPort) = explode(":", $proxy);
     $url = $scheme.$host.":".$port.$url;
     $host = $host.":".$port;
-}else{
-  $proxyHost = ''; 
-  $proxyPort = '';
-}
+	}
 
 if ($scheme != "ssl://")
 	{
@@ -182,30 +179,25 @@ $cookies.
 "Connection: Close".$nn.
 $content_tl.$nn.$postdata;
 
-//write_file(CONFIG_DIR."request.txt", $request, 0); // add
+//write_file(CONFIG_DIR."request.txt", $request);
 
 if(isset($mip_enabled) && $mip_enabled){
  $mip_action = "download"; 
- echo "<p>Multi IP Enabled</b>...<br>\n";
- if(file_exists(CLASS_DIR."mip.php")) @include(CLASS_DIR."mip.php");
+ if(file_exists(CLASS_DIR."mip.php")) @include_once(CLASS_DIR."mip.php");
 
 }else{
 
-    $errno = 0;
-	$errstr = "";
-	$hosts = ($proxyHost ? $scheme . $proxyHost : $scheme . $host) . ':' . ($proxyPort ? $proxyPort : $port);
-	$fp = @stream_socket_client ( $hosts, $errno, $errstr, 120, STREAM_CLIENT_CONNECT );
+ $fp = @fsockopen($proxyHost ? $scheme.$proxyHost : $scheme.$host, $proxyPort ? $proxyPort : $port, $errno, $errstr, 15);
 
 }
 
 
-if (!$fp) {
-    $dis_host = $proxyHost ? $proxyHost : $host;
-    $dis_port = $proxyPort ? $proxyPort : $port;
-    html_error("Couldn't connect to ".$dis_host." at port ".$dis_port, 0);
-}
+if (!$fp)
+	{
+	html_error("Couldn't connect to ".($proxyHost ? $proxyHost : $host)." at port ".($proxyPort ? $proxyPort : $port), 0);
+	}
 
-
+socket_set_timeout($fp, 120);
 
 if($errno || $errstr)
   {
@@ -218,7 +210,7 @@ if ($saveToFile)
 	if ($proxy)
 		{
 		echo "<p>".$htxt['_con_proxy'].": <b>".$proxyHost."</b> at port <b>".$proxyPort."</b>...<br>\n";
-		echo "GET: <b>".$url."</b>...<br>\n";
+		echo "GET: <b>".$host.$url."</b>...<br>\n";
 		}
 	else
 		{
@@ -233,9 +225,9 @@ fputs($fp,$request);
 fflush($fp);
 $timeStart = getmicrotime();
 
-$header = '';
-do {
-  $header .= fgets ( $fp, 16384 );
+do
+  {
+  $header.= @fgets($fp, 8192);
 } while (strpos($header, $nn.$nn) === false);
 
 #########################################################################
@@ -247,7 +239,6 @@ if (!$header)
   return false;
   }
 
-$responsecode = "";
 preg_match('/^HTTP\/1\.0|1 ([0-9]+) .*/',$header,$responsecode);
 if (($responsecode[1] == 404 || $responsecode[1] == 403) && $saveToFile)
 {
@@ -266,33 +257,25 @@ if (($responsecode[1] == 404 || $responsecode[1] == 403) && $saveToFile)
 
 if ($saveToFile)
   {
-  $bytesTotal = trim(cut_str($header, "Content-Length:", "\n"));
-  
-  //check sizelimit feature  (it is in MB)
+  $bytesTotal = intval(trim(cut_str($header, "Content-Length:", "\n")));
+  //check sizelimit feature 
    if($limitsize>0){
-    if ($bytesTotal > $limitsize*1024*1024)
+   if ($bytesTotal > $limitsize*1024*1024)
 	{
-	  $lastError = $htxt['_sorry_tobig'].": ".$fileSize = bytesToKbOrMbOrGb($bytesTotal)." &gt;&gt; ".$htxt['_max_filesize']." ".$limitsize." MB";
+	  $lastError = $htxt['_sorry_tobig'].": ".$fileSize = bytesToKbOrMbOrGb($bytesTotal)." &gt;&gt; MAX Filesize: ".$limitsize." MB";
+	  fclose($fp);
 	  return false;
 	}
   }
   if($lowlimitsize>0){
    if ($bytesTotal < $lowlimitsize*1024*1024)
    {
-	  $lastError = $htxt['_sorry_tosmall'].": ".$fileSize = bytesToKbOrMbOrGb($bytesTotal)." &gt;&gt; ".$htxt['_min_filesize']." ".$lowlimitsize." MB";
+	  $lastError = $htxt['_sorry_tosmall'].": ".$fileSize = bytesToKbOrMbOrGb($bytesTotal)." &gt;&gt; MIN Filesize: ".$lowlimitsize." MB";
+	  fclose($fp);
 	  return false;	   
 	   
    }
-  }
-  // check storage limit (it is in MB)
-  if($storage_limit>0){
-    $curstorage = calcUsedSpace();
-    if (($curstorage + $bytesTotal) > $storage_limit*1024*1024)
-	{
-	  $lastError = $htxt['_sorry_insuficient_storage'].": ".$fileSize = bytesToKbOrMbOrGb($curstorage)." &gt;&gt; ".$htxt['_storage_limit']." ".$storage_limit." MB";
-	  return false;
-	}  
-  }
+  }  
   
   if($limitbyip)
   {
@@ -338,7 +321,6 @@ if ($saveToFile)
 		is_present($page_src,"To avoid creation of corrupted zip files, you cannot create a zip on this torrent until it is done downloading");
 	}
 
-    $redir = "";
 	if(trim(preg_match('/[^\-]Location: *(.+)(\r|\n)+/', $header, $redir)))
 	{
 		$redirect = $redir[1];
@@ -373,26 +355,20 @@ if ($Resume["use"] === TRUE && !stristr($header, "Content-Range:"))
 		}
 	return FALSE;
 	}
-
 $ContentDisposition = trim(cut_str($header, "Content-Disposition:", "\n"))."\n";
 if ($ContentDisposition && stristr($ContentDisposition, "filename="))
 	{
 	
 	if($force_name)
 	  {
-		$FileName = $force_name;		
-        
+		$FileName = $force_name;
+		$saveToFile = dirname($saveToFile).PATH_SPLITTER.$FileName;
 	  }
 	else
 	  {
-		$FileName = trim(trim(trim(trim(trim(cut_str($ContentDisposition, "filename=", "\n")), "="), "?"), ";"), '"');		
+		$FileName = trim(trim(trim(trim(trim(cut_str($ContentDisposition, "filename=", "\n")), "="), "?"), ";"), '"');
+		$saveToFile = dirname($saveToFile).PATH_SPLITTER.$FileName;
 	  }
-	  if(preg_match("/UTF\-8\?B\?(.*)$/i", $FileName, $b64)){	    
-	    $FileName = preg_replace("/[^a-zA-Z0-9\-\.]/", "_", base64_decode($b64[1]));
-	  }
-	  if (strpos($FileName,"/")){$FileName=basename($FileName);
-	  }
-	  $saveToFile = dirname($saveToFile).PATH_SPLITTER.$FileName;
 	}
 
 if(!empty($add_ext_5city)||!empty($rename_suffix)||!empty($rename_prefix)){
@@ -498,17 +474,50 @@ else
 	 $ext = strrchr(basename($saveToFile), ".");
 	 $File_Name = substr(basename($saveToFile), 0, -strlen($ext));
 	}
-
 	print "File <b>".$File_Name."<s><font color=red>".$ext."</font></s>&nbsp;[<span class='g'>".$fileSize."</span>]</b>..";
 
-	require (CLASS_DIR . '/transloadui.php');
+?>
+<br>
+<table cellspacing="0" cellpadding="0" style="FONT-FAMILY: Tahoma; FONT-SIZE: 11px;">
+<tr>
+<td></td>
+<td>
+ <div style="border:#BBBBBB 1px solid; width:300px; height:10px;" class="progressborder">
+ 	<div id="progress" style="background-color:#18f20d; margin:1px; width:0%; height:8px;"></div>
+ </div>
+</td>
+<td></td>
+<tr>
+<tr>
+<td align="left" id="received">0 KB</td>
+<td align="center" id="percent">0%</td>
+<td align="right" id="speed">0 KB/s</td>
+</tr>
+</table>
+<br>
+<div id="resume" align="center"></div>
+<script type="text/javascript">
+function pr(percent, received, speed){
+	document.getElementById("received").innerHTML = '<b>' + received + '</b>';
+	document.getElementById("percent").innerHTML = '<b>' + percent + '%</b>';
+	document.getElementById("progress").style.width = percent + '%';
+	document.getElementById("speed").innerHTML = '<b>' + speed + ' KB/s</b>';
+	document.title = percent + '%..';
+	return true;
+	}
 
+function mail(str, field) {
+	document.getElementById("mailPart." + field).innerHTML = str;
+	return true;
+	}
+</script>
+<br>
+<?php
 if ($Resume["use"] === TRUE)
 	{
 	$received = bytesToKbOrMbOrGb(filesize($saveToFile));
 	$percent = round($Resume["from"] / ($bytesTotal + $Resume["from"]) * 100, 2);
-	echo "<script type='text/javascript'>pr('" . $percent . "', '" . $received . "', '0');</script>";
-        flush ();
+	print "<script>pr('".$percent."', '".$received."', '0')</script>";
 	}
   }
 else
@@ -516,10 +525,9 @@ else
   $page = $header;
   }
 
-do {
-    $data = @fread ( $fp, ($saveToFile ? $chunkSize : 16384) );
-    if ($data == '')
-        break;
+	while(!feof($fp))
+		{
+	 	$data = @fgets($fp, 8192);
 	 	if($saveToFile)
 	    {
 	    $bytesSaved = fwrite($fs, $data);
@@ -548,7 +556,7 @@ do {
 	      $chunkTime = $chunkTime ? $chunkTime : 1;
 	      $lastChunkTime = $time;
 	      $speed = @round($chunkSize / 1024 / $chunkTime, 2);
-	      echo "<script type='text/javascript'>pr('" . $percent . "', '" . $received . "', '" . $speed . "');</script>";
+	      echo "<script>pr('".$percent."', '".$received."', '".$speed."')</script>";
 	      $last = $bytesReceived;
 	      }
 	    }
@@ -556,7 +564,7 @@ do {
 	    {
 	    $page.= $data;
 	    }
-	  }while( strlen($data)> 0 );
+	  }
 	
 
 	if($saveToFile)
@@ -583,7 +591,8 @@ do {
 	  }
 	else
 	  {
-	if (isset($NoDownload) && $NoDownload) {
+	  if ($NoDownload)
+	    {
 	    if (stristr($host, "rapidshare"))
 	      {
 			is_present($page, "You have reached the limit for Free users", "You have reached the limit for Free users.", 0);
@@ -605,34 +614,8 @@ do {
 	  }
 }
 
-//simple curl function for https:// logins
-function sslcurl($link, $cookie = 0, $post = 0, $refer = 0)
-{
-	$mm = !empty($post) ? 1 : 0;
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $link);
-	curl_setopt($ch, CURLOPT_HEADER, 1);
-	curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U;Windows NT 5.1; de;rv:1.8.0.1)\r\nGecko/20060111\r\nFirefox/1.5.0.1');
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	if ($mm == 1)
-	{
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, formpostdata($post));
-	}
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-	curl_setopt($ch, CURLOPT_REFERER, $refer);
-	curl_setopt($ch, CURLOPT_COOKIE, $cookie) ;
-	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-	// curl_setopt ( $ch , CURLOPT_TIMEOUT, 15);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-	$contents .= curl_exec($ch);
-	// $info = curl_getinfo($ch);
-	// $stat = $info['http_code'];
-	curl_close($ch);
-	return $contents;
-}
-
-function formpostdata($post) {
+function formpostdata($post)
+  {
 	$postdata = "";
 	foreach ($post as $k => $v) {
 		$postdata .= "$k=$v&";
@@ -647,7 +630,7 @@ function GetCookies($content)
 	{
 	// The U option will make sure that it matches the first character
 	// So that it won't grab other information about cookie such as expire, domain and etc
-	preg_match_all ( '/Set-Cookie: (.*)(;|\r\n)/U', $content, $temp );
+	preg_match_all('/Set-Cookie: (.*);/U',$content,$temp);
 
 	$cookie = $temp[1];
 	$cook = implode('; ',$cookie);
@@ -678,13 +661,13 @@ $bound="--------".substr(md5(time()),-8);
 $saveToFile=0;
 
 unset($postdata);
-        if ($post) {
-                foreach ( $post as $key => $value ) {
-                        $postdata .= "--" . $bound . $nn;
-                        $postdata .= 'Content-Disposition: form-data; name="'.$key.'"' . $nn . $nn;
-                        $postdata .= $value . $nn;
-                }
-        }
+foreach ($post as $key => $value)
+	{
+		$postdata.="--".$bound.$nn;
+		$postdata.="Content-Disposition: form-data; name=\"$key\"".$nn.$nn;
+		$postdata.=$value.$nn;
+	}
+
 $fileSize = getSize($file);
 
 $fieldname = $fieldname ? $fieldname : file.md5($filename);
@@ -757,10 +740,43 @@ if($errno || $errstr)
 
 
 echo "File <b>".$filename."</b>, size <b>".bytesToKbOrMb($fileSize)."</b>...<br>";
+?>
+<table cellspacing=0 cellpadding=0 style="FONT-FAMILY: Tahoma; FONT-SIZE: 11px;" id=progressblock>
+<tr>
+	<td width=100>&nbsp;</td>
+	<td width=300 nowrap>
+		<div style="border:#BBBBBB 1px solid; width:300px; height:10px;" class="progressborder">
+    		<div id="progress" style="background-color:#18f20d; margin:1px; width:0%; height:8px;"></div>
+		</div>
+	</td>
+<td width=100>&nbsp;</td>
+<tr>
+	<td align=right id=received width=100 nowrap>0 KB</td>
+	<td align=center id=percent width=300>0%</td>
+	<td align=left id=speed width=100 nowrap>0 KB/s</td>
+</tr>
+</table>
+<script>
+function pr(percent, received, speed)
+{
+	document.getElementById("received").innerHTML = '<b>' + received + '</b>';
+	document.getElementById("percent").innerHTML = '<b>' + percent + '%</b>';
+	document.title= '['+percent + '%]->['+orlink+']'+' Uploaded';
+	if (percent > 90) {percent=percent-1;}
+	document.getElementById("progress").style.width = percent + '%';
+	document.getElementById("speed").innerHTML = '<b>' + speed + ' KB/s</b>';
+	return true;
+}
 
-global $id;
-$id = md5 ( time () * rand ( 0, 10 ) );
-require (CLASS_DIR.'uploadui.php');
+function mail(str, field)
+{
+	document.getElementById("mailPart." + field).innerHTML = str;
+	return true;
+}
+</script>
+<br>
+<?php
+
 flush();
 
 $timeStart=getmicrotime();
@@ -780,8 +796,6 @@ $fs=fopen($file,'r');
 $i=0;
 
 $local_sleep=$sleep_count;
-echo "<script>pr('0','0 KB','0')</script>";
-flush();
 while (!feof($fs))
 	{
 		$data=fread($fs,$chunkSize);
@@ -820,7 +834,7 @@ while (!feof($fs))
 		$lastChunkTime = $time;
 		$speed = round($sendbyte / 1024 / $chunkTime, 2);
 		$percent = round($totalsend / $fileSize * 100, 2);
-		echo "<script>pr('".$percent."','".bytesToKbOrMb($totalsend)."','".$speed."')</script>";
+		echo "<script>pr(".$percent.", '".bytesToKbOrMb($totalsend)."', ".$speed.")</script>\n";
 		flush();
 	}
 fclose($fs);

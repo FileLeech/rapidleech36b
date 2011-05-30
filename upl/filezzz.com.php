@@ -7,7 +7,7 @@
 			$ref = 'http://www.filezzz.com/';
 ?>
 <script>document.getElementById('info').style.display='none';</script>
-<?
+<?php
 
 			$Url=parse_url($ref);
 			$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), 0, 0, 0, 0, $_GET["proxy"],$pauth);
@@ -26,7 +26,7 @@
 
 ?>
 <script>document.getElementById('progressblock').style.display='none';</script>
-<?
+<?php
 			is_page($upfiles);
 			$cookies.='; '.implode("; ", GetCookies($page, true));
 			$finish_url=trim(cut_str($upfiles,'Location:',"\n"));

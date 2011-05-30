@@ -8,28 +8,6 @@ Latest Revision
 ## Lic Code: GNU General Public License v3
 ---------------
 
-Rv.7.4:
-* [SECURITY] WARNING: Bug found due to the insert_location() function (download system) which reveals premium cookies and base_64 encoded auth-strings to end user(s). The premium accounts of rapidleech servers providing premium-account downloads to public, are in danger of having their premium accounts compromised! Private rapidleech servers are safe for now, but are strongly encouraged to upgrade - Szalinski, Th3-882
-* [SECURITY] New premium cookie encryption system implemented (due to the complexity of cookie system and to keep load on 3rd-party servers to a minimum, cookies are encrypted instead, and then decrypted when needed) - Szalinski, Th3-882
-* [SECURITY] New $secretkey in config.php,which is used for cookie encryption. A standard key is included, but you must create your own random string, max 56 characters in length, customized to be user friendly in xpanel - Szalinski, viant77
-* [FEATURE] Add rar/unrar support, customized in xpanel, fix the deletion time when we use autodelete system - Danielx_x, Darknight, Th3-882
-* [FEATURE] Add Movie Thumbnailer - Sakib, Slider324
-* [FEATURE] Fix movie thumbnailer feature with more restriction by jmsmarcello, customized & recoded xpanel, fixed over & over (:lol:) by Darknight (sorry for makin' u trouble, thx :D)
-* [FEATURE] Fix language - Idoenk, Se7en.7x
-* [FEATURE] Add persian language - Dverbame
-* [FEATURE] Fix the link checker for newly filehost - Idoenk
-* [FEATURE] Fix http.php also other.php to support new filehost layout (need PHP 5 or higher) - Th3-882, Idoenx
-* [FEATURE] Minor fix in autodownload - Idoenx, Th3-882
-* [FEATURE] Add some newly filehost for download & upload plugin - viant77, mfp2123
-* [PLUGIN] Added some newly download plugin for new filehost - Th3-882, vdhdevil, Se7en.7x, Vinhatrang_LV, Raj Malhotra, Thangborn4000, Rockabilly, Blackriderz
-* [PLUGIN] Added some newly upload plugin for new filehost - Th3-882,  Vinhatrang_LV, Shy2ply, Nastrove/Defport, Darkra
-* [PLUGIN] Fix existing broken download plugin - Th3-882, vdhdevil, Se7en.7x, Vinhatrang_LV, Kaox, Thangborn4000, Raj Malhotra, Shy2ply
-* [PLUGIN] Fix existing broken upload plugin - Th3-882, vdhdevil, Vinhatrang_LV, Thangborn4000, Raj Malhotra, Slider234, Luft-on, Balor, Nastrove/Defport
-* [PLUGIN] Add Downloadclass for supporting OOP format - TheOnly92, Szalinski, Raj Malhotra, Th3-882
-* Special credit given to the following people : Th3-882 & vdhdevil, if they didn't help, there will be no new revision for this script, thx a lot mate, greeting from Indonesia...sorry for askin' too much, I know I'm noob  :(
-* Special two middle finger for those people who sellin' open source script, removin' credit developer name, hackin' public leech which they serve public freely, exploit bugs when they know they should report so the developer can fix this. 
-* Additional note for Idoenk & viant77 : wb :maho:
-
 Rv.7.3:
  * Fix Traffic update
  * Fix update FILES_LST after deleteIt
