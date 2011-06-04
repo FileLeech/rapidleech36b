@@ -107,7 +107,7 @@ class wupload_com extends DownloadClass {
         $cookie7 = "isAffiliate=".cut_str($page,'Set-Cookie: isAffiliate=',";")."; ";
         $cookies = "$cookie1$cookie2$cookie3$cookie4$cookie5$cookie6$cookie7";
         $page = $this->GetPage($link, $cookies, 0, 0);
-        if (!preg_match('#Location: (http:\/\/s([0-9]+)\.wupload\.com\/.+\/([a-z0-9]+))#', $page, $dlink)) {
+        if (!preg_match('#Location: (http:\/\/.+wupload\.com\/.+\/([a-z0-9]+))#', $page, $dlink)) {
             html_error("Error 1x01: Plugin is out of date");
         }
         $this->RedirectDownload(trim($dlink[1]), "wupload", $cookies, 0, $link);
