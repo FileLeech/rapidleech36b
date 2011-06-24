@@ -55,7 +55,7 @@ class fileflyer_com extends DownloadClass {
         is_present($page, 'class="handlinkblocked"', "You need to have premium access to unlock this link!");
 
         if (!preg_match('#(http:\/\/.+fileflyer\.com\/d\/[^\"]+)"#', $page, $dl)) {
-            html_error("Error, free code couldn't be found. Contact the author with the link which u have this error!");
+            html_error("Error, free code need to be updated. Contact the author with the link which u have this error!");
         }
         $dlink = trim($dl[1]);
         $Url = parse_url($dlink);

@@ -471,7 +471,7 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 				print "<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<center><img src='".IMAGE_DIR."rl_lgo.png'>";
 					require_once(CLASS_DIR."http.php");
 					require_once (HOST_DIR. "DownloadClass.php");
-					require_once(HOST_DIR.'/dwn'.$file);
+					require_once(HOST_DIR.'dwn/'.$file);
 					$class = substr($file, 0, -4);
 					$firstchar = substr($file, 0, 1);
 					if ($firstchar > 0)
