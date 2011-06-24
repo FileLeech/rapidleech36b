@@ -1,4 +1,4 @@
-<?php    
+<?php
 if (!defined('RAPIDLEECH')){
   require_once("404.php");
   exit;
@@ -22,16 +22,14 @@ class animeground_com extends DownloadClass {
             $Username = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["animeground_com"] ["user"];
             $password = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["animeground_com"] ["pass"];
             $auth = base64_encode($Username.":".$password);
-            if (function_exists('encrypt')) {
-                $auth = encrypt($auth);
-            }
+            $sendauth = ($_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) ? encrypt($auth) : 1;
             $Url = parse_url($link);
             $FileName = basename($Url['path']);
-            $this->RedirectDownload($link, $FileName, 0, 0, "http://www.animeground.com/index.asp", 0, $auth);
+            $this->RedirectDownload($link, $FileName, 0, 0, "http://www.animeground.com/index.asp", 0, $sendauth);
         exit;
     }
 }
 
-//by vdhdevil & Ruud v.Tony 13-04-2011
+//animeground download plugin by vdhdevil & Ruud v.Tony
 ?>
 

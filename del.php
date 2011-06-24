@@ -8,7 +8,7 @@ error_reporting(0);
 
 define('MISC_DIR', 'misc/');
 define('CLASS_DIR', 'classes/');
-define('CONFIG_DIR', './');
+define('CONFIG_DIR', 'configs/');
 define('LANG_DIR', 'languages/');
 $PHP_SELF = !$PHP_SELF ? $_SERVER["PHP_SELF"] : $PHP_SELF;
 

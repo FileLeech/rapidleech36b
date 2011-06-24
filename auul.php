@@ -10,10 +10,10 @@ define('RAPIDLEECH', 'yes');
 $PHP_SELF = !isset($PHP_SELF) ? $_SERVER["PHP_SELF"] : $PHP_SELF;
 define('ROOT_DIR', realpath("./"));
 define('HOST_DIR', 'pluginz/');
-define('UPL_DIR', 'upl/');
+define('UPLOAD_DIR', HOST_DIR.'upl/');
 define('MISC_DIR', 'misc/');
 define('CLASS_DIR', 'classes/');
-define('CONFIG_DIR', './');
+define('CONFIG_DIR', 'configs/');
 
 $nn = "\r\n";
 $rev_num = '36B.Rv7.4';
@@ -37,7 +37,7 @@ require_once(CONFIG_DIR."config.php");	// Reads the configuration file, so we ca
 
 // Include other useful functions
 require_once(CLASS_DIR."other.php");
-require_once(HOST_DIR."hosts.php");
+require_once(HOST_DIR.'dwn/'."hosts.php");
 require_once(CLASS_DIR."http.php");
 
 define('DOWNLOAD_DIR', (substr($download_dir, 0, 6) == "ftp://" ? '' : $download_dir));	// Set the download directory constant
@@ -52,7 +52,7 @@ define('IMAGE_DIR', MISC_DIR . TPL_PATH);
 if($limited_edition || $limited_area)
 {
   $dlimitation = array($limited_edition, $limited_area);
-  require_once("limit_district.php");
+  require_once(CLASS_DIR."limit_district.php");
 }
 
 if(!$forbid_auul){
@@ -207,17 +207,17 @@ var orlink='<?php echo basename($file); ?> to <?php echo $host; ?>';
 		
 			//ob_start("callback");
 				// If there is a plugin to the host
-				if (file_exists(UPL_DIR.$host.".php")){
+				if (file_exists(UPLOAD_DIR.$host.".php")){
 					// Read the configuration file for the host
-					include_once(UPL_DIR.$host.".index.php");
+					include_once(UPLOAD_DIR.$host.".index.php");
 					// If the size of the file is bigger than the max for the host
 					if ($max_file_size["$host"]!=false)
 						if ($fsize > $max_file_size["$host"]*1024*1024)       
 							html_error("Bigger than file-size", 0);
 							
 							// Upload it!
-					include(UPL_DIR.$page_upload["$host"]);
-				}else html_error('This service not allowed || Plugin not exist: '.UPL_DIR.trim($host).".php", 0); 
+					include(UPLOAD_DIR.$page_upload["$host"]);
+				}else html_error('This service not allowed || Plugin not exist: '.UPLOAD_DIR.trim($host).".php", 0); 
 				// Save the download link
 				$uploads[$file][$host] = $download_link;
 				$uploads[$file]['date'] = date("Y-m-d H:i:s");
@@ -354,11 +354,11 @@ else
 <center>
 <div id="host_list" style="overflow:auto; height:300px; width:100%">
 <?php
-	$d = opendir(UPL_DIR); $bftxt = '';
+	$d = opendir(UPLOAD_DIR); $bftxt = '';
 	while (false !== ($modules = readdir($d))){
 		if($modules!="." && $modules!=".."){
-			if(is_file(UPL_DIR.$modules)){
-				if (strpos($modules,".index.php")) include_once(UPL_DIR.$modules);
+			if(is_file(UPLOAD_DIR.$modules)){
+				if (strpos($modules,".index.php")) include_once(UPLOAD_DIR.$modules);
 			}
 		}
 	}

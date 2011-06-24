@@ -28,7 +28,7 @@ define('PATH_SPLITTER', (strstr(ROOT_DIR, "\\") ? "\\" : "/"));
 define('HOST_DIR', 'pluginz/');
 define('MISC_DIR', 'misc/');
 define('CLASS_DIR', 'classes/');
-define('CONFIG_DIR', './');
+define('CONFIG_DIR', 'configs/');
 define('LANG_DIR', 'languages/');
 
 //PROTECTED AREA, PLEASE DONT REMOVE OR CHANGE ANYTHING!
@@ -204,7 +204,7 @@ if( $czFlst==0 && (!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) &&
 if($limited_edition || $limited_area)
 {
   $dlimitation = array($limited_edition, $limited_area);
-  require_once("limit_district.php");
+  require_once(CLASS_DIR."limit_district.php");
 }
 
 $cnt_deleted = ($auto_del_time > 0 ? purge_files($auto_del_time):0);
@@ -252,9 +252,9 @@ if(!$_COOKIE)
 
 require_once(CLASS_DIR."cookie.php");
 
-if (!@file_exists(HOST_DIR."hosts.php"))
+if (!@file_exists(HOST_DIR."dwn/hosts.php"))
 	{
-	create_hosts_file("hosts.php");
+	create_hosts_file("dwn/hosts.php");
 	}
 
 if (!empty($_GET["image"]))
@@ -294,7 +294,7 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
   if(!isset($_GET["filename"]) || !$_GET["host"] || !$_GET["path"])
   {
       //require "host.php";
-	require_once(HOST_DIR."hosts.php");
+	require_once(HOST_DIR."dwn/hosts.php");
   
    if(!isset($_POST["link"])){
      if(isset($_GET["idx"])) //if link was sent from audl
@@ -437,6 +437,18 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 		$pos = str_replace(".", "", strrchr($LINK, "."));
 		$numidx = (is_numeric($pos)?$pos:-1);
 	}
+	if ($_GET['user_pass'] == "on")
+	{
+		$Url['user'] = $_GET['iuser'];
+		$Url['pass'] = $_GET['ipass']; 
+		// Rebuild url
+		$query = "";
+		if ($Url['query'])
+		{
+			$query = '?' . $Url['query'];
+		}
+		$LINK = $Url['scheme'] . "://" . $Url['user'] . ":" . $Url['pass'] . "@" . $Url['host'] . $Url['path'] . $query;
+	}
 
 	if($_GET["dis_plug"] != "on")
 	{
@@ -446,7 +458,7 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 			print "<html>$nn<head>$nn<title>".$txt['downloading']." $LINK</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn";
 			print "<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<br>$nn";
 			require_once(CLASS_DIR."http.php");
-			require_once(HOST_DIR."vBulletin_plug.php");
+			require_once(HOST_DIR."dwn/vBulletin_plug.php");
 			exit();
 		  }
 		else
@@ -459,7 +471,7 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 				print "<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<center><img src='".IMAGE_DIR."rl_lgo.png'>";
 					require_once(CLASS_DIR."http.php");
 					require_once (HOST_DIR. "DownloadClass.php");
-					require_once(HOST_DIR.$file);
+					require_once(HOST_DIR.'/dwn'.$file);
 					$class = substr($file, 0, -4);
 					$firstchar = substr($file, 0, 1);
 					if ($firstchar > 0)
@@ -483,14 +495,26 @@ if (!isset($_GET["path"]) || $download_dir_is_changeable == false)
 		$FileName = basename ($Url ["path"]);
 		$mydomain = $_SERVER['SERVER_NAME'];
 		$myip = $_SERVER['SERVER_ADDR'];
-		if($bw_save && preg_match("/($mydomain|$myip)/i", $Url["host"]))
+		if(!$bw_save && preg_match("/($mydomain|$myip)/i", $Url["host"]))
 			{
 				html_error("You are not allowed to leech from <font color=black>".$mydomain." (".$myip.")</font>");
 			} 
 			             
 		$auth = ($Url["user"] && $Url["pass"]) ? "&auth=".urlencode (encrypt (base64_encode($Url["user"].":".$Url["pass"]))) : "";
+
+	if (isset ($_GET ['cookieuse']))
+	{
+		if (strlen ($_GET ['cookie'] > 0))
+		{
+			$_GET ['cookie'] .= ';' . $_POST ['cookie'];
+		}
+		else
+		{
+			$_GET ['cookie'] = $_POST ['cookie'];
+		}
+	}
 		
-		insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&port=".$Url["port"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
+		insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&port=".$Url["port"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "") . "&cookie=" . urlencode (encrypt ($_GET ['cookie'])));
   }
 else
   {
@@ -547,8 +571,20 @@ if($limitbyip){
         $redirectto = "";
 	    
 	    $pauth = urldecode(trim($_GET["pauth"]));
-	    $auth = decrypt(urldecode(trim($_GET["auth"])));
-
+		if ($_GET['auth'] == 1)
+		{
+			if (!preg_match("|^(?:.+\.)?(.+\..+)$|i", $_GET ["host"], $hostmatch)) html_error('No valid hostname found for authorisation!');
+			$hostmatch = str_replace('.', '_', $hostmatch[1]);
+			if ($premium_acc ["$hostmatch"] && $premium_acc ["$hostmatch"] ["user"] && $premium_acc ["$hostmatch"] ["pass"])
+			{
+				$auth = base64_encode ( $premium_acc ["$hostmatch"] ["user"] . ":" . $premium_acc ["$hostmatch"] ["pass"] );
+			}
+			else html_error('No useable premium account found for this download - please set one in accounts.php');
+		}
+		else
+		{
+			$auth = decrypt(urldecode(trim($_GET['auth'])));
+		}
 	    if($_GET["auth"]){
 	      $AUTH["use"] = TRUE;
 	      $AUTH["str"] = $_GET["auth"];
@@ -593,6 +629,7 @@ if($limitbyip){
 				$_GET ["host"] = ($purl ["host"]) ? $purl ["host"] : $_GET ["host"];
     			$_GET["path"] = $purl["path"].($purl["query"] ? "?".$purl["query"] : "");
 				$_GET ['port'] = $purl ['port'] ? $purl ['port'] : 80;
+				$_GET ['cookie']=$_GET ["cookie"] ? urldecode(encrypt(trim($_GET["cookie"]))) : "";
     			$lastError = "";
 			}
 	    

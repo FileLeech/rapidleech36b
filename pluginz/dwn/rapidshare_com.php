@@ -170,23 +170,29 @@ class rapidshare_com extends DownloadClass {
 			unset($ahash);
 		}
 		if (!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) {
+			$pA = true;
 			$user = $_REQUEST["premium_user"];
 			$pass = $_REQUEST["premium_pass"];
 		} else {
 			$user = $premium_acc["rs_com"]["user"];
 			$pass = $premium_acc["rs_com"]["pass"];
 		}
+		$user = urlencode($user);
+		$pass = urlencode($pass);
 
-		$cookie = $this->ChkAccInfo('login', $user, $pass);
+		$cookie = $this->ChkAccInfo('login', $user, $pass, $pA);
 		$cookie = "enc=$cookie;";
+		$sendauth = 1;
+		if ($pA) $sendauth = 0;
+		else $cookie = 0;
 
-		$page = $this->GetPageS("https://rapidshare.com/files/{$this->fileid}/{$this->filename}", $cookie);
+		$page = $this->GetPageS("https://rapidshare.com/files/{$this->fileid}/{$this->filename}", $cookie, 0, 0, ($sendauth) ? base64_encode("$user:$pass") : '');
 		$this->Check_Limit($page);
 
 		if (!stristr($page, "Location:")) html_error("Cannot use premium account", 0);
 
 		$Href = $this->ReLocation($page);
-		$this->RedirectDownload($Href, $this->filename, $cookie);
+		$this->RedirectDownload($Href, $this->filename, $cookie, 0, 0, 0, $sendauth);
 	}
 	private function PremiumCookieDownload($cookie) {
 		$this->ChkAccInfo($cookie);
@@ -220,13 +226,11 @@ class rapidshare_com extends DownloadClass {
 			return $page;
 		}
 	}
-	private function ChkAccInfo($cookie, $user='', $pass='') {
+	private function ChkAccInfo($cookie, $user='', $pass='', $pA=false) {
 		if ($cookie != "login") {
-			$page = $this->Check_Limit($this->GetPageS($this->apiurl."?sub=getaccountdetails&cookie=" . $cookie), 1);
+			$page = $this->Check_Limit($this->GetPageS($this->apiurl."?sub=getaccountdetails&cookie=$cookie"), 1);
 			$t1 = 'Cookie';$t2 = 'cookie';
 		} elseif (!empty($user) && !empty($pass)) {
-			$user = urlencode($user);
-			$pass = urlencode($pass);
 			$page = $this->Check_Limit($this->GetPageS($this->apiurl."?sub=getaccountdetails&withcookie=1&login=$user&password=$pass"), 1);
 			$t1 = 'Error';$t2 = 'login details';
 		} else html_error("Login failed. User/Password empty.");
@@ -260,10 +264,11 @@ class rapidshare_com extends DownloadClass {
 
 		if ($info['servertime'] >= $info['billeduntil']) {
 			html_error("[$t1] RapidPro has expired or is inactive.");
-		} elseif ($info['directstart'] == 0) {
+		} elseif ($info['directstart'] == 0 && (!$user || $pA)) {
+			if ($pA) $cookie = $info['cookie'];
 			$dd = $this->GetPageS($this->apiurl."?cookie=$cookie&sub=setaccountdetails&directstart=1");
 			if (substr(strrchr($dd, "\n"), 1) != 'OK') {
-				html_error("[$t1] Error enabling direct downloads. Please do it manually.");
+				html_error("Error enabling direct downloads. Please do it manually.");
 			}
 			$this->changeMesg($this->lastmesg.'<br />Direct downloads has been enabled in your account');
 		}
@@ -313,7 +318,7 @@ class rapidshare_com extends DownloadClass {
 		$errz2 = curl_error($ch);
 		curl_close($ch);
 
-		if ($errz != 0) html_error("[cURL:$errz] $errz2");
+		if ($errz != 0) html_error("RS:[cURL:$errz] $errz2");
 		return $page;
 	}
 }
@@ -328,7 +333,8 @@ class rapidshare_com extends DownloadClass {
 //[18-MAR-11]  Premium: Now SSL downloads will be disabled if OpenSSL isn't loaded && Added 5 status msgs with changeMesg() :D - Th3-822
 //[19-APR-11]  Plugin checked & fixed for work with new changes at RS && SSL support is needed (It will show error if OpenSSL isn't loaded)... Including for get data in Free download :( . - Th3-822
 //[20-APR-11]  FreeDL: Added new functions for use https with cURL if OpenSSL isn't loaded. - Th3-822
-//[21-APR-11]  Plugin edited to work in 36B (With cookies & hashes) && Fixed $post in cURL function. (Oops, but isn't used by the plugin)... - Th3-822
+//[21-APR-11]  Fixed $post in cURL function. (Oops, but isn't used by the plugin)... - Th3-822
 //[29-MAY-11]  Premium: Removed support for multi RS logins (Isn't needed now) & changed the login process using 'ChkAccInfo'. Free: Changed countdown, added new function. And plugin checked. - Th3-822
+//[01-JUN-11]  Premium: Fixed error in login. - Th3-822
 
 ?>

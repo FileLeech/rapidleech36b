@@ -80,7 +80,7 @@ class DownloadClass {
 			"&partSize=" . ($_GET ["split"] ? $_GET ["partSize"] : "") . "&method=" . $_GET ["method"] .
 			"&proxy=" . ($_GET ["useproxy"] ? $_GET ["proxy"] : "") . "&saveto=" . $_GET ["path"] .
 			"&link=" . urlencode ( $link ) . ($_GET ["add_comment"] == "on" ? "&comment=" .
-			urlencode ( $_GET ["comment"] ) : "") . ($auth ? '&auth=' . (urlencode($auth)) : "") . ($pauth ? "&pauth=$pauth" : "") .
+			urlencode ( $_GET ["comment"] ) : "") . ($auth ? '&auth=' . ($auth == 1 ? 1 : urlencode($auth)) : "") . ($pauth ? "&pauth=$pauth" : "") .
 			($_GET ["uploadlater"] ? "&uploadlater=".$_GET["uploadlater"]."&uploadtohost=".$_GET['uploadtohost'] : "") .
 			"&cookie=" . ($cookie ? urlencode(encrypt($cookie)) : 0).
 			"&post=" . urlencode ( serialize ( $post ) ) .

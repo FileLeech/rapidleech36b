@@ -1,6 +1,6 @@
 <?php    
 if (!defined('RAPIDLEECH')){
-  require_once("404.php");
+  require_once("index.html");
   exit;
 }
 
@@ -13,6 +13,11 @@ class wupload_com extends DownloadClass {
             $this->DownloadPremium($link);
         } elseif ($_POST['step'] == "1") {
             $this->DownloadFree($link);
+        } elseif ($_POST['password'] == "1") {
+            $post["passwd"] = $_POST['passwd'];
+            $link = $_POST['link'];
+            $page = $this->GetPage($link, 0, $post, $referer );
+            $this->PrepareFree($link);
         } else {
             $this->PrepareFree($link);
         }
@@ -40,6 +45,17 @@ class wupload_com extends DownloadClass {
         $post['tm'] = $tm;
         $post['tm_hash'] = $tm_hash;
         $page = $this->GetPage($link, 0, $post, $referer);
+        if (stristr ( $page, "Please Enter Password" )) {
+            preg_match('%<form enctype="application/x-www-form-urlencoded" action="(.*)" method="post">%', $page, $match);
+            $link = "http://www.wupload.com".$match[1];
+            echo "\n" . '<form action="' . $PHP_SELF . '" method="post" >' . "\n";
+            echo '<input type="hidden" name="link" value="' . $link . '" />' . "\n";
+            echo '<input type="hidden" name="password" value="1" />' . "\n";
+            echo '<h4>Enter password here: <input type="text" name="passwd" id="filepass" size="13" />&nbsp;&nbsp;<input type="submit" onclick="return check()" value="Submit" /></h4>' . "\n";
+            echo "<script language='JavaScript'>\nfunction check() {\nvar pass=document.getElementById('filepass');\nif (pass.value == '') { window.alert('You didn\'t enter the password'); return false; }\nelse { return true; }\n}\n</script>\n";
+            echo "</form>\n</body>\n</html>";
+            exit;
+        }
         if (stristr ( $page, "Please enter the captcha below:" )) {
             if (preg_match('/Recaptcha\.create\("([^"]+)/i', $page, $k)) {
                 $k = $k[1];
@@ -107,11 +123,13 @@ class wupload_com extends DownloadClass {
         $cookie7 = "isAffiliate=".cut_str($page,'Set-Cookie: isAffiliate=',";")."; ";
         $cookies = "$cookie1$cookie2$cookie3$cookie4$cookie5$cookie6$cookie7";
         $page = $this->GetPage($link, $cookies, 0, 0);
-        if (!preg_match('#Location: (http:\/\/.+wupload\.com\/.+\/([a-z0-9]+))#', $page, $dlink)) {
-            html_error("Error 1x01: Plugin is out of date");
+        if (!stristr ( $page, "Location:" )) {
+            html_error("Error 1x01: Plugin is out of date!");
+
         }
-        $this->RedirectDownload(trim($dlink[1]), "wupload", $cookies, 0, $link);
-        exit;
+        $dlink = trim ( cut_str ( $page, "Location: ", "\n" ) );
+        $this->RedirectDownload($dlink, "wupload", $cookies, 0, $link);
+        exit();
     }
 
 }

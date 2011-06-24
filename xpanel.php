@@ -22,7 +22,7 @@ if(get_magic_quotes_gpc()) {
 }
 $ver_um = '1.7';
 define('RAPIDLEECH', 'yes');
-define('CONFIG_DIR', './');
+define('CONFIG_DIR', 'configs/');
 define('CLASS_DIR', 'classes/');
 define('MISC_DIR', 'misc/');
 define('LANG_DIR', 'languages/');
@@ -906,7 +906,7 @@ if(isset($_POST['submit'])){
 	$_config .= "\$add_ext_5city = '".$_POST['extension']."';//eg. ccpb => file_name.rar.ccpb\n\n";
 	
 	$_config .= "//define writable files\n";
-	$_config .= "define('LOG_DIR', 'logfile/');\n";
+	$_config .= "define('LOG_DIR', CONFIG_DIR.'logfile/');\n";
 	$_config .= "define('FILES_LST', LOG_DIR.'Rx08_2208081410_f1L3Z.lst');\n";
 	$_config .= "define('IP_L33CH_L0G', LOG_DIR.'Rx08_2208081410_IP_L33CH_L0G.lst');\n";
 	$_config .= "define('VISITOR_LST', LOG_DIR.'Rx08_2208081410_v1zit0r.lst');\n";

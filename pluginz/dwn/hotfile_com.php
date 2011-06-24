@@ -1,7 +1,8 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
+<?php
+
+if (!defined('RAPIDLEECH')) {
+	require_once ("index.html");
+	exit();
 }
 
 class hotfile_com extends DownloadClass {
@@ -16,11 +17,12 @@ class hotfile_com extends DownloadClass {
 			}
 			$page = $this->GetPage($link);
 			is_present($page, "<td>This file is either removed due", "Error: This file is either removed due to copyright claim or is deleted by the uploader.");
+			is_present($page, "<td>File is removed", "Error: File is removed due to copyright claim.");
 			if (stristr($page, "\r\nContent-Length: 0\r\n")) {
 				is_notpresent($page, "\r\nLocation:", "Error: Invalid link. Please check the download link.");
 				// Check if file has enabled Hot/Direct linking.
 				if (!preg_match("/(s\d+)\.hotfile\.com\/get\/(\w+\/\w+\/\w+\/\w+\/\w+)\/([^\r|\n]+)/i", $page, $l)) {
-					html_error("Error: Invalid link. Please check the download link.");
+					html_error("Error: Invalid link?. Please check the download link.");
 				}
 				$dllink = "http://{$l[1]}.hotfile.com/get/{$l[2]}/{$l[3]}";
 
@@ -40,15 +42,14 @@ class hotfile_com extends DownloadClass {
                         $cookie = $hf_cookie_auth_value;
                 }
 			$this->DownloadPremium($link, $cookie);
-		} elseif (($_REQUEST["premium_acc"] == "on" && $_REQUEST["premium_user"] && $_REQUEST["premium_pass"]) ||
-			($_REQUEST["premium_acc"] == "on" && $premium_acc["hotfile_com"]["user"] && $premium_acc["hotfile_com"]["pass"])) {
+		}elseif ($_REQUEST["premium_acc"] == "on" && (($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"])) || (!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) || (!empty($premium_acc["hotfile_com"]['user']) && !empty($premium_acc["hotfile_com"]['pass'])))) {
 			$this->DownloadPremium($link);
 		} else {
 			$this->DownloadFree($link);
 		}
 	}
 	private function DownloadFree($link) {
-		global $Referer, $download_dir;
+		global $Referer, $PHP_SELF;
 		$page = $this->GetPage($link);
 		if ($_GET["step"] != "1") {
 			if (!preg_match_all('/timerend=d\.getTime\(\)\+(\d+)/i', $page, $t)) {
@@ -103,7 +104,7 @@ class hotfile_com extends DownloadClass {
 	</form></body></html><?php
 				exit;
 			} else {
-				insert_timer($t[0]/1000, "Waiting captcha/link timelock:");
+				insert_timer(($t[0]/1000)+1, "Waiting captcha/link timelock:");
 			}
 			$post['action'] = cut_str($page, "action value=", ">");
 			$post['tm'] = cut_str($page, "tm value=", ">");
@@ -117,6 +118,20 @@ class hotfile_com extends DownloadClass {
 
 		$lfound = (stristr($page, "hotfile.com/get/") ? true : false);
 		$cfound = (stristr($page, "api.recaptcha.net/challenge?k=") ? true : false);
+		if (!$lfound && !$cfound) {
+			/* No captcha or link found?. Let's try resending the post */
+			$post['action'] = cut_str($page, "action value=", ">");
+			$post['tm'] = cut_str($page, "tm value=", ">");
+			$post['tmhash'] = cut_str($page, "tmhash value=", ">");
+			$post['wait'] = cut_str($page, "wait value=", ">");
+			$post['waithash'] = cut_str($page, "waithash value=", ">");
+			$post['upidhash'] = cut_str($page, "upidhash value=", ">");
+
+			$page = $this->GetPage($link, 0, $post);
+
+			$lfound = (stristr($page, "hotfile.com/get/") ? true : false);
+			$cfound = (stristr($page, "api.recaptcha.net/challenge?k=") ? true : false);
+		}
 
 		if($_GET["step"] == "1" && !$lfound) {
 			//Send captcha
@@ -148,7 +163,7 @@ class hotfile_com extends DownloadClass {
 			//Download captcha img.
 			$page = $this->GetPage("http://www.google.com/recaptcha/api/image?c=" . $challenge);
 			$capt_img = substr($page, strpos($page, "\r\n\r\n") + 4);
-			$imgfile = $download_dir . "hotfile_captcha.jpg";
+			$imgfile = DOWNLOAD_DIR . "hotfile_captcha.jpg";
 
 			if (file_exists($imgfile)) {
 				unlink($imgfile);
@@ -173,6 +188,7 @@ class hotfile_com extends DownloadClass {
 		is_notpresent($page, "\r\nLocation:", "Error: Direct link not found.");
 
 		if (!preg_match("/(s\d+)\.hotfile\.com\/get\/(\w+\/\w+\/\w+\/\w+\/\w+)\/([^\r|\n]+)/i", $page, $l)) {
+			is_present(cut_str($page, "\r\nLocation: ", "\r\n"), "?expire=1", "Error: Your download expired, try again.");
 			html_error("Error: Direct link not found [2].");
 		}
 		$dllink = "http://{$l[1]}.hotfile.com/get/{$l[2]}/{$l[3]}";
@@ -209,6 +225,15 @@ class hotfile_com extends DownloadClass {
 	private function login($authc = false) {
 		global $premium_acc;
 		
+		if (($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"]))) {
+			$ahash = ($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"]));
+			$ahash = explode(":", base64_decode(utf8_strrev(dcd($ahash))));
+			if(count($ahash) == 2 && (!empty($ahash[0]) && !empty($ahash[1]))) {
+				$_REQUEST["premium_user"] = $ahash[0];
+				$_REQUEST["premium_pass"] = $ahash[1];
+			}
+			unset($ahash);
+		}
 		if (!$authc) {
 			$user = ($_REQUEST["premium_user"] ? $_REQUEST["premium_user"] : $premium_acc["hotfile_com"]["user"]);
 			$pass = ($_REQUEST["premium_pass"] ? $_REQUEST["premium_pass"] : $premium_acc["hotfile_com"]["pass"]);
@@ -223,6 +248,7 @@ class hotfile_com extends DownloadClass {
 			$page = $this->GetPage($postURL, 0, $post, 'http://hotfile.com/');
 			$cookie = GetCookies($page);
 
+			is_present($page, '/suspended.html', "Login failed: Your account has been suspended.");
 			is_notpresent($page, "Location: /?cookiecheck=1", "Login failed: Username or Password is incorrect.");
 			is_notpresent($cookie, "auth=", "Login Failed: Cannot get cookie.");
 		} elseif (strlen($authc) == 64) {
@@ -242,5 +268,6 @@ class hotfile_com extends DownloadClass {
 
 //[06-Feb-2011]  Plugin rewritten & added cookie support by Th3-822.
 //[13-Feb-2011]  Removed old code & Fixed captcha in free download. - Th3-822
+//[15-May-2011]  Added 3 error msg; 1 edited & Fixed error in 'hfwait' form & Added 1 seg to free dl Timelock & Added code to try again if captcha isn't found. - Th3-822
 
 ?>

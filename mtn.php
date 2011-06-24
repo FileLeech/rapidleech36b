@@ -4,7 +4,7 @@ error_reporting(0);
 set_time_limit(0);
 session_start();
 define('CLASS_DIR', 'classes/');
-define('CONFIG_DIR', './');
+define('CONFIG_DIR', 'configs/');
 define('LANG_DIR', 'languages/');
 define ( 'TEMPLATE_DIR', 'misc/tpl/'.$csstype.'/' );
 define ('CREDITS', '<small class="small-credits">Sakib Hossain | Slider234 | jmsmarcelo | DarkNight</small><br />');

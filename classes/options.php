@@ -30,7 +30,7 @@ function closeit(flag){var d_shlast = d.getElementById(\"showlast\");var d_hist 
 
 	switch ($_GET ["act"]) {
 		case "upload" :
-			if(!defined('UPLOAD_DIR')){define(UPLOAD_DIR, 'upl/');}
+			if(!defined('UPLOAD_DIR')){define(UPLOAD_DIR, HOST_DIR.'upl/');}
 			require(CLASS_DIR . "options/upload.php");
 			upload();
 			break;

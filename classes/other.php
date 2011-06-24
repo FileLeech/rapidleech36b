@@ -586,12 +586,12 @@ function write_traffic($fname, $isi)
   
 function create_hosts_file($host_file = "hosts.php")
 	{
-	$fp = opendir(HOST_DIR);
+	$fp = opendir(HOST_DIR.'dwn/');
 	while (($file = readdir($fp)) !== false)
 		{
 		if (substr($file, -4) == ".inc")
 			{
-			require_once(HOST_DIR.$file);
+			require_once(HOST_DIR.'dwn/'.$file);
 			}
 		}
 	if (!is_array($host))
@@ -600,7 +600,7 @@ function create_hosts_file($host_file = "hosts.php")
 		}
 	else
 		{
-		$fs = fopen(HOST_DIR.$host_file, "wb");
+		$fs = fopen(HOST_DIR.'dwn/'.$host_file, "wb");
 		if (!$fs)
 			{
 			print "Cannot create hosts file";

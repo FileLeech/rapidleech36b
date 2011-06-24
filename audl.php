@@ -7,7 +7,7 @@ error_reporting(0);
 
 define('MISC_DIR', 'misc/');
 define('CLASS_DIR', 'classes/');
-define('CONFIG_DIR', './');
+define('CONFIG_DIR', 'configs/');
 define('LANG_DIR', 'languages/');
 @set_time_limit(0);
 ini_alter("memory_limit", "1024M");
@@ -39,7 +39,7 @@ error_reporting(6135);
 if($limited_edition || $limited_area)
 {
   $dlimitation = array($limited_edition, $limited_area);
-  require_once("limit_district.php");
+  require_once(CLASS_DIR."limit_district.php");
 }
 
 if(!$forbid_audl){

@@ -2,7 +2,7 @@
  error_reporting(1);
  define('RAPIDLEECH', 'yes');
  define('ROOT_DIR', realpath("./"));
- define('CONFIG_DIR', './');
+ define('CONFIG_DIR', 'configs/');
  define('CLASS_DIR', 'classes/');
  define('LANG_DIR', 'languages/');
  define('AJAX_DIR', CLASS_DIR . 'ajax/');

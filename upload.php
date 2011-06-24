@@ -2,8 +2,9 @@
 define('RAPIDLEECH', 'yes');
 
 define('MISC_DIR', 'misc/');
-define('UPLOAD_DIR', 'upl/');
-define('CONFIG_DIR', './');
+define('HOST_DIR', 'pluginz/');
+define('UPLOAD_DIR', HOST_DIR.'upl/');
+define('CONFIG_DIR', 'configs/');
 define('CLASS_DIR', 'classes/');
 
 error_reporting(0);

@@ -12,7 +12,7 @@ Updated by Raj Malhotra on 12 Dec 2010 => Added some improvements
 \*******************megaupload.com*******************************/
 
 if (! defined ( 'RAPIDLEECH' )) {
-	require_once ("index.html");
+	require_once ("404.php");
 	exit ();
 }
 

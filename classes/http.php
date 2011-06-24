@@ -294,33 +294,6 @@ if ($saveToFile)
 	}  
   }
   
-  if($limitbyip)
-  {
-   if($ada_acc){
-    $ahost = $host;
-	$hostfile = "hosts.php";
-	require_once(HOST_DIR.$hostfile); // $host redefine as an array colection plugin 
-	$ar_host = explode(".", $ahost);
-	$_host = ''; $pjg=0;
-	for($i=0; $i<count($ar_host); $i++){
-	  if($pjg<2){$_host= $ar_host[count($ar_host)-$i-1].($i==0?"":".").$_host; }
-	  $pjg++;
-	}
-	$dumhost= array(); $i=0;
-	foreach($host as $dh => $flnya){
-	 $dumhost[$i] = $dh; $i++;
-	}
-	$host = $ahost;
-	//if($post!==0 || $auth!==0 || $cookie!==0){
-	if(in_array($_host, $dumhost)){
-	 $fname = basename($saveToFile).".".rand(1,1000); 
-	 $limitedfile = "./tmp/$ipmu.$fname";
-	 $ret = mkdir("$limitedfile", 0777); 
-	}
-   } //-- ada_acc
-  } //-- limitbyip
-
-  
   if (stristr($host, "rapidshare") && $bytesTotal < 10000)
 	{
 		while(!feof($fp))
@@ -374,25 +347,19 @@ if ($Resume["use"] === TRUE && !stristr($header, "Content-Range:"))
 	return FALSE;
 	}
 
-$ContentDisposition = trim(cut_str($header, "Content-Disposition:", "\n"))."\n";
-if ($ContentDisposition && stristr($ContentDisposition, "filename="))
-	{
-	
-	if($force_name)
-	  {
-		$FileName = $force_name;		
-        
-	  }
-	else
-	  {
-		$FileName = trim(trim(trim(trim(trim(cut_str($ContentDisposition, "filename=", "\n")), "="), "?"), ";"), '"');		
-	  }
-	  if(preg_match("/UTF\-8\?B\?(.*)$/i", $FileName, $b64)){	    
-	    $FileName = preg_replace("/[^a-zA-Z0-9\-\.]/", "_", base64_decode($b64[1]));
-	  }
-	  if (strpos($FileName,"/")){$FileName=basename($FileName);
-	  }
-	  $saveToFile = dirname($saveToFile).PATH_SPLITTER.$FileName;
+	if($force_name) {
+		$FileName = $force_name;
+		$saveToFile = dirname ( $saveToFile ) . PATH_SPLITTER . $FileName;
+	} else {
+		$ContentDisposition = trim ( cut_str ( $header, "Content-Disposition:", "\n" ) ) . "\n";
+		if ($ContentDisposition && stripos ( $ContentDisposition, "filename=" ) !== false) {
+			$FileName = trim ( trim ( trim ( trim ( trim ( cut_str ( $ContentDisposition, "filename=", "\n" ) ), "=" ), "?" ), ";" ), '"' );
+			if (strpos($FileName,"/") !== false) $FileName = basename($FileName);
+			if(preg_match("/UTF\-8\?B\?(.*)$/i", $FileName, $b64)){
+				$FileName = preg_replace("/[^a-zA-Z0-9\-\.]/", "_", base64_decode($b64[1]));
+			}
+			$saveToFile = dirname($saveToFile).PATH_SPLITTER.$FileName;
+		}
 	}
 
 if(!empty($add_ext_5city)||!empty($rename_suffix)||!empty($rename_prefix)){
