@@ -19,7 +19,7 @@ class turbobit_net extends DownloadClass {
     }
 
     private function Retrieve($link) {
-        global $options;
+        global $download_dir;
         $page = $this->GetPage($link);
         preg_match_all('#Set-Cookie: ([^;]+)#', $page, $tmp);
         $TmpCookies = $tmp[1][2];
@@ -56,8 +56,8 @@ class turbobit_net extends DownloadClass {
                 $page = $this->GetPage($img);
                 $headerend = strpos($page, "\r\n\r\n");
                 $pass_img = substr($page, $headerend + 4);
-                write_file($options['download_dir'] . "turbobit_captcha.jpg", $pass_img);
-                $img_src = $options['download_dir'] . "turbobit_captcha.jpg";
+                write_file($download_dir . "turbobit_captcha.jpg", $pass_img);
+                $img_src = $download_dir . "turbobit_captcha.jpg";
             }else
                 html_error("Error 0x03: Plugin is out of date");
         } else {
@@ -68,8 +68,8 @@ class turbobit_net extends DownloadClass {
                 $t=strpos($pass_img, "P");
                 $pass_img=ltrim(substr($pass_img, $t-2),"\r\n");
             }
-            write_file($options['download_dir'] . "turbobit_captcha.png", $pass_img);
-            $img_src = $options['download_dir'] . "turbobit_captcha.png";           
+            write_file($download_dir . "turbobit_captcha.png", $pass_img);
+            $img_src = $download_dir . "turbobit_captcha.png";           
         }
         $this->EnterCaptcha($img_src, $data, '10');
         exit;

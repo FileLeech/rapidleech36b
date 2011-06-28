@@ -28,7 +28,7 @@ function auto_del($delay = 0)
 function ipcounter()
 {
   global $heute, $delay_per_ip, $ipmu;
-  $xhandle=@opendir("tmp");
+  $xhandle=@opendir(CONFIG_DIR."tmp");
   if($xhandle)
   {
 	while($buin = readdir($xhandle)) {
@@ -46,17 +46,17 @@ function ipcounter()
 
 	error_reporting(0);
 	$time=time();
-	$xhandle=@opendir("tmp");
+	$xhandle=@opendir(CONFIG_DIR."tmp");
 	while($buin = readdir($xhandle)) {
 		if($buin=="." || $buin=="..") {$buin="fu"; }		
-		$xd=filemtime("tmp/$buin");
+		$xd=filemtime(CONFIG_DIR."tmp/$buin");
 		$altr=$time-$xd;
 		if($altr>$delay_per_ip*60*60) {
-			if(is_dir("tmp/$buin")) {
-				rmdir("tmp/$buin"); 
+			if(is_dir(CONFIG_DIR."tmp/$buin")) {
+				rmdir(CONFIG_DIR."tmp/$buin"); 
 			}
 			else {
-				unlink("tmp/$buin"); 
+				unlink(CONFIG_DIR."tmp/$buin"); 
 			}
 		}
 	}

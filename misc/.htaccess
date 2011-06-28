@@ -4,7 +4,7 @@ order deny,allow
 deny from all
 </files>
 
-<files ~ "\.upload.html$">
+<files js.php>
 allow from all
 </files>
 
