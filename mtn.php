@@ -41,7 +41,7 @@ if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === 
 if($limited_edition || $limited_area)
 {
   $dlimitation = array($limited_edition, $limited_area);
-  require_once("limit_district.php");
+  require_once(CLASS_DIR."limit_district.php");
 }
 if($limit_timework)
 {  

@@ -1,6 +1,6 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-  require_once("index.html");
+  require_once("404.php");
   exit;
 }
 

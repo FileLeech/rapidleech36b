@@ -45,7 +45,7 @@ $server = getServerPlatf();
 if($limited_edition || $limited_area)
 {
   $dlimitation = array($limited_edition, $limited_area);
-  require_once("limit_district.php");
+  require_once(CLASS_DIR."limit_district.php");
 }
 
 if(!$forbid_lynx){

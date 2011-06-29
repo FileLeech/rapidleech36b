@@ -1,14 +1,15 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-    require_once("404.php");
-    exit;
+    require_once("index.html");
+    exit();
 }
 
-class filefaster_com extends DownloadClass {
+class zomgupload_com extends DownloadClass {
+
     public function Download($link) {
         global $Referer;
             $page = $this->GetPage($link);
-            is_present($page, "No such file with this filename", "No such file with this filename");
+            is_present($page, "File Not Found", "The file you were looking for could not be found");
 
             $id = cut_str($page, 'name="id" value="','"');
             $FileName = cut_str($page, 'name="fname" value="','"');
@@ -19,12 +20,13 @@ class filefaster_com extends DownloadClass {
             $post['id'] = $id;
             $post['fname'] = $FileName;
             $post['referer'] = $link;
-            $post['method_free'] = "Free Download";
+            $post['method_free'] = " ";
             $page = $this->GetPage($link, 0, $post, $link);
-            if (preg_match('#(\d+)</b></font></span> seconds#', $page, $wait)) {
+            $rand = cut_str($page, 'name="rand" value="','"');
+            if (preg_match('#(\d+)</span> seconds#', $page, $wait)) {
                 $this->CountDown($wait[1]);
             }
-            if (preg_match_all("#<span style='[^\d]+(\d+)[^\d]+\d+\w+;'>\W+(\d+);</span>#", $page, $temp)) {
+            if (preg_match_all("#<span style='[^\d]+(\d+)[^\d]+\d+\w+;'>(\d+)</span>#", $page, $temp)) {
                 for ($i=0;$i<count($temp[1])-1;$i++){
                     for ($j=$i+1;$j<count($temp[1]);$j++){
                         if ($temp[1][$i]>$temp[1][$j]){
@@ -40,28 +42,28 @@ class filefaster_com extends DownloadClass {
                 }
                 $captcha="";
                 foreach($temp[2] as $value) {
-                    $captcha.=chr($value);
+                    $captcha.=$value;
                 }
             }
-            $rand = cut_str($page, 'name="rand" value="','"');
-            unset ($post);
+            unset($post);
             $post['op'] = "download2";
             $post['id'] = $id;
             $post['rand'] = $rand;
             $post['referer'] = $link;
-            $post['method_free'] = "Free Download";
+            $post['method_free'] = " ";
             $post['method_premium'] = "";
             $post['code'] = $captcha;
-            $post['down_script'] = "1";
+            $post['down_direct'] = "1";
             $page = $this->GetPage($link, 0, $post, $link);
-            if (!stristr ( $page, "Location:" )) {
-                html_error("Sorry, download link couldn't be found. Contact the author n give the link which u have this error!");
+            if (!preg_match('#(http:\/\/.+zomgupload\.com(:\d+)?\/files\/\d+\/[^"]+)"#', $page, $dl)) {
+                html_error("Sorry, Download link not found, contact the author n give the link which u have this error");
             }
-            $dlink = trim (cut_str($page, "Location: ", "\n" ));
+            $dlink = trim($dl[1]);
+            $Url = parse_url($dlink);
             if (!$FileName) $FileName = basename ($Url['path']);
             $this->RedirectDownload($dlink, $FileName, 0, 0, $link);
     }
 }
 
-//filefaster free download plugin by Ruud v.Tony 23-06-2011
+//zomgupload free download plugin by Ruud v.Tony 28-06-2011
 ?>

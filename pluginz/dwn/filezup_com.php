@@ -1,26 +1,23 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-    require_once ("404.php");
-    exit ();
+    require_once("index.html");
+    exit();
 }
 
-class filehook_com extends DownloadClass {
+class filezup_com extends DownloadClass {
 
     public function Download($link) {
-        global $premium_acc;
-            if (($_REQUEST['premium_acc'] == 'on' && $_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || ($_REQUEST['premium_acc'] == 'on' && $premium_acc['filehook_com'] ['user'] && $premium_acc['filehook_com'] ['pass'])) {
-                $this->DownloadPremium($link);
-            } elseif ($_POST['step'] == '1') {
-                $this->DownloadFree($link);
-            } else {
-                $this->Retrieve($link);
-            }
+        if($_POST['step'] == "1") {
+            $this->DownloadFree($link);
+        } else {
+            $this->Retrieve($link);
+        }
     }
 
     private function Retrieve($link) {
         global $Referer;
             $page = $this->GetPage($link);
-            is_present($page, "File Not Found", "Have u check ur link? The file doesn't exist!");
+            is_present($page, "File Not Found", "The file you were looking for could not be found");
 
             $id = cut_str($page, 'name="id" value="','"');
             $fname = cut_str($page, 'name="fname" value="','"');
@@ -30,31 +27,26 @@ class filehook_com extends DownloadClass {
             $post['usr_login'] = "";
             $post['id'] = $id;
             $post['fname'] = $fname;
-            $post['referer'] = $link;
-            $post['op0'] = "download1";
-            $post['usr_login0'] = "";
-            $post['id0'] = "";
-            $post['fname0'] = $fname;
-            $post['referer0'] = $link;
+            $post['referer'] = "";
             $post['method_free'] = "Free Download";
             $page = $this->GetPage($link, 0, $post, $link);
             $rand = cut_str($page, 'name="rand" value="','"');
             if (preg_match("#You have to wait (\d+) minutes, (\d+) seconds till next download#",$page,$message)){
                 html_error($message[0]);
             }
-            if (preg_match('#(\d+)</span>seconds#', $page, $wait)) {
+            if (preg_match('#(\d+)</span> seconds#', $page, $wait)) {
                 $this->CountDown($wait[1]);
             }
-            if (stristr($page, "Enter code below:")) {
-                preg_match('#(http://filehook.com/captchas/.+)"#', $page, $temp);
-                
+            if (stristr($page, "Enter code below")) {
+                preg_match('#(http:\/\/www\.filezup.com\/captchas/.+)"#', $page, $temp);
+
                 $data = array();
                 $data['step'] = '1';
                 $data['link'] = $link;
                 $data['id'] = $id;
                 $data['rand'] = $rand;
                 $data['referer'] = urlencode($link);
-                $this->EnterCaptcha($temp[1], $data, 10);
+                $this->EnterCaptcha($temp[1], $data, 20);
                 exit();
             }
     }
@@ -74,20 +66,16 @@ class filehook_com extends DownloadClass {
         if (strpos($page, "Wrong captcha")) {
             return $this->Retrieve($link);
         }
-        if (!preg_match('#(http:\/\/.+(:\d+)?\/d\/[^"]+)"#', $page, $dl)) {
-            html_error("Sorry, Download link not found, contact the author n post the link which u have this error");
+        if (!stristr ( $page, "Location:" )) {
+            html_error("Sorry, download link couldn't be found. Contact the author n give the link which u have this error!");
         }
-        $dlink = trim($dl[1]);
+        $dlink = trim (cut_str($page, "Location: ", "\n"));
         $Url = parse_url($dlink);
         $FileName = basename($Url['path']);
         $this->RedirectDownload($dlink, $FileName, 0, 0, $link);
         exit();
     }
-
-    private function DownloadPremium($link) {
-        html_error("This plugin doesn't support premium!");
-    }
 }
 
-//filehook free download plugin by Ruud v.Tony 21-06-2011 (for fun :D)
+//filezup.com free download plugin by Ruud v.Tony 28-06-2011
 ?>
