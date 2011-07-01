@@ -294,6 +294,15 @@ if ($saveToFile)
 	}  
   }
   
+  if($limitbyip)
+  {
+   if($ada_acc){
+	 $fname = basename($saveToFile).".".rand(1,1000); 
+	 $limitedfile = CONFIG_DIR."tmp/$ipmu.$fname";
+	 $ret = mkdir("$limitedfile", 0777);
+   } //-- ada_acc
+  } //-- limitbyip
+  
   if (stristr($host, "rapidshare") && $bytesTotal < 10000)
 	{
 		while(!feof($fp))

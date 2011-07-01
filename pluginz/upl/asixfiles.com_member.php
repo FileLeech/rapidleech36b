@@ -66,13 +66,13 @@ if ($continue_up)
 	$post['upload_type']= 'file';
 	$post['sess_id']= $xfss;
 	$post['file_0_descr']=$_REQUEST['descript'];
-	$post['file_0_public']='1';
+	$post['file_0_public']='';
 	$post['link_rcpt']='';
 	$post['link_pass']='';
 	$post['tos']='1';
 	$post['submit_btn']=' Upload! ';
-	$uurl= $upfrm.'/cgi-bin/upload.cgi?upload_id='.$uid.'&js_on=1&utype=anon&upload_type=file';
-	$url=parse_url($upfrm.'/cgi-bin/upload.cgi?upload_id='.$uid.'&js_on=1&utype=anon&upload_type=file');
+	$uurl= $upfrm.'/cgi-bin/upload.cgi?upload_id='.$uid.'&js_on=1&utype=prem&upload_type=file';
+	$url=parse_url($upfrm.'/cgi-bin/upload.cgi?upload_id='.$uid.'&js_on=1&utype=prem&upload_type=file');
 ?>
 <script>document.getElementById('info').style.display='none';</script>
 <?
