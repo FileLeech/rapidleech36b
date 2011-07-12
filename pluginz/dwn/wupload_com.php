@@ -1,4 +1,4 @@
-<?php    
+<?php
 if (!defined('RAPIDLEECH')){
   require_once("404.php");
   exit;
@@ -13,7 +13,7 @@ class wupload_com extends DownloadClass {
             $page = $this->GetPage($link);
             is_present($page, "Error 404", "The page you are trying to access was not found.");
             is_present($page, "Sorry! This file has been deleted.", "Sorry! This file has been deleted.");
-            if (preg_match('/Location: (http:\/\/www\.wupload\.com\/file\/.+)/', $page, $tlink)) {
+            if (preg_match('/Location: (.*)/', $page, $tlink)) {
                 $link = $tlink[1];
                 $page = $this->GetPage($link);
             }
@@ -39,7 +39,9 @@ class wupload_com extends DownloadClass {
         } elseif ($_POST['passfree'] == "1") {
             $post["passwd"] = $_POST['passwd'];
             $link = $_POST['link'];
-            $page = $this->GetPage($link, 0, $post, $link);
+            $Referer = $_POST['referer'];
+            $cookie = urldecode($_POST['cookie']);
+            $page = $this->GetPage($link, $cookie, $post, $Referer);
             $this->PrepareFree($link);
         } else {
             $this->PrepareFree($link);
@@ -50,13 +52,19 @@ class wupload_com extends DownloadClass {
         global $Referer;
 
             $page = $this->GetPage($link);
-            if (preg_match('/\/file\/(\d+)/i', $link, $match)) {
-                $id = $match[1];
-            }
+            $cookie = GetCookies($page);
             if (preg_match('/<a href="(.*)" id="free_download">/', $page, $match)) {
-                $link = "http://www.wupload.com/file/$id/$match[1]";
+                $link = "http://www.wupload.com/file/".$match[1];
             }
-            $page = $this->GetPage($link, 0, 0, $link);
+            $page = $this->GetPage($link, $cookie, 0, $Referer);
+            is_present($page, 'You can only download 1 file at a time.', 'You can only download 1 file at a time.');
+            if (preg_match('/http:\/\/.+wupload\.com\/download\/[^\'"]+/i', $page, $dl)) {
+                $dlink = trim($dl[0]);
+                $Url = parse_url($dlink);
+                $FileName = basename($Url['path']);
+                $this->RedirectDownload($dlink, $FileName, $cookie, 0, $Referer);
+                exit ();
+            }
             if (stristr ( $page, "Please wait" )) {
                 preg_match('/var countDownDelay = ([0-9]+);/', $page, $wait);
                 $this->CountDown($wait[1]);
@@ -66,19 +74,21 @@ class wupload_com extends DownloadClass {
             $post = array();
             $post['tm'] = $tm;
             $post['tm_hash'] = $tm_hash;
-            $page = $this->GetPage($link, 0, $post, $link);
+            $page = $this->GetPage($link, 0, $post, $Referer);
             if (stristr ( $page, "Please Enter Password" )) {
                 preg_match('%<form enctype="application/x-www-form-urlencoded" action="(.*)" method="post">%', $page, $match);
                 $link = "http://www.wupload.com".$match[1];
                 echo "\n" . '<form action="' . $PHP_SELF . '" method="post" >' . "\n";
                 echo '<input type="hidden" name="link" value="' . $link . '" />' . "\n";
+                echo '<input type="hidden" name="referer" value="' . $Referer . '" />' . "\n";
+                echo '<input type="hidden" name="cookie" value="' . urlencode($cookie) . '" />' . "\n";
                 echo '<input type="hidden" name="passfree" value="1" />' . "\n";
                 echo '<h4>Enter password here: <input type="text" name="passwd" id="filepass" size="13" />&nbsp;&nbsp;<input type="submit" onclick="return check()" value="Submit" /></h4>' . "\n";
                 echo "<script language='JavaScript'>\nfunction check() {\nvar pass=document.getElementById('filepass');\nif (pass.value == '') { window.alert('You didn\'t enter the password'); return false; }\nelse { return true; }\n}\n</script>\n";
                 echo "</form>\n</body>\n</html>";
                 exit;
             }
-            if (stristr ( $page, "Please enter the captcha below:" )) {
+            if (stristr ( $page, "Please enter the captcha" )) {
                 if (preg_match('/Recaptcha\.create\("([^"]+)/i', $page, $k)) {
                     $k = $k[1];
                     $cachestop = rand();
@@ -86,10 +96,11 @@ class wupload_com extends DownloadClass {
                     html_error("Error getting CAPTCHA data.", 0);
                 }
                 $page = $this->GetPage("http://www.google.com/recaptcha/api/challenge?k=$k&cachestop=".$cachestop."&ajax=1");
+                $cookieimg = GetCookies($page);
                 $ch = cut_str($page, "challenge : '", "'");
                 if ($ch) {
                     $img = "http://www.google.com/recaptcha/api/image?c=".$ch;
-                    $page = $this->GetPage($img);
+                    $page = $this->GetPage($img, $cookieimg);
                     $capt_img = substr($page, strpos($page, "\r\n\r\n") + 4);
                     $imgfile = DOWNLOAD_DIR."wupload.jpg";
                     if (file_exists($imgfile)) {
@@ -103,6 +114,8 @@ class wupload_com extends DownloadClass {
                 $data = array();
                 $data['step'] = '1';
                 $data['link'] = $link;
+                $data['referer'] = $Referer;
+                $data['cookie'] = urlencode($cookie);
                 $data['recaptcha_challenge_field'] = $ch;
                 $this->EnterCaptcha($imgfile, $data, 20);
                 exit();
@@ -115,14 +128,16 @@ class wupload_com extends DownloadClass {
             $post['recaptcha_challenge_field'] = $_POST["recaptcha_challenge_field"];
             $post['recaptcha_response_field'] = $_POST["captcha"];
             $link = $_POST["link"];
-            $page = $this->GetPage($link, 0, $post, $link);
+            $Referer = $_POST["referer"];
+            $cookie = urldecode($_POST["cookie"]);
+            $page = $this->GetPage($link, $cookie, $post, $Referer);
             if (!preg_match('/http:\/\/.+wupload\.com\/download\/[^\'"]+/i', $page, $dl)) {
                 html_error("Error: Download link not found, plugin need to be updated!");
             }
             $dlink = trim($dl[0]);
             $Url = parse_url($dlink);
             $FileName = basename($Url['path']);
-            $this->RedirectDownload($dlink, $FileName, 0, 0, $link);
+            $this->RedirectDownload($dlink, $FileName, $cookie, 0, $Referer);
             exit ();
     }
 

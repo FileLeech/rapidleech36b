@@ -2,8 +2,7 @@
 </td></tr>
 <tr><td align=center>
 <div id=info width=100% align=center>Retrive upload ID</div>
-<?php 
-
+<?php
 /************************************************************
 * Enter your default Login & Password below (if applicable) *
 *************************************************************/

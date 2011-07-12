@@ -4,7 +4,7 @@ if (!defined('RAPIDLEECH')){
   exit;
 }
 
-require_once (HOST_DIR .  "uploaded_to.php");
+require_once (HOST_DIR . "dwn/"."uploaded_to.php");
 $link = str_replace("ul.to", "uploaded.to/file", $LINK);
 $hostClass = new uploaded_to();
 $hostClass->Download( $link );

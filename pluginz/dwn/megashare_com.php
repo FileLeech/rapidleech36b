@@ -1,7 +1,7 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
+<?php
+if (!defined('RAPIDLEECH')) {
+	require_once ("index.html");
+	exit();
 }
 
 class megashare_com extends DownloadClass {
@@ -9,7 +9,7 @@ class megashare_com extends DownloadClass {
 		global $premium_acc;
 
 		if (($_REQUEST["premium_acc"] == "on" && $_REQUEST["premium_user"] && $_REQUEST["premium_pass"]) ||
-			($_REQUEST["premium_acc"] == "on" && $premium_acc["megashare"]["user"] && $premium_acc["megashare"]["pass"])) {
+			($_REQUEST["premium_acc"] == "on" && $premium_acc["megashare_com"]["user"] && $premium_acc["megashare_com"]["pass"])) {
 			return $this->Download_Premium($link);
 		} elseif ($_POST['step'] == 1) {
 			return $this->Send_Captcha($link);
@@ -19,20 +19,19 @@ class megashare_com extends DownloadClass {
 	}
 
 	private function Prepare_Free($link) {
-            global $download_dir;
 		$page = $this->GetPage($link);
-		if (preg_match('#Location: (http://(\w+\.)megashare.com/[^\r|\n]+)#i', $page, $RD)) {
+		if (preg_match('#Location: (http://(\w+\.)megashare\.com/[^\r|\n]+)#i', $page, $RD)) {
 			$link = $RD[1];
 			$page = $this->GetPage($link);
 		}
 		$cookie = GetCookies($page);
 
-		if (!preg_match('@<input type="hidden" name="([^"]+)" value="([^"]+)">@i', $page, $HV) || !preg_match('@src="images/dwn-btn3.gif" name="(?#Hate chunked reqs)(?:\r?\n[^\r|\n]+\r?\n)?([^"]+)" class="textfield" value="([^"]+)">@i', $page, $SP)) html_error("Error getting POST data.");
+		if (!preg_match('@<input type="hidden" name="([^"]+)" value="([^"]+)">@i', $page, $HV) || !preg_match('@src="images/dwn-btn3\.gif" name="(?#Hate chunked reqs)(?:\r?\n[^\r|\n]+\r?\n)?([^"]+)" class="textfield" value="([^"]+)">@i', $page, $SP)) html_error("Error getting POST data.");
 
 		$post = array($HV[1] => $HV[2], $SP[1] => $SP[2], $SP[1].'.x' => 1, $SP[1].'.y' => 1);
 		$page = $this->GetPage($link, $cookie, $post);
-		is_present($page, "This File has been DELETED.", "This file was deleted.");
-		is_present($page, "This File is Password Protected.", "This File is Password Protected.");
+		is_present($page, "This File has been DELETED", "This file was deleted.");
+		is_present($page, "This File is Password Protected", "This File is Password Protected.");
 
 		$form = cut_str($page, 'name="downloader">', "</form>");
 		if (!preg_match_all('@<input type="hidden" name="([^"]+)" value="(?#Still hating chunked reqs)(?:\r?\n[^\r|\n]+\r?\n)?([^"]+)?"(?:\s?/?)>@i', $page, $hI)) html_error("Error getting POST data 2.");
@@ -51,7 +50,7 @@ class megashare_com extends DownloadClass {
 		$form = cut_str($page, 'name="downloader">', "</form>");
 		if (!preg_match_all('@<input type="hidden" name="([^"]+)" value="(?#Still hating chunked reqs)(?:\r?\n[^\r|\n]+\r?\n)?([^"]+)?"(?:\s?/?)>@i', $page, $hI)) html_error("Error getting CAPTCHA/POST data.");
 
-		if (!preg_match('@src="images/get-direct-link-btn.png" name="([^"]+)" value="([^"]+)"@i', $page, $dI)) html_error("Error getting POST data 3.");
+		if (!preg_match('@src="images/get-direct-link-btn\.png" name="([^"]+)" value="([^"]+)"@i', $page, $dI)) html_error("Error getting POST data 3.");
 		$post = array($dI[1].'.x' => 1, $dI[1].'.y' => 1);
 		$hI = array_combine($hI[1], $hI[2]);
 		foreach ($hI as $k => $v) {
@@ -73,7 +72,7 @@ class megashare_com extends DownloadClass {
 			//Download captcha img.
 			$page = $this->GetPage("http://www.megashare.com/".cut_str($form, 'id="1zcimg" src="', '"'), $cookie);
 			$capt_img = substr($page, strpos($page, "\r\n\r\n") + 4);
-			$imgfile = $download_dir . "megashare_captcha.jpg";
+			$imgfile = DOWNLOAD_DIR . "megashare_captcha.jpg";
 
 			if (file_exists($imgfile)) {
 				unlink($imgfile);
@@ -117,7 +116,7 @@ class megashare_com extends DownloadClass {
 		$this->Download_Free($page, $cookie);
 	}
 	private function Download_Free($page, $cookie) {
-		if (!preg_match('@"(http://(www.)?megashare.com/dnd/[^/]+/[^/]+/[^"]+)"@i', $page, $D)) html_error("Download-link not found.");
+		if (!preg_match('@(http://(www\.)?megashare\.com/dnd/\d+/[^/]+/[^"|\']+)("|\')@i', $page, $D)) html_error("Download-link not found.");
 		$dllink = $D[1];
 
 		$filename = parse_url($dllink);
@@ -130,13 +129,13 @@ class megashare_com extends DownloadClass {
 		$cookie = $this->login();
 
 		$page = $this->GetPage($link, $cookie);
-		if (preg_match('#Location: (http://(\w+\.)megashare.com/[^\r|\n]+)#i', $page, $RD)) {
+		if (preg_match('#Location: (http://(\w+\.)megashare\.com/[^\r|\n]+)#i', $page, $RD)) {
 			$link = $RD[1];
 			$page = $this->GetPage($link);
 		}
 		$cookie = "$cookie; " . GetCookies($page);
 
-		if (!preg_match('@<input type="hidden" name="([^"]+)" value="([^"]+)">@i', $page, $HV) || !preg_match('@src="images/download-btn.gif" name="([^"]+)" class="textfield" value="([^"]+)">@i', $page, $SP)) html_error("[Premium] Error getting POST data.");
+		if (!preg_match('@<input type="hidden" name="([^"]+)" value="([^"]+)">@i', $page, $HV) || !preg_match('@src="images/download-btn\.gif" name="([^"]+)" class="textfield" value="([^"]+)">@i', $page, $SP)) html_error("[Premium] Error getting POST data.");
 
 		$post = array($HV[1] => $HV[2], $SP[1] => $SP[2], $SP[1].'.x' => 1, $SP[1].'.y' => 1);
 		$page = $this->GetPage($link, $cookie, $post);
@@ -156,7 +155,7 @@ class megashare_com extends DownloadClass {
 
 		$page = $this->GetPage($link, $cookie, $post);
 
-		if (!preg_match('@"(http://(www.)?megashare.com/dnd/[^/]+/[^/]+/[^"]+)"@i', $page, $D)) html_error("Download-link not found.");
+		if (!preg_match('@(http://(www\.)?megashare\.com/dnd/\d+/[^/]+/[^"|\']+)("|\')@i', $page, $D)) html_error("Download-link not found.");
 		$dllink = $D[1];
 
 		$filename = parse_url($dllink);
@@ -168,8 +167,8 @@ class megashare_com extends DownloadClass {
 	private function login() {
 		global $premium_acc;
 		$pA = ($_REQUEST["premium_user"] && $_REQUEST["premium_pass"] ? true : false);
-		$email = ($pA ? $_REQUEST["premium_user"] : $premium_acc["megashare"]["user"]);
-		$pass = ($pA ? $_REQUEST["premium_pass"] : $premium_acc["megashare"]["pass"]);
+		$email = ($pA ? $_REQUEST["premium_user"] : $premium_acc["megashare_com"]["user"]);
+		$pass = ($pA ? $_REQUEST["premium_pass"] : $premium_acc["megashare_com"]["pass"]);
 
 		if (empty($email) || empty($pass)) {
 			html_error("Login Failed: Email or Password is empty. Please check login data.");
@@ -191,5 +190,6 @@ class megashare_com extends DownloadClass {
 }
 
 //[28-4-2011] Written by Th3-822.
+//[09-7-2010] Fixed regexps. (No more chunked content.) - Th3-822
 
 ?>

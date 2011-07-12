@@ -23,7 +23,7 @@ class youtube_com extends DownloadClass
 		if (!preg_match('#fmt_url_map=(.+?);#', $this->page, $fmt_url_map)) html_error('Video link not found.');
 		$fmt_url_maps = preg_split('%,%', urldecode(str_replace('\u0026amp','', $fmt_url_map[1])));
 
-		$fmts = array(37,22,35,18,34,6,5,0,17,13);
+		$fmts = array(38,37,22,18,45,43,35,34,5,17);
 		$yt_fmt = $_POST['yt_fmt'];
 
 		if ($_POST['ytube_mp4'] == 'on')
@@ -72,9 +72,10 @@ class youtube_com extends DownloadClass
 			$furl = $fmturlmaps[0][1];
 		}
 
-		if (preg_match ('%0|5|6|34|35%', $yt_fmt)) $ext = '.flv';
-		elseif (preg_match ('%18|22|37%', $yt_fmt)) $ext = '.mp4';
-		elseif (preg_match ('%13|17%', $yt_fmt)) $ext = '.3gp';
+		if (preg_match ('%5|34|35%', $yt_fmt)) $ext = '.flv';
+		elseif (preg_match ('%17%', $yt_fmt)) $ext = '.3gp';
+		elseif (preg_match ('%18|22|37|38%', $yt_fmt)) $ext = '.mp4';
+		elseif (preg_match ('%43|45%', $yt_fmt)) $ext = '.webm';
 		elseif (preg_match ('%highest%', $yt_fmt)) $ext = '.mp4';
 		else $ext = '.flv';
 
