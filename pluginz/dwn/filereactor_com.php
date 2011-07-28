@@ -52,7 +52,6 @@ class filereactor_com extends DownloadClass {
             html_error("Error 1: Plugin is out of date");
         }
         $this->RedirectDownload(trim($dlink[1]), $FileName, $Cookies, 0, $link,$FileName);
-        //echo "<pre>";var_dump(nl2br(htmlentities($page)));echo "</pre>";
         exit;
     }
     private function DownloadPre($link){

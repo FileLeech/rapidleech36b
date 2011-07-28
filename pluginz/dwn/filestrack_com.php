@@ -37,8 +37,7 @@ class filestrack_com extends DownloadClass{
         $ch = cut_str($page, "challenge : '", "'");
         $img = "http://www.google.com/recaptcha/api/image?c=" . $ch;
         insert_timer($wait[1]);
-        $data=array();
-        $data['link']=urlencode($link);
+        $data = $this->DefaultParamArr($link);
         $data['step']="1";
         $data['id']=$id;
         $data['rand']=$rand;
@@ -64,8 +63,11 @@ class filestrack_com extends DownloadClass{
             html_error("Error 0x02 :Plugin is out date");
         }
         $this->RedirectDownload($dlink[1], $FileName, 0, 0, $link);
-        //echo "<pre>";var_dump(nl2br(htmlentities($page)));echo "</pre>";exit;
         exit();
     }
 }
+
+/*
+* by vdhdevil
+*/
 ?>

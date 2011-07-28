@@ -297,9 +297,9 @@ if ($saveToFile)
   if($limitbyip)
   {
    if($ada_acc){
-/*    $ahost = $host;
+        $ahost = $host;
 	$hostfile = "hosts.php";
-	require_once(HOST_DIR.'dwn/'.$hostfile); // $host redefine as an array colection plugin 
+	require_once(HOST_DIR.'dwn/'.$hostfile); // $host redefine as an array colection plugin
 	$ar_host = explode(".", $ahost);
 	$_host = ''; $pjg=0;
 	for($i=0; $i<count($ar_host); $i++){
@@ -310,13 +310,12 @@ if ($saveToFile)
 	foreach($host as $dh => $flnya){
 	 $dumhost[$i] = $dh; $i++;
 	}
-	$host = $ahost;
-	//if($post!==0 || $auth!==0 || $cookie!==0){
-	if(in_array($_host, $dumhost)){*/
-	 $fname = basename($saveToFile).".".rand(1,1000); 
+	$host = $ahost;	//if($post!==0 || $auth!==0 || $cookie!==0){
+	if(in_array($_host, $dumhost)){
+	 $fname = basename($saveToFile).".".rand(1,1000);
 	 $limitedfile = CONFIG_DIR."tmp/$ipmu.$fname";
 	 $ret = mkdir("$limitedfile", 0777);
-	//}
+	}
    } //-- ada_acc
   } //-- limitbyip
   

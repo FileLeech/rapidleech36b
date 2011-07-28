@@ -18,7 +18,6 @@ class uploaded_to extends DownloadClass {
     }
 
     private function Retrieve($link) {
-		global $Referer, $download_dir;
 		$page = $this->GetPage($link);
 
 		is_present($page, "uploaded.to/404", "File not found");
@@ -38,10 +37,8 @@ class uploaded_to extends DownloadClass {
 		$page = $this->GetPage($linkcaptcha, 0, 0, $link);
 		$ch = cut_str($page, "challenge : '", "'");
 
-		$data = array();
+        $data = $this->DefaultParamArr($link, 0, $link);
 		$data['step'] = "1";
-		$data['link'] = urlencode($link);
-		$data['referer'] = urlencode($Referer);
 		$data['recaptcha_challenge_field'] = $ch;
 
 		//Download captcha img.

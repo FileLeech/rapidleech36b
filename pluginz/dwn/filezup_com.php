@@ -15,7 +15,7 @@ class filezup_com extends DownloadClass {
     }
 
     private function Retrieve($link) {
-        global $Referer;
+        global $PHP_SELF;
             $page = $this->GetPage($link);
             is_present($page, "File Not Found", "The file you were looking for could not be found");
 
@@ -40,12 +40,10 @@ class filezup_com extends DownloadClass {
             if (stristr($page, "Enter code below")) {
                 preg_match('#(http:\/\/www\.filezup.com\/captchas/.+)"#', $page, $temp);
 
-                $data = array();
+                $data = $this->DefaultParamArr($link, 0, $link);
                 $data['step'] = '1';
-                $data['link'] = $link;
                 $data['id'] = $id;
                 $data['rand'] = $rand;
-                $data['referer'] = urlencode($link);
                 $this->EnterCaptcha($temp[1], $data, 20);
                 exit();
             }
@@ -61,7 +59,6 @@ class filezup_com extends DownloadClass {
         $post['method_premium'] = "";
         $post['code'] = $_POST['captcha'];
         $post['down_script'] = "1";
-        $link = $_POST['link'];
         $page = $this->GetPage($link, 0, $post, $link);
         if (strpos($page, "Wrong captcha")) {
             return $this->Retrieve($link);

@@ -8,7 +8,7 @@ if (!defined('RAPIDLEECH')) {
 class turbobit_net extends DownloadClass {
 
     public function Download($link) {
-        global $premium_acc, $options;
+        global $premium_acc;
         if (($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) || ($_REQUEST ["premium_acc"] == "on" && $premium_acc ["turbobit_net"] ["user"] && $premium_acc ["turbobit_net"] ["pass"])) {
             $this->DownloadPremium($link);
         } elseif ($_POST['step'] == "1") {
@@ -27,23 +27,22 @@ class turbobit_net extends DownloadClass {
         $arrCookies = array_combine($tmp[1], $tmp[2]);
         $Cookies = urldecode(http_build_query($arrCookies, "", "; "));
         $Cookies = str_replace(array("user_isloggedin=deleted; ","set_user_lang_change=deleted; "), "", $Cookies);
-		if (!preg_match('#class="free\W\w+" href="([^"]+)#',$page,$tmp)){
-			html_error("Plugin is out of date");
-		}
+        if (!preg_match('#class="free\W\w+" href="([^"]+)#',$page,$tmp)){
+            html_error("Plugin is out of date");
+        }
         $flink = "http://turbobit.net" . $tmp[1];
         $page = $this->GetPage($flink, $Cookies, 0, $link);
         if (preg_match('#(\d+)</span> seconds#', $page,$count)){
             html_error("You have reached the limit of connections,try downloading again after ".$count[1]." seconds");
         }
         if (!preg_match("#value = '(.*)' name = 'captcha_type'#", $page, $captcha_type)) {
-			html_error("Error 0x02:Plugin is out of date");
+            html_error("Error 0x02:Plugin is out of date");
         }
         if (!preg_match("#value = '(.*)' name = 'captcha_subtype'#", $page, $captcha_subtype)) {
             html_error("Error 0x03: Plugin is out of date");
         }
-        $data = array();
+        $data = $this->DefaultParamArr($link);
         $data['step'] = "1";
-        $data['link'] = $link;
         $data['Cookies'] = $Cookies;
         $data['flink'] = $flink;
         $data['captcha_type'] = $captcha_type[1];

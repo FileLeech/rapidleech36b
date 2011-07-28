@@ -50,7 +50,6 @@ class wupload_com extends DownloadClass {
 
     private function PrepareFree($link) {
         global $Referer;
-
             $page = $this->GetPage($link);
             $cookie = GetCookies($page);
             if (preg_match('/<a href="(.*)" id="free_download">/', $page, $match)) {
@@ -111,11 +110,8 @@ class wupload_com extends DownloadClass {
                     html_error("Error getting CAPTCHA image.", 0);
                 }
 
-                $data = array();
+                $data = $this->DefaultParamArr($link, $cookie, $link);
                 $data['step'] = '1';
-                $data['link'] = $link;
-                $data['referer'] = $Referer;
-                $data['cookie'] = urlencode($cookie);
                 $data['recaptcha_challenge_field'] = $ch;
                 $this->EnterCaptcha($imgfile, $data, 20);
                 exit();
@@ -123,11 +119,9 @@ class wupload_com extends DownloadClass {
     }
 
     private function DownloadFree($link) {
-        global $Referer;
             $post = array();
             $post['recaptcha_challenge_field'] = $_POST["recaptcha_challenge_field"];
             $post['recaptcha_response_field'] = $_POST["captcha"];
-            $link = $_POST["link"];
             $Referer = $_POST["referer"];
             $cookie = urldecode($_POST["cookie"]);
             $page = $this->GetPage($link, $cookie, $post, $Referer);

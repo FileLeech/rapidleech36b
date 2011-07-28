@@ -1,7 +1,8 @@
 <?php
-if (!defined('RAPIDLEECH')){
+
+if (!defined('RAPIDLEECH')) {
   require_once("404.php");
-  exit;
+	exit();
 }
 
 class d4shared_com extends DownloadClass {
@@ -37,13 +38,50 @@ class d4shared_com extends DownloadClass {
 			html_error("Download-link not found.");
 		}
 
-		if (!preg_match('/var c = (\d+)/', $page, $count)) html_error("Timer not found.");
-		$this->CountDown($count[1]);
-
 		$url = parse_url($dllink);
 		$FileName = basename($url["path"]);
 
+		if (!preg_match('/var c = (\d+)/', $page, $count)) html_error("Timer not found.");
+		if ($count[1] <= 120) $this->CountDown($count[1]);
+		else {
+			$data = $this->DefaultParamArr($dllink, encrypt($this->cookie));
+			$data['filename'] = urlencode($FileName);
+			$data['host'] = $url["host"];
+			$data['port'] = $url["port"];
+			$data['path'] = urlencode($url["path"] . ($url["query"] ? "?" . $url["query"] : ""));
+			$data['saveto'] = $_GET["path"];
+			$this->JSCountdown($count[1], $data);
+		}
+
 		$this->RedirectDownload($dllink, $FileName, $this->cookie);
+	}
+
+	private function JSCountdown($secs, $post = 0, $text='Waiting link timelock') {
+		global $PHP_SELF;
+		echo "<p><center><span id='dl' class='htmlerror'><b>ERROR: Please enable JavaScript. (Countdown)</b></span><br /><span id='dl2'>Please wait</span></center></p>\n";
+		echo "<form action='$PHP_SELF' name='cdwait' method='POST'>\n";
+		if ($post) {
+			foreach ($post as $name => $input) {
+				echo "<input type='hidden' name='$name' id='$name' value='$input' />\n";
+			}
+		}?>	<script type="text/javascript">
+		var c = <?php echo $secs; ?>;var text = "<?php echo $text; ?>";var c2 = 0;var dl = document.getElementById("dl");var a2 = document.getElementById("dl2");fc();fc2();
+		function fc() {
+			if (c > 0) {
+				if (c > 120) {
+					dl.innerHTML = text+". Please wait <b>"+ Math.round(c/60) +"</b> minutes...";
+				} else {
+					dl.innerHTML = text+". Please wait <b>"+c+"</b> seconds...";
+				}
+				c = c - 1;
+				setTimeout("fc()", 1000);
+			} else {
+				dl.style.display="none";
+				void(<?php if ($post) echo 'document.forms.cdwait.submit()';else echo 'location.reload()'; ?>);
+			}
+		}
+		function fc2(){if(c>120){if(c2<=20){a2.innerHTML=a2.innerHTML+".";c2=c2+1}else{c2=10;a2.innerHTML=""}setTimeout("fc2()",100)}else{dl2.style.display="none"}}<?php echo "</script></form></body></html>";
+		exit;
 	}
 
 	private function CheckForPass($page, $link, $predl=false, $pA=false) {
@@ -67,7 +105,7 @@ class d4shared_com extends DownloadClass {
 				echo "<input type='hidden' name='$name' id='$name' value='$val' />\n";
 			}
 			echo '<input type="hidden" name="dsid" value="' . trim(cut_str($page, 'name="dsid" value="', '"')) . '" />' . "\n";
-			if ($predl) echo '<br /><input type="checkbox" name="premium_acc" id="premium_acc" onclick="javascript:var displ=this.checked?\'\':\'none\';document.getElementById(\'premiumblock\').style.display=displ;" '.(!$pA?'checked="checked"':'').' />&nbsp;'.$gtxt['use_premix'].'<br /><div id="premiumblock" style="display: none;"><br /><table width="150" border="0"><tr><td>'.$gtxt['_uname'].':&nbsp;</td><td><input type="text" name="premium_user" id="premium_user" size="15" value="" /></td></tr><tr><td>'.$gtxt['_pass'].':&nbsp;</td><td><input type="password" name="premium_pass" id="premium_pass" size="15" value="" /></td></tr></table></div><br />';
+			if ($predl) echo '<br /><input type="checkbox" name="premium_acc" id="premium_acc" onclick="javascript:var displ=this.checked?\'\':\'none\';document.getElementById(\'premiumblock\').style.display=displ;" '.(!$pA?'checked="checked"':'').' />&nbsp;'.lang(249).'<br /><div id="premiumblock" style="display: none;"><br /><table width="150" border="0"><tr><td>'.lang(250).':&nbsp;</td><td><input type="text" name="premium_user" id="premium_user" size="15" value="" /></td></tr><tr><td>'.lang(251).':&nbsp;</td><td><input type="password" name="premium_pass" id="premium_pass" size="15" value="" /></td></tr></table></div><br />';
 			echo '<h4>Enter password here: <input type="text" name="userPass2" id="filepass" size="13" />&nbsp;&nbsp;<input type="submit" onclick="return check()" value="Download File" /></h4>' . "\n";
 			echo "<script type='text/javascript'>\nfunction check() {\nvar pass=document.getElementById('filepass');\nif (pass.value == '') { window.alert('You didn\'t enter the password'); return false; }\nelse { return true; }\n}\n</script>\n";
 			echo "\n</form></center>\n</body>\n</html>";
@@ -143,5 +181,6 @@ class d4shared_com extends DownloadClass {
 //[26-Jan-2011] Fixed cookies for download pass-protected files. - Th3-822
 //[02-Apr-2011] Fixed error when downloading pass-protected files & Added 1 Error Msg. - Th3-822
 //[07-May-2011] Some edits to the plugin && Added Premium download support. - Th3-822
+//[25-Jul-2011] Using a function for longer link timelock at free download ( I should add it to DownloadClass. :D ). -Th3-822
 
 ?>

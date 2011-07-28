@@ -34,22 +34,13 @@ private function Prepare_Free($link) {
 
         if (preg_match('/check:\'([^\']+)/i', $page, $ck) && preg_match('/Recaptcha\.create\("([^"]+)/i', $page,
                 $pid)) {
-                $this->getcaptcha($ck[1], $pid[1], $link, $cookie);
+				$data = $this->DefaultParamArr($link, $cookie);
+				$data['check'] = $ck[1];
+				$data['step'] = '1';
+				$this->Show_reCaptcha($pid[1], $data);
         } else {
                 html_error("Error getting CAPTCHA.");
         }
-}
-
-private function getcaptcha($check, $ppid, $link, $cookie) {
-        global $Referer;
-
-        $data['check'] = $check;
-        $data['step'] = '1';
-        $data['link'] = urlencode($link);
-        $data['referer'] = urlencode($Referer);
-        $data['cookie'] = urlencode($cookie);
-
-        $this->Show_reCaptcha($ppid, $data);
 }
 
 private function Show_reCaptcha($pid, $inputs) {

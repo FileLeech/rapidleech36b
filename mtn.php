@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 define('RAPIDLEECH', 'yes');
 error_reporting(0);
 set_time_limit(0);
@@ -6,8 +6,8 @@ session_start();
 define('CLASS_DIR', 'classes/');
 define('CONFIG_DIR', 'configs/');
 define('LANG_DIR', 'languages/');
-define ( 'TEMPLATE_DIR', 'misc/tpl/'.$csstype.'/' );
 define ('CREDITS', '<small class="small-credits">Sakib Hossain | Slider234 | jmsmarcelo | DarkNight</small><br />');
+define ('IMAGE_DIR', 'misc/tpl/');
 require_once(CONFIG_DIR."config.php");
 require_once(CLASS_DIR."other.php");
 require_once(LANG_DIR."language.$lang.inc.php");
@@ -19,13 +19,15 @@ $charSet = 'UTF-8';
 <html>
 <head>
 <title>Movie Thumbnailer</title>
-<link href="misc/tpl/<?php echo $csstype;?>/style_sujancok_default.css" rel="stylesheet" type="text/css" />
+<link rel="shortcut icon" type="image/gif" href="<?php echo IMAGE_DIR?><?php echo $csstype;?>/ico_home.gif">
+<link href="<?php echo IMAGE_DIR?><?php echo $csstype;?>/style_sujancok<?php echo $csstype;?>.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="jscolor/jscolor.js"></script>
 <script type="text/javascript" language="javascript" src="rsajax.js"></script>
 </head>
 <body>
-<center><a href="index.php"><img src="misc/tpl/<?php echo $csstype;?>/rl_lgo.png" alt="RapidLeech" border="0" /></a><br /><br /><br />
-<?php
+<div class="head_container"><center>
+<a href="<?php echo $index_file;?>" title="Rapidleech"><img src="<?php echo IMAGE_DIR?><?php echo $csstype;?>/rl_lgo.png" border="0"><h1></h1></a></div><br /><br /><br /></center>
+<center><?php
 if (!$navi_left['showmtn'])
 {
     exit("<h1>Movie Thumbnailer is Disable</h1>");
@@ -88,9 +90,8 @@ foreach($files as $file)
 </table>
 </form>
 <?php include('mtn/create.php');?>
-<br /><?php
-echo CREDITS;?>
+<br /><?php echo CREDITS;?>
 <br />
 </center>
 </body>
-</html>
+</ht

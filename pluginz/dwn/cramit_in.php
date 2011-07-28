@@ -23,19 +23,20 @@ class cramit_in extends DownloadClass {
     }
 
     private function PrepareFree($link, $password) {
-        global $Referer;
+        global $PHP_SELF;
+
             $page = $this->GetPage($link);
             is_present($page, "File Not Found", "The file expired");
 
             $id = cut_str($page, 'name="id" value="','"');
-            $fname = cut_str($page, 'name="fname" value="','"');
+            $FileName = cut_str($page, 'name="fname" value="','"');
 
             $post = array();
             $post['rand_input'] = "";
             $post['op'] = "download1";
             $post['usr_login'] = "";
             $post['id'] = $id;
-            $post['fname'] = $fname;
+            $post['fname'] = $FileName;
             $post['referer'] = $link;
             $post['method_free'] = "FREE DOWNLOAD";
             $page = $this->GetPage($link, 0, $post, $link);
@@ -58,13 +59,12 @@ class cramit_in extends DownloadClass {
             if (strpos($page, "Enter the code below:")) {
                 preg_match('#(http:\/\/.+captchas\/[^"]+)">#', $page, $temp);
 
-                $data = array();
+                $data = $this->DefaultParamArr($link, 0, $link);
                 $data['step'] = '1';
-                $data['link'] = $link;
                 $data['id'] = $id;
                 $data['rand'] = $rand;
-                $data['referer'] = urlencode($link);
                 $data['password'] = $password;
+                $data['filename'] = $FileName;
                 $this->EnterCaptcha($temp[1], $data, 20);
                 exit();
             }
@@ -81,17 +81,22 @@ class cramit_in extends DownloadClass {
         $post['code'] = $_POST['captcha'];
         $post['down_direct'] = "1";
         $post['password'] = $_POST['password'];
-        $link = $_POST['link'];
+        $FileName = $_POST['filename'];
         $page = $this->GetPage($link, 0, $post, $link);
         if (strpos($page, "Wrong password") || strpos($page, "Wrong captcha")) {
             return $this->PrepareFree($link, $password);
         }
-        if (!preg_match('#(http:\/\/.+cramit\.in\/d\/[^"]+)">click here#', $page, $dl)) {
-            html_error("Sorry, Download link. Contact the author n give him the link which u have this error!");
+        if (!preg_match('/(http:\/\/cramit\.in\/file_download\/\w+\/\w+\/free\/[^"]+)"/', $page, $match)) {
+            html_error("Error 1: Redirect location cant be found!");
         }
-        $dlink = trim($dl[1]);
+        $tlink = trim($match[1]);
+        $page = $this->GetPage($tlink, 0, 0, $link);
+        if (!stristr($page, 'Location:')) {
+            html_error("Error 2: Download link cant be found!");
+        }
+        $dlink = trim(cut_str( $page, "Location: ", "\n" ));
         $Url = parse_url($dlink);
-        $Filename = basename($Url['path']);
+        if (!$FileName) $FileName = basename($dlink);
         $this->RedirectDownload($dlink, $Filename, 0, 0, $link);
         exit;
     }
@@ -105,4 +110,5 @@ class cramit_in extends DownloadClass {
 //Updated 11-5-2011 to support password protected files by help vdhdevil
 //Fixed for site layout change by Ruud v.Tony 24-06-2011
 //Update for the captcha failure n the error message 06-07-2011
+//Update again for redirect location in download link 25-07-2011 :hammer:
 ?>

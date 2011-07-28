@@ -76,6 +76,7 @@ class rapidshare_com extends DownloadClass {
 			} else {
 				$cookie = $rs_cookie_enc_value;
 			}
+
 			$this->lastmesg = $htxt['_retrieving'] . "<br />RS Premium Download [Cookie]";
 			$this->changeMesg($this->lastmesg);
 
@@ -93,7 +94,6 @@ class rapidshare_com extends DownloadClass {
 		}
 	}
 	private function DownloadFree($link) {
-		global $Referer;
 		$page = $this->GetPageS($this->apiurl."?sub=download&fileid={$this->fileid}&filename={$this->filename}&try=1");
 
 		is_present($page, "ERROR: This file is too big to download it for free.", "This file is too big to download it for free.");
@@ -115,9 +115,8 @@ class rapidshare_com extends DownloadClass {
 			$dlauth = $details[1];
 			$countdown = $details[2];
 
-			$data = array('rs_host' => urlencode($host), 'rs_fileid' => $this->fileid,
-				'rs_filename' => urlencode($this->filename), 'rs_dlauth' => urlencode($dlauth),
-				'link' => urlencode($link), 'referer' => urlencode($Referer), 'rs_freedl' => 'ok');
+			$data = array_merge($this->DefaultParamArr($link), array('rs_host' => urlencode($host), 'rs_fileid' => $this->fileid,
+				'rs_filename' => urlencode($this->filename), 'rs_dlauth' => urlencode($dlauth), 'rs_freedl' => 'ok'));
 			$this->JSCountdown($countdown, $data);
 		} else {
 			html_error("Download link not found.");
@@ -163,21 +162,27 @@ class rapidshare_com extends DownloadClass {
 			unset($ahash);
 		}
 		if (!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) {
+			$pA = true;
 			$user = $_REQUEST["premium_user"];
 			$pass = $_REQUEST["premium_pass"];
 		} else {
 			$user = $premium_acc["rs_com"]["user"];
 			$pass = $premium_acc["rs_com"]["pass"];
 		}
+		$user = urlencode($user);
+		$pass = urlencode($pass);
 
-		$cookie = $this->ChkAccInfo('login', $user, $pass);
+		$cookie = $this->ChkAccInfo('login', $user, $pass, $pA);
 		$cookie = "enc=$cookie;";
+		$sendauth = 1;
+		if ($pA) $sendauth = 0;
+		else $cookie = 0;
 
-		$page = $this->GetPageS("https://rapidshare.com/files/{$this->fileid}/{$this->filename}", $cookie);
+		$page = $this->GetPageS("https://rapidshare.com/files/{$this->fileid}/{$this->filename}", $cookie, 0, 0, ($sendauth) ? base64_encode("$user:$pass") : '');
 		if (!stristr($page, "Location:")) html_error("Cannot use premium account", 0);
 
 		$Href = $this->ReLocation($page);
-		$this->RedirectDownload($Href, $this->filename, $cookie);
+		$this->RedirectDownload($Href, $this->filename, $cookie, 0, 0, 0, $sendauth);
 	}
 	private function PremiumCookieDownload($cookie) {
 		$this->ChkAccInfo($cookie);
@@ -189,13 +194,11 @@ class rapidshare_com extends DownloadClass {
 		$Href = $this->ReLocation($page);
 		$this->RedirectDownload($Href, $this->filename, $cookie);
 	}
-	private function ChkAccInfo($cookie, $user='', $pass='') {
+	private function ChkAccInfo($cookie, $user='', $pass='', $pA=false) {
 		if ($cookie != "login") {
-			$page = $this->GetPageS($this->apiurl."?sub=getaccountdetails&cookie=" . $cookie);
+			$page = $this->GetPageS($this->apiurl."?sub=getaccountdetails&cookie=$cookie");
 			$t1 = 'Cookie';$t2 = 'cookie';
 		} elseif (!empty($user) && !empty($pass)) {
-			$user = urlencode($user);
-			$pass = urlencode($pass);
 			$page = $this->GetPageS($this->apiurl."?sub=getaccountdetails&withcookie=1&login=$user&password=$pass");
 			$t1 = 'Error';$t2 = 'login details';
 		} else html_error("Login failed. User/Password empty.");
@@ -231,7 +234,8 @@ class rapidshare_com extends DownloadClass {
 
 		if ($info['servertime'] >= $info['billeduntil']) {
 			html_error("[$t1] RapidPro has expired or is inactive.");
-		} elseif ($info['directstart'] == 0) {
+		} elseif ($info['directstart'] == 0 && (!$user || $pA)) {
+			if ($pA) $cookie = $info['cookie'];
 			$dd = $this->GetPageS($this->apiurl."?cookie=$cookie&sub=setaccountdetails&directstart=1");
 			if (substr(strrchr($dd, "\n"), 1) != 'OK') {
 				html_error("[$t1] Error enabling direct downloads. Please do it manually.");
@@ -301,6 +305,7 @@ class rapidshare_com extends DownloadClass {
 //[20-APR-11]  FreeDL: Added new functions for use https with cURL if OpenSSL isn't loaded. - Th3-822
 //[21-APR-11]  Plugin edited to work in 36B (With cookies & hashes) && Fixed $post in cURL function. (Oops, but isn't used by the plugin)... - Th3-822
 //[29-MAY-11]  Premium: Removed support for multi RS logins (Isn't needed now) & changed the login process using 'ChkAccInfo'. Free: Changed countdown, added new function. And plugin checked. - Th3-822
+
 //[10-JUL-11]  Check_Limit() function isn't needed now, removed & Thinking about delete the old fixes info (Too long for read. :D ). - Th3-822
 
 ?>

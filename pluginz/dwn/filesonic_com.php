@@ -59,7 +59,7 @@ class filesonic_com extends DownloadClass {
     }
 
     private function PrepareFree($link) {
-        global $Referer;
+        global $PHP_SELF, $Referer;
 
         $page = $this->GetPage($link);
         preg_match('%<a href="(.*)" id="free_download">%', $page, $match);
@@ -111,9 +111,8 @@ class filesonic_com extends DownloadClass {
                 html_error("Error getting CAPTCHA image.", 0);
             }
 
-            $data = array();
+            $data = $this->DefaultParamArr($link);
             $data['step'] = '1';
-            $data['link'] = $link;
             $data['recaptcha_challenge_field'] = $ch;
             $this->EnterCaptcha($imgfile, $data, 20);
             exit();
@@ -126,7 +125,6 @@ class filesonic_com extends DownloadClass {
         $post = array();
         $post['recaptcha_challenge_field'] = $_POST["recaptcha_challenge_field"];
         $post['recaptcha_response_field'] = $_POST["captcha"];
-        $link = $_POST["link"];
         $page = $this->GetPage($link, 0, $post, $referer);
         if (!preg_match('/http:\/\/.+filesonic\.com\/download\/[^\'"]+/i', $page, $dl)) {
             html_error("Error: Plugin out of date!");
@@ -134,7 +132,7 @@ class filesonic_com extends DownloadClass {
         $dlink = trim($dl[0]);
         $Url = parse_url($dlink);
         $FileName = basename($Url['path']);
-        $this->RedirectDownload($dlink, $FileName);
+        $this->RedirectDownload($dlink, $FileName, 0, 0, $Referer);
         exit ();
     }
 
@@ -153,8 +151,8 @@ class filesonic_com extends DownloadClass {
         $post['password'] = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["filesonic_com"] ["pass"];
         $page = $this->GetPage($loginurl, 0, $post, $Referer);
         $cookies = array ();
-		if(preg_match_all("/Set-Cookie: (([^=]+)=[^;]*;)/", $page, $matches))foreach($matches[2] as $k=>$v)$cookies[$v]=$matches[1][$k];
-		$cookie = implode(" ",$cookies);
+        if(preg_match_all("/Set-Cookie: (([^=]+)=[^;]*;)/", $page, $matches))foreach($matches[2] as $k=>$v)$cookies[$v]=$matches[1][$k];
+        $cookie = implode(" ",$cookies);
         is_present($cookie, 'role=free', "Account Free, Login not validated");
         is_notpresent($cookie, 'nickname=', "Error logging in - Account not found!");
         if (preg_match('/Location: (.*)/i', $page, $home)) {

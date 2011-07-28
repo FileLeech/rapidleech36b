@@ -86,6 +86,8 @@ while (false !== ($entry = $d->read())) {
             case 'megaporn.com':
                 $host['megarotic.com'] = $host['megaporn.com'];
                 break;
+			default:
+				break;
         }
     }
 }

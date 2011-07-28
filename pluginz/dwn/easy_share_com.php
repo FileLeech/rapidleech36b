@@ -19,7 +19,7 @@ class easy_share_com extends DownloadClass {
     }
 
     private function Retrieve($link) {
-      global $Referer, $download_dir;
+      global $download_dir;
         $page = $this->GetPage($link);
         is_present($page, "The file could not be found", "The file could not be found. Please check the download link.");
         is_present($page, "File not available", "File not available");
@@ -47,13 +47,10 @@ class easy_share_com extends DownloadClass {
         $headerend = strpos($page, "\r\n\r\n");
         $pass_img = substr($page, $headerend + 4);
         write_file($download_dir . "easyshare_captcha.jpg", $pass_img);
-        $data = array();
-        $data['link'] = $linkpost;
-        $data['referer'] = $referer;
+        $data = $this->DefaultParamArr($linkpost, $cookie, $referer);
         $data['challenge'] = $challenge;
         $data['valid'] = $valid;
         $data['easy_share'] = "ok";
-        $data['cookie'] = $cookie;
         $data['FileName'] = $FileName;
         $this->EnterCaptcha($download_dir . "easyshare_captcha.jpg", $data, 5);
     }
