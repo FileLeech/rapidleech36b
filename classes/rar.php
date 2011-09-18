@@ -363,7 +363,7 @@ class rlRar {
 ?></textarea>
         <br />
         <input type="button" value="Highlight text" onclick="javascript:document.getElementById('rar_debug_text<?php echo $debug_id; ?>').focus();document.getElementById('rar_debug_text<?php echo $debug_id; ?>').select();" />
-        <div class="dragzone" style="text-align: center;font-weight: bold">&nbsp;<br />You can drag window from here<br />&nbsp;</div>
+        <div class="rar-debug" style="text-align: center;font-weight: bold">&nbsp;<br />You can drag window from here<br />&nbsp;</div>
       </div>
   </div>
 <script type="text/javascript">

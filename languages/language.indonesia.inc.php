@@ -22,7 +22,7 @@
   // general page; commonly load on every page
      'js_disable'      => 'Javascript Anda tidak aktif',
      '_bypass_autodel' => 'batalkan autodelete dengan param ini',
-	 'back_main' => 'Kembali ke main',
+	 'back_main' => 'Kembali ke menu utama',
 	 
 	 'no_files' 	=> 'Files tidak ada',
 	 'tabel_no_file' => 'Tidak ditemukan file',
@@ -150,13 +150,17 @@ switch($vpage)
      'plugin_youtube' => 'Transfer Video YouTube Kualitas Tinggi, Format Mp4 (H264)',
      'plugin_imageshack' => 'ImageShack&reg; TorrentService',
      'plugin_megaupl' => 'Cookie Megaupload.com',
+     'plugin_uploaded' => 'Uploaded.to Cookie Value',
 	 'plugin_hotfile' => 'Hotfile.com Cookie Value',
 	 'plugin_rs' => 'Rapidshare.com Cookie Value',
+     'plugin_cookie' => 'Additional Cookie Value',
      'plugin_buletin' => 'Gunakan Plugin vBulletin',
 	 
      '_user' => 'user=',
 	 '_auth' => 'auth=',
 	 '_enc' => 'enc=',
+     '_login' => 'login=',
+     '_key' => 'Key=Value',
 	 	 
      '_sfrefresh' => 'Refresh',
      'chk_all' => 'Check Semua',
@@ -434,9 +438,12 @@ switch($vpage)
 	 'plugin_megaupl' => 'Cookie Megaupload.com',
 	 'plugin_hotfile' => 'Cookie Hotfile.com',
 	 'plugin_rs' => 'Cookie Rapidshare.com',
+     'plugin_uploaded' => 'Cookie Uploaded.to',
 	 '_user' => 'user=',
      '_auth' => 'auth=',
      '_enc' => 'enc=',	 
+     '_login' => 'login=',
+
 	 'reach_lim_audl' => 'Maaf tidak dapat memproses lebih dari %link% sekaligus.',
 	 'auto_check_link' => 'Periksa Link Otomatis',
 

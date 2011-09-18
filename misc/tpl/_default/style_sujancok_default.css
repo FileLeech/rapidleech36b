@@ -162,6 +162,158 @@ div.acthistory_prompt{padding: 1px 2px 2px 2px;background: transparent;}
 div.acthistory_prompt .closer_btn{position:fixed; padding-bottom:5px;}
 .closer_btn span{padding-left: 20px;font-weight:bold; margin-top:10px;}
 
+/* Rar-Table CSS - RAR.php */
+td.rar-table-left
+{
+border-left:1px solid #666;
+padding:2px;
+background-color:transparent;
+}
+
+td.rar-table-right
+{
+border-right:1px solid #666;
+padding:2px;
+background-color:transparent;
+}
+
+td.rar-table-all
+{
+border-right:1px solid #666;
+padding:6px;
+background-color:transparent;
+}
+
+td.rar-table-tlr-2
+{
+border-right:1px solid #666;
+border-left:1px solid #666;
+border-top:1px solid #666;
+padding:6px;
+background-color:transparent;
+}
+
+td.rar-table-tlr-3
+{
+border-right:1px solid #666;
+border-left:1px solid #666;
+border-top:1px solid #666;
+padding:6px;
+background-color:transparent;
+}
+
+td.rar-table-tlr-4
+{
+border-right:1px solid #666;
+border-left:1px solid #666;
+border-top:1px solid #666;
+padding:6px;
+background-color:transparent;
+}
+
+td.rar-left
+{
+border-left:1px solid #666;
+padding:2px;
+background-color:transparent;
+}
+
+td.rar-left-2
+{
+border-left:1px solid #666;
+padding:2px;
+background-color:transparent;
+}
+
+td.rar-left-3
+{
+border-left:1px solid #666;
+padding:2px;
+background-color:transparent;
+}
+
+td.rar-left-4
+{
+border-left:1px solid #666;
+padding:2px;
+background-color:transparent;
+}
+
+td.rar-left-5
+{
+border-left:1px solid #666;
+padding:2px;
+background-color:transparent;
+}
+
+td.rar-left-6
+{
+border-left:1px solid #666;
+padding:2px;
+background-color:transparent;
+}
+
+td.rar-right{
+border-left:1px solid #666;
+padding:2px;
+background-color:transparent;
+}
+
+td.rar-table-space-2{
+border-top:1px solid #666;
+}
+/* Finish Rar-Tabel CSS */
+
+/* UnRar-Table CSS - UnRAR.php */
+td.rar-table-main{
+border-right:1px solid #666; 
+border-left:1px solid #666; 
+border-top:1px solid #666; 
+padding:6px; 
+background-color:transparent;
+}
+
+td.rar-table-side{
+border-right:1px solid #666; 
+border-left:1px solid #666;
+padding:2px; 
+background-color:transparent;
+}
+
+td.rar-table-top{
+border-top:1px solid #666; 
+}
+
+td.rar-table-tlr{
+border-right:1px solid #666; 
+border-left:1px solid #666; 
+border-top:1px solid #666; 
+padding:2px; 
+background-color:transparent;
+}
+
+td.rar-tbl-left{
+border-left:1px solid #666;
+padding:2px; 
+background-color:transparent;
+}
+
+td.rar-tbl-right{
+border-right:1px solid #666;
+padding:2px; 
+background-color:transparent;
+}
+
+td.rar-table-space{
+border-top:1px solid #666;
+}
+/*Finish UnRar-Tabel CSS*/
+
+.rar-debug{
+background:#666; 
+border:2px solid #fff;
+color:#fff;
+}
 
 /*Left Menu*/
 td.left_mnu a div, td.backaudl a div{
@@ -379,4 +531,8 @@ div.progressborder{
 }
 div.progressborder #progress {
  background-color:#88ECF4 !important; 
+}
+
+.embd_acc{
+  padding-top:.1em;
 }

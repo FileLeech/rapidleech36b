@@ -3,7 +3,7 @@ define('RAPIDLEECH', 'yes');
 
 error_reporting(0);
 //error_reporting(E_ALL); 
-@ini_set('display_errors', true); 
+@ini_set('display_errors', true);
 
 define('MISC_DIR', 'misc/');
 define('CLASS_DIR', 'classes/');
@@ -19,67 +19,61 @@ $PHP_SELF = !isset($PHP_SELF) ? $_SERVER["PHP_SELF"] : $PHP_SELF;
 
 $nn = "\r\n";
 $rev_num = '36B.Rv7.4';
-$RL_VER = 'Rx08.ii'.$rev_num;
+$RL_VER = 'Rx08.ii' . $rev_num;
 
-require_once(CONFIG_DIR."config.php");
-require_once(CLASS_DIR."other.php");
+require_once(CONFIG_DIR . "config.php");
+require_once(CLASS_DIR . "other.php");
 // Load languages set for audl
 $vpage = "audl";
-require_once(LANG_DIR."language.$lang.inc.php");
+require_once(LANG_DIR . "language.$lang.inc.php");
 $charSet = (isset($charSet) && !empty($charSet) ? $charSet : 'charset=UTF-8');
 define('DOWNLOAD_DIR', (substr($download_dir, 0, 6) == "ftp://" ? '' : $download_dir));
-define('TPL_PATH', 'tpl'. '/' . $csstype . '/');
+define('TPL_PATH', 'tpl' . '/' . $csstype . '/');
 define('IMAGE_DIR', MISC_DIR . TPL_PATH);
 
 $ch_curl = (extension_loaded("curl") ? 1 : 0);
 error_reporting(6135);
 //===================
-
 //Cek ip yg banned || is it listed as authorized ip || check country limit
-if($limited_edition || $limited_area)
-{
-  $dlimitation = array($limited_edition, $limited_area);
-  require_once(CLASS_DIR."limit_district.php");
+if ($limited_edition || $limited_area) {
+    $dlimitation = array($limited_edition, $limited_area);
+    require_once(CLASS_DIR . "limit_district.php");
 }
 
-if(!$forbid_audl){
- if ($login===true){
- if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === false)
-	{
-		header('WWW-Authenticate: Basic realm="Rx08"');
-		header('HTTP/1.0 401 Unauthorized');
-		exit("<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<h1>$RL_VER: NuLL</h1>$nn</body>$nn</html>");
-	}
- } 
-}else {
- echo "<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>$RL_VER: <br>AuDL Disabled</h1>$nn</body>$nn</html>";
- exit();
+if (!$forbid_audl) {
+    if ($login === true) {
+        if (!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === false) {
+            header('WWW-Authenticate: Basic realm="Rx08"');
+            header('HTTP/1.0 401 Unauthorized');
+            exit("<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $csstype . ".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<h1>$RL_VER: NuLL</h1>$nn</body>$nn</html>");
+        }
+    }
+} else {
+    echo "<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $csstype . ".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>$RL_VER: <br>AuDL Disabled</h1>$nn</body>$nn</html>";
+    exit();
 }
 
 _create_list();
-if($downloadLimitbyip){
- $FilesDownloaded = 0;
- $StorageTaken = 0;
- $FilesDownloadedPerTime = 0;
- $back = $list; 
- $bshow_all = $show_all;
- $show_all = false;
- _create_list(false);
- $show_all = $bshow_all;
- foreach ( $list as $k => $file ) {
-   if (isset($file ['ip']) && $file ['ip'] == get_real_ip()) {
-	if (time () - $downloadDelayPerIP < $file ['date']) {
-	   $FilesDownloadedPerTime ++;
-	}
-	$FilesDownloaded ++;
-   }
- }
- $list2 = $list;
- $list = $back;
+if ($downloadLimitbyip) {
+    $FilesDownloaded = 0;
+    $StorageTaken = 0;
+    $FilesDownloadedPerTime = 0;
+    $back = $list;
+    $bshow_all = $show_all;
+    $show_all = false;
+    _create_list(false);
+    $show_all = $bshow_all;
+    foreach ($list as $k => $file) {
+        if (isset($file ['ip']) && $file ['ip'] == get_real_ip()) {
+            if (time () - $downloadDelayPerIP < $file ['date']) {
+                $FilesDownloadedPerTime++;
+            }
+            $FilesDownloaded++;
+        }
+    }
+    $list2 = $list;
+    $list = $back;
 }
-
-
-
 ?>
 <!DOCTYPE html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head>
@@ -102,7 +96,8 @@ td.backaudl a div{
 <script type="text/javascript" src="<?php echo MISC_DIR;?>b64.js"></script>
 <script type="text/javascript">d = document;</script>
 </head>
-<body><?php
+<body>
+<?php
 if($downloadLimitbyip){
  if ($FilesDownloadedPerTime >= $downloadsPerIP ) { 
   html_error( "You have exceeded your download limit, you can only download ". $downloadsPerIP ." files in " . sec1time ( $downloadDelayPerIP ), 0);
@@ -115,34 +110,28 @@ if($downloadLimitbyip){
 <center>
 <noscript><p></p><b><?php echo $gtxt['js_disable'];?></b></noscript>
 <?php
-if($auto_del_time>0)
-	{
-	echo "<span class=\"c\">".$gtxt['_autodel'].":&nbsp;<b class=\"g\">".$auto_del_time."</b>&nbsp;hour".($auto_del_time>1?"s":"")."</span>";
-	//auto_del($auto_del_time);
-	purge_files($auto_del_time);
-	}
-if($audl > 0)
-	{
-	echo "&nbsp;||&nbsp;<span class=\"c\">Link Allow:&nbsp;<b class=\"g\">".$audl."</b>&nbsp;link".($audl>1?"s":"")."</span>";
-	}
-if($lowlimitsize>0)
-	{
-	echo "&nbsp;||&nbsp;<span class=\"c\">".$gtxt['_minfilesize'].":&nbsp;<b class=\"s\">".$lowlimitsize."</b>&nbsp;MB</span>";
-	}
-if($limitsize>0)
-	{
-	echo "&nbsp;||&nbsp;<span class=\"c\">".$gtxt['_maxfilesize'].":&nbsp;<b class=\"s\">".$limitsize."</b>&nbsp;MB</span>";
-	}
-if(!empty($add_ext_5city))
-	{
-	echo "&nbsp;||&nbsp;<span class=\"c\">".$gtxt['_fakeext'].":&nbsp;<b><a style=\"color:red;\" href=\"javascript:void(0)\" title=\"Auto rename extension with this\">.".$add_ext_5city."</a></b></span>";
-	}
-if($limit_timework)
-	{
-	echo "<br><span class=\"c\">".$gtxt['_timework'].":&nbsp;</span><b class=\"s\">".$workstart."</b>&nbsp;".$gtxt['_upto']."&nbsp;<b class=\"s\">".$workend."</b>";
-	}
+if ($auto_del_time > 0) {
+    echo "<span class=\"c\">" . $gtxt['_autodel'] . ":&nbsp;<b class=\"g\">" . $auto_del_time . "</b>&nbsp;hour" . ($auto_del_time > 1 ? "s" : "") . "</span>";
+    //auto_del($auto_del_time);
+    purge_files($auto_del_time);
+}
+if ($audl > 0) {
+    echo "&nbsp;||&nbsp;<span class=\"c\">Link Allow:&nbsp;<b class=\"g\">" . $audl . "</b>&nbsp;link" . ($audl > 1 ? "s" : "") . "</span>";
+}
+if ($lowlimitsize > 0) {
+    echo "&nbsp;||&nbsp;<span class=\"c\">" . $gtxt['_minfilesize'] . ":&nbsp;<b class=\"s\">" . $lowlimitsize . "</b>&nbsp;MB</span>";
+}
+if ($limitsize > 0) {
+    echo "&nbsp;||&nbsp;<span class=\"c\">" . $gtxt['_maxfilesize'] . ":&nbsp;<b class=\"s\">" . $limitsize . "</b>&nbsp;MB</span>";
+}
+if (!empty($add_ext_5city)) {
+    echo "&nbsp;||&nbsp;<span class=\"c\">" . $gtxt['_fakeext'] . ":&nbsp;<b><a style=\"color:red;\" href=\"javascript:void(0)\" title=\"Auto rename extension with this\">." . $add_ext_5city . "</a></b></span>";
+}
+if ($limit_timework) {
+    echo "<br><span class=\"c\">" . $gtxt['_timework'] . ":&nbsp;</span><b class=\"s\">" . $workstart . "</b>&nbsp;" . $gtxt['_upto'] . "&nbsp;<b class=\"s\">" . $workend . "</b>";
+}
 ?>
-	
+
 <?php
 if (isset($_REQUEST["crot"]) && $_REQUEST["crot"] == "step2" && isset($_POST["links"]))
 	{
@@ -202,6 +191,7 @@ $atxt['reach_lim_audl'] = str_replace('%link%', $audl, $atxt['reach_lim_audl']);
 		(isset($_REQUEST["mu_acc"])?'&mu_acc='.$_REQUEST["mu_acc"]:'').
 		(isset($_REQUEST["hf_acc"])?'&hf_acc='.$_REQUEST["hf_acc"]:'').
 		(isset($_REQUEST["rs_acc"])?'&rs_acc='.$_REQUEST["rs_acc"]:'').
+		(isset($_REQUEST["ul_acc"])?'&ul_acc='.$_REQUEST["ul_acc"]:'').
 		
 		(isset($_REQUEST["rspre_com"])?'&premium_acc='.$_REQUEST["rspre_com"]:'');
 			
@@ -223,6 +213,10 @@ $atxt['reach_lim_audl'] = str_replace('%link%', $audl, $atxt['reach_lim_audl']);
           $cook = isset($_REQUEST["rs_cookie"]) && $_REQUEST["rs_cookie"]!='' ? $_REQUEST["rs_cookie"] : $rs_cookie_enc_value;
           $start_link.='&rs_hash='.encEnti(rotN($cook,$rnum)).$rnum;    
         } 
+        if(isset($_REQUEST["ul_acc"]) && $_REQUEST["ul_acc"] == "on") {
+          $cook = isset($_REQUEST["ul_cookie"]) && $_REQUEST["ul_cookie"]!='' ? $_REQUEST["ul_cookie"] : $ul_cookie_login_value;
+          $start_link.='&ul_hash='.encEnti(rotN($cook,$rnum)).$rnum;
+        }
 ?>
 <script type="text/javascript" src="rscheck.js"></script>
 <script type="text/javascript">
@@ -779,7 +773,7 @@ function highlight(field) {
             </tr>
             <?php
                     }
-		 $ar_host_acc = array(
+/*		 $ar_host_acc = array(
 		  "rs_com"=>"Rapidshare.com",
 		  "rs_de"=>"Rapidshare.de",
 		  "megaupload"=>"Megaupload.com",
@@ -802,7 +796,7 @@ function highlight(field) {
 		  "animeground_com"=>"Animeground.com",
 		  "turbobit_net"=>"Turbobit.net",
 		  "enterupload_com"=>"Enterupload.com",
-		 );
+		 );*/
 $ada_acc = (isset($premium_acc) && is_array($premium_acc));
  if($ada_acc){
    foreach($premium_acc as $dhost => $val){
@@ -851,6 +845,14 @@ foreach($ar_host_acc as $khost => $nmhost){
                 <input type="checkbox" value="on" name="rs_acc" id="rs_acc" onClick="javascript:var displcom=this.checked?'':'none';document.getElementById('rsprblok').style.display=displcom;" <?php if (isset($rs_cookie_enc_value) && isset($premium_acc_audl) && $premium_acc_audl) print ' checked'; ?>>&nbsp;<label for="rs_acc"><?php echo $atxt['plugin_rs'];?></label>
                 <table width="150" id="rsprblok" style="display: none;">
                  <tr><td style="padding-left:22px;"><label for="rplrs"><?php echo $atxt['_enc'];?></label></td><td><input type="text" id="rplrs" size="45" name="rs_cookie" onFocus="highlight(this);" value=""></td></tr>
+                </table>
+			  </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" value="on" name="ul_acc" id="ul_acc" onClick="javascript:var displcom=this.checked?'':'none';document.getElementById('ulprblok').style.display=displcom;" <?php if (isset($ul_cookie_login_value) && isset($premium_acc_audl) && $premium_acc_audl) print ' checked'; ?>>&nbsp;<label for="ul_acc"><?php echo $atxt['plugin_uploaded'];?></label>
+                <table width="150" id="ulprblok" style="display: none;">
+                 <tr><td style="padding-left:22px;"><label for="rplul"><?php echo $atxt['_login'];?></label></td><td><input type="text" id="rplul" size="45" name="ul_cookie" onFocus="highlight(this);" value=""></td></tr>
                 </table>
 			  </td>
             </tr>

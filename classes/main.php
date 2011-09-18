@@ -127,13 +127,13 @@ foreach($host as $site => $file)
  { echo "$cm'$site'"; $cm = ", "; }
 ?>
 );
-function inserthost(){
-  var dtpl = "", d = document;
-  for(i=0; i<arHost.length; i++)
-   {  dtpl += "<span class=\"c\">" + arHost[i] + "<span><br>";}
+function inserthost(arHost){
+  var dtpl = '', d = document;
+  for(var i=0; i < arHost.length; i++)
+   {  dtpl += '<span class=&quot;c&quot;>' + arHost[i] + '<\/span><br \/>';}
   d.getElementById('dir').innerHTML = dtpl;
 }
-setTimeout("inserthost()", 100);
+setTimeout("inserthost(arHost)", 100);
 </script>
 <?php
 }
@@ -276,15 +276,17 @@ if($limitbyip && $ada_acc){
 <div style="height:5px;">&nbsp;</div><small class='subtitle'><?php echo $txt['server_stats'];?></small><hr>
 <?php echo $txt['current_storage'];?>&nbsp;<b class="g"><?php echo bytesToKbOrMbOrGb($serverfiles);?></b>&nbsp;&nbsp;&nbsp;
 <?php
-if($storage_limit>0){
-	echo '(Max: <b class="r">'.bytesToKbOrMbOrGb($storage_limit*1024*1024).'</b>)';}
-if($limitbytraffic){
-	echo "<br>".$txt['current_traffic']." <b class='g'>".bytesToKbOrMbOrGb($cur_trf[0])."</b>&nbsp;of&nbsp;<span class=\"s\" title=\"".$txt['max_traffic']."\"><b>".bytesToKbOrMbOrGb($max_trf)."</b></span> until <small><span class='g'>$delay</span></small>";
-	$cur_trf = get_traffic(TRAFFIC_LST);	
-	if($day_reset_trafic>0) echo "<br>".$txt['reset_traffic_remain']."&nbsp;<small class=\"s\">".sec2time(timeremain_traffic($day_reset_trafic, $cur_trf[1]))."</small>";	
-	}
-if($limit_timework)	{
-  echo "<br>".$gtxt['_timework'].": <b class=\"s\">$workstart</b>&nbsp;upto&nbsp;<b class=\"s\">$workend</b>";	
+if ($storage_limit > 0) {
+    echo '(Max: <b class="r">' . bytesToKbOrMbOrGb($storage_limit * 1024 * 1024) . '</b>)';
+}
+if ($limitbytraffic) {
+    echo "<br>" . $txt['current_traffic'] . " <b class='g'>" . bytesToKbOrMbOrGb($cur_trf[0]) . "</b>&nbsp;of&nbsp;<span class=\"s\" title=\"" . $txt['max_traffic'] . "\"><b>" . bytesToKbOrMbOrGb($max_trf) . "</b></span> until <small><span class='g'>$delay</span></small>";
+    $cur_trf = get_traffic(TRAFFIC_LST);
+    if ($day_reset_trafic > 0)
+        echo "<br>" . $txt['reset_traffic_remain'] . "&nbsp;<small class=\"s\">" . sec2time(timeremain_traffic($day_reset_trafic, $cur_trf[1])) . "</small>";
+}
+if ($limit_timework) {
+    echo "<br>" . $gtxt['_timework'] . ": <b class=\"s\">$workstart</b>&nbsp;upto&nbsp;<b class=\"s\">$workend</b>";
 }
 ?>
 </td>
@@ -433,6 +435,23 @@ if($download_dir_is_changeable){
 </td>
 </tr>
 
+<tr>
+<td>
+<input type="checkbox" name="ul_acc" id="ul_acc" onClick="javascript:var displ=this.checked?'':'none';document.getElementById('ulblok').style.display=displ;"<?php if(isset($ul_cookie_login_value)) print ' checked'; ?>>&nbsp;<label for="ul_acc"><small><?php echo $txt['plugin_uploaded'];?></small></label>
+<table width="150" id="ulblok" style="display: none;">
+<tr><td><?php echo $txt['_login'];?></td><td><input type="text" name="ul_cookie" id="ul_cookie" size="45"/></td></tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td>
+<input type="checkbox" name="cookieuse" id="cookieuse" onClick="javascript:var displ=this.checked?'':'none';document.getElementById('cookieblok').style.display=displ;"&nbsp;<label for="cookieuse"><small><?php echo $txt['plugin_cookie'];?></small></label>
+<table width="150" id="cookieblok" style="display: none;">
+<tr><td><?php echo $txt['_key'];?></td><td><input type="text" name="cookie" id="cookie" size="45"/></td></tr>
+</table>
+</td>
+</tr>
 
 <tr>
 <td>
@@ -464,10 +483,10 @@ function set_rlxmode(){
 <?php 
 //_create_list();
 
-if(isset($_POST["act"])){
- echo '<tr><td align="center">';
- require_once(CLASS_DIR."options.php");
- echo '</td></tr>';
+if (isset($_POST["act"])) {
+    echo '<tr><td align="center">';
+    require_once(CLASS_DIR . "options.php");
+    echo '</td></tr>';
 }
 $morethanone = (!isset($list["files"]["totalfile"]) ? count($list)>1 : $list["files"]["totalfile"]>1);
 ?>
@@ -479,8 +498,8 @@ $morethanone = (!isset($list["files"]["totalfile"]) ? count($list)>1 : $list["fi
 <a href="javascript:void(0);" onclick="setCheckboxes(0);"><?php echo $txt['chk_unchk'];?></a> |
 <a href="javascript:void(0);" onclick="setCheckboxes(2);"><?php echo $txt['chk_invert'];?></a> |
 <?php
-if($list && $morethanone){
- echo '<a href="javascript:void(0);" onclick="flist_match_hide();">'.$gtxt['chk_txt_matches'].' </a> |';
+if ($list && $morethanone) {
+    echo '<a href="javascript:void(0);" onclick="flist_match_hide();">' . $gtxt['chk_txt_matches'] . ' </a> |';
 }
 ?>
 </span>

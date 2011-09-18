@@ -29,28 +29,43 @@ $premium_acc["rs_com"] = array(
   array('user' => 'user3', 'pass' => 'pass3')
 );  //foobar - rs_com- multi; */
 //$premium_acc["rs_de"] = array('user' => '', 'pass' => '');
-//$premium_acc["megaupload"] = array('user' => '', 'pass' => '');
-//$premium_acc["megashare"] = array('user' => '', 'pass' => '');
-//$premium_acc["netload"] = array('user' => '', 'pass' => '');
-//$premium_acc["gigasize"] = array('user' => '', 'pass' => '');
-//$premium_acc["vBulletin_acc"] = array('user' => '', 'pass' => '');
-//$premium_acc["uploaded_to"] = array('user' => '', 'pass' => '');
-//$premium_acc["easyshare"] = array('user' => '', 'pass' => '');
+//$premium_acc["4shared"] = array('user' => '', 'pass' => '');
+//$premium_acc["animeground"] = array('user' => '', 'pass' => '');
+//$premium_acc["bitshare"] = array('user' => '', 'pass' => '');
 //$premium_acc["depositfiles"] = array('user' => '', 'pass' => '');
-//$premium_acc["hotfile_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["uploading"] = array('user' => '', 'pass' => '');
+//$premium_acc["easyshare"] = array('user' => '', 'pass' => '');
+//$premium_acc["enterupload"] = array('user' => '', 'pass' => '');
+//$premium_acc["fileape"] = array('user' => '', 'pass' => '');
+//$premium_acc["filedino"] = array('user' => '', 'pass' => '');
+//$premium_acc["filedude"] = array('user' => '', 'pass' => '');
 //$premium_acc["filefactory"] = array('user' => '', 'pass' => '');
-//$premium_acc["4shared_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["fileserve"] = array('user' => '', 'pass' => '');
+//$premium_acc["filesonic"] = array('user' => '', 'pass' => '');
+//$premium_acc["freakshare"] = array('user' => '', 'pass' => '');
+//$premium_acc["gigasize"] = array('user' => '', 'pass' => '');
+//$premium_acc["hellshare"] = array('user' => '', 'pass' => '');
+//$premium_acc["hotfile"] = array('user' => '', 'pass' => '');
+//$premium_acc["ifile"] = array('user' => '', 'pass' => '');
+//$premium_acc["kickload"] = array('user' => '', 'pass' => '');
+//$premium_acc["letitbit"] = array('user' => '', 'pass' => '');
+//$premium_acc["megashare"] = array('user' => '', 'pass' => '');
+//$premium_acc["megashares"] = array('user' => '', 'pass' => '');
+//$premium_acc["megaupload"] = array('user' => '', 'pass' => '');
+//$premium_acc["netload"] = array('user' => '', 'pass' => '');
+//$premium_acc["oron"] = array('user' => '', 'pass' => '');
 //$premium_acc["sendspace"] = array('user' => '', 'pass' => '');
-//$premium_acc["fileserve_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["filesonic_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["oron_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["duckload_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["shareonline_biz"] = array('user' => '', 'pass' => '');
-//$premium_acc["torrific_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["animeground_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["turbobit_net"] = array('user' => '', 'pass' => '');
-//$premium_acc["enterupload_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["shareonline"] = array('user' => '', 'pass' => '');
+//$premium_acc["torrific"] = array('user' => '', 'pass' => '');
+//$premium_acc["turbobit"] = array('user' => '', 'pass' => '');
+//$premium_acc["ugotfile"] = array('user' => '', 'pass' => '');
+//$premium_acc["uploaded"] = array('user' => '', 'pass' => '');
+//$premium_acc["uploading"] = array('user' => '', 'pass' => '');
+//$premium_acc["uploadstation"] = array('user' => '', 'pass' => '');
+//$premium_acc["vBulletin"] = array('user' => '', 'pass' => '');
+//$premium_acc["wupload"] = array('user' => '', 'pass' => '');
+//$premium_acc["x7"] = array('user' => '', 'pass' => '');
+//$premium_acc["youtube"] = array('user' => '', 'pass' => '');
+
 
 #Auto Download Premium Account #
 //$premium_acc_audl = false;
@@ -64,6 +79,9 @@ $premium_acc["rs_com"] = array(
 #Rapidshare cookie #
 //$rs_cookie_enc_value = '';
 
+#Uploaded cookie #
+//$ul_cookie_login_value = '';
+
 ###Imageshack Torrent Account ###
 //$imageshack_acc = array('user' => '', 'pass' => '');
 
@@ -72,16 +90,63 @@ $premium_acc["rs_com"] = array(
 //$upload_acc["rs_com_coll"] = array('user' => '', 'pass' => '');
 //$upload_acc["rs_com_pre"] = array('user' => '', 'pass' => '');
 //$upload_acc["mu_pre"] = array('user' => '', 'pass' => '');
+//$upload_acc["mu_mem"] = array('user' => '', 'pass' => '');
 //$upload_acc["hf_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["easysh_mem"] = array('user' => '', 'pass' => '');
 //$upload_acc["deposit_up"] = array('user' => '', 'pass' => '');
 //$upload_acc["uploading_up"] = array('user' => '', 'pass' => '');
+//$upload_acc["fileserve_pre"] = array('user' => '', 'pass' => '');
+//$upload_acc["fileserve_mem"] = array('user' => '', 'pass' => '');
+//$upload_acc["ul_up"] = array('user' => '', 'pass' => '');
+
+
+# Acc info & drop down
+$ar_host_acc = array(
+'rs_com'         	=>  'rapidshare.com',
+'rs_de'          	=>  'rapidshare.de',
+'4shared'        	=>  '4shared.com',
+'animeground' 	  	=>  'animeground.com',
+'bitshare'		=>  'bitshare.com',
+'depositfiles' 	=>  'depositfiles.com',
+'easyshare'            =>  'easy-share.com',
+'enterupload' 	  	=>  'enterupload.com',
+'fileape'        	=>  'fileape.com',
+'filedino'		=>  'filedino.com',
+'filedude'		=>  'filedude.com',
+'filefactory'		=>  'filefactory.com',
+'fileserve'      	=>  'fileserve.com',
+'filesonic'      	=>  'filesonic.com',
+'freakshare'     	=>  'freakshare.com',
+'gigasize'       	=>  'gigasize.com',
+'hellshare'      	=>  'hellshare.com',
+'hotfile'        	=>  'hotfile.com',
+'ifile'          	=>  'ifile.it',
+'kickload'       	=>  'kickload.com',
+'letitbit'       	=>  'letitbit.net',
+'megashare'      	=>  'megashare.com',
+'megashares'     	=>  'megashares.com',
+'megaupload'     	=>  'megaupload.com',
+'netload'        	=>  'netload.in',
+'oron'           	=>  'oron.com',
+'sendspace'      	=>  'sendspace.com',
+'shareonline'    	=>  'share-online.biz',
+'torrific'       	=>  'torrific.com',
+'turbobit'       	=>  'turbobit.net',
+'ugotfile'       	=>  'ugotfile.com',
+'uploaded'       	=>  'uploaded.to',
+'uploading'      	=>  'uploading.com',
+'uploadstation'  	=>  'uploadstation.com',
+'vBulletin'      	=>  'vbulletin.acc',
+'wupload'        	=>  'wupload.com',
+'x7'             	=>  'x7.to',
+'youtube'       	=>  'youtube.com',
+);
 
 
 #-LIMITATION-CONFIG
 $limitbyip = false; //limit RL by IP; dont forget chmod 777 to folder tmp
 $maximum_free_downloads = 5; //how many times it'll granted?
-$delay_per_ip = 12; //(in hour) recycle allowable IP
+$delay_per_ip = 1; //(in hour) recycle allowable IP
 
 $auto_del_time = 0; //(in hour) delete leeched file
 $limitsize = 0; //(in MB) limit upper-bound of filesize
@@ -91,7 +156,7 @@ $storage_limit = 0; //(in MB) limit your server files storage.  1 * 1024 = 1 GB;
 
 $downloadLimitbyip = false; //limit RL by IP
 $downloadsPerIP = 2; //how many times it'll granted?
-$downloadDelayPerIP = 3600; //(in second)
+$downloadDelayPerIP = 120; //(in second)
 
 $audl = 5; //how many link allow to auto-download work ?
 $auul = 5; //how many file allow to auto-upload work ?
@@ -168,17 +233,6 @@ $rename_prefix = '';//eg. mysite => mysite_file_name.rar
 $rename_suffix = '';//eg. mysite => file_name_mysite.rar
 $add_ext_5city = '';//eg. ccpb => file_name.rar.ccpb
 
-//define writable files
-define('LOG_DIR', CONFIG_DIR.'logfile/');
-define('FILES_LST', LOG_DIR.'Rx08_2208081410_f1L3Z.lst');
-define('IP_L33CH_L0G', LOG_DIR.'Rx08_2208081410_IP_L33CH_L0G.lst');
-define('VISITOR_LST', LOG_DIR.'Rx08_2208081410_v1zit0r.lst');
-define('TRAFFIC_LST', LOG_DIR.'Rx08_2208081410_tR4fic.txt');
-define('LOG_PHP', LOG_DIR.'Rx08_2208081410_d4Mn.log.php');
-define('LASTLOG_LST', LOG_DIR.'Rx08_2208081410_d4Mn_Last.txt');
-define('MYUPLOAD_LST', LOG_DIR.'myuploads.txt');
-define('ONGOING_LST', LOG_DIR.'Rx08_2208081410_ongoingTask.lst');
-
 ###-VIEW-CONFIG
 $navi_left = array(
  'showcpanel' => true,
@@ -202,7 +256,7 @@ $mtn_edge = 0;
 $video_option = array (
 'enable' => false,
 'txtcolor' => 'FFFFFF',
-'txtfont' => 'Blue.ttf',
+'txtfont' => '',
 'txtsize' => 10,
 );
 $time = array(
@@ -221,7 +275,7 @@ $premix_status = true; // enable acc premix status
 $ip_premixstat_list = array('127.0.0.1'); // trusted ip, can view detil acc.
 
 ###-MISC-CONFIG
-$no_cache = false;
+$no_cache = true;
 $redir = true;
 
 $disable_ajax = false; //switch to old method, No-Ajax in Serverfiles
@@ -242,6 +296,17 @@ $autosubmit = true;
 
 $timezone = 7; // set Timezone. It is GMT+(7) for Indonesia.
 $lang = 'english'; // set Language.
-
 $csstype = '_default'; // set Theme to your RL. eg. _default
+
+//define writable files
+define('LOG_DIR', CONFIG_DIR.'logfile/');
+define('FILES_LST', LOG_DIR.'Rx08_2208081410_f1L3Z.lst');
+define('IP_L33CH_L0G', LOG_DIR.'Rx08_2208081410_IP_L33CH_L0G.lst');
+define('VISITOR_LST', LOG_DIR.'Rx08_2208081410_v1zit0r.lst');
+define('TRAFFIC_LST', LOG_DIR.'Rx08_2208081410_tR4fic.txt');
+define('LOG_PHP', LOG_DIR.'Rx08_2208081410_d4Mn.log.php');
+define('LASTLOG_LST', LOG_DIR.'Rx08_2208081410_d4Mn_Last.txt');
+define('MYUPLOAD_LST', LOG_DIR.'myuploads.txt');
+define('ONGOING_LST', LOG_DIR.'Rx08_2208081410_ongoingTask.lst');
+
 ?>

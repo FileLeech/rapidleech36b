@@ -10,7 +10,7 @@ define('RAPIDLEECH', 'yes');
 $PHP_SELF = !isset($PHP_SELF) ? $_SERVER["PHP_SELF"] : $PHP_SELF;
 define('ROOT_DIR', realpath("./"));
 define('HOST_DIR', 'pluginz/');
-define('UPLOAD_DIR', HOST_DIR.'upl/');
+define('UPLOAD_DIR', HOST_DIR.'upload/');
 define('MISC_DIR', 'misc/');
 define('CLASS_DIR', 'classes/');
 define('CONFIG_DIR', 'configs/');
@@ -37,7 +37,7 @@ require_once(CONFIG_DIR."config.php");	// Reads the configuration file, so we ca
 
 // Include other useful functions
 require_once(CLASS_DIR."other.php");
-require_once(HOST_DIR.'dwn/'."hosts.php");
+require_once(HOST_DIR.'download/'."hosts.php");
 require_once(CLASS_DIR."http.php");
 
 define('DOWNLOAD_DIR', (substr($download_dir, 0, 6) == "ftp://" ? '' : $download_dir));	// Set the download directory constant

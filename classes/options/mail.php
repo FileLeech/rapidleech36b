@@ -67,7 +67,7 @@ function xmail() {
 }
 
 function mail_go() {
-	global $list, $optxt,$disable_deleting;
+	global $list, $optxt, $fromaddr, $disable_to;
 	//require_once (CLASS_DIR . "mail.php");
 	if (! checkmail ( $_GET ["email"] )) {
 		echo $optxt['invalid_email']."<br><br>";

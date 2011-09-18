@@ -147,13 +147,17 @@ switch($vpage)
      'plugin_youtube' => 'Transferir Video do Youtube com Qualidade Máxima em formato Mp4 (H264)',
      'plugin_imageshack' => 'ImageShack&reg; - Serviço de Torrent',
      'plugin_megaupl' => 'Megaupload.com Cookie Valor',
+     'plugin_uploaded' => 'Uploaded.to Cookie Valor',
 	 'plugin_hotfile' => 'Hotfile.com Cookie Valor',
 	 'plugin_rs' => 'Rapidshare.com Cookie Value',
+     'plugin_cookie' => 'Additional Cookie Value',
      'plugin_buletin' => 'Usar plugin vBulletin',
 	 
      '_user' => 'usuário=',
 	 '_auth' => 'auth=',
 	 '_enc' => 'enc=',
+     '_login' => 'login=',
+     '_key' => 'Key=Value',
 	 	 
      '_sfrefresh' => 'Atualizar',
      'chk_all' => 'Selecionar Todos',
@@ -430,9 +434,13 @@ switch($vpage)
 	 'plugin_megaupl' => 'Cookie Megaupload.com',
 	 'plugin_hotfile' => 'Cookie Hotfile.com',
 	 'plugin_rs' => 'Cookie Rapidshare.com',
+     'plugin_uploaded' => 'Cookie Uploaded.to',
+
 	 '_user' => 'usuário=',
      '_auth' => 'auth=',
      '_enc' => 'enc=',	 
+     '_login' => 'login=',
+
 	 'reach_lim_audl' => 'Sorry you can not proceed more than %link% Links at once.',
 	 'auto_check_link' => 'Auto Check Links',
 

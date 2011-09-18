@@ -3,7 +3,7 @@ define('RAPIDLEECH', 'yes');
 
 define('MISC_DIR', 'misc/');
 define('HOST_DIR', 'pluginz/');
-define('UPLOAD_DIR', HOST_DIR.'upl/');
+define('UPLOAD_DIR', HOST_DIR.'upload/');
 define('CONFIG_DIR', 'configs/');
 define('CLASS_DIR', 'classes/');
 

@@ -178,7 +178,7 @@ pass: <input type="password" id="pass" name="pass">
 <!-- =============================================-->
 <tr>
 <td class="tdacc">
-<h1>PREMIX ACC CONFIG</h1></td><td>&nbsp;</td></tr>
+<h1>PREMIUM ACC CONFIG</h1></td><td>&nbsp;</td></tr>
 <tr>
 <td class="tdacc">
 <input type="checkbox" id="usepcc" name="usepcc" onClick="displ=this.checked?'':'none';document.getElementById('divpccL').style.display=displ;" <?php if($showpostn){if(isset($_POST['usepcc']) && $_POST['usepcc']=='on')echo ' checked';}elseif((isset($premium_acc)) && $ada_acc) echo ' checked';?>><label for=usepcc><b>Use premiX acc</b></label>
@@ -211,14 +211,13 @@ pass: <input type="password" id="pass" name="pass">
 	<div id="rsenc"<?php echo $styledisplay;?>>
 	user: <input type="text" id="rpl0" name="rpl0" value="">
 	pass: <input type="password" id="rppl0" name="rppl0" value="">
-	
 	<span id="rspcc"></span>
 	<span id="buttonplus0">
 	&nbsp;<input id="rsid_0" type="image" src="<?php echo IMAGE_DIR;?>plus.png" alt="+" title="Add Row" onclick="addElement('rsenc', this.id, ['rpl', 'rppl'], ['addition', 'buttonplus'] ); return false;" style="vertical-align:middle;">
 	</span></div>
 	<span id="rsauth2">
 	<?php if(!$rsencchecked){
-	  echo "<div>Rapidshare.com premiX ACC</div>";
+	  echo "<div>Rapidshare.com Premium Account</div>";
 	 }else{
 	  //echo (isset($arr_acchashmulti)?(count($arr_acchashmulti)>1?count($arr_acchashmulti):'?'):(isset($premium_acc["rs_com"]["user"])?1:'?'))."&nbsp;".ACC_EMBED;
 	  echo (isset($premium_acc["rs_com"][0]["user"])?(count($premium_acc["rs_com"])):(isset($premium_acc["rs_com"]["user"])?1:'?'))."&nbsp;".ACC_EMBED;
@@ -245,478 +244,802 @@ pass: <input type="password" id="pass" name="pass">
 	user: <input type="text" id="rplde" name="rplde" value="">&nbsp;
 	pass: <input type="password" id="rpplde" name="rpplde" value="">
 	</div>
-	<span id="rsauth2de"><?php if(!$rsdechecked){echo "<div>Rapidshare.de premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="rsauth2de"><?php if(!$rsdechecked){echo "<div>Rapidshare.de Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-<?php 
- $megupld=false;$chk='';
- if($showpostn){
-   if(isset($_POST['megaupload_premix']) && $_POST['megaupload_premix']=='on')
-    {$chk= ' checked';$megupld=true;}
- }elseif(isset($premium_acc['megaupload']))
-    {$chk= ' checked';$megupld=true;}
-?>
-
-<input type="checkbox" id="megaupload_premix" name="megaupload_premix" onClick="clk(this,'muacc','muket','<?php echo $megupld;?>');"<?php echo $chk;?>>
-<label for="megaupload_premix">&nbsp;Megaupload.com</label>
-	</td>
-	<td class="tdacc">
-	<div id="muacc"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrmu" name="usrmu" value="">&nbsp;
-	pass: <input type="password" id="passmu" name="passmu" value="">
-	</div>
-	<span id="muket"><?php if(!$megupld){echo "<div>Megaupload.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-<?php 
-  $megshr=false;$chk='';
-  if($showpostn){
-    if(isset($_POST['megashare_premix']) && $_POST['megashare_premix']=='on')
-	 {$chk= ' checked';$megshr=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['megashare'])))
-    {$chk= ' checked'; $megshr=true;} 
-?>
-
-<input type="checkbox" id="megashare_premix" name="megashare_premix" onClick="clk(this,'megabox','megaket','<?php echo $megshr;?>');"<?php echo $chk;?>>
-<label for="megashare_premix">&nbsp;Megashare.com</label>
-	</td>
-	<td class="tdacc">
-	<div id="megabox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrmega" name="usrmega" value="">&nbsp;
-	pass: <input type="password" id="passmega" name="passmega" value="">
-	</div>
-	<span id="megaket" ><?php if(!$megshr){echo "<div>Megashare.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-<?php 
-  $ntld=false;$chk='';
-  if($showpostn){
-    if(isset($_POST['netload_premix']) && $_POST['netload_premix']=='on')
-	  {$chk= ' checked';$ntld=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['netload'])))
-    {$chk= ' checked';$ntld=true;} 
-?>
-
-<input type="checkbox" id="netload_premix" name="netload_premix" onClick="clk(this,'netbox','netket','<?php echo $ntld;?>');"<?php echo $chk;?>>
-<label for="netload_premix">&nbsp;Netload.in</label>
-	</td>
-	<td class="tdacc">
-	<div id="netbox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrnet" name="usrnet" value="">&nbsp;
-	pass: <input type="password" id="passnet" name="passnet" value="">
-	</div>
-	<span id="netket" ><?php if(!$ntld){echo "<div>Netload.in premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-<?php 
-  $gigasz=false;$chk='';
-  if($showpostn){
-    if(isset($_POST['gigasize_premix']) && $_POST['gigasize_premix']=='on')
-	  {$chk= ' checked';$gigasz=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['gigasize'])))
-    {$chk= ' checked';$gigasz=true;} 
-?>
-
-<input type="checkbox" id="gigasize_premix" name="gigasize_premix" onClick="clk(this,'gzbox','gzket','<?php echo $gigasz;?>');"<?php echo $chk;?>>
-<label for="gigasize_premix">&nbsp;Gigasize.com</label>
-	</td>
-	<td class="tdacc">
-	<div id="gzbox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrgz" name="usrgz" value="">&nbsp;
-	pass: <input type="password" id="passgz" name="passgz" value="">
-	</div>
-	<span id="gzket" ><?php if(!$gigasz){echo "<div>Gigasize.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-<?php 
-  $vbulacc=false;$chk='';
-   if($showpostn){
-     if(isset($_POST['vBulletin_acc_premix']) && $_POST['vBulletin_acc_premix']=='on')
-	  {$chk= ' checked';$vbulacc=true;}
-     }elseif((isset($premium_acc))&&(isset($premium_acc['vBulletin_acc'])))
-      {$chk= ' checked';$vbulacc=true;} 
-?>
-<input type="checkbox" id="vBulletin_acc_premix" name="vBulletin_acc_premix" onClick="clk(this,'vbulbox','vbulket','<?php echo $vbulacc;?>');"<?php echo $chk;?>>
-<label for="vBulletin_acc_premix">&nbsp;vBulletin</label>
-	</td>
-	<td class="tdacc">
-	<div id="vbulbox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrvbul" name="usrvbul" value="">&nbsp;
-	pass: <input type="password" id="passvbul" name="passvbul" value="">
-	</div>
-	<span id="vbulket" ><?php if(!$vbulacc){echo "<div>vBulletin premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
 	
 	<tr>
 	<td class="tdacc">
 <?php 
-  $upl_to=false; $chk='';
-  if($showpostn){
-   if(isset($_POST['uploaded_to_premix']) && $_POST['uploaded_to_premix']=='on')
-    {$chk= ' checked';$upl_to=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['uploaded_to'])))
-    {$chk= ' checked';$upl_to=true;} 
-?>
-<input type="checkbox" id="uploaded_to_premix" name="uploaded_to_premix" onClick="clk(this,'uptobox','uptoket','<?php echo $upl_to;?>');"<?php echo $chk;?>>
-<label for="uploaded_to_premix">&nbsp;Uploaded.to</label>
-	</td>
-	<td class="tdacc">
-	<div id="uptobox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrupto" name="usrupto" value="">&nbsp;
-	pass: <input type="password" id="passupto" name="passupto" value="">
-	</div>
-	<span id="uptoket" ><?php if(!$upl_to){echo "<div>Uploaded.to premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	
-	<tr>
-	<td class="tdacc">
-<?php 
-  $easysh=false; $chk='';
-  if($showpostn){
-   if(isset($_POST['easyshare_premix']) && $_POST['easyshare_premix']=='on')
-    {$chk= ' checked';$easysh=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['easyshare'])))
-    {$chk= ' checked';$easysh=true;} 
-?>
-<input type="checkbox" id="easyshare_premix" name="easyshare_premix" onClick="clk(this,'easybox','easyket','<?php echo $easysh;?>');"<?php echo $chk;?>>
-<label for="easyshare_premix">&nbsp;Easy-Share.com</label>
-	</td>
-	<td class="tdacc">
-	<div id="easybox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usreasy" name="usreasy" value="">&nbsp;
-	pass: <input type="password" id="passeasy" name="passeasy" value="">
-	</div>
-	<span id="easyket" ><?php if(!$easysh){echo "<div>Easy-Share.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-<?php 
-  $deposit=false; $chk='';
-  if($showpostn){
-   if(isset($_POST['depositfiles_premix']) && $_POST['depositfiles_premix']=='on')
-    {$chk= ' checked';$deposit=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['depositfiles'])))
-    {$chk= ' checked';$deposit=true;} 
-?>
-<input type="checkbox" id="depositfiles_premix" name="depositfiles_premix" onClick="clk(this,'deposbox','deposket','<?php echo $deposit;?>');"<?php echo $chk;?>>
-<label for="depositfiles_premix">&nbsp;Depositfiles.com</label>
-	</td>
-	<td class="tdacc">
-	<div id="deposbox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrdepos" name="usrdepos" value="">&nbsp;
-	pass: <input type="password" id="passdepos" name="passdepos" value="">
-	</div>
-	<span id="deposket" ><?php if(!$deposit){echo "<div>Depositfiles.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-<?php 
-  $hotfile=false; $chk='';
-  if($showpostn){
-   if(isset($_POST['hotfile_com_premix']) && $_POST['hotfile_com_premix']=='on')
-    {$chk= ' checked';$hotfile=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['hotfile_com'])))
-    {$chk= ' checked';$hotfile=true;} 
-?>
-<input type="checkbox" id="hotfile_com_premix" name="hotfile_com_premix" onClick="clk(this,'hotfilebox','hotfileket','<?php echo $hotfile;?>');"<?php echo $chk;?>>
-<label for="hotfile_com_premix">&nbsp;Hotfile.com</label>
-	</td>
-	<td class="tdacc">
-	<div id="hotfilebox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrhotfile" name="usrhotfile" value="">&nbsp;
-	pass: <input type="password" id="passhotfile" name="passhotfile" value="">
-	</div>
-	<span id="hotfileket" ><?php if(!$hotfile){echo "<div>Hotfile.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-<?php 
-  $ulding=false; $chk='';
-  if($showpostn){
-   if(isset($_POST['uploading_premix']) && $_POST['uploading_premix']=='on')
-    {$chk= ' checked';$ulding=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['uploading'])))
-    {$chk= ' checked';$ulding=true;} 
-?>
-<input type="checkbox" id="uploading_premix" name="uploading_premix" onClick="clk(this,'uldingbox','uldingket','<?php echo $ulding;?>');"<?php echo $chk;?>>
-<label for="uploading_premix">&nbsp;Uploading.com</label>
-	</td>
-	<td class="tdacc">
-	<div id="uldingbox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usruploading" name="usruploading" value="">&nbsp;
-	pass: <input type="password" id="passuploading" name="passuploading" value="">
-	</div>
-	<span id="uldingket" ><?php if(!$ulding){echo "<div>Uploading.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-	<?php 
-  $ff=false; $chk='';
-  if($showpostn){
-   if(isset($_POST['filefactory_premix']) && $_POST['filefactory_premix']=='on')
-    {$chk= ' checked';$ff=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['filefactory'])))
-    {$chk= ' checked';$ff=true;} 
-	?>
-<input type="checkbox" id="filefactory_premix" name="filefactory_premix" onClick="clk(this,'ffbox','ffket','<?php echo $ff;?>');"<?php echo $chk;?>>
-<label for="filefactory_premix">&nbsp;Filefactory.com</label>
-	</td>
-	<td class="tdacc">
-	<div id="ffbox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrfilefactory" name="usrfilefactory" value="">&nbsp;
-	pass: <input type="password" id="passfilefactory" name="passfilefactory" value="">
-	</div>
-	<span id="ffket" ><?php if(!$ff){echo "<div>Filefactory.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-	<?php 
-  $d4shared=false; $chk='';
+  $d4shared=false;$chk ='';
   if($showpostn){
    if(isset($_POST['4shared_premix']) && $_POST['4shared_premix']=='on')
     {$chk= ' checked';$d4shared=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['4shared_com'])))
+  }elseif(isset($premium_acc['4shared']))
     {$chk= ' checked';$d4shared=true;}
-	?>
-<input type="checkbox" id="4shared_premix" name="4shared_premix" onClick="clk(this,'d4sbox','d4sket','<?php echo $d4shared;?>');"<?php echo $chk;?>>
+?>
+<input type="checkbox" id="4shared_premix" name="4shared_premix" onClick=" clk(this,'4sharedbox','4sharedmsg','<?php echo $d4shared;?>');"<?php print $chk;?>>
 <label for="4shared_premix">&nbsp;4shared.com</label>
 	</td>
 	<td class="tdacc">
-	<div id="d4sbox"<?php echo $styledisplay;?> class="float">
+	<div id="4sharedbox"<?php echo $styledisplay;?> class="float">
 	user: <input type="text" id="usr4shared" name="usr4shared" value="">&nbsp;
 	pass: <input type="password" id="pass4shared" name="pass4shared" value="">
 	</div>
-	<span id="d4sket" ><?php if(!$d4shared){echo "<div>4shared Premix ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="4sharedmsg"><?php if(!$d4shared){echo "<div>4shared.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
+	
 	<tr>
 	<td class="tdacc">
-	<?php 
-  $sendspace=false; $chk='';
+<?php 
+  $animeground=false;$chk ='';
   if($showpostn){
-   if(isset($_POST['sendspace_premix']) && $_POST['sendspace_premix']=='on')
-    {$chk= ' checked';$sendspace=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['sendspace'])))
-    {$chk= ' checked';$sendspace=true;} 
-	?>
-<input type="checkbox" id="sendspace_premix" name="sendspace_premix" onClick="clk(this,'sendbox','sendket','<?php echo $sendspace;?>');"<?php echo $chk;?>>
-<label for="sendspace_premix">&nbsp;Sendspace.com</label>
+   if(isset($_POST['animeground_premix']) && $_POST['animeground_premix']=='on')
+    {$chk= ' checked';$animeground=true;}
+  }elseif(isset($premium_acc['animeground']))
+    {$chk= ' checked';$animeground=true;}
+?>
+<input type="checkbox" id="animeground_premix" name="animeground_premix" onClick=" clk(this,'animegroundbox','animegroundmsg','<?php echo $animeground;?>');"<?php print $chk;?>>
+<label for="animeground_premix">&nbsp;Animeground.com</label>
 	</td>
 	<td class="tdacc">
-	<div id="sendbox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrsendspace" name="usrsendspace" value="">&nbsp;
-	pass: <input type="password" id="passsendspace" name="passsendspace" value="">
+	<div id="animegroundbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usranimeground" name="usranimeground" value="">&nbsp;
+	pass: <input type="password" id="passanimeground" name="passanimeground" value="">
 	</div>
-	<span id="sendket" ><?php if(!$sendspace){echo "<div>Sendspace Free/premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="animegroundmsg"><?php if(!$animeground){echo "<div>Animeground.com Free Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
+	
 	<tr>
 	<td class="tdacc">
-	<?php 
-  $fileserve=false; $chk='';
+<?php 
+  $bitshare=false;$chk ='';
   if($showpostn){
-   if(isset($_POST['fileserve_com_premix']) && $_POST['fileserve_com_premix']=='on')
+   if(isset($_POST['bitshare_premix']) && $_POST['bitshare_premix']=='on')
+    {$chk= ' checked';$bitshare=true;}
+  }elseif(isset($premium_acc['bitshare']))
+    {$chk= ' checked';$bitshare=true;}
+?>
+<input type="checkbox" id="bitshare_premix" name="bitshare_premix" onClick=" clk(this,'bitsharebox','bitsharemsg','<?php echo $bitshare;?>');"<?php print $chk;?>>
+<label for="bitshare_premix">&nbsp;Bitshare.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="bitsharebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrbitshare" name="usrbitshare" value="">&nbsp;
+	pass: <input type="password" id="passbitshare" name="passbitshare" value="">
+	</div>
+	<span id="bitsharemsg"><?php if(!$bitshare){echo "<div>Bitshare.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $depositfiles=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['depositfiles_premix']) && $_POST['depositfiles_premix']=='on')
+    {$chk= ' checked';$depositfiles=true;}
+  }elseif(isset($premium_acc['depositfiles']))
+    {$chk= ' checked';$depositfiles=true;}
+?>
+<input type="checkbox" id="depositfiles_premix" name="depositfiles_premix" onClick=" clk(this,'depositfilesbox','depositfilesmsg','<?php echo $depositfiles;?>');"<?php print $chk;?>>
+<label for="depositfiles_premix">&nbsp;Depositfiles.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="depositfilesbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrdepositfiles" name="usrdepositfiles" value="">&nbsp;
+	pass: <input type="password" id="passdepositfiles" name="passdepositfiles" value="">
+	</div>
+	<span id="depositfilesmsg"><?php if(!$depositfiles){echo "<div>Depositfiles.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $easyshare=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['easyshare_premix']) && $_POST['easyshare_premix']=='on')
+    {$chk= ' checked';$easyshare=true;}
+  }elseif(isset($premium_acc['easyshare']))
+    {$chk= ' checked';$easyshare=true;}
+?>
+<input type="checkbox" id="easyshare_premix" name="easyshare_premix" onClick=" clk(this,'easysharebox','easysharemsg','<?php echo $easyshare;?>');"<?php print $chk;?>>
+<label for="easyshare_premix">&nbsp;Easy-Share.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="easysharebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usreasyshare" name="usreasyshare" value="">&nbsp;
+	pass: <input type="password" id="passeasyshare" name="passeasyshare" value="">
+	</div>
+	<span id="easysharemsg"><?php if(!$easyshare){echo "<div>Easy-Share.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $enterupload=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['enterupload_premix']) && $_POST['enterupload_premix']=='on')
+    {$chk= ' checked';$enterupload=true;}
+  }elseif(isset($premium_acc['enterupload']))
+    {$chk= ' checked';$enterupload=true;}
+?>
+<input type="checkbox" id="enterupload_premix" name="enterupload_premix" onClick=" clk(this,'enteruploadbox','enteruploadmsg','<?php echo $enterupload;?>');"<?php print $chk;?>>
+<label for="enterupload_premix">&nbsp;Enterupload.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="enteruploadbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrenterupload" name="usrenterupload" value="">&nbsp;
+	pass: <input type="password" id="passenterupload" name="passenterupload" value="">
+	</div>
+	<span id="enteruploadmsg"><?php if(!$enterupload){echo "<div>Enterupload.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $fileape=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['fileape_premix']) && $_POST['fileape_premix']=='on')
+    {$chk= ' checked';$fileape=true;}
+  }elseif(isset($premium_acc['fileape']))
+    {$chk= ' checked';$fileape=true;}
+?>
+<input type="checkbox" id="fileape_premix" name="fileape_premix" onClick=" clk(this,'fileapebox','fileapemsg','<?php echo $fileape;?>');"<?php print $chk;?>>
+<label for="fileape_premix">&nbsp;Fileape.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="fileapebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrfileape" name="usrfileape" value="">&nbsp;
+	pass: <input type="password" id="passfileape" name="passfileape" value="">
+	</div>
+	<span id="fileapemsg"><?php if(!$fileape){echo "<div>Fileape.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $filedino=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['filedino_premix']) && $_POST['filedino_premix']=='on')
+    {$chk= ' checked';$filedino=true;}
+  }elseif(isset($premium_acc['filedino']))
+    {$chk= ' checked';$filedino=true;}
+?>
+<input type="checkbox" id="filedino_premix" name="filedino_premix" onClick=" clk(this,'filedinobox','filedinomsg','<?php echo $filedino;?>');"<?php print $chk;?>>
+<label for="filedino_premix">&nbsp;Filedino.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="filedinobox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrfiledino" name="usrfiledino" value="">&nbsp;
+	pass: <input type="password" id="passfiledino" name="passfiledino" value="">
+	</div>
+	<span id="filedinomsg"><?php if(!$filedino){echo "<div>Filedino.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $filedude=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['filedude_premix']) && $_POST['filedude_premix']=='on')
+
+    {$chk= ' checked';$filedude=true;}
+  }elseif(isset($premium_acc['filedude']))
+
+    {$chk= ' checked';$filedude=true;}
+?>
+<input type="checkbox" id="filedude_premix" name="filedude_premix" onClick=" clk(this,'filedudebox','filedudemsg','<?php echo $filedude;?>');"<?php print $chk;?>>
+<label for="filedude_premix">&nbsp;Filedude.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="filedudebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrfiledude" name="usrfiledude" value="">&nbsp;
+	pass: <input type="password" id="passfiledude" name="passfiledude" value="">
+	</div>
+	<span id="filedudemsg"><?php if(!$filedude){echo "<div>Filedude.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $filefactory=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['filefactory_premix']) && $_POST['filefactory_premix']=='on')
+    {$chk= ' checked';$filefactory=true;}
+  }elseif(isset($premium_acc['filefactory']))
+    {$chk= ' checked';$filefactory=true;}
+?>
+<input type="checkbox" id="filefactory_premix" name="filefactory_premix" onClick=" clk(this,'filefactorybox','filefactorymsg','<?php echo $filefactory;?>');"<?php print $chk;?>>
+<label for="filefactory_premix">&nbsp;Filefactory.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="filefactorybox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrfilefactory" name="usrfilefactory" value="">&nbsp;
+	pass: <input type="password" id="passfilefactory" name="passfilefactory" value="">
+	</div>
+	<span id="filefactorymsg"><?php if(!$filefactory){echo "<div>Filefactory.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $fileserve=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['fileserve_premix']) && $_POST['fileserve_premix']=='on')
     {$chk= ' checked';$fileserve=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['fileserve_com'])))
-    {$chk= ' checked';$fileserve=true;} 
-	?>
-<input type="checkbox" id="fileserve_com_premix" name="fileserve_com_premix" onClick="clk(this,'fileservebox','fileserveket','<?php echo $fileserve;?>');"<?php echo $chk;?>>
-<label for="fileserve_com_premix">&nbsp;Fileserve.com</label>
+  }elseif(isset($premium_acc['fileserve']))
+    {$chk= ' checked';$fileserve=true;}
+?>
+<input type="checkbox" id="fileserve_premix" name="fileserve_premix" onClick=" clk(this,'fileservebox','fileservemsg','<?php echo $fileserve;?>');"<?php print $chk;?>>
+<label for="fileserve_premix">&nbsp;Fileserve.com</label>
 	</td>
 	<td class="tdacc">
 	<div id="fileservebox"<?php echo $styledisplay;?> class="float">
 	user: <input type="text" id="usrfileserve" name="usrfileserve" value="">&nbsp;
 	pass: <input type="password" id="passfileserve" name="passfileserve" value="">
 	</div>
-	<span id="fileserveket" ><?php if(!$fileserve){echo "<div>Fileserve.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="fileservemsg"><?php if(!$fileserve){echo "<div>Fileserve.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
+	
 	<tr>
 	<td class="tdacc">
-	<?php 
-  $filesonic=false; $chk='';
+<?php 
+  $filesonic=false;$chk ='';
   if($showpostn){
-   if(isset($_POST['filesonic_com_premix']) && $_POST['filesonic_com_premix']=='on')
+   if(isset($_POST['filesonic_premix']) && $_POST['filesonic_premix']=='on')
     {$chk= ' checked';$filesonic=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['filesonic_com'])))
-    {$chk= ' checked';$filesonic=true;} 
-	?>
-<input type="checkbox" id="filesonic_com_premix" name="filesonic_com_premix" onClick="clk(this,'filesonicbox','filesonicket','<?php echo $filesonic;?>');"<?php echo $chk;?>>
-<label for="filesonic_com_premix">&nbsp;Filesonic.com</label>
+  }elseif(isset($premium_acc['filesonic']))
+    {$chk= ' checked';$filesonic=true;}
+?>
+<input type="checkbox" id="filesonic_premix" name="filesonic_premix" onClick=" clk(this,'filesonicbox','filesonicmsg','<?php echo $filesonic;?>');"<?php print $chk;?>>
+<label for="filesonic_premix">&nbsp;Filesonic.com</label>
 	</td>
 	<td class="tdacc">
 	<div id="filesonicbox"<?php echo $styledisplay;?> class="float">
 	user: <input type="text" id="usrfilesonic" name="usrfilesonic" value="">&nbsp;
 	pass: <input type="password" id="passfilesonic" name="passfilesonic" value="">
 	</div>
-	<span id="filesonicket" ><?php if(!$filesonic){echo "<div>Filesonic.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="filesonicmsg"><?php if(!$filesonic){echo "<div>Filesonic.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
+	
 	<tr>
 	<td class="tdacc">
-	<?php 
-  $oron=false; $chk='';
+<?php 
+  $freakshare=false;$chk ='';
   if($showpostn){
-   if(isset($_POST['oron_com_premix']) && $_POST['oron_com_premix']=='on')
+   if(isset($_POST['freakshare_premix']) && $_POST['freakshare_premix']=='on')
+    {$chk= ' checked';$freakshare=true;}
+  }elseif(isset($premium_acc['freakshare']))
+    {$chk= ' checked';$freakshare=true;}
+?>
+<input type="checkbox" id="freakshare_premix" name="freakshare_premix" onClick=" clk(this,'freaksharebox','freaksharemsg','<?php echo $freakshare;?>');"<?php print $chk;?>>
+<label for="freakshare_premix">&nbsp;Freakshare.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="freaksharebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrfreakshare" name="usrfreakshare" value="">&nbsp;
+	pass: <input type="password" id="passfreakshare" name="passfreakshare" value="">
+	</div>
+	<span id="freaksharemsg"><?php if(!$freakshare){echo "<div>Freakshare.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $gigasize=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['gigasize_premix']) && $_POST['gigasize_premix']=='on')
+    {$chk= ' checked';$gigasize=true;}
+  }elseif(isset($premium_acc['gigasize']))
+    {$chk= ' checked';$gigasize=true;}
+?>
+<input type="checkbox" id="gigasize_premix" name="gigasize_premix" onClick=" clk(this,'gigasizebox','gigasizemsg','<?php echo $gigasize;?>');"<?php print $chk;?>>
+<label for="gigasize_premix">&nbsp;Gigasize.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="gigasizebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrgigasize" name="usrgigasize" value="">&nbsp;
+	pass: <input type="password" id="passgigasize" name="passgigasize" value="">
+	</div>
+	<span id="gigasizemsg"><?php if(!$gigasize){echo "<div>Gigasize.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $hellshare=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['hellshare_premix']) && $_POST['hellshare_premix']=='on')
+    {$chk= ' checked';$hellshare=true;}
+  }elseif(isset($premium_acc['hellshare']))
+    {$chk= ' checked';$hellshare=true;}
+?>
+<input type="checkbox" id="hellshare_premix" name="hellshare_premix" onClick=" clk(this,'hellsharebox','hellsharemsg','<?php echo $hellshare;?>');"<?php print $chk;?>>
+<label for="hellshare_premix">&nbsp;Hellshare.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="hellsharebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrhellshare" name="usrhellshare" value="">&nbsp;
+	pass: <input type="password" id="passhellshare" name="passhellshare" value="">
+	</div>
+	<span id="hellsharemsg"><?php if(!$hellshare){echo "<div>Hellshare.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $hotfile=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['hotfile_premix']) && $_POST['hotfile_premix']=='on')
+    {$chk= ' checked';$hotfile=true;}
+  }elseif(isset($premium_acc['hotfile']))
+    {$chk= ' checked';$hotfile=true;}
+?>
+<input type="checkbox" id="hotfile_premix" name="hotfile_premix" onClick=" clk(this,'hotfilebox','hotfilemsg','<?php echo $hotfile;?>');"<?php print $chk;?>>
+<label for="hotfile_premix">&nbsp;Hotfile.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="hotfilebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrhotfile" name="usrhotfile" value="">&nbsp;
+	pass: <input type="password" id="passhotfile" name="passhotfile" value="">
+	</div>
+	<span id="hotfilemsg"><?php if(!$hotfile){echo "<div>Hotfile.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $ifile=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['ifile_premix']) && $_POST['ifile_premix']=='on')
+    {$chk= ' checked';$ifile=true;}
+  }elseif(isset($premium_acc['ifile']))
+    {$chk= ' checked';$ifile=true;}
+?>
+<input type="checkbox" id="ifile_premix" name="ifile_premix" onClick=" clk(this,'ifilebox','ifilemsg','<?php echo $ifile;?>');"<?php print $chk;?>>
+<label for="ifile_premix">&nbsp;Ifile.it</label>
+	</td>
+	<td class="tdacc">
+	<div id="ifilebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrifile" name="usrifile" value="">&nbsp;
+	pass: <input type="password" id="passifile" name="passifile" value="">
+	</div>
+	<span id="ifilemsg"><?php if(!$ifile){echo "<div>Ifile.it Free Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $kickload=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['kickload_premix']) && $_POST['kickload_premix']=='on')
+    {$chk= ' checked';$kickload=true;}
+  }elseif(isset($premium_acc['kickload']))
+    {$chk= ' checked';$kickload=true;}
+?>
+<input type="checkbox" id="kickload_premix" name="kickload_premix" onClick=" clk(this,'kickloadbox','kickloadmsg','<?php echo $kickload;?>');"<?php print $chk;?>>
+<label for="kickload_premix">&nbsp;Kickload.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="kickloadbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrkickload" name="usrkickload" value="">&nbsp;
+	pass: <input type="password" id="passkickload" name="passkickload" value="">
+	</div>
+	<span id="kickloadmsg"><?php if(!$kickload){echo "<div>Kickload.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $letitbit=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['letitbit_premix']) && $_POST['letitbit_premix']=='on')
+    {$chk= ' checked';$letitbit=true;}
+  }elseif(isset($premium_acc['letitbit']))
+    {$chk= ' checked';$letitbit=true;}
+?>
+<input type="checkbox" id="letitbit_premix" name="letitbit_premix" onClick=" clk(this,'letitbitbox','letitbitmsg','<?php echo $letitbit;?>');"<?php print $chk;?>>
+<label for="letitbit_premix">&nbsp;Letitbit.net</label>
+	</td>
+	<td class="tdacc">
+	<div id="letitbitbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrletitbit" name="usrletitbit" value="">
+	pass: <input type="password" id="passletitbit" name="passletitbit" value="">
+	</div>
+	<span id="letitbitmsg"><?php if(!$letitbit){echo "<div>Letitbit.net Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $megashare=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['megashare_premix']) && $_POST['megashare_premix']=='on')
+    {$chk= ' checked';$megashare=true;}
+  }elseif(isset($premium_acc['megashare']))
+    {$chk= ' checked';$megashare=true;}
+?>
+<input type="checkbox" id="megashare_premix" name="megashare_premix" onClick=" clk(this,'megasharebox','megasharemsg','<?php echo $megashare;?>');"<?php print $chk;?>>
+<label for="megashare_premix">&nbsp;Megashare.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="megasharebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrmegashare" name="usrmegashare" value="">&nbsp;
+	pass: <input type="password" id="passmegashare" name="passmegashare" value="">
+	</div>
+	<span id="megasharemsg"><?php if(!$megashare){echo "<div>Megashare.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $megashares=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['megashares_premix']) && $_POST['megashares_premix']=='on')
+    {$chk= ' checked';$megashares=true;}
+  }elseif(isset($premium_acc['megashares']))
+    {$chk= ' checked';$megashares=true;}
+?>
+<input type="checkbox" id="megashares_premix" name="megashares_premix" onClick=" clk(this,'megasharesbox','megasharesmsg','<?php echo $megashares;?>');"<?php print $chk;?>>
+<label for="megashares_premix">&nbsp;Megashares.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="megasharesbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrmegashares" name="usrmegashares" value="">&nbsp;
+	pass: <input type="password" id="passmegashares" name="passmegashares" value="">
+	</div>
+	<span id="megasharesmsg"><?php if(!$megashares){echo "<div>Megashares.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $megaupload=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['megaupload_premix']) && $_POST['megaupload_premix']=='on')
+    {$chk= ' checked';$megaupload=true;}
+  }elseif(isset($premium_acc['megaupload']))
+    {$chk= ' checked';$megaupload=true;}
+?>
+<input type="checkbox" id="megaupload_premix" name="megaupload_premix" onClick=" clk(this,'megauploadbox','megauploadmsg','<?php echo $megaupload;?>');"<?php print $chk;?>>
+<label for="megaupload_premix">&nbsp;Megaupload.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="megauploadbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrmegaupload" name="usrmegaupload" value="">&nbsp;
+	pass: <input type="password" id="passmegaupload" name="passmegaupload" value="">
+	</div>
+	<span id="megauploadmsg"><?php if(!$megaupload){echo "<div>Megaupload.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $netload=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['netload_premix']) && $_POST['netload_premix']=='on')
+    {$chk= ' checked';$netload=true;}
+  }elseif(isset($premium_acc['netload']))
+    {$chk= ' checked';$netload=true;}
+?>
+<input type="checkbox" id="netload_premix" name="netload_premix" onClick=" clk(this,'netloadbox','netloadmsg','<?php echo $netload;?>');"<?php print $chk;?>>
+<label for="netload_premix">&nbsp;Netload.in</label>
+	</td>
+	<td class="tdacc">
+	<div id="netloadbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrnetload" name="usrnetload" value="">&nbsp;
+	pass: <input type="password" id="passnetload" name="passnetload" value="">
+	</div>
+	<span id="netloadmsg"><?php if(!$netload){echo "<div>Netload.in Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $oron=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['oron_premix']) && $_POST['oron_premix']=='on')
     {$chk= ' checked';$oron=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['oron_com'])))
-    {$chk= ' checked';$oron=true;} 
-	?>
-<input type="checkbox" id="oron_com_premix" name="oron_com_premix" onClick="clk(this,'oronbox','oronket','<?php echo $oron;?>');"<?php echo $chk;?>>
-<label for="oron_com_premix">&nbsp;Oron.com</label>
+  }elseif(isset($premium_acc['oron']))
+    {$chk= ' checked';$oron=true;}
+?>
+<input type="checkbox" id="oron_premix" name="oron_premix" onClick=" clk(this,'oronbox','oronmsg','<?php echo $oron;?>');"<?php print $chk;?>>
+<label for="oron_premix">&nbsp;Oron.com</label>
 	</td>
 	<td class="tdacc">
 	<div id="oronbox"<?php echo $styledisplay;?> class="float">
 	user: <input type="text" id="usroron" name="usroron" value="">&nbsp;
 	pass: <input type="password" id="passoron" name="passoron" value="">
 	</div>
-	<span id="oronket" ><?php if(!$oron){echo "<div>Oron.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="oronmsg"><?php if(!$oron){echo "<div>Oron.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
+	
 	<tr>
 	<td class="tdacc">
-	<?php 
-  $duckload=false; $chk='';
+<?php 
+  $sendspace=false;$chk ='';
   if($showpostn){
-   if(isset($_POST['duckload_com_premix']) && $_POST['duckload_com_premix']=='on')
-    {$chk= ' checked';$duckload=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['duckload_com'])))
-    {$chk= ' checked';$duckload=true;} 
-	?>
-<input type="checkbox" id="duckload_com_premix" name="duckload_com_premix" onClick="clk(this,'duckloadbox','duckloadket','<?php echo $duckload;?>');"<?php echo $chk;?>>
-<label for="duckload_com_premix">&nbsp;Duckload.com</label>
+   if(isset($_POST['sendspace_premix']) && $_POST['sendspace_premix']=='on')
+    {$chk= ' checked';$sendspace=true;}
+  }elseif(isset($premium_acc['sendspace']))
+    {$chk= ' checked';$sendspace=true;}
+?>
+<input type="checkbox" id="sendspace_premix" name="sendspace_premix" onClick=" clk(this,'sendspacebox','sendspacemsg','<?php echo $sendspace;?>');"<?php print $chk;?>>
+<label for="sendspace_premix">&nbsp;Sendspace.com</label>
 	</td>
 	<td class="tdacc">
-	<div id="duckloadbox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrduckload" name="usrduckload" value="">&nbsp;
-	pass: <input type="password" id="passduckload" name="passduckload" value="">
+	<div id="sendspacebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrsendspace" name="usrsendspace" value="">&nbsp;
+	pass: <input type="password" id="passsendspace" name="passsendspace" value="">
 	</div>
-	<span id="duckloadket" ><?php if(!$duckload){echo "<div>Duckload.com premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="sendspacemsg"><?php if(!$sendspace){echo "<div>Sendspace.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
+	
 	<tr>
 	<td class="tdacc">
-	<?php 
-  $shareonline=false; $chk='';
+<?php 
+  $shareonline=false;$chk ='';
   if($showpostn){
-   if(isset($_POST['shareonline_biz_premix']) && $_POST['shareonline_biz_premix']=='on')
+   if(isset($_POST['shareonline_premix']) && $_POST['shareonline_premix']=='on')
     {$chk= ' checked';$shareonline=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['shareonline_biz'])))
-    {$chk= ' checked';$shareonline=true;} 
-	?>
-<input type="checkbox" id="shareonline_biz_premix" name="shareonline_biz_premix" onClick="clk(this,'shareonlinebox','shareonlineket','<?php echo $shareonline;?>');"<?php echo $chk;?>>
-<label for="shareonline_biz_premix">&nbsp;Shareonline.biz</label>
+  }elseif(isset($premium_acc['shareonline']))
+    {$chk= ' checked';$shareonline=true;}
+?>
+<input type="checkbox" id="shareonline_premix" name="shareonline_premix" onClick=" clk(this,'shareonlinebox','shareonlinemsg','<?php echo $shareonline;?>');"<?php print $chk;?>>
+<label for="shareonline_premix">&nbsp;Share-Online.biz</label>
 	</td>
 	<td class="tdacc">
 	<div id="shareonlinebox"<?php echo $styledisplay;?> class="float">
 	user: <input type="text" id="usrshareonline" name="usrshareonline" value="">&nbsp;
 	pass: <input type="password" id="passshareonline" name="passshareonline" value="">
 	</div>
-	<span id="shareonlineket" ><?php if(!$shareonline){echo "<div>Shareonline.biz premiX ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="shareonlinemsg"><?php if(!$shareonline){echo "<div>Share-Online.biz Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
+	
 	<tr>
 	<td class="tdacc">
-	<?php 
-  $torrific=false; $chk='';
+<?php 
+  $torrific=false;$chk ='';
   if($showpostn){
-   if(isset($_POST['torrific_com_premix']) && $_POST['torrific_com_premix']=='on')
+   if(isset($_POST['torrific_premix']) && $_POST['torrific_premix']=='on')
     {$chk= ' checked';$torrific=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['torrific_com'])))
-    {$chk= ' checked';$torrific=true;} 
-	?>
-<input type="checkbox" id="torrific_com_premix" name="torrific_com_premix" onClick="clk(this,'torrificbox','torrificket','<?php echo $torrific;?>');"<?php echo $chk;?>>
-<label for="torrific_com_premix">&nbsp;Torrific.com</label>
+  }elseif(isset($premium_acc['torrific']))
+    {$chk= ' checked';$torrific=true;}
+?>
+<input type="checkbox" id="torrific_premix" name="torrific_premix" onClick=" clk(this,'torrificbox','torrificmsg','<?php echo $torrific;?>');"<?php print $chk;?>>
+<label for="torrific_premix">&nbsp;Torrific.com</label>
 	</td>
 	<td class="tdacc">
 	<div id="torrificbox"<?php echo $styledisplay;?> class="float">
 	user: <input type="text" id="usrtorrific" name="usrtorrific" value="">&nbsp;
 	pass: <input type="password" id="passtorrific" name="passtorrific" value="">
 	</div>
-	<span id="torrificket" ><?php if(!$torrific){echo "<div>Torrific.com Free Member ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="torrificmsg"><?php if(!$torrific){echo "<div>Torrific.com Free Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
+	
 	<tr>
 	<td class="tdacc">
-	<?php 
-  $animeground=false; $chk='';
-  if($showpostn){
-   if(isset($_POST['animeground_com_premix']) && $_POST['animeground_com_premix']=='on')
-    {$chk= ' checked';$animeground=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['animeground_com'])))
-    {$chk= ' checked';$animeground=true;} 
-	?>
-<input type="checkbox" id="animeground_com_premix" name="animeground_com_premix" onClick="clk(this,'animebox','animeket','<?php echo $animeground;?>');"<?php echo $chk;?>>
-<label for="animeground_com_premix">&nbsp;Animeground.com</label>
-	</td>
-	<td class="tdacc">
-	<div id="animebox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usranimeground" name="usranimeground" value="">&nbsp;
-	pass: <input type="password" id="passanimeground" name="passanimeground" value="">
-	</div>
-	<span id="animeket" ><?php if(!$animeground){echo "<div>Animeground.com Free Member ACC</div>";}else{echo ACC_EMBED;}?></span>
-	</td>
-	</tr>
-	<tr>
-	<td class="tdacc">
-	<?php 
-  $turbobit=false; $chk='';
+<?php 
+  $turbobit=false;$chk ='';
   if($showpostn){
    if(isset($_POST['turbobit_premix']) && $_POST['turbobit_premix']=='on')
     {$chk= ' checked';$turbobit=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['turbobit_net'])))
-    {$chk= ' checked';$turbobit=true;} 
-	?>
-<input type="checkbox" id="turbobit_premix" name="turbobit_premix" onClick="clk(this,'turbobox','turboket','<?php echo $turbobit;?>');"<?php echo $chk;?>>
+  }elseif(isset($premium_acc['turbobit']))
+    {$chk= ' checked';$turbobit=true;}
+?>
+<input type="checkbox" id="turbobit_premix" name="turbobit_premix" onClick=" clk(this,'turbobitbox','turbobitmsg','<?php echo $turbobit;?>');"<?php print $chk;?>>
 <label for="turbobit_premix">&nbsp;Turbobit.net</label>
 	</td>
 	<td class="tdacc">
-	<div id="turbobox"<?php echo $styledisplay;?> class="float">
+	<div id="turbobitbox"<?php echo $styledisplay;?> class="float">
 	user: <input type="text" id="usrturbobit" name="usrturbobit" value="">&nbsp;
 	pass: <input type="password" id="passturbobit" name="passturbobit" value="">
 	</div>
-	<span id="turboket" ><?php if(!$turbobit){echo "<div>Turbobit.net Premix ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="turbobitmsg"><?php if(!$turbobit){echo "<div>Turbobit.net Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
+	
 	<tr>
 	<td class="tdacc">
-	<?php 
-  $enterupload=false; $chk='';
+<?php 
+  $ugotfile=false;$chk ='';
   if($showpostn){
-   if(isset($_POST['enterupload_premix']) && $_POST['enterupload_premix']=='on')
-    {$chk= ' checked';$enterupload=true;}
-  }elseif((isset($premium_acc))&&(isset($premium_acc['enterupload_com'])))
-    {$chk= ' checked';$enterupload=true;} 
-	?>
-<input type="checkbox" id="enterupload_premix" name="enterupload_premix" onClick="clk(this,'enterbox','enterket','<?php echo $enterupload;?>');"<?php echo $chk;?>>
-<label for="enterupload_premix">&nbsp;Enterupload.com</label>
+   if(isset($_POST['ugotfile_premix']) && $_POST['ugotfile_premix']=='on')
+    {$chk= ' checked';$ugotfile=true;}
+  }elseif(isset($premium_acc['ugotfile']))
+    {$chk= ' checked';$ugotfile=true;}
+?>
+<input type="checkbox" id="ugotfile_premix" name="ugotfile_premix" onClick=" clk(this,'ugotfilebox','ugotfilemsg','<?php echo $ugotfile;?>');"<?php print $chk;?>>
+<label for="ugotfile_premix">&nbsp;Ugotfile.com</label>
 	</td>
 	<td class="tdacc">
-	<div id="enterbox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usrenterupload" name="usrenterupload" value="">&nbsp;
-	pass: <input type="password" id="passenterupload" name="passenterupload" value="">
+	<div id="ugotfilebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrugotfile" name="usrugotfile" value="">&nbsp;
+	pass: <input type="password" id="passugotfile" name="passugotfile" value="">
 	</div>
-	<span id="enterket" ><?php if(!$enterupload){echo "<div>Enterupload.com Premix ACC</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="ugotfilemsg"><?php if(!$ugotfile){echo "<div>Ugotfile.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
-
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $uploaded=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['uploaded_premix']) && $_POST['uploaded_premix']=='on')
+    {$chk= ' checked';$uploaded=true;}
+  }elseif(isset($premium_acc['uploaded']))
+    {$chk= ' checked';$uploaded=true;}
+?>
+<input type="checkbox" id="uploaded_premix" name="uploaded_premix" onClick=" clk(this,'uploadedbox','uploadedmsg','<?php echo $uploaded;?>');"<?php print $chk;?>>
+<label for="uploaded_premix">&nbsp;Uploaded.to</label>
+	</td>
+	<td class="tdacc">
+	<div id="uploadedbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usruploaded" name="usruploaded" value="">&nbsp;
+	pass: <input type="password" id="passuploaded" name="passuploaded" value="">
+	</div>
+	<span id="uploadedmsg"><?php if(!$uploaded){echo "<div>Uploaded.to Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $uploading=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['uploading_premix']) && $_POST['uploading_premix']=='on')
+    {$chk= ' checked';$uploading=true;}
+  }elseif(isset($premium_acc['uploading']))
+    {$chk= ' checked';$uploading=true;}
+?>
+<input type="checkbox" id="uploading_premix" name="uploading_premix" onClick=" clk(this,'uploadingbox','uploadingmsg','<?php echo $uploading;?>');"<?php print $chk;?>>
+<label for="uploading_premix">&nbsp;Uploading.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="uploadingbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usruploading" name="usruploading" value="">&nbsp;
+	pass: <input type="password" id="passuploading" name="passuploading" value="">
+	</div>
+	<span id="uploadingmsg"><?php if(!$uploading){echo "<div>Uploading.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $uploadstation=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['uploadstation_premix']) && $_POST['uploadstation_premix']=='on')
+    {$chk= ' checked';$uploadstation=true;}
+  }elseif(isset($premium_acc['uploadstation']))
+    {$chk= ' checked';$uploadstation=true;}
+?>
+<input type="checkbox" id="uploadstation_premix" name="uploadstation_premix" onClick=" clk(this,'uploadstationbox','uploadstationmsg','<?php echo $uploadstation;?>');"<?php print $chk;?>>
+<label for="uploadstation_premix">&nbsp;Uploadstation.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="'uploadstationbox'"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usruploadstation" name="usruploadstation" value="">&nbsp;
+	pass: <input type="password" id="passuploadstation" name="passuploadstation" value="">
+	</div>
+	<span id="'uploadstationmsg'"><?php if(!$uploadstation){echo "<div>Uploadstation.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $vbulletin=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['vBulletin_premix']) && $_POST['vBulletin_premix']=='on')
+    {$chk= ' checked';$vbulletin=true;}
+  }elseif(isset($premium_acc['vBulletin']))
+    {$chk= ' checked';$vbulletin=true;}
+?>
+<input type="checkbox" id="vBulletin_premix" name="vBulletin_premix" onClick=" clk(this,'vbulletinbox','vbulletinmsg','<?php echo $vbulletin;?>');"<?php print $chk;?>>
+<label for="vBulletin_premix">&nbsp;vBulletin</label>
+	</td>
+	<td class="tdacc">
+	<div id="vbulletinbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrvbulletin" name="usrvbulletin" value="">&nbsp;
+	pass: <input type="password" id="passvbulletin" name="passvbulletin" value="">
+	</div>
+	<span id="vbulletinmsg"><?php if(!$vbulletin){echo "<div>vBulletin Member Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $wupload=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['wupload_premix']) && $_POST['wupload_premix']=='on')
+    {$chk= ' checked';$wupload=true;}
+  }elseif(isset($premium_acc['wupload']))
+    {$chk= ' checked';$wupload=true;}
+?>
+<input type="checkbox" id="wupload_premix" name="wupload_premix" onClick=" clk(this,'wuploadbox','wuploadmsg','<?php echo $wupload;?>');"<?php print $chk;?>>
+<label for="wupload_premix">&nbsp;Wupload.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="wuploadbox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrwupload" name="usrwupload" value="">&nbsp;
+	pass: <input type="password" id="passwupload" name="passwupload" value="">
+	</div>
+	<span id="wuploadmsg"><?php if(!$wupload){echo "<div>Wupload.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $x7=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['x7_premix']) && $_POST['x7_premix']=='on')
+    {$chk= ' checked';$x7=true;}
+  }elseif(isset($premium_acc['x7']))
+    {$chk= ' checked';$x7=true;}
+?>
+<input type="checkbox" id="x7_premix" name="x7_premix" onClick=" clk(this,'x7box','x7msg','<?php echo $x7;?>');"<?php print $chk;?>>
+<label for="x7_premix">&nbsp;x7.to</label>
+	</td>
+	<td class="tdacc">
+	<div id="x7box"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrx7" name="usrx7" value="">&nbsp;
+	pass: <input type="password" id="passx7" name="passx7" value="">
+	</div>
+	<span id="x7msg"><?php if(!$x7){echo "<div>x7.to Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
+	
+	<tr>
+	<td class="tdacc">
+<?php 
+  $youtube=false;$chk ='';
+  if($showpostn){
+   if(isset($_POST['youtube_premix']) && $_POST['youtube_premix']=='on')
+    {$chk= ' checked';$youtube=true;}
+  }elseif(isset($premium_acc['youtube']))
+    {$chk= ' checked';$youtube=true;}
+?>
+<input type="checkbox" id="youtube_premix" name="youtube_premix" onClick=" clk(this,'youtubebox','youtubemsg','<?php echo $youtube;?>');"<?php print $chk;?>>
+<label for="youtube_premix">&nbsp;Youtube.com</label>
+	</td>
+	<td class="tdacc">
+	<div id="youtubebox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usryoutube" name="usryoutube" value="">&nbsp;
+	pass: <input type="password" id="passyoutube" name="passyoutube" value="">
+	</div>
+	<span id="youtubemsg"><?php if(!$youtube){echo "<div>Youtube.com Member Account</div>";}else{echo ACC_EMBED;}?></span>
+	</td>
+	</tr>
 
 	</tbody></table>
 	</li></ul>
@@ -792,6 +1115,27 @@ pass: <input type="password" id="pass" name="pass">
 </td>
 </tr>
 
+<tr>
+<td class="tdacc" style="padding-left:15px;">
+<?php 
+  $ulcook=false;$chk='';
+  if($showpostn){
+   if(isset($_POST['ulhash_premix']) && $_POST['ulhash_premix']=='on')
+    {$chk= ' checked';$ulcook=true;}
+   }elseif(isset($ul_cookie_login_value)&&(!empty($ul_cookie_login_value)))
+    {$chk= ' checked';$ulcook=true;}
+?>
+
+<input type="checkbox" id="ulhash_premix" name="ulhash_premix" onClick="clk(this,'ulacchash','ulket2','<?php echo $ulcook;?>');"<?php echo $chk;?>>
+<label for="ulhash_premix">&nbsp;Uploaded.to cookie</label>
+</td>
+<td class="tdacc">
+	<div id="ulacchash"<?php echo $styledisplay;?> class="float">
+	login= <input type="text" id="ulhashcookie" name="ulhashcookie" value="" size="40">
+	</div>
+	<span id="ulket2"><?php if(!$ulcook){echo "<span>Uploaded.to premiX ACC cookie.</span>";}else{echo CK_EMBED;}?></span>
+</td>
+</tr>
 
 <tr>
 <td class="tdacc" style="padding-left:15px;">

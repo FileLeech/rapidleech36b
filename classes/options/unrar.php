@@ -32,7 +32,7 @@ function unrar_setCheckboxes(act, filestounrar) {
     $file = $list[$_GET["files"][$i]];
 ?>
             <tr align="center">
-              <td colspan="2" style="border-right:1px solid #666; border-left:1px solid #666; border-top:1px solid #666; padding:6px; background-color:#001825;">
+              <td colspan="2" class="rar-table-main">
                 <input type="hidden" name="files[<?php echo $i; ?>]" value="<?php echo $_GET["files"][$i]; ?>" />
                 <?php printf($optxt['_filefr'],htmlentities(basename($file["name"]))); ?>
                 <br />
@@ -41,8 +41,8 @@ function unrar_setCheckboxes(act, filestounrar) {
                 <a href="javascript:void(0);" onclick="unrar_setCheckboxes(2, <?php echo $i;?>);"><?php echo $txt['chk_invert']; ?></a>
               </td>
             </tr>
-            <tr>
-              <td colspan="2" style="border-right:1px solid #666; border-left:1px solid #666; padding:2px; background-color:#001825;">
+            <tr>					 
+              <td colspan="2" class="rar-table-side">
                 &nbsp;
 <?php
     unset ($rar);
@@ -66,17 +66,17 @@ function unrar_setCheckboxes(act, filestounrar) {
       foreach($rar_list as $rar_key => $rar_item) {
 ?>
             <tr>
-              <td style="border-left:1px solid #666; padding:2px; background-color:#001825;">
+              <td class="rar-table-left">
                 <input type="checkbox" name="filestounrar[<?php echo $i; ?>][]" checked="checked" value="<?php echo base64_encode($rar_key); ?>" />
               </td>
-              <td style="border-right:1px solid #666; padding:2px; background-color:#001825;"><?php echo $rar_key.' ('.bytesToKbOrMbOrGb($rar_item['size']).')'; ?></td>
+              <td class="rar-table-right"><?php echo $rar_key.' ('.bytesToKbOrMbOrGb($rar_item['size']).')'; ?></td>
             </tr>
 <?php
       }
     }
 ?>
             <tr>
-              <td colspan="2" style="border-top:1px solid #666;">&nbsp;</td>
+              <td colspan="2" class="rar-table-top" style="border-top:1px solid #666;">&nbsp;</td>
             </tr>
 <?php
   }
@@ -128,26 +128,26 @@ function unrar_go() {
     if (count($_GET['filestounrar'][$i]) == 0) { continue; }
 ?>
           <tr align="center">
-            <td colspan="2" style="border-right:1px solid #666; border-left:1px solid #666; border-top:1px solid #666; padding:2px; background-color:#001825;"><?php printf($optxt['_extracting'],basename($file["name"])); ?></td>
+            <td colspan="2" class="rar-table-tlr"><?php printf($optxt['_extracting'],basename($file["name"])); ?></td>
           </tr>
 <?php
     foreach ($_GET['filestounrar'][$i] as $rar_item) {
 ?>
           <tr>
-            <td style="border-left:1px solid #666; padding:2px; background-color:#001825;">
+            <td class="rar-tbl-left">
 <?php
         echo $rar_dld_in_webdir ? '<a href="'.$rar_dld_webpath.basename(base64_decode($rar_item)).'">' : '';
         echo basename(base64_decode($rar_item));
         echo $rar_dld_in_webdir ? '</a>' : '';
 ?>
             </td>
-            <td id="<?php echo 'unrar'.$_GET["files"][$i].'-'.str_replace('=', '-', $rar_item); ?>" align="center" style="border-right:1px solid #666; padding:2px; background-color:#001825;"><?php echo $optxt['_wait']; ?></td>
+            <td clas="rar-tbl-right" id="<?php echo 'unrar'.$_GET["files"][$i].'-'.str_replace('=', '-', $rar_item); ?>" align="center"><?php echo $optxt['_wait']; ?></td>
           </tr>
 <?php
     }
 ?>
           <tr>
-            <td colspan="2" style="border-top:1px solid #666;">&nbsp;</td>
+            <td colspan="2" class="rar-table-space">&nbsp;</td>
           </tr>
 <?php
   }
