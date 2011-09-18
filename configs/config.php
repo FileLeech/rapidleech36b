@@ -289,7 +289,7 @@ $autochecklink = true; // Auto check submited link in audl
 $mip_enabled= false; //If you need to disable multiple ip support, set to false
 $mip_arotate= true; //Auto change to next ip after start transload process
 
-$secretkey = '';//Place your Secret Key
+$secretkey = 'testing';//Place your Secret Key
 $iframealocate = 10;//how many iframe to allocate in audl for manual method.
 $pointboost = 0;//boost your RS-Point with this feature!!
 $autosubmit = true;

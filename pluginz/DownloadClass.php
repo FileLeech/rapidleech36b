@@ -133,7 +133,7 @@ class DownloadClass {
         insert_timer($countDown, "Waiting link timelock");
     }
 
-    private function JSCountdown($secs, $post = 0, $text='Waiting link timelock') {
+    public function JSCountdown($secs, $post = 0, $text='Waiting link timelock') {
         global $PHP_SELF;
         echo "<p><center><span id='dl' class='htmlerror'><b>ERROR: Please enable JavaScript. (Countdown)</b></span><br /><span id='dl2'>Please wait</span></center></p>\n";
         echo "<form action='$PHP_SELF' name='cdwait' method='POST'>\n";

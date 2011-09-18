@@ -58,14 +58,13 @@ class filesonic_com extends DownloadClass {
     }
 
     private function Retrieve($link) {
-        global $PHP_SELF, $Referer;
+        global $Referer;
 
         $page = $this->GetPage($link, "lang=en; isJavascriptEnable=1");
         is_present($page, 'This file has been marked as private', 'This file has been marked as private by its owner and cannot be downloaded');
         is_present($page, 'This file was deleted', 'This file was deleted');
         $cookie = GetCookies($page) . "; lang=en; isJavascriptEnable=1";
-        if (preg_match('%<input type="text" value="(.*)" name="URL_%', $page, $name))
-            $FileName = basename($name[1]);
+        if (preg_match('%<input type="text" value="(.*)" name="URL_%', $page, $name)) $FileName = basename($name[1]);
         if (preg_match('%<a href="(.*)" id="free_download">%', $page, $match)) {
             $link = "http://www.$this->domain/file/$this->id/$match[1]";
         } else {
@@ -86,6 +85,10 @@ class filesonic_com extends DownloadClass {
         if (!empty($tm) && !empty($tm_hash)) {
             $page = $this->GetPage($link, $cookie, array('tm' => $tm, 'tm_hash' => $tm_hash), $Referer);
         }
+        if (preg_match('#http://[a-zA-Z](\d+)?\.' . $this->domain . '/download/' . $this->id . '/[^\'"]+#i', $page, $dl)) {
+            $this->RedirectDownload(trim($dl[0]), $FileName, $cookie, 0, $Referer);
+            exit();
+        }
         if (stristr($page, 'Please Enter Password')) {
             if (preg_match('%<form enctype="application/x-www-form-urlencoded" action="(.*)" method="post">%', $page, $pw)) {
                 $link = "http://www.$this->domain$pw[1]";
@@ -103,20 +106,16 @@ class filesonic_com extends DownloadClass {
             }
             $data = $this->DefaultParamArr($link, $cookie, $Referer);
             $data['step'] = '1';
-            $data['challenge'] = cut_str($this->GetPage("http://www.google.com/recaptcha/api/challenge?k=$cid[1]&cachestop=" . rand() . "&ajax=1"), "challenge : '", "'");
+            $data['recaptcha_challenge_field'] = cut_str($this->GetPage("http://www.google.com/recaptcha/api/challenge?k=$cid[1]&cachestop=" . rand() . "&ajax=1"), "challenge : '", "'");
             $data['name'] = $FileName;
             $this->Show_reCaptcha($cid[1], $data);
             exit();
         }
         is_present($page, 'Free users may only download 1 file at a time.', 'Free users may only download 1 file at a time.');
-        if (preg_match('#http://[a-zA-Z](\d+)?\.' . $this->domain . '/download/' . $this->id . '/[^\'"]+#i', $page, $dl)) {
-            $this->RedirectDownload(trim($dl[0]), $FileName, $cookie, 0, $Referer);
-            exit();
-        }
     }
 
     private function Free($link) {
-        $post['recaptcha_challenge_field'] = $_POST["challenge"];
+        $post['recaptcha_challenge_field'] = $_POST["recaptcha_challenge_field"];
         $post['recaptcha_response_field'] = $_POST["recaptcha_response_field"];
         $cookie = urldecode($_POST["cookie"]);
         $link = urldecode($_POST["link"]);
