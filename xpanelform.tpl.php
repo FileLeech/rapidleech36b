@@ -200,8 +200,8 @@ pass: <input type="password" id="pass" name="pass">
 	if($showpostn){
 	 if(isset($_POST['rs_com_premix']) && $_POST['rs_com_premix']=='on')
 	  {$chk=' checked';$rsencchecked=true;}
-	}elseif(isset($premium_acc["rs_com"]) && ((isset($premium_acc["rs_com"]["user"]) && $premium_acc["rs_com"]["user"]!='' && isset($premium_acc["rs_com"]["pass"]) && $premium_acc["rs_com"]["pass"]!='')
-	  || (isset($premium_acc["rs_com"][0]["user"]) && $premium_acc["rs_com"][0]["user"]!=''&& isset($premium_acc["rs_com"][0]["pass"]) && $premium_acc["rs_com"][0]["pass"]!='')))
+	}elseif(isset($premium_acc["rapidshare_com"]) && ((isset($premium_acc["rapidshare_com"]["user"]) && $premium_acc["rapidshare_com"]["user"]!='' && isset($premium_acc["rapidshare_com"]["pass"]) && $premium_acc["rapidshare_com"]["pass"]!='')
+	  || (isset($premium_acc["rapidshare_com"][0]["user"]) && $premium_acc["rapidshare_com"][0]["user"]!=''&& isset($premium_acc["rapidshare_com"][0]["pass"]) && $premium_acc["rapidshare_com"][0]["pass"]!='')))
 	  
 	  {$chk=' checked';$rsencchecked=true;}
 ?>
@@ -219,8 +219,8 @@ pass: <input type="password" id="pass" name="pass">
 	<?php if(!$rsencchecked){
 	  echo "<div>Rapidshare.com Premium Account</div>";
 	 }else{
-	  //echo (isset($arr_acchashmulti)?(count($arr_acchashmulti)>1?count($arr_acchashmulti):'?'):(isset($premium_acc["rs_com"]["user"])?1:'?'))."&nbsp;".ACC_EMBED;
-	  echo (isset($premium_acc["rs_com"][0]["user"])?(count($premium_acc["rs_com"])):(isset($premium_acc["rs_com"]["user"])?1:'?'))."&nbsp;".ACC_EMBED;
+	  //echo (isset($arr_acchashmulti)?(count($arr_acchashmulti)>1?count($arr_acchashmulti):'?'):(isset($premium_acc["rapidshare_com"]["user"])?1:'?'))."&nbsp;".ACC_EMBED;
+	  echo (isset($premium_acc["rapidshare_com"][0]["user"])?(count($premium_acc["rapidshare_com"])):(isset($premium_acc["rapidshare_com"]["user"])?1:'?'))."&nbsp;".ACC_EMBED;
 	  }
 	?>
 	</span>
@@ -276,7 +276,7 @@ pass: <input type="password" id="pass" name="pass">
   if($showpostn){
    if(isset($_POST['animeground_premix']) && $_POST['animeground_premix']=='on')
     {$chk= ' checked';$animeground=true;}
-  }elseif(isset($premium_acc['animeground']))
+  }elseif(isset($premium_acc['animeground_com']))
     {$chk= ' checked';$animeground=true;}
 ?>
 <input type="checkbox" id="animeground_premix" name="animeground_premix" onClick=" clk(this,'animegroundbox','animegroundmsg','<?php echo $animeground;?>');"<?php print $chk;?>>
@@ -287,7 +287,7 @@ pass: <input type="password" id="pass" name="pass">
 	user: <input type="text" id="usranimeground" name="usranimeground" value="">&nbsp;
 	pass: <input type="password" id="passanimeground" name="passanimeground" value="">
 	</div>
-	<span id="animegroundmsg"><?php if(!$animeground){echo "<div>Animeground.com Free Account</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="animegroundmsg"><?php if(!$animeground){echo "<div>Animeground.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	
@@ -1164,9 +1164,9 @@ pass: <input type="password" id="pass" name="pass">
 <tr>
 <td align="left" colspan="3">
 <?php
-$exist_accrs = (isset($premium_acc["rs_com"]) ? 
-  ( isset($premium_acc["rs_com"]["user"]) && $premium_acc["rs_com"]["user"]!='' && isset($premium_acc["rs_com"]["pass"]) && $premium_acc["rs_com"]["pass"]!='' ? true : 
-    (isset($premium_acc["rs_com"][0]["user"]) && $premium_acc["rs_com"][0]["user"]!='' && isset($premium_acc["rs_com"][0]["pass"]) && $premium_acc["rs_com"][0]["pass"]!='' ? true : false)
+$exist_accrs = (isset($premium_acc["rapidshare_com"]) ? 
+  ( isset($premium_acc["rapidshare_com"]["user"]) && $premium_acc["rapidshare_com"]["user"]!='' && isset($premium_acc["rapidshare_com"]["pass"]) && $premium_acc["rapidshare_com"]["pass"]!='' ? true : 
+    (isset($premium_acc["rapidshare_com"][0]["user"]) && $premium_acc["rapidshare_com"][0]["user"]!='' && isset($premium_acc["rapidshare_com"][0]["pass"]) && $premium_acc["rapidshare_com"][0]["pass"]!='' ? true : false)
   ) : false );
 ?>
 <div id="parentnfoconfig">

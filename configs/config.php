@@ -20,17 +20,17 @@ $users = array('' => '');  // user=>pass
 ###-PREMIUM-CONFIG
 
 //$premium_acc = array();
-//$premium_acc["rs_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["rapidshare_com"] = array('user' => '', 'pass' => '');
 
 /*// below here is the way u insert multiple acc for rapidshare.com
-$premium_acc["rs_com"] = array(
+$premium_acc["rapidshare_com"] = array(
   array('user' => 'user1', 'pass' => 'pass1'),
   array('user' => 'user2', 'pass' => 'pass2'),
   array('user' => 'user3', 'pass' => 'pass3')
 );  //foobar - rs_com- multi; */
 //$premium_acc["rs_de"] = array('user' => '', 'pass' => '');
 //$premium_acc["4shared"] = array('user' => '', 'pass' => '');
-//$premium_acc["animeground"] = array('user' => '', 'pass' => '');
+//$premium_acc["animeground_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["bitshare"] = array('user' => '', 'pass' => '');
 //$premium_acc["depositfiles"] = array('user' => '', 'pass' => '');
 //$premium_acc["easyshare"] = array('user' => '', 'pass' => '');
@@ -68,7 +68,7 @@ $premium_acc["rs_com"] = array(
 
 
 #Auto Download Premium Account #
-//$premium_acc_audl = false;
+//$premium_acc_audl = true;
 
 #Megaupload cookie #
 //$mu_cookie_user_value = '';
@@ -102,10 +102,10 @@ $premium_acc["rs_com"] = array(
 
 # Acc info & drop down
 $ar_host_acc = array(
-'rs_com'         	=>  'rapidshare.com',
+'rapidshare_com'       =>  'rapidshare.com',
 'rs_de'          	=>  'rapidshare.de',
 '4shared'        	=>  '4shared.com',
-'animeground' 	  	=>  'animeground.com',
+'animeground_com' 	=>  'animeground.com',
 'bitshare'		=>  'bitshare.com',
 'depositfiles' 	=>  'depositfiles.com',
 'easyshare'            =>  'easy-share.com',
@@ -289,7 +289,7 @@ $autochecklink = true; // Auto check submited link in audl
 $mip_enabled= false; //If you need to disable multiple ip support, set to false
 $mip_arotate= true; //Auto change to next ip after start transload process
 
-$secretkey = 'testing';//Place your Secret Key
+$secretkey = '';//Place your Secret Key
 $iframealocate = 10;//how many iframe to allocate in audl for manual method.
 $pointboost = 0;//boost your RS-Point with this feature!!
 $autosubmit = true;

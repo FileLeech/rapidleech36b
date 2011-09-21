@@ -64,6 +64,9 @@ ul{padding-left:2em;}
 	height:60px;
 	width:331px;
 }
+.tdheadolgo {
+    background: transparent no-repeat url(rl_lgo.png);
+}
 .tdheadolgo h1 {
 	height:49px;
 }

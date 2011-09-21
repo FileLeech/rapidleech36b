@@ -51,9 +51,9 @@ class filesonic_com extends DownloadClass {
             $page = $this->GetPage($link, $cookie, $post, $Referer);
             return $this->Retrieve($link);
         } elseif ($_POST['step'] == "1") {
-            return $this->Free($link);
+            $this->Free($link);
         } else {
-            return $this->Retrieve($link);
+            $this->Retrieve($link);
         }
     }
 

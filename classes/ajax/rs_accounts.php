@@ -47,17 +47,17 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts']))
 		}
 	else
 		{ // untuk RS Acc Status, cek single acc ato multi. return all acc to $txtacc
-		if(isset($_POST['staccounts']) && isset($premium_acc["rs_com"]))
+		if(isset($_POST['staccounts']) && isset($premium_acc["rapidshare_com"]))
 			{
 			$accstatus=1; $n_acc='';
-			$txtac = (isset($premium_acc["rs_com"]["user"])?($premium_acc["rs_com"]["user"]!='' && $premium_acc["rs_com"]["pass"]!='' ? $premium_acc["rs_com"]["user"].":".$premium_acc["rs_com"]["pass"]:':') : count($premium_acc["rs_com"]));
+			$txtac = (isset($premium_acc["rapidshare_com"]["user"])?($premium_acc["rapidshare_com"]["user"]!='' && $premium_acc["rapidshare_com"]["pass"]!='' ? $premium_acc["rapidshare_com"]["user"].":".$premium_acc["rapidshare_com"]["pass"]:':') : count($premium_acc["rapidshare_com"]));
 			if(is_numeric($txtac))
 				{
 				$n_acc=(int)($txtac-1); $txtac='';
 				for($i=0; $i<=$n_acc; $i++)
 					{
-					$acc = $premium_acc["rs_com"][$i]['user'];
-					$pas = $premium_acc["rs_com"][$i]['pass'];
+					$acc = $premium_acc["rapidshare_com"][$i]['user'];
+					$pas = $premium_acc["rapidshare_com"][$i]['pass'];
 					$txtac.=$acc.":".$pas."\n";
 					}
 				}

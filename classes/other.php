@@ -73,13 +73,10 @@ function rotN($s, $n) {
         $char &= ~ $cap;
         $char = $char > 64 && $char < 123 ? (($char - 65 + $n) % 26 + 65) : $char;
         $char |= $cap;
-        if ($char < 65 && $char2 > 64 || ($char > 90 && $char < 97 && ($char2 < 91 || $char2 > 96)))
-            $char += 26;
-        else if ($char > 122 && $char2 < 123)
-            $char -= 52;
-        if (strtoupper(chr($char2)) === chr($char2))
-            $char = strtoupper(chr($char)); else
-            $char = strtolower(chr($char));
+        if ($char < 65 && $char2 > 64 || ($char > 90 && $char < 97 && ($char2 < 91 || $char2 > 96))) $char += 26;
+        else if ($char > 122 && $char2 < 123) $char -= 52;
+        if (strtoupper(chr($char2)) === chr($char2)) $char = strtoupper(chr($char));
+        else $char = strtolower(chr($char));
         $s2 .= $char;
     }
     return $s2;
@@ -518,9 +515,7 @@ function GetOnline() {
 
 function UpdateOnline() {
     global $ipmu;
-    if (!file_exists(VISITOR_LST)
-
-        )@touch(VISITOR_LST);
+    if (!file_exists(VISITOR_LST)) @touch(VISITOR_LST);
     if (@file_exists(VISITOR_LST)) {
         $onlines = file_get_contents(VISITOR_LST);
         $onlineList = unserialize($onlines);
@@ -535,9 +530,7 @@ function UpdateOnline() {
 
 function ongoingAdd() {
     global $onGoing;
-    if (!file_exists(ONGOING_LST)
-
-        )@touch(ONGOING_LST);
+    if (!file_exists(ONGOING_LST)) @touch(ONGOING_LST);
     if (@file_exists(ONGOING_LST)) {
         $ongoings = file_get_contents(ONGOING_LST);
         (is_numeric($ongoings) ? $ongoings++ : $ongoings = 1);
@@ -623,8 +616,7 @@ function create_hosts_file($host_file = "hosts.php") {
 function logged_user($u) {
     global $_SERVER;
     foreach ($u as $user => $pass) {
-        if ($_SERVER['PHP_AUTH_USER'] == $user && $_SERVER['PHP_AUTH_PW'] == $pass)
-            return true;
+        if ($_SERVER['PHP_AUTH_USER'] == $user && $_SERVER['PHP_AUTH_PW'] == $pass) return true;
     }
     return false;
 }
@@ -656,28 +648,26 @@ function is_notpresent($lpage, $mystr, $strerror, $head = 0) {
     }
 }
 
-  function insert_location($newlocation)
-  {
-  global $nn;
-  list($location, $list) = explode("?", $newlocation);
-  $list = explode("&", $list);
-  print "<form action=\"$location\" method=\"post\">".$nn;
-  foreach ($list as $l)
-  {
-  list($name, $value) = explode("=", $l);
-  print "<input type=\"hidden\" name=\"$name\" value=\"$value\">".$nn;
+function insert_location($newlocation) {
+    global $nn;
+    list($location, $list) = explode("?", $newlocation);
+    $list = explode("&", $list);
+    print "<form action=\"$location\" method=\"post\">" . $nn;
+    foreach ($list as $l) {
+        list($name, $value) = explode("=", $l);
+        print "<input type=\"hidden\" name=\"$name\" value=\"$value\">" . $nn;
+    }
+?>
+    <script type="text/javascript">
+        void(document.forms[0].submit());
+    </script>
+    </form>
+    </body>
+    </html>
+<?php
 
-  }
-  ?>
-  <script type="text/javascript">
-  void(document.forms[0].submit());
-  </script>
-  </form>
-  </body>
-  </html>
-  <?php
-  flush();
-  }
+    flush();
+}
 
 function pause_download() {
     global $pathWithName, $PHP_SELF, $_GET, $nn, $bytesReceived, $fs, $fp;
@@ -765,112 +755,84 @@ function itung(){if(di>0){ setTimeout("itung()",1000); di--; d.getElementById("t
     return $htmlscript;
 }
 
+function html_error($msg, $head = 1) {
+    global $PHP_SELF, $charSet, $gtxt, $csstype, $onGoing, $nn;
+    if ($head == 1) {
+        echo('<html>');
+        echo('<head>');
+        echo('<meta http-equiv="Content-Type" content="text/html; charset=' . $charSet . '">');
+        echo('<title>Upps...</title>');
+        echo('<link type="text/css" rel="stylesheet" href="' . IMAGE_DIR . 'style_sujancok' . $csstype . '.css" />');
+        echo('</head>');
+        echo('<body>');
+        echo('<div class="head_container" align="center">');
+        echo('<a href="' . $PHP_SELF . '"><div class="tdheadolgo"></div></a>');
+        echo('</div>');
+    }
 
-  // Tambahan retry
-  function html_retry($msg, $head = 1, $link, $cook=false)
-  {
-  global $PHP_SELF, $gtxt, $alternatefree, $csstype;
-  if(!$alternatefree){html_error($msg, $head);}
+    echo ('<div align="center">');
+    echo ('<span style="color:red; background-color:#fec; padding:3px; border:2px solid #FFaa00; line-height:25px\"><b>' . $msg . '</b></span><br /><br />');
+    echo ('<a id="tdone" href="' . $PHP_SELF . '">[&nbsp;<b><span id="txtdone">' . $gtxt['back_main'] . '</span>&nbsp;]</a><br />');
+    $audlparam = (isset($_GET["idx"])) ? $_GET["idx"] : '';
+    if ($audlparam != '') {
+        $audlparam = explode('|', $audlparam);
+        if ($audlparam[0] != '') {
+            $audlparam[0] = true;
+        }
+        if ($audlparam[1] == '') {
+            $audlparam[1] = 'none';
+        }
+        echo autoNext($audlparam[0], false, $audlparam[1]);
+    }
+    flush();
+    echo('</div>');
 
-  if ($head == 1)
-  {
-  ?>
-  <html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
-  <title>Upps...</title>
-  <style type="text/css">
-  <!--
-  @import url("<?php print IMAGE_DIR; ?>style_sujancok<?php print $csstype;?>.css");
-  -->
-  .tdheadolgo {
-  background: transparent no-repeat url(<?php print IMAGE_DIR;?>rl_lgo.png);
-  }
-  </style>
-  </head>
-  <body>
-  <div class="head_container"><center>
-  <a href="<?php echo $PHP_SELF;?>"><div class="tdheadolgo"></div></a></center>
-  </div>
-  <?php
-  }
-  ?>
-  <center>
-  <?php
-  echo "<div style=\"height:30px;\">&nbsp;</div><span style=\"color:red; background-color:#fec; padding:3px; border:2px solid #FFaa00; line-height:25px\"><b>$msg</b></span><br><br>";
-  echo "Trying free-download (without premium acc).[<b id='tmr' class='g'>~</b>]&nbsp;
-  <a href=\"javascript:void(0);\" onclick=\"document.frmretry.submit();\">[Execute]</a><br><br>";
-  echo "<a id=\"tdone\" href=\"".$PHP_SELF."\">[&nbsp;<b><span id=\"txtdone\">".$gtxt['back_main']."</b></span>&nbsp;]</a><br>";
+    if ($onGoing)
+        ongoingRemove();
+    if ($head == 1) {
+        echo ($nn . '</body></html>');
+    }
+    exit;
+}
 
-  echo counteritung('frmretry',15);
-  ?>
+// Tambahan retry
+function html_retry($msg, $head = 1, $link, $cook=false) {
+    global $PHP_SELF, $gtxt, $alternatefree, $csstype, $charSet;
+    if (!$alternatefree) {
+        html_error($msg, $head);
+    }
 
-  <form name="frmretry" action="<?php echo $PHP_SELF;?>" method="post">
-  <input type="hidden" name="link" value="<?php print $link;?>">
-  <input type="hidden" name="task" value="retry">
-  <input type="hidden" name="premium_acc" id="premium_acc" value="">
-  <input type="hidden" name="mu_acc" id="mu_acc" value="">
+    if ($head == 1) {
+        echo('<html>');
+        echo('<head>');
+        echo('<meta http-equiv="Content-Type" content="text/html; charset=' . $charSet . '">');
+        echo('<title>Upps...</title>');
+        echo('<link type="text/css" rel="stylesheet" href="' . IMAGE_DIR . 'style_sujancok' . $csstype . '.css" />');
+        echo('</head>');
+        echo('<body>');
+        echo('<div class="head_container" align="center">');
+        echo('<a href="' . $PHP_SELF . '"><div class="tdheadolgo"></div></a>');
+        echo('</div>');
+    }
 
-  </form>
+    echo('<div align="center">');
+    echo('<div style="height:30px;">&nbsp;</div><span style="color:red; background-color:#fec; padding:3px; border:2px solid #FFaa00; line-height:25px"><b>' . $msg . '</b></span><br /><br />');
+    echo('Trying free-download (without premium acc).[<b id="tmr" class="g">~</b>]&nbsp;<a href="javascript:void(0);" onclick="document.frmretry.submit();">[Execute]</a><br /><br />');
+    echo('<a id="tdone" href="' . $PHP_SELF . '">[&nbsp;<b><span id="txtdone">' . $gtxt['back_main'] . '</b></span>&nbsp;]</a><br />');
+    echo counteritung('frmretry', 15);
 
-  </center>
-  </body>
-  </html>
+    echo("\n" . '<form name="frmretry" action="' . $PHP_SELF . '" method="post">' . "\n");
+    echo('<input type="hidden" name="link" value="' . $link . '">' . "\n");
+    echo('<input type="hidden" name="task" value="retry">' . "\n");
+    echo('<input type="hidden" name="premium_acc" id="premium_acc" value="">' . "\n");
+    echo('<input type="hidden" name="mu_acc" id="mu_acc" value="">' . "\n");
+    echo('</form>' . "\n");
 
-  <?php
-  exit;
-  }
-
-
-
-
-  function html_error($msg, $head = 1) {
-  global $PHP_SELF, $gtxt, $csstype, $onGoing;
-  if ($head == 1)
-  {
-  ?>
-  <html>
-  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
-  <title>Upps...</title>
-  <style type="text/css">
-  <!--
-  @import url("<?php print IMAGE_DIR; ?>style_sujancok<?php print $csstype;?>.css");
-  -->
-  .tdheadolgo {
-  background: transparent no-repeat url(<?php print IMAGE_DIR;?>rl_lgo.png);
-  }
-  </style>
-  </head>
-  <body>
-  <div class="head_container"><center>
-  <a href="<?php echo $PHP_SELF;?>"><div class="tdheadolgo"></div></a></center>
-  </div>
-  <?php
-  }
-  ?>
-  <center>
-  <?php
-  echo "<span style=\"color:red; background-color:#fec; padding:3px; border:2px solid #FFaa00; line-height:25px\"><b>$msg</b></span><br><br>";
-  echo "<a id=\"tdone\" href=\"".$PHP_SELF."\">[&nbsp;<b><span id=\"txtdone\">".$gtxt['back_main']."</span>&nbsp;]</a><br>";
-
-  $audlparam = (isset($_GET["idx"])) ? $_GET["idx"] : '';
-  if($audlparam!=''){
-  $audlparam = explode('|',$audlparam);
-  if($audlparam[0]!=''){$audlparam[0] = true;}
-  if($audlparam[1]==''){$audlparam[1] = 'none';}
-  echo autoNext($audlparam[0], false, $audlparam[1]);
-  }
-  flush();
-  ?>
-  </center>
-
-  <?php
-  if($onGoing)ongoingRemove();
-  if ($head == 1){
-  echo "</body></html>";
-  }
-  exit;
-  }
+    echo('</div>');
+    echo('</body>');
+    echo('</html>');
+    exit();
+}
 
 function sec2time($time) {
     global $gtxt;
@@ -958,8 +920,7 @@ function _cmp_list_enums($a, $b) {
 
 function count_age($age) {
     global $gtxt;
-    if ($age <= 60)
-        return $gtxt["less_a_minute"];
+    if ($age <= 60) return $gtxt["less_a_minute"];
     $jam_str = "";
     $jam = floor($age / 3600);
     if ($jam >= 1) {
@@ -1178,14 +1139,15 @@ function defport($urls) {
 
 function getSize($file) {
     $size = filesize($file);
-    if ($size < 0)
-        if (!(strtoupper(substr(PHP_OS, 0, 3)) == 'WIN'))
+    if ($size < 0) {
+        if (!(strtoupper(substr(PHP_OS, 0, 3)) == 'WIN')) {
             $size = trim(`stat -c%s $file`);
-        else {
+        } else {
             $fsobj = new COM("Scripting.FileSystemObject");
             $f = $fsobj->GetFile($file);
             $size = $file->Size;
         }
+    }
     return $size;
 }
 
@@ -1195,8 +1157,7 @@ function purge_files($delay) {
     if (file_exists(FILES_LST) && is_numeric($delay) && $delay > 0) {
         $files_lst = file(FILES_LST);
         $files_new = "";
-        if (!isset($timezone))
-            $timezone = 7;
+        if (!isset($timezone)) $timezone = 7;
         $unix_now = ( time() - date("Z") + (3600 * $timezone));
         foreach ($files_lst as $files_line) {
             $files_data = unserialize(trim($files_line));
@@ -1520,12 +1481,13 @@ function vidlist($dir, $exts) {
     return $results;
 }
 
-function textarea($var, $stop = false) {
-	echo "\n<br /><textarea cols='200' rows='30' readonly='readonly'>";
-	if (is_array($var)) echo htmlentities(print_r($var, true), ENT_QUOTES);
-	else echo htmlentities($var, ENT_QUOTES);
-	echo "</textarea><br />\n";
-	if ($stop) exit;
+function textarea($var, $cols = 200, $rows = 30, $stop = false) {
+    $cols = ($cols == 0) ? 200 : $cols;
+    $rows = ($rows == 0) ? 30 : $rows;
+    echo "\n<br /><textarea cols='$cols' rows='$rows' readonly='readonly'>";
+    if (is_array($var)) echo htmlentities(print_r($var, true), ENT_QUOTES);
+    else echo htmlentities($var, ENT_QUOTES);
+    echo "</textarea><br />\n";
+    if ($stop) exit;
 }
-
 ?>

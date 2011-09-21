@@ -105,7 +105,6 @@ class uploadstation_com extends DownloadClass {
 
         $data = $this->DefaultParamArr($this->link, $this->cookie);
         $data['recaptcha_shortencode_field'] = cut_str($this->page, 'name="recaptcha_shortencode_field" value="', '"');
-        ;
         $data['step'] = '1';
         $this->Show_reCaptcha($pid, $data);
     }

@@ -262,7 +262,7 @@ if ($limited_edition || $limited_area) {
 }
 
 $cnt_deleted = ($auto_del_time > 0 ? purge_files($auto_del_time) : 0);
-($downloadLimitbyip ? purge_files_ip($downloadDelayPerIP):'');
+($downloadLimitbyip ? purge_files_ip($downloadDelayPerIP) : '');
 ($OnlineVisitor ? UpdateOnline() : '');
 register_shutdown_function("pause_download");
 
@@ -271,7 +271,7 @@ if ($login === true) {
     if (!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === false) {
         header('WWW-Authenticate: Basic realm="Rx08"');
         header('HTTP/1.0 401 Unauthorized');
-        exit("<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $csstype . ".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<h1>$RL_VER: NuLL</h1>$nn</body>$nn</html>");
+        exit("<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charSet\"><style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $csstype . ".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<h1>$RL_VER: NuLL</h1>$nn</body>$nn</html>");
     }
 }
 
@@ -351,30 +351,6 @@ if (!isset($_GET["filename"]) || !$_GET["host"] || !$_GET["path"]) {
         if (isset($premium_acc)) {
             $acc_txt = '';
             $spacer = '<div class="embd_acc"></div>';
-/*            $ar_host_acc = array(
-                "rs_com" => "Rapidshare.com",
-                "rs_de" => "Rapidshare.de",
-                "megaupload" => "Megaupload.com",
-                "megashare" => "Megashare.com",
-                "netload" => "Netload.in",
-                "gigasize" => "Gigasize.com",
-                "uploaded_to" => "Uploaded.to",
-                "easyshare" => "Easy-share.com",
-                "depositfiles" => "Depositfiles.com",
-                "hotfile_com" => "Hotfile.com",
-                "uploading" => "Uploading.com",
-                "filefactory" => "Filefactory.com",
-                "4shared_com" => "4shared.com",
-                "fileserve_com" => "Fileserve.com",
-                "filesonic_com" => "Filesonic.com",
-                "oron_com" => "Oron.com",
-                "duckload_com" => "Duckload.com",
-                "shareonline_biz" => "Shareonline.biz",
-                "torrific_com" => "Torrific.com",
-                "animeground_com" => "Animeground.com",
-                "turbobit_net" => "Turbobit.net",
-                "enterupload_com" => "Enterupload.com",
-            );*/
             foreach ($premium_acc as $host_acc => $val) {
                 $acc_txt.= ( isset($premium_acc[$host_acc]["user"]) ? ($premium_acc[$host_acc]["user"] != '' && $premium_acc[$host_acc]["pass"] != '' ? $ar_host_acc[$host_acc] . $spacer : '') : $ar_host_acc[$host_acc] . " multi acc" . $spacer);
             }
@@ -393,17 +369,14 @@ if (!isset($_GET["filename"]) || !$_GET["host"] || !$_GET["path"]) {
             if (isset($imageshack_acc)) {
                 $acc_txt.= ( $imageshack_acc["user"] != '' && $imageshack_acc["pass"] != '' ? "Imageshack Account" . $spacer : '');
             }
-            $ar_rscom = (isset($premium_acc["rs_com"]) ? $premium_acc["rs_com"] : false);
+            $ar_rscom = (isset($premium_acc["rapidshare_com"]) ? $premium_acc["rapidshare_com"] : false);
         } //-end embed acc need
         else {
             $ar_rscom = false;
         }
         // check there's exist rs acc,. single or multi
         if ($ar_rscom) {
-            $exist_accrs = (
-                    isset($ar_rscom["user"]) ? ($ar_rscom["user"] != '' && $ar_rscom["pass"] != '') :
-                            (isset($ar_rscom[0]["user"]) ? ($ar_rscom[0]["user"] != '' && $ar_rscom[0]["pass"] != '') : false)
-                    );
+            $exist_accrs = (isset($ar_rscom["user"]) ? ($ar_rscom["user"] != '' && $ar_rscom["pass"] != '') : (isset($ar_rscom[0]["user"]) ? ($ar_rscom[0]["user"] != '' && $ar_rscom[0]["pass"] != '') : false));
         } else {
             $exist_accrs = false;
         }
@@ -489,7 +462,7 @@ if (!isset($_GET["filename"]) || !$_GET["host"] || !$_GET["path"]) {
         } else {
             foreach ($host as $site => $file) {
                 if (preg_match("/^(.+\.)?" . $site . "$/i", $Url["host"])) {
-                    print "<html>$nn<head>$nn<title>" . $txt['prep_dl'] . " $LINK</title>$nn<link rel=\"shortcut icon\" type=\"image/gif\" href=\"" . IMAGE_DIR . "rsload_2.gif\">$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn";
+                    print "<html>$nn<head>$nn<title>" . $txt['prep_dl'] . " $LINK</title>$nn<link rel=\"shortcut icon\" type=\"image/gif\" href=\"" . IMAGE_DIR . "rsload_2.gif\">$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charSet\">$nn";
                     print "<style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $csstype . ".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<center><img src='" . IMAGE_DIR . "rl_lgo.png'>";
                     require_once(CLASS_DIR . "http.php");
                     require_once (HOST_DIR . "DownloadClass.php");
@@ -509,13 +482,13 @@ if (!isset($_GET["filename"]) || !$_GET["host"] || !$_GET["path"]) {
         }
     }
 
-    print "<html>$nn<head>$nn<title>" . $txt['leeching'] . " $LINK</title>$nn<link rel=\"shortcut icon\" type=\"image/gif\" href=\"" . IMAGE_DIR . "rsload_2.gif\">$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn</head>$nn<body>$nn";
+    print "<html>$nn<head>$nn<title>" . $txt['leeching'] . " $LINK</title>$nn<link rel=\"shortcut icon\" type=\"image/gif\" href=\"" . IMAGE_DIR . "rsload_2.gif\">$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charSet\">$nn</head>$nn<body>$nn";
 
     $Url = parse_url($LINK);
     $FileName = basename($Url ["path"]);
     $mydomain = $_SERVER['SERVER_NAME'];
     $myip = $_SERVER['SERVER_ADDR'];
-    if (!$bw_save && preg_match("/($mydomain|$myip)/i", $Url["host"])) {
+    if ($bw_save && preg_match("/($mydomain|$myip)/i", $Url["host"])) {
         html_error("You are not allowed to leech from <font color=black>" . $mydomain . " (" . $myip . ")</font>");
     }
 
@@ -531,212 +504,203 @@ if (!isset($_GET["filename"]) || !$_GET["host"] || !$_GET["path"]) {
 
     insert_location("$PHP_SELF?filename=" . urlencode($FileName) . "&host=" . $Url["host"] . "&port=" . $Url["port"] . "&path=" . urlencode($Url["path"] . ($Url["query"] ? "?" . $Url["query"] : "")) . "&referer=" . urlencode($Referer) . "&email=" . ($_GET["domail"] ? $_GET["email"] : "") . "&partSize=" . ($_GET["split"] ? $_GET["partSize"] : "") . "&method=" . $_GET["method"] . "&proxy=" . ($_GET["useproxy"] ? $_GET["proxy"] : "") . "&saveto=" . $_GET["path"] . "&link=" . urlencode($LINK) . ($_GET["add_comment"] == "on" ? "&comment=" . urlencode($_GET["comment"]) : "") . $auth . ($pauth ? "&pauth=$pauth" : "") . (isset($_GET["idx"]) ? "&idx=" . $_GET["idx"] : "") . "&cookie=" . urlencode(encrypt($_GET ['cookie'])));
 } else {
-?>
-    <html>
-        <head>
-            <meta http-equiv="Content-Type" content="text/html; <?php echo $charSet; ?>">
-            <link rel="shortcut icon" type="image/gif" href="<?php echo IMAGE_DIR . 'rsload_2.gif?' . rand(11, 9999); ?>" />
-            <title>nYedoTz...</title>
-            <style type="text/css">
-                <!--
-                @import url("<?php print IMAGE_DIR; ?>style_sujancok<?php print $csstype; ?>.css");
-            -->
-        </style>
-    </head>
-    <body>
-        <center>
-            <?php
-            /*
-              // Deprecated of useless and unworth feature for some cases might fail this status.
-              if($MaxServerJob > 0){
-              if($MaxServerJob <= ongoingGet()){
-              html_error("Server is only allowed to download $MaxServerJob downloads at a time.");
-              }
-              }
-             */
+    echo('<html>');
+    echo('<head>');
+    echo('<meta http-equiv="Content-Type" content="text/html; charset=' . $charSet . '">');
+    echo('<link rel="shortcut icon" type="image/gif" href="' . IMAGE_DIR . 'rsload_2.gif? ' . rand(11, 9999) . '" />');
+    echo('<title>nYedoTz...</title>');
+    echo('<link type="text/css" rel="stylesheet" href="' . IMAGE_DIR . 'style_sujancok' . $csstype . '.css" />');
+    echo('</head>');
+    echo('<body>');
+    echo('<div align="center">');
+    /*
+      // Deprecated of useless and unworth feature for some cases might fail this status.
+      if($MaxServerJob > 0){
+      if($MaxServerJob <= ongoingGet()){
+      html_error("Server is only allowed to download $MaxServerJob downloads at a time.");
+      }
+      }
+     */
 
-            if ($limitbyip) {
-                if ($ada_acc) {
-                    $trheute = $heute + 1;
-                    if ($trheute > $maximum_free_downloads) {
-                        html_error($msgNya);
-                    }
-                }
+    if ($limitbyip) {
+        if ($ada_acc) {
+            $trheute = $heute + 1;
+            if ($trheute > $maximum_free_downloads) {
+                html_error($msgNya);
             }
+        }
+    }
 
 // Deprecated of useless and unworth feature for some cases might fail this status.
 //	ongoingAdd ();
-            do {
-                list($_GET["filename"], $tmp) = explode('?', urldecode(trim($_GET["filename"])));
-                $_GET["saveto"] = urldecode(trim($_GET["saveto"]));
-                $_GET["host"] = urldecode(trim($_GET["host"]));
-                $_GET["path"] = urldecode(trim($_GET["path"]));
-                $_GET["port"] = $_GET["port"] ? urldecode(trim($_GET["port"])) : 80;
-                $_GET["referer"] = $_GET["referer"] ? urldecode(trim($_GET["referer"])) : 0;
-                $_GET["link"] = urldecode(trim($_GET["link"]));
+    do {
+        list($_GET["filename"], $tmp) = explode('?', urldecode(trim($_GET["filename"])));
+        $_GET["saveto"] = urldecode(trim($_GET["saveto"]));
+        $_GET["host"] = urldecode(trim($_GET["host"]));
+        $_GET["path"] = urldecode(trim($_GET["path"]));
+        $_GET["port"] = $_GET["port"] ? urldecode(trim($_GET["port"])) : 80;
+        $_GET["referer"] = $_GET["referer"] ? urldecode(trim($_GET["referer"])) : 0;
+        $_GET["link"] = urldecode(trim($_GET["link"]));
 
-                $_GET["post"] = $_GET["post"] ? unserialize(stripslashes(urldecode(trim($_GET["post"])))) : 0;
-                $_GET ["cookie"] = $_GET ["cookie"] ? decrypt(urldecode(trim($_GET["cookie"]))) : "";
-                //$resume_from = $_GET["resume"] ? intval(urldecode(trim($_GET["resume"]))) : 0;
-                //if ($_GET["resume"]) {unset($_GET["resume"]);}
+        $_GET["post"] = $_GET["post"] ? unserialize(stripslashes(urldecode(trim($_GET["post"])))) : 0;
+        $_GET ["cookie"] = $_GET ["cookie"] ? decrypt(urldecode(trim($_GET["cookie"]))) : "";
+        //$resume_from = $_GET["resume"] ? intval(urldecode(trim($_GET["resume"]))) : 0;
+        //if ($_GET["resume"]) {unset($_GET["resume"]);}
 
-                $redirectto = "";
+        $redirectto = "";
 
-                $pauth = urldecode(trim($_GET["pauth"]));
-                if ($_GET['auth'] == 1) {
-                    if (!preg_match("|^(?:.+\.)?(.+\..+)$|i", $_GET ["host"], $hostmatch))
-                        html_error('No valid hostname found for authorisation!');
-                    $hostmatch = str_replace('.', '_', $hostmatch[1]);
-                    if ($premium_acc ["$hostmatch"] && $premium_acc ["$hostmatch"] ["user"] && $premium_acc ["$hostmatch"] ["pass"]) {
-                        $auth = base64_encode($premium_acc ["$hostmatch"] ["user"] . ":" . $premium_acc ["$hostmatch"] ["pass"]);
-                    } else {
-                        html_error('No useable premium account found for this download - please set one in accounts.php');
-                    }
-                } else {
-                    $auth = decrypt(urldecode(trim($_GET['auth'])));
-                }
-                if ($_GET["auth"]) {
-                    $AUTH["use"] = TRUE;
-                    $AUTH["str"] = $_GET["auth"];
-                } else {
-                    unset($AUTH);
-                }
+        $pauth = urldecode(trim($_GET["pauth"]));
+        if ($_GET['auth'] == 1) {
+            if (!preg_match("|^(?:.+\.)?(.+\..+)$|i", $_GET ["host"], $hostmatch))
+                html_error('No valid hostname found for authorisation!');
+            $hostmatch = str_replace('.', '_', $hostmatch[1]);
+            if ($premium_acc ["$hostmatch"] && $premium_acc ["$hostmatch"] ["user"] && $premium_acc ["$hostmatch"] ["pass"]) {
+                $auth = base64_encode($premium_acc ["$hostmatch"] ["user"] . ":" . $premium_acc ["$hostmatch"] ["pass"]);
+            } else {
+                html_error('No useable premium account found for this download - please set one in accounts.php');
+            }
+        } else {
+            $auth = decrypt(urldecode(trim($_GET['auth'])));
+        }
+        if ($_GET["auth"]) {
+            $AUTH["use"] = TRUE;
+            $AUTH["str"] = $_GET["auth"];
+        } else {
+            unset($AUTH);
+        }
 
-                $ftp = parse_url($_GET["link"]);
+        $ftp = parse_url($_GET["link"]);
 
-                $IS_FTP = $ftp["scheme"] == "ftp" ? TRUE : FALSE;
-                $AUTH["ftp"] = array("login" => $ftp["user"] ? $ftp["user"] : "anonymous",
-                    "password" => $ftp["pass"] ? $ftp["pass"] : "anonymous@leechget.com");
+        $IS_FTP = $ftp["scheme"] == "ftp" ? TRUE : FALSE;
+        $AUTH["ftp"] = array("login" => $ftp["user"] ? $ftp["user"] : "anonymous", "password" => $ftp["pass"] ? $ftp["pass"] : "anonymous@leechget.com");
 
-                $pathWithName = $_GET["saveto"] . PATH_SPLITTER . $_GET["filename"];
-                while (stristr($pathWithName, "\\\\")) {
-                    $pathWithName = str_replace("\\\\", "\\", $pathWithName);
-                }
+        $pathWithName = $_GET["saveto"] . PATH_SPLITTER . $_GET["filename"];
+        while (stristr($pathWithName, "\\\\")) {
+            $pathWithName = str_replace("\\\\", "\\", $pathWithName);
+        }
 
-                list($pathWithName, $tmp) = explode('?', $pathWithName);
+        list($pathWithName, $tmp) = explode('?', $pathWithName);
 
-                if ($ftp["scheme"] == "ftp" && !$_GET["proxy"]) {
-                    require_once(CLASS_DIR . "ftp.php");
-                    $file = getftpurl($_GET["host"], $ftp["port"] ? $ftp["port"] : 21, $_GET["path"], &$pathWithName);
-                } else {
-                    require_once(CLASS_DIR . "http.php");
-                    $_GET["force_name"] ? $force_name = urldecode($_GET["force_name"]) : '';
-                    $file = geturl($_GET["host"], $_GET["port"], $_GET["path"], $_GET["referer"], $_GET["cookie"], $_GET["post"], &$pathWithName, $_GET["proxy"], $pauth, $auth, $ftp["scheme"]);
-                }
-                if ($redir && $lastError && stristr($lastError, $txt['_error'] . " " . $txt['_redirect_to'] . " [")) {
-                    $redirectto = trim(cut_str($lastError, $txt['_error'] . " " . $txt['_redirect_to'] . " [", "]"));
-                    print $txt['_redirecting_to'] . " <b>$redirectto</b> ... <br>$nn";
-                    $_GET ["referer"] = $_GET ["link"];
-                    $_GET["link"] = $redirectto;
-                    $purl = parse_url($redirectto);
-                    list($_GET["filename"], $tmp) = explode('?', basename($redirectto));
-                    $_GET ["host"] = ($purl ["host"]) ? $purl ["host"] : $_GET ["host"];
-                    $_GET["path"] = $purl["path"] . ($purl["query"] ? "?" . $purl["query"] : "");
-                    $_GET ['port'] = $purl ['port'] ? $purl ['port'] : 80;
-                    $_GET ['cookie'] = $_GET ["cookie"] ? urldecode(encrypt(trim($_GET["cookie"]))) : "";
-                    $lastError = "";
-                }
-            } while ($redirectto && !$lastError);
+        if ($ftp["scheme"] == "ftp" && !$_GET["proxy"]) {
+            require_once(CLASS_DIR . "ftp.php");
+            $file = getftpurl($_GET["host"], $ftp["port"] ? $ftp["port"] : 21, $_GET["path"], &$pathWithName);
+        } else {
+            require_once(CLASS_DIR . "http.php");
+            $_GET["force_name"] ? $force_name = urldecode($_GET["force_name"]) : '';
+            $file = geturl($_GET["host"], $_GET["port"], $_GET["path"], $_GET["referer"], $_GET["cookie"], $_GET["post"], &$pathWithName, $_GET["proxy"], $pauth, $auth, $ftp["scheme"]);
+        }
+        if ($redir && $lastError && stristr($lastError, $txt['_error'] . " " . $txt['_redirect_to'] . " [")) {
+            $redirectto = trim(cut_str($lastError, $txt['_error'] . " " . $txt['_redirect_to'] . " [", "]"));
+            print $txt['_redirecting_to'] . " <b>$redirectto</b> ... <br>$nn";
+            $_GET ["referer"] = $_GET ["link"];
+            $_GET["link"] = $redirectto;
+            $purl = parse_url($redirectto);
+            list($_GET["filename"], $tmp) = explode('?', basename($redirectto));
+            $_GET ["host"] = ($purl ["host"]) ? $purl ["host"] : $_GET ["host"];
+            $_GET["path"] = $purl["path"] . ($purl["query"] ? "?" . $purl["query"] : "");
+            $_GET ['port'] = $purl ['port'] ? $purl ['port'] : 80;
+            $_GET ['cookie'] = $_GET ["cookie"] ? urlencode(encrypt($_GET["cookie"])) : "";
+            $lastError = "";
+        }
+    } while ($redirectto && !$lastError);
 
 // Deprecated of useless and unworth feature for some cases might fail this status.
 //	ongoingRemove ();
 
-            if ($lastError) {
-                html_error($lastError, 0);
-            } elseif ($file["bytesReceived"] == $file["bytesTotal"] || $file["size"] == "Unknown") {
-                $inCurrDir = stristr(dirname($pathWithName), ROOT_DIR) ? TRUE : FALSE;
-                if ($inCurrDir) {
-                    $Path = parse_url($PHP_SELF);
-                    $Path = substr($Path["path"], 0, strlen($Path["path"]) - strlen(strrchr($Path["path"], "/")));
-                } else {
-                    $cl_Path = relink_path(DOWNLOAD_DIR, $PHP_SELF);
-                }
-                print "<script>pr(100, '" . $file["size"] . "', '" . $file["speed"] . "')</script>";
-                print "File <b>" . ($inCurrDir ? "<a href=\"" . $Path . "/" . substr(dirname($pathWithName), strlen(ROOT_DIR) + 1) . "/" . basename($file["file"]) . "\">" : "<a href=\"" . $cl_Path["root"] . "/" . $cl_Path["download"] . basename($file["file"]) . "\">") . basename($file["file"]) . "</a>" . "</b> (<b>" . $file["size"] . "</b>) " . $txt['_saved'] . "<br>Time: <b>" . $file["time"] . "</b> | " . $txt['_avg_spd'] . " <b>" . $file["speed"] . " KB/s</b><br>";
-
-                if ($inCurrDir) {
-                    $unix_zone = filemtime(substr(dirname($pathWithName), strlen(ROOT_DIR) + 1) . "/" . basename($file["file"]));
-                } else {
-                    $unix_zone = filemtime(DOWNLOAD_DIR . basename($file["file"]));
-                }
-                $unix_zone = ( $unix_zone - date("Z") + (3600 * $timezone));
-                $file["date"] = $unix_zone;
-                $result = write_file(FILES_LST, serialize(array("name" => $file["file"], "size" => str_replace(" ", "&nbsp;", $file["size"]), "date" => $file["date"], "age" => $gtxt["less_a_minute"], "link" => $_GET["link"], "comment" => str_replace("\n", "\\n", str_replace("\r", "\\r", $_GET["comment"])), "ip" => $ipmu)) . "\r\n", 0);
-
-                $result2 = write_file(IP_L33CH_L0G, serialize(array("name" => $file["file"], "date" => $file["date"], "ip" => $ipmu)) . "\r\n", 0);
-
-
-                //$file ["date"] = time ();
-                //$file ["date"] = ($inCurrDir ? filectime(substr(dirname($pathWithName), strlen(ROOT_DIR) + 1)."/".basename($file["file"])) : filectime(DOWNLOAD_DIR.basename($file["file"])));
-
-                if (!$result && !$result2) {
-                    print $txt['error_upd_list'] . "<br>";
-                }
-
-                if ($limitbytraffic) {
-                    if ($max_trafic > 0) {
-                        $fn_trafic = TRAFFIC_LST;
-                        if (@file_exists($fn_trafic)) {
-                            $ar_trafic = get_traffic($fn_trafic);
-                            if (is_numeric($ar_trafic[0])) {
-                                $add_trafic = ($ar_trafic[0] + $file["bytesReceived"]);
-                            } else {
-                                $add_trafic = $file["bytesReceived"];
-                            }
-                            if (!write_traffic($fn_trafic, $add_trafic . ":" . (isset($trafic_start_date) ? $trafic_start_date : (strtotime("now") + (3600 * $timezone)) ))) {
-                                print $txt['error_upd_trf_list'] . "<br>";
-                            }
-                        }
-                    }
-                }
-
-
-                if ($_GET["email"]) {
-                    require_once(CLASS_DIR . "mail.php");
-                    $_GET["partSize"] = (isset($_GET["partSize"]) ? $_GET["partSize"] * 1024 * 1024 : FALSE);
-                    if (xmail($fromaddr, $_GET["email"], "File " . basename($file["file"]), "File: " . basename($file["file"]) . "\r\n" . "Link: " . $_GET["link"] . ($_GET["comment"] ? "\r\n" . "Comments: " . str_replace("\\r\\n", "\r\n", $_GET["comment"]) : ""), $pathWithName, $_GET["partSize"], $_GET["method"])) {
-                        print "<script>mail('" . $txt['mail_file_sent'] . "<b>" . $_GET["email"] . "</b>.', '" . basename($file["file"]) . "');</script>";
-                    } else {
-                        print "<div class='acthistory_result'>" . $txt['mail_error_send'] . "</div>";
-                    }
-                }
-
-                // restrict loop if this index called by audl.php; (empty($_GET["idx"]))
-                if ($pointboost > 0 && empty($_GET["idx"])) {
-                    // i'd rather not delete current downloaded file
-                    if (!defined("DOWNLOADED_FILE")) {
-                        define('DOWNLOADED_FILE', DOWNLOAD_DIR . basename($file["file"]));
-                    }
-                    @write_file(DOWNLOADED_FILE, " ");
-                    if ($numidx < $pointboost - 1) {
-                        // generate reload form (link, secondcounterdown, auth, indexnumber)
-                        echo genReload($_GET["link"], 3, $auth, $numidx);
-                    }
-                } else {   // generate delete link
-                    $rnd = rand(11, 99);
-                    echo '<p>Delete Link: <a href="del.php?d=' . str_replace("=", "", rotN(base64_encode($file["date"] . ':' . '4puZ'), $rnd)) . "-" . $rnd . '">Delete</a>';
-                    echo '<br/>' . $txt['delete_link_notice'] . '<br/></p>';
-                }
-                print "<br><a id='tdone' href=\"" . $PHP_SELF . "\">[&nbsp;<b><span id='txtdone'>" . $gtxt['back_main'] . " ]</b></span></a><br/>";
-            } else {
-                unlink($pathWithName);
-                print "Connection lost<br><a href=\"javascript:location.reload();\">" . $txt['_reload'] . "</a>";
-                print '<script>setTimeout("location.reload()",1000);</script>';
-            }
-            //check whether this index called from audl.php
-            $audlparam = (isset($_GET["idx"])) ? $_GET["idx"] : '';
-            if ($audlparam != '') {
-                $audlparam = explode('|', $audlparam);
-                $audlparam[0] = ($audlparam[0] != '' ? true : false);
-                if ($audlparam[1] == '') {
-                    $audlparam[1] = 'none';
-                }
-                echo autoNext($audlparam[0], true, $audlparam[1]);
-            }
-            ?>
-        </center>
-    </body>
-</html>
-            <?php
+    if ($lastError) {
+        html_error($lastError, 0);
+    } elseif ($file["bytesReceived"] == $file["bytesTotal"] || $file["size"] == "Unknown") {
+        $inCurrDir = stristr(dirname($pathWithName), ROOT_DIR) ? TRUE : FALSE;
+        if ($inCurrDir) {
+            $Path = parse_url($PHP_SELF);
+            $Path = substr($Path["path"], 0, strlen($Path["path"]) - strlen(strrchr($Path["path"], "/")));
+        } else {
+            $cl_Path = relink_path(DOWNLOAD_DIR, $PHP_SELF);
         }
-            ?>
+        print "<script>pr(100, '" . $file["size"] . "', '" . $file["speed"] . "')</script>";
+        print "File <b>" . ($inCurrDir ? "<a href=\"" . $Path . "/" . substr(dirname($pathWithName), strlen(ROOT_DIR) + 1) . "/" . basename($file["file"]) . "\">" : "<a href=\"" . $cl_Path["root"] . "/" . $cl_Path["download"] . basename($file["file"]) . "\">") . basename($file["file"]) . "</a>" . "</b> (<b>" . $file["size"] . "</b>) " . $txt['_saved'] . "<br>Time: <b>" . $file["time"] . "</b> | " . $txt['_avg_spd'] . " <b>" . $file["speed"] . " KB/s</b><br>";
+
+        if ($inCurrDir) {
+            $unix_zone = filemtime(substr(dirname($pathWithName), strlen(ROOT_DIR) + 1) . "/" . basename($file["file"]));
+        } else {
+            $unix_zone = filemtime(DOWNLOAD_DIR . basename($file["file"]));
+        }
+        $unix_zone = ( $unix_zone - date("Z") + (3600 * $timezone));
+        $file["date"] = $unix_zone;
+        $result = write_file(FILES_LST, serialize(array("name" => $file["file"], "size" => str_replace(" ", "&nbsp;", $file["size"]), "date" => $file["date"], "age" => $gtxt["less_a_minute"], "link" => $_GET["link"], "comment" => str_replace("\n", "\\n", str_replace("\r", "\\r", $_GET["comment"])), "ip" => $ipmu)) . "\r\n", 0);
+
+        $result2 = write_file(IP_L33CH_L0G, serialize(array("name" => $file["file"], "date" => $file["date"], "ip" => $ipmu)) . "\r\n", 0);
+
+
+        //$file ["date"] = time ();
+        //$file ["date"] = ($inCurrDir ? filectime(substr(dirname($pathWithName), strlen(ROOT_DIR) + 1)."/".basename($file["file"])) : filectime(DOWNLOAD_DIR.basename($file["file"])));
+
+        if (!$result && !$result2) {
+            print $txt['error_upd_list'] . "<br>";
+        }
+
+        if ($limitbytraffic) {
+            if ($max_trafic > 0) {
+                $fn_trafic = TRAFFIC_LST;
+                if (@file_exists($fn_trafic)) {
+                    $ar_trafic = get_traffic($fn_trafic);
+                    if (is_numeric($ar_trafic[0])) {
+                        $add_trafic = ($ar_trafic[0] + $file["bytesReceived"]);
+                    } else {
+                        $add_trafic = $file["bytesReceived"];
+                    }
+                    if (!write_traffic($fn_trafic, $add_trafic . ":" . (isset($trafic_start_date) ? $trafic_start_date : (strtotime("now") + (3600 * $timezone)) ))) {
+                        print $txt['error_upd_trf_list'] . "<br>";
+                    }
+                }
+            }
+        }
+
+
+        if ($_GET["email"]) {
+            require_once(CLASS_DIR . "mail.php");
+            $_GET["partSize"] = (isset($_GET["partSize"]) ? $_GET["partSize"] * 1024 * 1024 : FALSE);
+            if (xmail($fromaddr, $_GET["email"], "File " . basename($file["file"]), "File: " . basename($file["file"]) . "\r\n" . "Link: " . $_GET["link"] . ($_GET["comment"] ? "\r\n" . "Comments: " . str_replace("\\r\\n", "\r\n", $_GET["comment"]) : ""), $pathWithName, $_GET["partSize"], $_GET["method"])) {
+                print "<script>mail('" . $txt['mail_file_sent'] . "<b>" . $_GET["email"] . "</b>.', '" . basename($file["file"]) . "');</script>";
+            } else {
+                print "<div class='acthistory_result'>" . $txt['mail_error_send'] . "</div>";
+            }
+        }
+
+        // restrict loop if this index called by audl.php; (empty($_GET["idx"]))
+        if ($pointboost > 0 && empty($_GET["idx"])) {
+            // i'd rather not delete current downloaded file
+            if (!defined("DOWNLOADED_FILE")) {
+                define('DOWNLOADED_FILE', DOWNLOAD_DIR . basename($file["file"]));
+            }
+            @write_file(DOWNLOADED_FILE, " ");
+            if ($numidx < $pointboost - 1) {
+                // generate reload form (link, secondcounterdown, auth, indexnumber)
+                echo genReload($_GET["link"], 3, $auth, $numidx);
+            }
+        } else {   // generate delete link
+            $rnd = rand(11, 99);
+            echo '<p>Delete Link: <a href="del.php?d=' . str_replace("=", "", rotN(base64_encode($file["date"] . ':' . '4puZ'), $rnd)) . "-" . $rnd . '">Delete</a>';
+            echo '<br/>' . $txt['delete_link_notice'] . '<br/></p>';
+        }
+        print "<br><a id='tdone' href=\"" . $PHP_SELF . "\">[&nbsp;<b><span id='txtdone'>" . $gtxt['back_main'] . " ]</b></span></a><br/>";
+    } else {
+        unlink($pathWithName);
+        print "Connection lost<br><a href=\"javascript:location.reload();\">" . $txt['_reload'] . "</a>";
+        print '<script>setTimeout("location.reload()",1000);</script>';
+    }
+    //check whether this index called from audl.php
+    $audlparam = (isset($_GET["idx"])) ? $_GET["idx"] : '';
+    if ($audlparam != '') {
+        $audlparam = explode('|', $audlparam);
+        $audlparam[0] = ($audlparam[0] != '' ? true : false);
+        if ($audlparam[1] == '') {
+            $audlparam[1] = 'none';
+        }
+        echo autoNext($audlparam[0], true, $audlparam[1]);
+    }
+    echo('</div>');
+    echo('</body>');
+    echo('</html>');
+}
+?>

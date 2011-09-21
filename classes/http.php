@@ -119,7 +119,7 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
         $content_tl = "";
     }
 
-    $cookies = '';
+    //$cookies = '';
     if ($cookie) {
         if (is_array($cookie)) {
             $cookies = "Cookie: " . CookiesToStr($cookie) . $nn;
@@ -327,11 +327,8 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
             $ContentDisposition = trim(cut_str($header, "Content-Disposition:", "\n")) . "\n";
             if ($ContentDisposition && stripos($ContentDisposition, "filename=") !== false) {
                 $FileName = trim(trim(trim(trim(trim(cut_str($ContentDisposition, "filename=", "\n")), "="), "?"), ";"), '"');
-                if (strpos($FileName, "/") !== false) {
-                    $FileName = basename($FileName);
-                } elseif (preg_match("/UTF\-8\?B\?(.*)$/i", $FileName, $b64)) {
-                    $FileName = preg_replace("/[^a-zA-Z0-9\-\.]/", "_", base64_decode($b64[1]));
-                }
+                if (strpos($FileName, "/") !== false) $FileName = basename($FileName);
+                if (preg_match("/UTF\-8\?B\?(.*)$/i", $FileName, $b64)) $FileName = preg_replace("/[^a-zA-Z0-9\-\.]/", "_", base64_decode($b64[1]));
                 $saveToFile = dirname($saveToFile) . PATH_SPLITTER . $FileName;
             }
         }
@@ -643,7 +640,7 @@ function upfile($host, $port, $url, $referer, $cookie, $post, $file, $filename, 
     $postdata.="Content-Disposition: form-data; name=\"$fieldname\"; filename=\"$filename\"" . $nn;
     $postdata.="Content-Type: application/octet-stream" . $nn . $nn;
 
-    $cookies = "";
+    //$cookies = "";
 
     if ($cookie) {
         if (is_array($cookie)) {

@@ -598,12 +598,12 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
 
                     $arr_acc = array();
                     if ($idx_mrsacc == "null") { // nothin new rs acc, grab the from config
-                        if (isset($premium_acc["rs_com"][0]["user"])) {
-                            $arr_acc = $premium_acc["rs_com"];
+                        if (isset($premium_acc["rapidshare_com"][0]["user"])) {
+                            $arr_acc = $premium_acc["rapidshare_com"];
                             $multiacc = true;
                         } else {
-                            $arr_acc[0]["user"] = $premium_acc["rs_com"]["user"];
-                            $arr_acc[0]["pass"] = $premium_acc["rs_com"]["pass"];
+                            $arr_acc[0]["user"] = $premium_acc["rapidshare_com"]["user"];
+                            $arr_acc[0]["pass"] = $premium_acc["rapidshare_com"]["pass"];
                             $multiacc = false;
                         }
                     } else { // we got new acc here
@@ -827,18 +827,18 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             $_config .= "###-PREMIUM-CONFIG\n\n";
 
             $_config .= $upcc . "\$premium_acc = array();\n";
-            $_config .= ( isset($_POST['rs_com_premix']) && $_POST['rs_com_premix'] == 'on' ? ($multiacc ? '//' : $upcc) : '//') . "\$premium_acc[\"rs_com\"] = array('user' => '" . $vector_sacc[0] . "', 'pass' => '" . $vector_sacc[1] . "');\n\n";
+            $_config .= ( isset($_POST['rs_com_premix']) && $_POST['rs_com_premix'] == 'on' ? ($multiacc ? '//' : $upcc) : '//') . "\$premium_acc[\"rapidshare_com\"] = array('user' => '" . $vector_sacc[0] . "', 'pass' => '" . $vector_sacc[1] . "');\n\n";
 
             if (!$multiacc) {
                 $_config .= ( isset($_POST['rs_com_premix']) && $_POST['rs_com_premix'] == 'on' ? (!$multiacc ? '/*' : $upcc) : '/*');
                 $_config .= "// below here is the way u insert multiple acc for rapidshare.com\n";
-                $_config .= "\$premium_acc[\"rs_com\"] = array(\n";
+                $_config .= "\$premium_acc[\"rapidshare_com\"] = array(\n";
                 $_config .= "  array('user' => 'user1', 'pass' => 'pass1'),\n";
                 $_config .= "  array('user' => 'user2', 'pass' => 'pass2'),\n";
                 $_config .= "  array('user' => 'user3', 'pass' => 'pass3')\n";
                 $_config .= ");  //foobar - rs_com- multi; */\n";
             } else {
-                $_config .= "\$premium_acc[\"rs_com\"] = array(";
+                $_config .= "\$premium_acc[\"rapidshare_com\"] = array(";
                 $vektor = "\n";
                 for ($i = 0; $i < count($vector_macc); $i++) {
                     $vektor .= "  array('user' => '" . $vector_macc[$i][0] . "', 'pass' => '" . $vector_macc[$i][1] . "')";
@@ -853,7 +853,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             $field = array(
                 "rs_de_premix" => array("rs_de", "rplde", "rpplde"),
                 '4shared_premix' => array('4shared', 'usr4shared', 'pass4shared'),
-                'animeground_premix' => array('animeground', 'usranimeground', 'passanimeground'),
+                'animeground_premix' => array('animeground_com', 'usranimeground', 'passanimeground'),
                 'bitshare_premix' => array('bitshare', 'usrbitshare', 'passbitshare'),
                 'depositfiles_premix' => array('depositfiles', 'usrdepositfiles', 'passdepositfiles'),
                 'easyshare_premix' => array('easyshare', 'usreasyshare', 'passeasyshare'),
@@ -930,10 +930,10 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
 
             $_config .= "# Acc info & drop down\n";
             $_config .= "\$ar_host_acc = array(\n";
-            $_config .= "'rs_com'         	=>  'rapidshare.com',\n";
+            $_config .= "'rapidshare_com'       =>  'rapidshare.com',\n";
             $_config .= "'rs_de'          	=>  'rapidshare.de',\n";
             $_config .= "'4shared'        	=>  '4shared.com',\n";
-            $_config .= "'animeground' 	  	=>  'animeground.com',\n";
+            $_config .= "'animeground_com' 	=>  'animeground.com',\n";
             $_config .= "'bitshare'		=>  'bitshare.com',\n";
             $_config .= "'depositfiles' 	=>  'depositfiles.com',\n";
             $_config .= "'easyshare'            =>  'easy-share.com',\n";
