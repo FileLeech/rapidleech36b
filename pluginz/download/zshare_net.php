@@ -4,47 +4,35 @@ if (!defined('RAPIDLEECH')){
   exit;
 }
 
-	    $Url["path"] = str_replace("/video/","/download/",$Url["path"]);
-	    $Url["path"] = str_replace("/audio/","/download/",$Url["path"]);
+class zshare_net extends DownloadClass {
+    
+    public function Download($link) {
+        if (stristr($link, '/video/')) {
+            $link = str_replace('/video/', '/download/', $link);
+        } elseif (stristr($link, '/audio/')) {
+            $link = str_replace('/audio/', '/download/', $link);
+        }
 
-		$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $Referer, 0, 0, 0, $_GET["proxy"],$pauth);
-		is_page($page);
-		
-		is_present($page,"file-404","File Not Found");
-	preg_match_all('/Set-Cookie: (.*);/U',$page,$temp);
-	$cookie = implode(';',$temp[1]);
+        $page = $this->GetPage($link);
+        //textarea($page, $cols, $rows, true);
+        is_present($page, '/file-404.html', 'File not found!');
+        $cookie = GetCookies($page);
 
-		
-		$post = array();
-		$post["referer2"] = cut_str($page, 'referer2" value="', '"');
-		$post["download"] = 1;
-		$post["imageField.x"] = rand(1,140);
-		$post["imageField.y"] = rand(1,20);
-		$Referer = $LINK;
+        $post = array('referer2' => cut_str($page, 'id="referer2" value="', '"'), 'download' => '1', 'imageField.x' => rand(0,153), 'imageField.y' => rand(0,25));
+        $page = $this->GetPage($link, $cookie, $post, $link);
+        $cookie = $cookie."; ".GetCookies($page);
+        if (!preg_match('#here[|](\d+)[|]class#', $page, $wait)) html_error('Error: Timer not found!');
+        $this->CountDown($wait[1]);
+        $dlink = cut_str($page, 'var link_enc=new Array(', ');');
+        $dlink = preg_replace('@[,\']@i', '', $dlink);
+        if (!isset($dlink)) html_error('Error: Download link not found!');
+        $filename = parse_url($dlink);
+        $FileName = basename($filename['path']);
+        $this->RedirectDownload($dlink, $FileName, $cookie, 0, $link);
+    }
+}
 
-		$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $Referer, $cookie, $post, 0, $_GET["proxy"],$pauth);
-		is_page($page);
-	preg_match_all('/Set-Cookie: (.*);/U',$page,$temp);
-	$cookie = implode(';',$temp[1]);
-
-	    
-	    $enclink= cut_str($page,"link_enc=new Array('","')");
-	    $linkdown = preg_replace('/[,\']/i', '', $enclink);
-	  
-		if($linkdown){
-			$Url = parse_url($linkdown);
-		$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $Referer, $cookie, $post, 0, $_GET["proxy"],$pauth);
-		is_page($page);
-
-
-		}else{html_error("Link not found",0);}
-		insert_timer("60");
-
-
-	$FileName = basename($Url["path"]);
-		
-	insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&cookie=".urlencode($cookie)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "").($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
-
-
-
+/*
+ * zshare.net free download plugin by Ruud v.Tony 22-09-2011
+ */
 ?>

@@ -45,7 +45,7 @@ if ($continue_up)
 				$post["login"]=$_REQUEST['bin_login'];
 				$post["password"]=$_REQUEST['bin_pass'];
 			
-			$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), "http://oron.com/login", 0, $post, 0, $_GET["proxy"], $pauth);
+			$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), "", 0, $post, 0, $_GET["proxy"], $pauth);
 			if (!preg_match('#Set-Cookie: autologin=([a-zA-Z0-9]+);#', $page))
 				html_error ('Not logged in. Check your login details!');
 			$cookies = GetCookies($page);
@@ -55,7 +55,7 @@ if ($continue_up)
 <div id=info width=100% align=center>Retrive upload ID</div> 
 <?php
 			$Url=parse_url('http://depositfiles.com/de/');
-			$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), "http://oron.com/login", $cookies, 0, 0, $_GET["proxy"], $pauth);
+			$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"] . ($Url["query"] ? "?" . $Url["query"] : ""), "", $cookies, 0, 0, $_GET["proxy"], $pauth);
 			
 			$upload_form = cut_str($page,'id="upload_form" method="post" enctype="multipart/form-data" action="','"');
 			$mfilesize = cut_str($page,'name="MAX_FILE_SIZE" value="','"');
@@ -84,5 +84,6 @@ if ($continue_up)
 }
 /**
 written by defport 22/05/2011
+*[Fixed] Slider324 20/08/11 Visit Incelugi.info 
 **/   
 ?>

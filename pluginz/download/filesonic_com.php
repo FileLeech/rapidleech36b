@@ -85,7 +85,7 @@ class filesonic_com extends DownloadClass {
         if (!empty($tm) && !empty($tm_hash)) {
             $page = $this->GetPage($link, $cookie, array('tm' => $tm, 'tm_hash' => $tm_hash), $Referer);
         }
-        if (preg_match('#http://[a-zA-Z](\d+)?\.' . $this->domain . '/download/' . $this->id . '/[^\'"]+#i', $page, $dl)) {
+        if (preg_match('@http:\/\/.+'.$this->domain.'\/download\/[^\'"]+@i', $page, $dl)) {
             $this->RedirectDownload(trim($dl[0]), $FileName, $cookie, 0, $Referer);
             exit();
         }
@@ -125,7 +125,7 @@ class filesonic_com extends DownloadClass {
         if (strpos($page, 'Please Enter Captcha')) {
             return $this->Retrieve($link);
         }
-        if (!preg_match('#http://[a-zA-Z](\d+)?\.' . $this->domain . '/download/' . $this->id . '/[^\'"]+#i', $page, $dl)) {
+        if (!preg_match(''@http:\/\/.+'.$this->domain.'\/download\/[^\'"]+@i', $page, $dl)) {
             html_error('Error: Final Download link for filesonic free can\'t be found!');
         }
         $this->RedirectDownload(trim($dl[0]), $FileName, $cookie, 0, $Referer);
@@ -176,7 +176,7 @@ class filesonic_com extends DownloadClass {
             $this->EnterPassword($page, $data);
             exit();
         }
-        if (!preg_match('#Location: (http://[a-zA-Z](\d+)?\.' . $this->domain . '/download/' . $this->id . '/[^\r|\n]+)#i', $page, $dl)) {
+        if (!preg_match('@Location: ([^|\r|\n]+)@i', $page, $dl)) {
             html_error('Error: Final Download link for premium can\'t be found!');
         }
         $Url = parse_url(trim($dl[1]));
