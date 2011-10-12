@@ -539,3 +539,8 @@ div.progressborder #progress {
 .embd_acc{
   padding-top:.1em;
 }
+
+.caption {
+	font-family: Tahoma;
+	font-size: 11px;
+}

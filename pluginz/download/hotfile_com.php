@@ -183,15 +183,6 @@ class hotfile_com extends DownloadClass {
     private function login($authc = false) {
         global $premium_acc;
 
-        if (($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"]))) {
-            $ahash = ($_GET["maudl"] == 'multi' && !empty($_GET["auth_hash"]));
-            $ahash = explode(":", base64_decode(utf8_strrev(dcd($ahash))));
-            if (count($ahash) == 2 && (!empty($ahash[0]) && !empty($ahash[1]))) {
-                $_REQUEST["premium_user"] = $ahash[0];
-                $_REQUEST["premium_pass"] = $ahash[1];
-            }
-            unset($ahash);
-        }
         if (!$authc) {
             $user = ($_REQUEST["premium_user"] ? $_REQUEST["premium_user"] : $premium_acc["hotfile"]["user"]);
             $pass = ($_REQUEST["premium_pass"] ? $_REQUEST["premium_pass"] : $premium_acc["hotfile"]["pass"]);

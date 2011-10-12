@@ -1,7 +1,7 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
+<?php
+if (!defined('RAPIDLEECH')) {
+    require_once ("404.php");
+    exit ();
 }
 
 class easy_share_com extends DownloadClass {
@@ -15,6 +15,18 @@ class easy_share_com extends DownloadClass {
         } else {
             $this->Retrieve($link);
         }
+    }
+
+  /*
+   * exit for terminated download
+   * return for continue download
+   * $content is header content before download
+   */
+    public function CheckBack($content) {
+        if (!strpos($content, "ontent-Disposition: attachment; ")){
+            html_error("You have input wrong captcha, Please try again!");
+        }
+        return;
     }
 
     private function Retrieve($link) {
@@ -85,6 +97,7 @@ class easy_share_com extends DownloadClass {
         $dlink = urldecode($_POST['link']);
         $FileName = $_POST['name'];
         $this->RedirectDownload($dlink, $FileName, $cookie, $post, $Referer);
+        $this->CheckBack($dlink);
         exit();
     }
 
@@ -123,11 +136,10 @@ class easy_share_com extends DownloadClass {
                     "&partSize=" . ($_GET["split"] ? $_GET["partSize"] : "") .
                     "&method=" . $_GET["method"] . "&proxy=" . ($_GET["useproxy"] ? $_GET["proxy"] : "") .
                     "&saveto=" . $_GET["path"] . "&link=" . $link . ($_GET["add_comment"] == "on" ? "&comment=" . urlencode($_GET["comment"]) : "") .
-                    "&pauth=" . (isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
+                    "&pauth=" . (isset($_GET["idx"]) ? "&idx=" . $_GET["idx"] : ""));
         }
         exit();
     }
-
 }
 
 /* * ************************************************\

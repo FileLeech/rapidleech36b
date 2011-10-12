@@ -20,92 +20,79 @@ function insert_timer($countd, $caption ="", $timeouttext = "", $hide = false) {
     }
 
     $timerid = rand(1000, time());
-?>
-    <center><span id=global<?php echo $timerid; ?>><br><span style="FONT-FAMILY: Tahoma; FONT-SIZE: 11px;"><?php echo $caption ?></span>&nbsp;&nbsp;<span id='timerlabel<?php echo $timerid; ?>' style="FONT-FAMILY: Tahoma; FONT-SIZE: 11px;"></span></span></center>
-    <script type="text/javascript">
-        var count<?php echo $timerid; ?>=<?php echo $countd; ?>;
-        function timer<?php echo $timerid; ?>()
-        {
-            if(count<?php echo $timerid; ?> > 0)
-            {
-                document.getElementById('timerlabel<?php echo $timerid; ?>').innerHTML = <?php echo $htxt['_pwait']; ?> + " " + count<?php echo $timerid; ?> + ' sec...';
-                count<?php echo $timerid; ?>=count<?php echo $timerid; ?> - 1;
-                setTimeout("timer<?php echo $timerid; ?>()", 1000)
-            }
-        }
-        timer<?php echo $timerid; ?>();
-    </script>
-    <!-- <?php
-    flush();
+    echo ('<div align="center">');
+    echo ('<span id="global' . $timerid . '">');
+    echo ('<br />');
+    echo ('<span class="caption">' . $caption . '</span>&nbsp;&nbsp;');
+    echo ('<span id="timerlabel' . $timerid . '" class="caption"></span></span>');
+    echo ('</div>');
+    echo ('<script type="text/javascript">');
+    echo ('var count' . $timerid . '=' . $countd . ';');
+    echo ('function timer' . $timerid . '() {');
+    echo ('if(count' . $timerid . ' > 0) {');
+    echo ('document.getElementById("timerlabel' . $timerid . '").innerHTML = ' . $htxt['_pwait'] . ' + " " + count' . $timerid . ' + " sec...";');
+    echo ('count' . $timerid . '=count' . $timerid . ' - 1;');
+    echo ('setTimeout("timer' . $timerid . '()", 1000);');
+    echo ('}');
+    echo ('}');
+    echo ('timer' . $timerid . '();');
+    echo ('</script>');
+    flush ();
     for ($nnn = 0; $nnn < $countd; $nnn++) {
         sleep(1);
     }
-?>
-    -->
-<?php
+    flush ();
+
     if ($hide === true) {
-?>
-        <script type="text/javascript">
-            document.getElementById('global<?php echo $timerid; ?>').style.display='none';
-        </script>
-<?php
-        flush();
+        echo ('<script type="text/javascript">document.getElementById("global' . $timerid . '").style.display="none";</script>');
+        flush ();
         return true;
     }
 
     if ($timeouttext) {
-?>
-        <script type="text/javascript">
-            document.getElementById('global<?php echo $timerid; ?>').innerHTML = '<?php echo $timeouttext; ?>';
-        </script>
-<?php
-        flush();
+        echo ('<script type="text/javascript">document.getElementById("global' . $timerid . '").innerHTML = "' . $timeouttext . '";</script>');
+        flush ();
         return true;
     }
+    return true;
 }
 
 function insert_new_timer($countd, $displaytext, $caption = "", $text = "") {
     if (!is_numeric($countd)) {
         html_error("Wrong Counter");
     }
-?>
-    <p><div id="code"></div></p>
-    <p><center><div id="dl"><h4><?php echo $gtxt['js_disable']; ?></h4></div></center></p>
-    <script type="text/javascript">
-        var c = <?php echo $countd; ?>;
-        fc();
-        function fc() {
-            if(c>0) {
-                document.getElementById("dl").innerHTML = "<?php echo $caption; ?> <?php echo $htxt['_pwait']; ?> <b>" + c.toFixed(1) + "</b> <?php echo $gtxt['_second']; ?>...";
-                c = c - .5;
-                setTimeout("fc()", 500);
-            }
-            else {
-                document.getElementById("dl").style.display="none";
-                document.getElementById("code").innerHTML = unescape("<?php echo $displaytext; ?>");
-            }
-        }
-    </script>
-<?php
+    echo ('<div id="code"></div>');
+    echo ('<div align="center">');
+    echo ('<div id="dl"><h4>' . $gtxt['js_disable'] . '</h4></div></div>');
+    echo ('<script type="text/javascript">');
+    echo ('var c = ' . $countd . ';');
+    echo ('fc();');
+    echo ('function fc() {');
+    echo ('if(c>0) {');
+    echo ('document.getElementById("dl").innerHTML = "' . $caption . ' ' . $htxt['_pwait'] . ' <b>" + c.toFixed(1) + "</b> ' . $gtxt['_second'] . '...";');
+    echo ('c = c - .5;');
+    echo ('setTimeout("fc()", 500);');
+    echo ('} else {');
+    echo ('document.getElementById("dl").style.display="none";');
+    echo ('document.getElementById("code").innerHTML = unescape("' . $displaytext . '");');
+    echo ('}');
+    echo ('}');
+    echo ('</script>');
     if (!empty($text)) {
         print $text;
     }
-?>
-    </body>
-    </html>
-<?php
+    echo ('</body></html>');
 }
 
 function is_page($lpage) {
     global $lastError;
     if (!$lpage) {
-        html_error($htxt['_error_retrieve'] . "<br>$lastError", 0);
+        html_error($htxt['_error_retrieve'] . "<br />$lastError", 0);
     }
 }
 
 function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveToFile = 0, $proxy = 0, $pauth = 0, $auth = 0, $scheme = "http", $resume_from = 0, $XMLRequest=0) {
     global $nn, $lastError, $PHP_SELF, $AUTH, $IS_FTP, $FtpBytesTotal, $FtpBytesReceived, $FtpTimeStart, $FtpChunkSize, $Resume, $bytesReceived, $fs, $forbidden_filetypes, $rename_these_filetypes_to, $bw_save, $force_name, $rename_prefix, $rename_suffix, $limitsize, $lowlimitsize, $limitbyip, $ipmu, $ada_acc, $pointboost, $add_ext_5city, $htxt, $gtxt, $mip_enabled, $storage_limit;
-//die('saveToFile:'.$saveToFile);
     $scheme.= "://";
 
     if (($post !== 0) && ($scheme == "http://" || $scheme == "https://")) {
@@ -119,7 +106,7 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
         $content_tl = "";
     }
 
-    //$cookies = '';
+    $cookies = '';
     if ($cookie) {
         if (is_array($cookie)) {
             $cookies = "Cookie: " . CookiesToStr($cookie) . $nn;
@@ -157,10 +144,8 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
     if (isset($mip_enabled) && $mip_enabled) {
         $mip_action = "download";
         echo "<p>Multi IP Enabled</b>...<br />\n";
-        if (file_exists(CLASS_DIR . "mip.php"))
-            @include(CLASS_DIR . "mip.php");
+        if (file_exists(CLASS_DIR . "mip.php")) @include(CLASS_DIR . "mip.php");
     }else {
-
         $errno = 0;
         $errstr = "";
         $hosts = ($proxyHost ? $scheme . $proxyHost : $scheme . $host) . ':' . ($proxyPort ? $proxyPort : $port);
@@ -173,8 +158,6 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
         $dis_port = $proxyPort ? $proxyPort : $port;
         html_error("Couldn't connect to " . $dis_host . " at port " . $dis_port, 0);
     }
-
-
 
     if ($errno || $errstr) {
         $lastError = $errstr;
@@ -227,6 +210,20 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
 //write_file(CONFIG_DIR."header.txt", $header);
 
     if ($saveToFile) {
+        if (preg_match("#(a-z0-9.]+)?(([a-z]+).[a-z]+([.a-z]+)?)#", $host, $tmp)) {
+            $hostclass = $tmp[2];
+            if (substr($hostclass, 0, 1) > 0) {
+                $hostclass = "d" . $hostclass;
+            }
+            $hostclass = str_replace(array("-", "."), "_", $hostclass);
+            if (file_exists(HOST_DIR . "download/" . $hostclass . ".php")) {
+                /* @var $hostvar DownloadClass */
+                require(HOST_DIR . "DownloadClass.php");
+                require(HOST_DIR . "download/" . $hostclass . ".php");
+                $hostvar = new $hostclass();
+                $hostvar->CheckBack($header);
+            }
+        }
         $bytesTotal = trim(cut_str($header, "Content-Length:", "\n"));
 
         //check sizelimit feature  (it is in MB)
@@ -257,19 +254,16 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
                 $hostfile = "hosts.php";
                 require_once(HOST_DIR . 'download/' . $hostfile); // $host redefine as an array colection plugin
                 $ar_host = explode(".", $ahost);
-                $_host = '';
-                $pjg = 0;
+                $_host = ''; $pjg = 0;
                 for ($i = 0; $i < count($ar_host); $i++) {
                     if ($pjg < 2) {
                         $_host = $ar_host[count($ar_host) - $i - 1] . ($i == 0 ? "" : ".") . $_host;
                     }
                     $pjg++;
                 }
-                $dumhost = array();
-                $i = 0;
+                $dumhost = array(); $i = 0;
                 foreach ($host as $dh => $flnya) {
-                    $dumhost[$i] = $dh;
-                    $i++;
+                    $dumhost[$i] = $dh; $i++;
                 }
                 $host = $ahost; //if($post!==0 || $auth!==0 || $cookie!==0){
                 if (in_array($_host, $dumhost)) {
@@ -439,8 +433,7 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
 
     do {
         $data = @fread($fp, ($saveToFile ? $chunkSize : 16384));
-        if ($data == '')
-            break;
+        if ($data == '') break;
         if ($saveToFile) {
             $bytesSaved = fwrite($fs, $data);
             if ($bytesSaved > -1) {
@@ -549,7 +542,6 @@ function GetCookies($content) {
     // The U option will make sure that it matches the first character
     // So that it won't grab other information about cookie such as expire, domain and etc
     preg_match_all('/Set-Cookie: (.*)(;|\r\n)/U', $content, $temp);
-
     $cookie = $temp[1];
     $cook = implode('; ', $cookie);
     return $cook;
@@ -561,8 +553,7 @@ function GetCookiesArr($content, $del=true, $dval='deleted') {
     foreach ($temp[1] as $v) {
         $v = explode('=', $v, 2);
         $cookie[$v[0]] = $v[1];
-        if ($del && $v[1] == $dval)
-            unset($cookie[$v[0]]);
+        if ($del && $v[1] == $dval) unset($cookie[$v[0]]);
     }
     return $cookie;
 }
@@ -640,7 +631,7 @@ function upfile($host, $port, $url, $referer, $cookie, $post, $file, $filename, 
     $postdata.="Content-Disposition: form-data; name=\"$fieldname\"; filename=\"$filename\"" . $nn;
     $postdata.="Content-Type: application/octet-stream" . $nn . $nn;
 
-    //$cookies = "";
+    $cookies = "";
 
     if ($cookie) {
         if (is_array($cookie)) {
@@ -713,7 +704,6 @@ function upfile($host, $port, $url, $referer, $cookie, $post, $file, $filename, 
 
 ################################################################
     //echo '| '.$zapros.' |';
-
 //    $pac = ceil($fileSize / $chunkSize);
     $fs = fopen($file, 'r');
 
@@ -775,4 +765,5 @@ function upfile($host, $port, $url, $referer, $cookie, $post, $file, $filename, 
 
     return $page;
 }
+
 ?>

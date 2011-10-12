@@ -1,35 +1,32 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
+<?php
+if (!defined('RAPIDLEECH')) {
+    require_once("404.php");
+    exit;
 }
-				
-	$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $Referer, 0, 0, 0, $_GET["proxy"],$pauth);
-	is_page($page);
-	$cookie=biscotti($page);
-	is_present($page,"File Not Found");
-	
-	if(preg_match('%FileSend -(\r|\n)*(.*)(\r|\n)*</title>%i', $page, $fname))
-		{
-		$FileName = $fname[2];
-		}
-		
-	preg_match('/action="(.*dl\.php\?.*?)"/i', $page, $loc);
-	preg_match_all('/\w{40,44}/i', $page, $comb);
-	$act=cut_str($loc[0],'action="','"');
-	$Href = $act;
-	$Url = parse_url($Href);
-	$FileName = !$FileName ? basename($Url["path"]) : $FileName;
-	$post = array();
-	$post[$comb[0][0]] = $comb[0][1];
 
-insert_location("$PHP_SELF?filename=none&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($LINK)."&post=".urlencode(serialize($post))."&cookie=".urlencode($cookie)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "")."&auth=".$auth.($pauth ? "&pauth=$pauth" : ""));
-	
-	 function biscotti($content) {
-        is_page($content);
-        preg_match_all("/Set-Cookie: (.*)\n/",$content,$matches);
-        foreach ($matches[0] as $coll) {
-        $bis.=cut_str($coll,"Set-Cookie: ","; ")."; ";    
-        }return $bis;}
- // written by kaox 10/05/09
+class filesend_net extends DownloadClass {
+
+    public function Download($link) {
+
+        $happy = $this->GetPage($link);
+        is_present($happy, 'File Not Found');
+        $v_tony = GetCookies($happy);
+
+        if (!preg_match('#time = (\d+);#', $happy, $wait)) html_error('Error: Timer id not found???');
+        $this->CountDown($wait[1]);
+        $orphan = cut_str($happy, '<form method="POST"', '</form>');
+        if (!preg_match('%<input type="hidden" name="(\w+)" value="(\w+)">%', $orphan, $twin)) html_error('Error: Post ID not found???');
+        $family = array($twin[1] => $twin[2], 'download' => '');
+        $ruud = cut_str($orphan, 'action="', '"');
+        if (!$ruud) html_error('Error: Download link not found???');
+        $sadness = parse_url($ruud);
+        $vreets = basename($sadness['path']);
+        $this->RedirectDownload($ruud, $vreets, $v_tony, $family);
+        exit();
+    }
+}
+
+/*
+ * Filesend.net free download plugin by Ruud v.Tony 04-10-2011
+ */
 ?>

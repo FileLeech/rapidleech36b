@@ -8,7 +8,7 @@ class ifile_it extends DownloadClass {
 
     public function Download($link) {
         global $premium_acc;
-        if (($_REQUEST['premium_acc'] == 'on' && $_REQUEST['premium_acc']['user'] && $_REQUEST['premium_acc']['pass']) || ($_REQUEST['premium_acc'] == 'on' && $premium_acc['ifile_it']['user'] && $premium_acc['ifile_it']['pass'])) {
+        if (($_REQUEST['premium_acc'] == 'on' && $_REQUEST['premium_acc']['user'] && $_REQUEST['premium_acc']['pass']) || ($_REQUEST['premium_acc'] == 'on' && $premium_acc['ifile']['user'] && $premium_acc['ifile']['pass'])) {
             $this->Member($link);
         } else {
             $this->NonMember($link);
