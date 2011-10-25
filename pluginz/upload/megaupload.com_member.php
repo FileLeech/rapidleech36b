@@ -1,9 +1,7 @@
 <?php
 ##########################################
-//$mega_login = ""; // login
-//$mega_pass = ""; // password
-$mega_login = $upload_acc["mu_mem"]["user"]; 
-$mega_pass = $upload_acc["mu_mem"]["pass"]; 
+$mega_login = ""; // login
+$mega_pass = ""; // password
 
 $mega_desc="Uploaded from rapidleech";  // Descriptions default
 ##########################################
@@ -14,6 +12,11 @@ if ($mega_login && $mega_pass){
 	$_REQUEST['my_pass'] = $mega_pass;
 	$_REQUEST['action'] = "FORM";
 	echo "<b><center>Use Default login/pass.</center></b>\n";
+} else if (isset($upload_acc) && isset($upload_acc["mu_mem"]['user']) && $upload_acc["mu_mem"]['user'] != '' && $upload_acc["mu_mem"]['pass'] != '') {
+    $_REQUEST['my_login'] = $upload_acc["mu_mem"]['user'];
+    $_REQUEST['my_pass'] = $upload_acc["mu_mem"]['pass'];
+    $_REQUEST['action'] = "FORM";
+    echo "<b><center>Use Default login/pass.</center></b>\n";
 }
 if ($_REQUEST['action'] == "FORM")
     $continue_up=true;

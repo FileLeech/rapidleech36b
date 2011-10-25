@@ -33,7 +33,7 @@ $premium_acc["rapidshare_com"] = array(
 //$premium_acc["animeground_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["bitshare"] = array('user' => '', 'pass' => '');
 //$premium_acc["depositfiles"] = array('user' => '', 'pass' => '');
-//$premium_acc["easyshare"] = array('user' => '', 'pass' => '');
+//$premium_acc["crocko"] = array('user' => '', 'pass' => '');
 //$premium_acc["enterupload"] = array('user' => '', 'pass' => '');
 //$premium_acc["fileape"] = array('user' => '', 'pass' => '');
 //$premium_acc["filedino"] = array('user' => '', 'pass' => '');
@@ -108,7 +108,7 @@ $ar_host_acc = array(
 'animeground_com' 	=>  'animeground.com',
 'bitshare'		=>  'bitshare.com',
 'depositfiles' 	=>  'depositfiles.com',
-'easyshare'            =>  'easy-share.com',
+'crocko'            =>  'crocko.com',
 'enterupload' 	  	=>  'enterupload.com',
 'fileape'        	=>  'fileape.com',
 'filedino'		=>  'filedino.com',

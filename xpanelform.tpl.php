@@ -338,22 +338,22 @@ pass: <input type="password" id="pass" name="pass">
 	<tr>
 	<td class="tdacc">
 <?php 
-  $easyshare=false;$chk ='';
+  $crocko=false;$chk ='';
   if($showpostn){
-   if(isset($_POST['easyshare_premix']) && $_POST['easyshare_premix']=='on')
-    {$chk= ' checked';$easyshare=true;}
-  }elseif(isset($premium_acc['easyshare']))
-    {$chk= ' checked';$easyshare=true;}
+   if(isset($_POST['crocko_premix']) && $_POST['crocko_premix']=='on')
+    {$chk= ' checked';$crocko=true;}
+  }elseif(isset($premium_acc['crocko']))
+    {$chk= ' checked';$crocko=true;}
 ?>
-<input type="checkbox" id="easyshare_premix" name="easyshare_premix" onClick=" clk(this,'easysharebox','easysharemsg','<?php echo $easyshare;?>');"<?php print $chk;?>>
-<label for="easyshare_premix">&nbsp;Easy-Share.com</label>
+<input type="checkbox" id="crocko_premix" name="crocko_premix" onClick=" clk(this,'crockobox','crockomsg','<?php echo $crocko;?>');"<?php print $chk;?>>
+<label for="crocko_premix">&nbsp;Crocko.com</label>
 	</td>
 	<td class="tdacc">
-	<div id="easysharebox"<?php echo $styledisplay;?> class="float">
-	user: <input type="text" id="usreasyshare" name="usreasyshare" value="">&nbsp;
-	pass: <input type="password" id="passeasyshare" name="passeasyshare" value="">
+	<div id="crockobox"<?php echo $styledisplay;?> class="float">
+	user: <input type="text" id="usrcrocko" name="usrcrocko" value="">&nbsp;
+	pass: <input type="password" id="passcrocko" name="passcrocko" value="">
 	</div>
-	<span id="easysharemsg"><?php if(!$easyshare){echo "<div>Easy-Share.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
+	<span id="crockomsg"><?php if(!$crocko){echo "<div>Crocko.com Premium Account</div>";}else{echo ACC_EMBED;}?></span>
 	</td>
 	</tr>
 	

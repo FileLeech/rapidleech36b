@@ -8,16 +8,15 @@ class netload_in extends DownloadClass {
 
     public function Download($link) {
         global $premium_acc;
-        
         //check the link
-        if (!$_REQUEST['step'] || !$_GET['step'] || !$_POST['step']) {
+        if (!$_REQUEST['step']) {
             $page = $this->GetPage($link);
             if (preg_match('/Location: (\/[^|\r|\n]+)/i', $page, $temp)) {
                 $link = 'http://netload.in' . $temp[1];
             }
             unset($page);
         }
-        if (($_REQUEST['premium_acc'] == 'on' && $_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || ($_REQUEST['premium_acc'] == 'on' && $premium_acc['netload_in']['user'] && $premium_acc['netload_in']['pass'])) {
+        if (($_REQUEST['premium_acc'] == 'on' && $_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || ($_REQUEST['premium_acc'] == 'on' && $premium_acc['netload']['user'] && $premium_acc['netload']['pass'])) {
             $this->Login($link);
         } elseif ($_POST['step'] == 'password') {
             $post['file_id'] = $_POST['file_id'];
@@ -50,11 +49,8 @@ class netload_in extends DownloadClass {
             exit();
         }
         $cookie = GetCookies($page);
-        if (preg_match('%href="(index\.php\?.+captcha.+?)"%', $page, $temp)) {
-            $link = 'http://netload.in/' . html_entity_decode($temp[1], ENT_QUOTES, 'UTF-8');
-        } else {
-            html_error('Error[getFreeLink]');
-        }
+        if (!preg_match('%href="(index\.php\?.+captcha.+?)"%', $page, $temp)) html_error('Error[getFreeLink]');
+        $link = 'http://netload.in/' . html_entity_decode($temp[1], ENT_QUOTES, 'UTF-8');
         $page = $this->GetPage($link, $cookie, 0, $link);
         if (!preg_match('#countdown\(([0-9]+),\'change\(\)\'\)#', $page, $wait)) html_error('Error[Timer 1 not found]!');
         $this->CountDown($wait[1] / 100);
@@ -94,19 +90,22 @@ class netload_in extends DownloadClass {
     private function Login($link) {
         global $premium_acc;
 
-        $user = ($_REQUEST["premium_user"] ? $_REQUEST["premium_user"] : $premium_acc["netload_in"]["user"]);
-        $pass = ($_REQUEST["premium_pass"] ? $_REQUEST["premium_pass"] : $premium_acc["netload_in"]["pass"]);
+        $user = ($_REQUEST["premium_user"] ? $_REQUEST["premium_user"] : $premium_acc["netload"]["user"]);
+        $pass = ($_REQUEST["premium_pass"] ? $_REQUEST["premium_pass"] : $premium_acc["netload"]["pass"]);
+        if (empty($user) || empty($pass)) {
+            html_error("Login Failed: Username or Password is empty. Please check login data.");
+        }
 
-        $postlogin = 'http://netload.in/index.php';
+        $posturl = 'http://netload.in/';
         $post['txtuser'] = $user;
         $post['txtpass'] = $pass;
         $post['txtcheck'] = 'login';
         $post['txtlogin'] = '';
-        $page = $this->GetPage($postlogin, 0, $post, 'http://netload.in/');
+        $page = $this->GetPage($posturl.'index.php', 0, $post, $posturl);
         is_present($page, '/index.php?id=15', 'Login failed, invalid username or password???');
         $cookie = GetCookies($page);
         //check the premium account (IMPORTANT!)
-        $page = $this->GetPage($postlogin . '?id=2', $cookie);
+        $page = $this->GetPage($posturl.'index.php?id=2', $cookie);
         is_present($page, 'No premium</span>', 'Account Free, login not validated!');
 
         return $this->Premium($link, $cookie, $this->GetPage($link, $cookie));
@@ -124,7 +123,7 @@ class netload_in extends DownloadClass {
             $this->EnterPassword($page, $data);
             exit();
         }
-        if (!preg_match('@http:\/\/[\d.]+\/[^|\r|\n|\'?"?]+@i', $page, $dl)) html_error('Error[getPremiumDownloadLink]');
+        if (!preg_match('@http:\/\/[\d.]+\/[^|\r|\n|\'"]+@i', $page, $dl)) html_error('Error[getPremiumDownloadLink]');
         $dlink = trim($dl[0]);
         $Url = parse_url($dlink);
         $FileName = basename($Url['path']);
@@ -147,5 +146,5 @@ class netload_in extends DownloadClass {
 
 //updated 05-jun-2010 for standard auth system (szal)
 //updated 05-Okt-2011 for premium & free, password protected files by Ruud v.Tony
-//updated 07-Okt-2011 in checking link based on gmsnaol comment...
+//small fix in checkin' link 10-Okt-2011 by Ruud v.Tony
 ?>

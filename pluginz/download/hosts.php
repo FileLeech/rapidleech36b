@@ -5,9 +5,9 @@ while (false !== ($entry = $d->read())) {
     if (stristr($entry, '.php') && !stristr($entry, 'index.php')) {
         $hostname = substr($entry, 0, -4);
         $hostname = str_replace('_', '.', $hostname);
-        if ($hostname == 'easy.share.com') $hostname = 'easy-share.com';
         if ($hostname == 'share.online.biz') $hostname = 'share-online.biz';
         if ($hostname == 'cash.file.net') $hostname = 'cash-file.net';
+        if ($hostname == 'i.filez.com') $hostname = 'i-filez.com';
         if ($hostname == 'galaxyscripts.com' || $hostname == 'vBulletin.plug' || $hostname == 'hosts') continue;
         $host[$hostname] = $entry;
         switch ($hostname) {
@@ -32,11 +32,17 @@ while (false !== ($entry = $d->read())) {
             case 'rghost.net':
                 $host['rghost.ru'] = $host['rghost.net'];
                 break;
+            case 'freakshare.com':
+                $host['freakshare.net'] = $host['freakshare.com'];
+                break;
             case 'kickload.com':
                 $host['storage.to'] = $host['kickload.com'];
                 break;
             case 'megaporn.com':
                 $host['megarotic.com'] = $host['megaporn.com'];
+                break;
+            case 'crocko.com':
+                $host['easy-share.com'] = $host['crocko.com'];
                 break;
             default:
                 break;

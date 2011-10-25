@@ -1,7 +1,7 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
+<?php
+if (!defined('RAPIDLEECH')) {
+    require_once ("404.php");
+    exit ();
 }
 
 class jumbofiles_com extends DownloadClass {
@@ -25,12 +25,13 @@ class jumbofiles_com extends DownloadClass {
             }
         } else {
             $page = $this->GetPage($link);
+            is_present($page, 'http://jumbofiles.com/server.html', 'File Not Found');
             if (!preg_match('#http://www\d+[^"]+#', $page, $dlink)) {
                 //non multimedia file
                 $id = cut_str($page, 'name="id" value="', '"');
                 $rand = cut_str($page, 'name="rand" value="', '"');
-                $post['id'] = $id; //7hkrw8yz9dln&
-                $post['rand'] = $rand; //54olyagn&
+                $post['id'] = $id;
+                $post['rand'] = $rand;
                 $post['referer'] = $link;
                 $post['x'] = rand(0, 70);
                 $post['y'] = rand(0, 11);
@@ -39,7 +40,7 @@ class jumbofiles_com extends DownloadClass {
                     echo '<input type="hidden" name="link" value="' . $link . '" />' . "\n";
                     echo '<input type="hidden" name="id" value="' . $id . '" />' . "\n";
                     echo '<input type="hidden" name="rand" value="' . $rand . '" />' . "\n";
-                    echo '<h4>Password: <input type="text" name="password" id="password" size="13" />&nbsp;&nbsp;<input type="hidden" name="down_direct" value="1">&nbsp;&nbsp;<input type="submit" onclick="return check()" value="Submit" /></h4>' . "\n";
+                    echo '<h4>Password: <input type="text" name="password" id="password" size="13" />&nbsp;&nbsp;<input type="submit" onclick="return check()" value="Submit" /></h4>' . "\n";
                     echo "<script language='JavaScript'>\nfunction check() {\nvar pass=document.getElementById('password');\nif (pass.value == '') { window.alert('You didn\'t enter the password'); return false; }\nelse { return true; }\n}\n</script>\n";
                     echo "</form>\n</body>\n</html>";
                     exit;
@@ -59,6 +60,5 @@ class jumbofiles_com extends DownloadClass {
 }
 
 //Practice makin' download plugin with POST methode, support password protected files,multimedia/non multimedia files by VDHDEVIL
-
 ?>
 

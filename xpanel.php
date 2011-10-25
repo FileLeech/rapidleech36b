@@ -130,7 +130,7 @@ $ar_chkbox_acc = array(
     'animeground_premix',
     'bitshare_premix',
     'depositfiles_premix', // index = 5
-    'easyshare_premix',
+    'crocko_premix',
     'enterupload_premix',
     'fileape_premix',
     'filedino_premix',
@@ -641,7 +641,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
                 fieldfilter($ar_chkbox_acc[3], 'usranimeground', 'passanimeground', $badpetik);
                 fieldfilter($ar_chkbox_acc[4], 'usrbitshare', 'passbitshare', $badpetik);
                 fieldfilter($ar_chkbox_acc[5], 'usrdepositfiles', 'passdepositfiles', $badpetik);
-                fieldfilter($ar_chkbox_acc[6], 'usreasyshare', 'passeasyshare', $badpetik);
+                fieldfilter($ar_chkbox_acc[6], 'usrcrocko', 'passcrocko', $badpetik);
                 fieldfilter($ar_chkbox_acc[7], 'usrenterupload', 'passenterupload', $badpetik);
                 fieldfilter($ar_chkbox_acc[8], 'usrfileape', 'passfileape', $badpetik);
                 fieldfilter($ar_chkbox_acc[9], 'usrfiledino', 'passfiledino', $badpetik);
@@ -783,7 +783,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             //===================
 
             $upcc = '';
-            if (empty($_POST['rs_com_premix']) && empty($_POST['rs_de_premix']) && empty($_POST['4shared_premix']) && empty($_POST['animeground_premix']) && empty($_POST['bitshare_premix']) && empty($_POST['depositfiles_premix']) && empty($_POST['easyshare_premix']) && empty($_POST['enterupload_premix']) && empty($_POST['fileape_premix']) && empty($_POST['filedino_premix']) && empty($_POST['filedude_premix']) && empty($_POST['filefactory_premix']) && empty($_POST['fileserve_premix']) && empty($_POST['filesonic_premix']) && empty($_POST['freakshare_premix']) && empty($_POST['gigasize_premix']) && empty($_POST['hellshare_premix']) && empty($_POST['hotfile_premix']) && empty($_POST['ifile_premix']) && empty($_POST['kickload_premix']) && empty($_POST['letitbit_premix']) && empty($_POST['megashare_premix']) && empty($_POST['megashares_premix']) && empty($_POST['megaupload_premix']) && empty($_POST['netload_premix']) && empty($_POST['oron_premix']) && empty($_POST['sendspace_premix']) && empty($_POST['shareonline_premix']) && empty($_POST['torrific_premix']) && empty($_POST['turbobit_premix']) && empty($_POST['ugotfile_premix']) && empty($_POST['uploaded_premix']) && empty($_POST['uploading_premix']) && empty($_POST['uploadstation_premix']) && empty($_POST['vBulletin_premix']) && empty($_POST['wupload_premix']) && empty($_POST['x7_premix']) && empty($_POST['youtube_premix']) && empty($_POST['muhash_premix']) && empty($_POST['hfhash_premix']) && empty($_POST['rshash_premix']) && empty($_POST['ulhash_premix']) && empty($_POST['imghack_premix'])) {
+            if (empty($_POST['rs_com_premix']) && empty($_POST['rs_de_premix']) && empty($_POST['4shared_premix']) && empty($_POST['animeground_premix']) && empty($_POST['bitshare_premix']) && empty($_POST['depositfiles_premix']) && empty($_POST['crocko_premix']) && empty($_POST['enterupload_premix']) && empty($_POST['fileape_premix']) && empty($_POST['filedino_premix']) && empty($_POST['filedude_premix']) && empty($_POST['filefactory_premix']) && empty($_POST['fileserve_premix']) && empty($_POST['filesonic_premix']) && empty($_POST['freakshare_premix']) && empty($_POST['gigasize_premix']) && empty($_POST['hellshare_premix']) && empty($_POST['hotfile_premix']) && empty($_POST['ifile_premix']) && empty($_POST['kickload_premix']) && empty($_POST['letitbit_premix']) && empty($_POST['megashare_premix']) && empty($_POST['megashares_premix']) && empty($_POST['megaupload_premix']) && empty($_POST['netload_premix']) && empty($_POST['oron_premix']) && empty($_POST['sendspace_premix']) && empty($_POST['shareonline_premix']) && empty($_POST['torrific_premix']) && empty($_POST['turbobit_premix']) && empty($_POST['ugotfile_premix']) && empty($_POST['uploaded_premix']) && empty($_POST['uploading_premix']) && empty($_POST['uploadstation_premix']) && empty($_POST['vBulletin_premix']) && empty($_POST['wupload_premix']) && empty($_POST['x7_premix']) && empty($_POST['youtube_premix']) && empty($_POST['muhash_premix']) && empty($_POST['hfhash_premix']) && empty($_POST['rshash_premix']) && empty($_POST['ulhash_premix']) && empty($_POST['imghack_premix'])) {
                 $upcc = '//';
             }
 
@@ -856,7 +856,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
                 'animeground_premix' => array('animeground_com', 'usranimeground', 'passanimeground'),
                 'bitshare_premix' => array('bitshare', 'usrbitshare', 'passbitshare'),
                 'depositfiles_premix' => array('depositfiles', 'usrdepositfiles', 'passdepositfiles'),
-                'easyshare_premix' => array('easyshare', 'usreasyshare', 'passeasyshare'),
+                'crocko_premix' => array('crocko', 'usrcrocko', 'passcrocko'),
                 'enterupload_premix' => array('enterupload', 'usrenterupload', 'passenterupload'),
                 'fileape_premix' => array('fileape', 'usrfileape', 'passfileape'),
                 'filedino_premix' => array('filedino', 'usrfiledino', 'passfiledino'),
@@ -936,7 +936,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             $_config .= "'animeground_com' 	=>  'animeground.com',\n";
             $_config .= "'bitshare'		=>  'bitshare.com',\n";
             $_config .= "'depositfiles' 	=>  'depositfiles.com',\n";
-            $_config .= "'easyshare'            =>  'easy-share.com',\n";
+            $_config .= "'crocko'            =>  'crocko.com',\n";
             $_config .= "'enterupload' 	  	=>  'enterupload.com',\n";
             $_config .= "'fileape'        	=>  'fileape.com',\n";
             $_config .= "'filedino'		=>  'filedino.com',\n";
