@@ -44,18 +44,15 @@ class megashare_com extends DownloadClass {
             $post[$k] = ($v == "") ? 1 : $v;
         }
 
-        if (!preg_match('/var c = (\d+);/i', $page, $cD))
-            html_error("Error getting timer.");
+        if (!preg_match('/var c = (\d+);/i', $page, $cD)) html_error("Error getting timer.");
         $this->CountDown($cD[1]);
 
         $page = $this->GetPage($link, $cookie, $post);
 
         $form = cut_str($page, 'name="downloader">', "</form>");
-        if (!preg_match_all('@<input type="hidden" name="([^"]+)" value="(?#Still hating chunked reqs)(?:\r?\n[^\r|\n]+\r?\n)?([^"]+)?"(?:\s?/?)>@i', $page, $hI))
-            html_error("Error getting CAPTCHA/POST data.");
+        if (!preg_match_all('@<input type="hidden" name="([^"]+)" value="(?#Still hating chunked reqs)(?:\r?\n[^\r|\n]+\r?\n)?([^"]+)?"(?:\s?/?)>@i', $page, $hI)) html_error("Error getting CAPTCHA/POST data.");
 
-        if (!preg_match('@src="images/get-direct-link-btn\.png" name="([^"]+)" value="([^"]+)"@i', $page, $dI))
-            html_error("Error getting POST data 3.");
+        if (!preg_match('@src="images/get-direct-link-btn\.png" name="([^"]+)" value="([^"]+)"@i', $page, $dI)) html_error("Error getting POST data 3.");
         $post = array($dI[1] . '.x' => 1, $dI[1] . '.y' => 1);
         $hI = array_combine($hI[1], $hI[2]);
         foreach ($hI as $k => $v) {
@@ -120,8 +117,7 @@ class megashare_com extends DownloadClass {
     }
 
     private function Download_Free($page, $cookie) {
-        if (!preg_match('@(http://(www\.)?megashare\.com/dnd/\d+/[^/]+/[^"|\']+)("|\')@i', $page, $D))
-            html_error("Download-link not found.");
+        if (!preg_match('@(http://(www\.)?megashare\.com/dnd/\d+/[^/]+/[^"|\']+)("|\')@i', $page, $D)) html_error("Download-link not found.");
         $dllink = $D[1];
 
         $filename = parse_url($dllink);

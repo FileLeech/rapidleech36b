@@ -98,10 +98,11 @@ class uploaded_to extends DownloadClass {
             if (empty($user) || empty($pass)) {
                 html_error("Login Failed: Username or Password is empty. Please check login data.");
             }
+            $posturl = "http://uploaded.to/";
             $post = array();
             $post["id"] = $user;
             $post["pw"] = $pass;
-            $page = $this->GetPage("http://uploaded.to/io/login", 0, $post, 'http://uploaded.to/\r\nX-Requested-With: XMLHttpRequest'); //other way add xml request without edit http.php
+            $page = $this->GetPage($posturl."io/login", 0, $post, $posturl."\r\nX-Requested-With: XMLHttpRequest"); //other way add xml request without edit http.php
             $cookie = GetCookies($page);
             is_present($page, 'err:"User and password do not match', 'Login Failed, please check your account');
         } elseif (strlen($loginc) == 84) {
@@ -110,7 +111,7 @@ class uploaded_to extends DownloadClass {
             html_error("[Cookie] Invalid cookie (" . strlen($loginc) . " != 84). Try to encode your cookie first!");
         }
 
-        $page = $this->GetPage('http://uploaded.to/me', $cookie);
+        $page = $this->GetPage($posturl."me", $cookie);
         $cookie = $cookie . '; ' . GetCookies($page);
         is_present($page, '<em>Free</em>', 'Account free, please check ur premium account');
         is_present($page, 'ocation: http://uploaded.to', 'Cookie failed, please check ur account');
