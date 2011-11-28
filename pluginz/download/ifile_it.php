@@ -7,7 +7,7 @@ if (!defined('RAPIDLEECH')) {
 class ifile_it extends DownloadClass {
 	private $cookie, $_url, $_ukey, $dlreq, $captcha, $usecurl;
 	public function Download($link) {
-		global $premium_acc, $Referer;
+		global $premium_acc, $Referer, $htxt;
 		$Referer = $link;
 		$this->cookie = array();
 		if (!function_exists('json_decode')) /* Load a class?... Or maybe we can add a 'json_decode' function in others.php... */ html_error("Error: Please enable JSON in php.");
@@ -18,8 +18,9 @@ class ifile_it extends DownloadClass {
 			if (extension_loaded('curl')) {
 				$cV = curl_version();
 				if (in_array('https', $cV['protocols'], true)) $this->usecurl = true;
+				else $cantlogin = true;
 			} else $cantlogin = true;
-			if ($cantlogin) $this->changeMesg(lang(300)."<br /><br />Https support: NO<br />Member Login disabled.");
+			if ($cantlogin) $this->changeMesg($htxt['_retrieving']."<br /><br />Https support: NO<br />Member Login disabled.");
 		}
 
 		if (!$cantlogin && $_REQUEST["premium_acc"] == "on" && ((!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) || ($premium_acc["ifile"]["user"] && $premium_acc["ifile"]["pass"]))) $this->Login($link);
@@ -68,11 +69,11 @@ class ifile_it extends DownloadClass {
 
 	private function chkcaptcha($link) {
 		if ($_POST["skip"] == "true") {
-			if (empty($_POST['recaptcha_response_field'])) html_error("You didn't enter the image verification code.");
+			if (empty($_POST['captcha'])) html_error("You didn't enter the image verification code.");
 			$post = array();
 			$post['ctype'] = 'recaptcha';
-			$post['recaptcha_response'] = $_POST['recaptcha_response_field'];
-			$post['recaptcha_challenge'] = $_POST['recaptcha_challenge_field'];
+			$post['recaptcha_response'] = $_POST['captcha'];
+			$post['recaptcha_challenge'] = $_POST['challenge'];
 			$this->_url = urldecode($_POST['_link']);
 			$this->dlreq = urldecode($_POST['_dlreq']);
 			$this->cookie = urldecode($_POST['cookie']);
@@ -98,31 +99,33 @@ class ifile_it extends DownloadClass {
 					$data['_link'] = urlencode($this->_url);
 					$data['_dlreq'] = urlencode($this->dlreq);
 					$data['skip'] = 'true';
-					$this->Show_reCaptcha($this->captcha, $data);
+					$this->DL_reCaptcha($this->captcha, $data);
 				}
 			} else html_error("Error getting download data ('{$rply['status']}' => '{$rply['message']}').");
 		}
 		return false;
 	}
 
-	private function Show_reCaptcha($pid, $inputs) {
-		global $PHP_SELF;
+	private function DL_reCaptcha($pid, $data) {
+		$page = $this->GetPage("http://www.google.com/recaptcha/api/challenge?k=" . $pid);
+		if (!preg_match('/challenge \: \'([^\']+)/i', $page, $ch)) html_error("Error getting CAPTCHA data.");
+		$challenge = $ch[1];
 
-		if (!is_array($inputs)) html_error("Error parsing captcha data.");
+		$data['challenge'] = $challenge;
 
-		// Themes: 'red', 'white', 'blackglass', 'clean'
-		echo "<script language='JavaScript'>var RecaptchaOptions={theme:'red', lang:'en'};</script>\n";
+		//Download captcha img.
+		$page = $this->GetPage("http://www.google.com/recaptcha/api/image?c=" . $challenge);
+		$capt_img = substr($page, strpos($page, "\r\n\r\n") + 4);
+		$imgfile = DOWNLOAD_DIR . "ifile_it_captcha.jpg";
 
-		echo "\n<center><form name='dl' action='$PHP_SELF' method='post' ><br />\n";
-		foreach ($inputs as $name => $input) {
-			echo "<input type='hidden' name='$name' id='$name' value='$input' />\n";
+		if (file_exists($imgfile)) {
+			unlink($imgfile);
 		}
-		echo "<script type='text/javascript' src='http://www.google.com/recaptcha/api/challenge?k=$pid'></script>";
-		echo "<noscript><iframe src='http://www.google.com/recaptcha/api/noscript?k=$pid' height='300' width='500' frameborder='0'></iframe><br />";
-		echo "<textarea name='recaptcha_challenge_field' rows='3' cols='40'></textarea><input type='hidden' name='recaptcha_response_field' value='manual_challenge' /></noscript><br />";
-		echo "<input type='submit' name='submit' onclick='javascript:return checkc();' value='Download File' />\n";
-		echo "<script type='text/javascript'>/*<![CDATA[*/\nfunction checkc(){\nvar capt=document.getElementById('recaptcha_response_field');\nif (capt.value == '') { window.alert('You didn\'t enter the image verification code.'); return false; }\nelse { return true; }\n}\n/*]]>*/</script>\n";
-		echo "</form></center>\n</body>\n</html>";
+		if (! write_file($imgfile, $capt_img)) {
+			html_error("Error getting CAPTCHA image.", 0);
+		}
+
+		$this->EnterCaptcha($imgfile, $data, 20);
 		exit;
 	}
 
@@ -187,5 +190,6 @@ class ifile_it extends DownloadClass {
 }
 
 //[16-Oct-2011] Written by Th3-822.
+//[21-Nov-2011] Captcha now doesn't allow hotlinking, fixed. - Th3-822
 
 ?>
