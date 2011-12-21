@@ -1,6 +1,6 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-    require_once ("index.html");
+    require_once ("404.php");
     exit();
 }
 
@@ -51,55 +51,13 @@ class filepost_com extends DownloadClass {
     }
 
     private function Free() {
-        if ($_REQUEST['step']) {
-            $post['code'] = $_POST['code'];
-            $post['token'] = $_POST['token'];
-            $Url = urldecode($_POST['link']);
-            $this->Cookies = urldecode($_POST['cookie']);
-            if ($_REQUEST['step'] == 'password') {
-                $post['file_pass'] = $_POST['password'];
-            } else {
-                $post['file_pass'] = '';
-                $post['recaptcha_challenge_field'] = $_POST['recaptcha_challenge_field'];
-                $post['recaptcha_response_field'] = $_POST['recaptcha_response_field'];
-                $recap = $_POST['recap'];
-            }
-            $check = $this->GetPage($Url, $this->Cookies, $post, $this->link);
-        } else {
-            if (!preg_match("@\{action: '([\w\-]+)', code: '(\w+)'\}@", $this->page, $tmp)) html_error('Error 0x02: Plugin is out of date!');
-            $action = $tmp[1];
-            $code = $tmp[2];
-            if (!preg_match("@\('token', '(\w+)'\)@", $this->page, $tmp)) html_error('Error 0x03: Plugin is out of date!');
-            $token = $tmp[1];
-            $Url = "http://filepost.com/files/get/?SID={$this->sid}&JsHttpRequest={$this->tid}-xml";
-            $post = array('action' => $action, 'code' => $code, 'token' => $token);
-            $check = $this->GetPage($Url, $this->Cookies, $post, $this->link);
-            if (!preg_match('@"js":\{"(\w+)":\{?"([a-z|\_]+)"?:?"?(\d+)"?@i', $check, $match)) html_error('Error : timer not found!');
-            $this->CountDown($match[3]);
-            if (strpos($this->page, 'var is_pass_exists = true') || strpos($this->page, 'var show_captcha = true')) {
-                $data = $this->DefaultParamArr($Url, $this->Cookies);
-                $data['code'] = $code;
-                $data['token'] = $token;
-                if (strpos($this->page, 'var is_pass_exists = true')) {
-                    $data['step'] = 'password';
-                    $this->VerifyPage($data);
-                } else {
-                    if (!preg_match('@key:			\'([^\']+)@i', $this->page, $cap)) html_error('Error 0x04: Plugin is out of date!');
-                    $data['step'] = 'Captcha';
-                    $data['recap'] = $cap[1]; // incase we need to load the captcha image again
-                    $this->VerifyPage($data, $cap[1]);
-                }
-            } else { // no captcha or password required, skip the form process
-                $post = array('code' => $code, 'file_pass' => '', 'token' => $token);
-                $check = $this->GetPage($Url, $this->Cookies, $post, $this->link);
-            }
-        }
-/*        switch ($_REQUEST['step']) {
+        //use case instead elseif for multiple condition
+        switch ($_REQUEST['step']) {
             case 'Captcha':
                 $post['code'] = $_POST['code'];
                 $post['file_pass'] = '';
                 $post['recaptcha_challenge_field'] = $_POST['recaptcha_challenge_field'];
-                $post['recaptcha_response_field'] = $_POST['password'];
+                $post['recaptcha_response_field'] = $_POST['recaptcha_response_field'];
                 $post['token'] = $_POST['token'];
                 $Url = urldecode($_POST['link']);
                 $this->Cookies = urldecode($_POST['cookie']);
@@ -131,19 +89,19 @@ class filepost_com extends DownloadClass {
                     $data['token'] = $token;
                     if (strpos($this->page, 'var is_pass_exists = true')) {
                         $data['step'] = 'password';
-                        $this->VerifyPage($data);
+                        $this->EnterPassword($data);
                     } else {
                         if (!preg_match('@key:			\'([^\']+)@i', $this->page, $cap)) html_error('Error 0x04: Plugin is out of date!');
                         $data['step'] = 'Captcha';
                         $data['recap'] = $cap[1]; // incase we need to load the captcha image again
-                        $this->VerifyPage($data, $cap[1]);
+                        $this->Show_reCaptcha($cap[1], $data);
                     }
                 } else { // no captcha or password required, skip the form process
                     $post = array('code' => $code, 'file_pass' => '', 'token' => $token);
                     $check = $this->GetPage($Url, $this->Cookies, $post, $this->link);
                 }
                 break;
-        }*/
+        }
 
         // Let's play with the regex
         if (preg_match('@"js":\{"(\w+)":\{?"(([^"]+)"?:?"?([^|\r|\n|\"]+)?)"\}@i', $check, $match)) {
@@ -164,12 +122,12 @@ class filepost_com extends DownloadClass {
                     switch ($match[2]) {
                         case 'Wrong file password':
                             $data['step'] = 'password';
-                            $this->VerifyPage($data);
+                            $this->EnterPassword($data);
                             break;
                         case 'You entered a wrong CAPTCHA code. Please try again.':
                             $data['step'] = 'Captcha';
                             $data['recap'] = $recap;
-                            $this->VerifyPage($data, $recap);
+                            $this->Show_reCaptcha($recap, $data);
                             break;
                     }
                     break;
@@ -182,28 +140,22 @@ class filepost_com extends DownloadClass {
         }
     }
 
-    private function VerifyPage($inputs, $pid = false) {
+    private function Show_reCaptcha($pid, $inputs) {
         global $PHP_SELF;
         if (!is_array($inputs)) {
-            html_error("Error parsing data.");
+            html_error("Error parsing captcha data.");
         }
-        if ($pid) {
-            // Themes: 'red', 'white', 'blackglass', 'clean'
-            echo "<script language='JavaScript'>var RecaptchaOptions={theme:'white', lang:'en'};</script>\n";
-        }
-        echo "\n<center><form action='$PHP_SELF' method='post' ><br />\n";
+        // Themes: 'red', 'white', 'blackglass', 'clean'
+        echo "<script language='JavaScript'>var RecaptchaOptions={theme:'white', lang:'en'};</script>\n";
+        echo "\n<center><form name='dl' action='$PHP_SELF' method='post' ><br />\n";
         foreach ($inputs as $name => $input) {
             echo "<input type='hidden' name='$name' id='$name' value='$input' />\n";
         }
-        if ($pid) { // captcha files
-            echo "<script type='text/javascript' src='http://www.google.com/recaptcha/api/challenge?k=$pid'></script>";
-            echo "<noscript><iframe src='http://www.google.com/recaptcha/api/noscript?k=$pid' height='300' width='500' frameborder='0'></iframe><br />";
-            echo "<textarea name='recaptcha_challenge_field' rows='3' cols='40'></textarea><input type='hidden' name='recaptcha_response_field' id='filepass' value='manual_challenge' /></noscript><br />";
-            echo "<input type='submit' name='submit' onclick='return check()' value='Enter Captcha' />\n";
-        } else { //password files
-            echo '<h4>Enter password here: <input type="text" name="password" id="filepass" size="13" />&nbsp;&nbsp;<input type="submit" onclick="return check()" value="Submit" /></h4>' . "\n";
-        }
-        echo "<script type='text/javascript'>/*<![CDATA[*/\nfunction check(){\nvar pass=document.getElementById('filepass');\nif (pass.value == '') { window.alert('You didn\'t enter the page verification code.'); return false; }\nelse { return true; }\n}\n/*]]>*/</script>\n";
+        echo "<script type='text/javascript' src='http://www.google.com/recaptcha/api/challenge?k=$pid'></script>";
+        echo "<noscript><iframe src='http://www.google.com/recaptcha/api/noscript?k=$pid' height='300' width='500' frameborder='0'></iframe><br />";
+        echo "<textarea name='recaptcha_challenge_field' rows='3' cols='40'></textarea><input type='hidden' name='recaptcha_response_field' value='manual_challenge' /></noscript><br />";
+        echo "<input type='submit' name='submit' onclick='javascript:return checkc();' value='Enter Captcha' />\n";
+        echo "<script type='text/javascript'>/*<![CDATA[*/\nfunction checkc(){\nvar capt=document.getElementById('recaptcha_response_field');\nif (capt.value == '') { window.alert('You didn\'t enter the image verification code.'); return false; }\nelse { return true; }\n}\n/*]]>*/</script>\n";
         echo "</form></center>\n</body>\n</html>";
         exit;
     }
@@ -214,6 +166,7 @@ class filepost_com extends DownloadClass {
         foreach ($inputs as $name => $input) {
             echo "<input type='hidden' name='$name' id='$name' value='$input' />\n";
         }
+        echo '<h4>Enter password here: <input type="text" name="password" id="filepass" size="13" />&nbsp;&nbsp;<input type="submit" onclick="return check()" value="Submit" /></h4>' . "\n";
         echo "<script type='text/javascript'>\nfunction check() {\nvar pass=document.getElementById('filepass');\nif (pass.value == '') { window.alert('You didn\'t enter the password'); return false; }\nelse { return true; }\n}\n</script>\n";
         echo "\n</form></center>\n</body>\n</html>";
         exit();

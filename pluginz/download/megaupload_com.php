@@ -9,6 +9,7 @@
   Fixed by thangbom40000 on 1 Dec 2010   => Fix for free user and premium download, no wait time, no capcha with free user.
   Fixed by thangbom40000 on 4 Dec 2010   => Fix input link with password: LINK|PASSWORD
   Updated by Raj Malhotra on 12 Dec 2010 => Added some improvements
+  Fixed by jorgeariasleal@gmail.com based on SVN patch
   \*******************megaupload.com****************************** */
 
 if (!defined('RAPIDLEECH')) {
@@ -61,7 +62,7 @@ class megaupload_com extends DownloadClass {
         //$countDown = rand(5, 10);
         insert_timer($countDown, "<b>Megaupload Free User</b>.", "", true);
 
-        preg_match('/http:\/\/(.*)" class="down_butt1"/', $page, $match);
+        preg_match('/http:\/\/(.*)" class="download_regular_usual"/', $page, $match);
         if (isset($match[1])) {
             $Href = 'http://' . $match[1];
             $Url = parse_url(html_entity_decode($Href, ENT_QUOTES, 'UTF-8'));
@@ -116,11 +117,11 @@ class megaupload_com extends DownloadClass {
         if (stristr($page, "Location:")) {
             //Premium with Direct active
             $Href = trim(cut_str($page, "Location: ", "\n"));
-        } elseif (preg_match('/http:\/\/(.*)" class="down_ad_butt1"/', $page, $match)) {
+        } elseif (preg_match('/http:\/\/(.*)" class="download_premium_but"/', $page, $match)) {
             //Premium with Direct disable
             $Href = "http://" . $match[1];
             $Referer = $link;
-        } elseif (preg_match('/http:\/\/(.*)" class="down_butt1"/', $page, $match)) {
+        } elseif (preg_match('/http:\/\/(.*)" class="download_regular_usual"/', $page, $match)) {
             //Free account - member
             echo "<div>Using free acoount - You're member</div>";
             $Href = "http://" . $match[1];
@@ -145,5 +146,6 @@ class megaupload_com extends DownloadClass {
   Fixed by thangbom40000 on 1 Dec 2010   => Fix for free user and premium download, no wait time, no capcha with free user.
   Fixed by thangbom40000 on 4 Dec 2010   => Fix input link with password: LINK|PASSWORD
   Updated by Raj Malhotra on 12 Dec 2010 => Added some improvements
+  Fixed by jorgeariasleal@gmail.com based on SVN patch
   \*******************megaupload.com****************************** */
 ?>

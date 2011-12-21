@@ -30,7 +30,7 @@ function ipcounter() {
     $xhandle = @opendir("tmp");
     if ($xhandle) {
         while ($buin = readdir($xhandle)) {
-            if (preg_match("#$ipmu#i", $buin)) {
+            if (preg_match("@$ipmu@i", $buin)) {
                 $heute = $heute + 1;
             }
         }
@@ -39,7 +39,7 @@ function ipcounter() {
         if (($ckusr != '') && ($ckusr > $heute)) {
             $heute = $ckusr;
         } else {
-            setcookie('rxyzusr', base64_encode(encEnti((string) $heute)), time() + ($options["delay_per_ip"] * 60 * 60));
+            setcookie('rxyzusr', base64_encode(encEnti((string) $heute)), time() + ($delay_per_ip * 60 * 60));
         }
         closedir($xhandle);
 
@@ -52,7 +52,7 @@ function ipcounter() {
             }
             $xd = filemtime("tmp/$buin");
             $altr = $time - $xd;
-            if ($altr > $options["delay_per_ip"] * 60 * 60) {
+            if ($altr > $delay_per_ip * 60 * 60) {
                 if (is_dir("tmp/$buin")) {
                     rmdir("tmp/$buin");
                 } else {

@@ -44,7 +44,7 @@ class megashare_com extends DownloadClass {
             $post[$k] = ($v == "") ? 1 : $v;
         }
 
-        if (!preg_match('/var c = (\d+);/i', $page, $cD)) html_error("Error getting timer.");
+        if (!preg_match('@var cSecs=cTmr [%] (\d+);@i', $page, $cD)) html_error("Error getting timer.");
         $this->CountDown($cD[1]);
 
         $page = $this->GetPage($link, $cookie, $post);
