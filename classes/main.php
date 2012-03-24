@@ -19,12 +19,12 @@ var IMG_DIR_TPL = '<?php print IMAGE_DIR;?>';
 <script type="text/javascript" src="<?php echo MISC_DIR;?>b64.js"></script>
 <script type="text/javascript" src="<?php echo MISC_DIR;?>js.php?main"></script>
 
-<?php if($ada_rsajax_js && (!$disable_ajax || $exist_accrs || !$disable_ajaxren)){
+<?php if($ada_rsajax_js && (!$options['disable_ajax'] || $exist_accrs || !$options['disable_ajaxren'])){
 ?>
 <script type="text/javascript" src="rsajax.js"></script>
 <?php } ?>
 <script type="text/javascript" src="rscheck.js"></script>
-<?php if(!$disable_to["act_rename"] && $ajax_rename){
+<?php if(!$options['disable_to']["act_rename"] && $ajax_rename){
 ?>
 <script type="text/javascript" src="rsajax_ren.js"></script>
 <?php } ?>
@@ -54,7 +54,7 @@ $.facebox.settings.loadingImage = '<?php echo MISC_DIR;?>facebox/loading.gif';
 <?php } ?>
 <style type="text/css">
 <!--
-@import url("<?php print IMAGE_DIR;?>style_sujancok<?php print $csstype;?>.css");
+@import url("<?php print IMAGE_DIR;?>style_sujancok<?php print $options['csstype'];?>.css");
 /* ###-MenuUtama-### */
 .menuUtama td{
  background: transparent no-repeat url(<?php print IMAGE_DIR;?>mnuUtama.png);
@@ -89,7 +89,7 @@ function changeStatus(file, size){ d.getElementById("status").innerHTML = '<?php
 <?php if(isset($srvload)){echo $srvload;}?>
 
 <div class="head_container"><center>
-<div class="tdheadolgo"><a href="<?php echo $index_file;?>" title="Rapidleech"><h1></h1></a></div>
+<div class="tdheadolgo"><a href="<?php echo $options['index_file'];?>" title="Rapidleech"><h1></h1></a></div>
 </center></div>
 
 <table align="center" style="margin-top:-2px;">
@@ -106,15 +106,15 @@ function changeStatus(file, size){ d.getElementById("status").innerHTML = '<?php
 <table cellpadding="0" cellspacing="0" border="0">
 <tr><td>
 <?php
-if($navi_left["showcpanel"]){
-  if(isset($xpanel_filename) && @file_exists($xpanel_filename)){
+if($options['navi_left']["showcpanel"]){
+  if(isset($options['xpanel_filename']) && @file_exists($options['xpanel_filename'])){
  ?>
- <a href="<?php echo $xpanel_filename;?>" target="_blank" title="<?php echo $txt['cpanel'];?>"><div id="left_cpanel"></div></a>
+ <a href="<?php echo $options['xpanel_filename'];?>" target="_blank" title="<?php echo $txt['cpanel'];?>"><div id="left_cpanel"></div></a>
  <?php
  }
 }
 
-if($navi_left["showplugins"]){
+if($options['navi_left']["showplugins"]){
 ?>
 <a href="javascript:void(0)" onclick="ddir=document.getElementById('dir'); if(ddir.style.display!=''){ddir.style.display='';}else{ddir.style.display='none';}"><div id="left_plugin"></div></a>
 <div align="center" class="splugins"><?php echo '<b><small>'.count($host).'</small></b> Plugins'; ?></div>
@@ -137,23 +137,23 @@ setTimeout("inserthost(arHost)", 100);
 </script>
 <?php
 }
-if($navi_left["showaudl"]){
+if($options['navi_left']["showaudl"]){
 ?>
 <a href="audl.php" target="_blank" title="<?php echo "Auto Download";?>"><div id="left_audl"></div></a>
 <?php
 }
-if($navi_left["showauul"]){
+if($options['navi_left']["showauul"]){
 ?>
 
 <a href="auul.php" target="_blank" title="<?php echo "AutoUpload";?>"><div id="left_auul"></div></a>
 <?php
 }
-if($navi_left["showlynx"]){
+if($options['navi_left']["showlynx"]){
 ?>
 <a href="lynx.php" target="_blank"><img src="<?php echo IMAGE_DIR.'listedfile.gif'?>" alt="List Files"></a>
 <?php
 }
-if($navi_left["showmtn"] && file_exists("mtn.php")){
+if($options['navi_left']["showmtn"] && file_exists("mtn.php")){
 ?><br />
 <a href="mtn.php" target="_blank"><img src="<?php echo IMAGE_DIR.'mtn.png'?>" alt="Movie Thumbnailer"></a>
 <?php
@@ -198,8 +198,8 @@ if($navi_left["showmtn"] && file_exists("mtn.php")){
 <td align="left">
 
 <?php
-if($limitbyip){
-  if($ada_acc && ($trheute > $maximum_free_downloads)){
+if($options['limitbyip']){
+  if($ada_acc && ($trheute > $options['maximum_free_downloads'])){
 ?>
 <div align="center" style="font-size:15px;"><br> <?php echo $msgNya;?><div><?php echo $txt['sorry_inc'];?></div><br></div>
 <?php
@@ -208,11 +208,11 @@ if($limitbyip){
 ?>
 
 	
-<table class="tab-content" id="tb1" cellspacing="5" width="100%"<?php if($limitbyip){if($trheute>$maximum_free_downloads){print ' style="display:none;"';}}?>>
+<table class="tab-content" id="tb1" cellspacing="5" width="100%"<?php if($options['limitbyip']){if($trheute>$options['maximum_free_downloads']){print ' style="display:none;"';}}?>>
 <tbody>
 <tr>
 
-<?php if($is_expired || $is_exceed || !$is_worktime || $storage_exceed || $alert_sloadhigh || $is_dllimit || ($limitbyip && $ada_acc && ($trheute > $maximum_free_downloads))) {
+<?php if($is_expired || $is_exceed || !$is_worktime || $storage_exceed || $alert_sloadhigh || $is_dllimit || ($options['limitbyip'] && $ada_acc && ($trheute > $options['maximum_free_downloads']))) {
 ?>
 <td align="left">
 <p align="left">
@@ -233,7 +233,7 @@ if($limitbyip){
 <div style="padding-top:25px;"></div><input type="submit" value="<?php echo $txt['_transload'];?>">
 
 <?php 
-if(isset($mip_enabled) && $mip_enabled){
+if(isset($options['mip_enabled']) && $options['mip_enabled']){
   $mip_action = "select";  // select || download
   if(file_exists(CLASS_DIR."mip.php")) @include_once(CLASS_DIR."mip.php");
 }
@@ -257,14 +257,14 @@ if(isset($mip_enabled) && $mip_enabled){
 <br><small class='subtitle'><?php echo $txt['user_stats'];?></small>
 
 <?php
-echo ($limitbyip && $ada_acc ? "&nbsp;&nbsp;&nbsp;<small>[<b class='r'>".$txt['limit_leech']."</b>]</small>":"")."<hr>";
+echo ($options['limitbyip'] && $ada_acc ? "&nbsp;&nbsp;&nbsp;<small>[<b class='r'>".$txt['limit_leech']."</b>]</small>":"")."<hr>";
 
-echo ($OnlineVisitor?'<div>User online: <b class="g">' . GetOnline() . '</b></div>':'');
-echo $txt['detect_ip']." <b>$ipmu </b>".($logact?"<small class='y'>[logged]</small>":"");
+echo ($options['OnlineVisitor']?'<div>User online: <b class="g">' . GetOnline() . '</b></div>':'');
+echo $txt['detect_ip']." <b>$ipmu </b>".($options['logact']?"<small class='y'>[logged]</small>":"");
 if($ref!=""){echo "<br>Refferer: <small>" . $ref."</small>";}
 
-if($limitbyip && $ada_acc){
-  echo "<br>You have used <b class='c'>$heute</b>&nbsp;out of&nbsp;<b class='c'>$maximum_free_downloads</b> pRemiX per <b class='g'>$delay_per_ip</b> ".$txt['premix_used_3'];
+if($options['limitbyip'] && $ada_acc){
+  echo "<br>You have used <b class='c'>$heute</b>&nbsp;out of&nbsp;<b class='c'>{$options['maximum_free_downloads']}</b> pRemiX per <b class='g'>{$options['delay_per_ip']}</b> ".$txt['premix_used_3'];
 }
 ?>
 </td>
@@ -276,17 +276,17 @@ if($limitbyip && $ada_acc){
 <div style="height:5px;">&nbsp;</div><small class='subtitle'><?php echo $txt['server_stats'];?></small><hr>
 <?php echo $txt['current_storage'];?>&nbsp;<b class="g"><?php echo bytesToKbOrMbOrGb($serverfiles);?></b>&nbsp;&nbsp;&nbsp;
 <?php
-if ($storage_limit > 0) {
-    echo '(Max: <b class="r">' . bytesToKbOrMbOrGb($storage_limit * 1024 * 1024) . '</b>)';
+if ($options['storage_limit'] > 0) {
+    echo '(Max: <b class="r">' . bytesToKbOrMbOrGb($options['storage_limit'] * 1024 * 1024) . '</b>)';
 }
-if ($limitbytraffic) {
+if ($options['limitbytraffic']) {
     echo "<br>" . $txt['current_traffic'] . " <b class='g'>" . bytesToKbOrMbOrGb($cur_trf[0]) . "</b>&nbsp;of&nbsp;<span class=\"s\" title=\"" . $txt['max_traffic'] . "\"><b>" . bytesToKbOrMbOrGb($max_trf) . "</b></span> until <small><span class='g'>$delay</span></small>";
     $cur_trf = get_traffic(TRAFFIC_LST);
-    if ($day_reset_trafic > 0)
-        echo "<br>" . $txt['reset_traffic_remain'] . "&nbsp;<small class=\"s\">" . sec2time(timeremain_traffic($day_reset_trafic, $cur_trf[1])) . "</small>";
+    if ($options['day_reset_trafic'] > 0)
+        echo "<br>" . $txt['reset_traffic_remain'] . "&nbsp;<small class=\"s\">" . sec2time(timeremain_traffic($options['day_reset_trafic'], $cur_trf[1])) . "</small>";
 }
-if ($limit_timework) {
-    echo "<br>" . $gtxt['_timework'] . ": <b class=\"s\">$workstart</b>&nbsp;upto&nbsp;<b class=\"s\">$workend</b>";
+if ($options['limit_timework']) {
+    echo "<br>" . $gtxt['_timework'] . ": <b class=\"s\">{$options['workstart']}</b>&nbsp;upto&nbsp;<b class=\"s\">{$options['workend']}</b>";
 }
 ?>
 </td>
@@ -366,13 +366,13 @@ if($cnt_deleted>0){
 </tr>
 
 <?php
-if($download_dir_is_changeable){
+if($options['download_dir_is_changeable']){
 ?>
 	<tr>
 	<td><input type="checkbox" name="saveto" id="saveto" onClick="javascript:var displ=this.checked?'':'none';document.getElementById('path').style.display=displ;"<?php echo isset($_COOKIE["saveto"]) ? " checked" : ""; ?>>&nbsp;<label for="saveto"><?php echo $gtxt['save_to'];?></label>
 	<table id="path"<?php echo isset($_COOKIE["saveto"]) ? "" : " style=\"display: none;\""; ?>>
 	<tr><td>
-	<?php echo $gtxt['save_path'];?>&nbsp;<input type="text" name="path" size="40" value="<?php echo (isset($_COOKIE["path"]) ? $_COOKIE["path"] : (substr($download_dir, 0, 6) != "ftp://" ? realpath(DOWNLOAD_DIR) : $download_dir)); ?>" <?php echo ($download_dir_is_changeable ? '':'readonly');?>>
+	<?php echo $gtxt['save_path'];?>&nbsp;<input type="text" name="path" size="40" value="<?php echo (isset($_COOKIE["path"]) ? $_COOKIE["path"] : (substr($options['download_dir'], 0, 6) != "ftp://" ? realpath(DOWNLOAD_DIR) : $options['download_dir'])); ?>" <?php echo ($options['download_dir_is_changeable'] ? '':'readonly');?>>
 	</td></tr>
 	</table>
 	</td>
@@ -508,7 +508,7 @@ if ($list && $morethanone) {
 if($list)
  {
   ?>
-<?php if ($show_all === true)
+<?php if ($options['show_all'] === true)
    {
   ?>
 | <a href="javascript:void(0);" onclick="<?php echo (!$ajax_serverfiles? 'showAll()' : 'showAll2()')?>" id="showall"><?php echo $gtxt['_show']."&nbsp;";?>
@@ -536,7 +536,7 @@ if(getCookie("showAll") == 1) {
  }
   else
  {
-  if ($show_all === true)
+  if ($options['show_all'] === true)
     {
     unset($Path);
     ?>
@@ -568,7 +568,7 @@ if($ajax_serverfiles){
 
 else
 {
-  $feat_ajax["ajax_delete"] = (!$disable_to["act_delete"] && $jQ_online ? '1' : '0');
+  $feat_ajax["ajax_delete"] = (!$options['disable_to']["act_delete"] && $jQ_online ? '1' : '0');
 
 // Show List file in table
 if($list)
@@ -584,26 +584,26 @@ if($list)
 <b class="sorttable_nosort"></b>
 </td>
 <td>
-<?php if(!$disable_action) 
+<?php if(!$options['disable_action']) 
  { ?>
   <select name="act" onChange="javascript:void(document.flist.submit());" style="float:left;">
    <option SELECTED="SELECTED"><?php echo $gtxt['action'];?></option>
 <?php echo 
-  (!$disable_to["act_upload"]?'<option value="upload">'.$txt['act_upload'].'</option>':'').
-  (!$disable_to["act_ftp"]?'<option value="ftp">'.$txt['act_ftp'].'</option>':'').
-  (!$disable_to["act_mail"]?'<option value="mail">'.$txt['act_mail'].'</option>':'').
-  (!$disable_to["act_boxes"]?'<option value="boxes">'.$txt['act_boxes'].'</option>':'').
-  (!$disable_to["act_split"]?'<option value="split">'.$txt['act_split'].'</option>':'').
-  (!$disable_to["act_merge"]?'<option value="merge">'.$txt['act_merge'].'</option>':'').
-  (!$disable_to["act_md5"]?'<option value="md5">'.$txt['act_md5']." / Changer".'</option>':'').
-  (!$disable_to["act_pack"]&&(@file_exists(CLASS_DIR."pear.php")||@file_exists(CLASS_DIR."tar.php")) ? "<option value=\"pack\">".$txt['act_pack']."</option>$nn" : "").
-  (!$disable_to["act_zip"]&&(@file_exists(CLASS_DIR."pclzip.php"))?"<option value=\"zip\">".$txt['act_zip']."</option>$nn" : "").
-  (!$disable_to["act_unzip"]&&(@file_exists(CLASS_DIR."unzip.php"))?"<option value=\"unzip\">".$txt['act_unzip']."</option>$nn" : "").
-  (!$disable_to["act_rar"]&&(!$server["is_windows"] && @file_exists(CLASS_DIR."rar.php"))?"<option value=\"rar\">".$txt['act_rar']."</option>$nn" : "").
-  (!$disable_to["act_unrar"]&&(@file_exists(ROOT_DIR.'/rar/rar')||@file_exists(ROOT_DIR.'/rar/unrar'))?"<option value=]\"unrar\">".$txt['act_unrar']."</option>$nn" : "").
-  (!$disable_to["act_rename"] ? "<option value=\"rename\">".$txt['act_rename']."</option>$nn" : "").
-  (!$disable_to["act_mrename"] ? "<option value=\"mrename\">".$txt['act_mrename']."</option>$nn" : "").
-  (!$disable_to["act_delete"] ? "<option value=\"delete\">".$txt['act_delete']."</option>$nn" : "").
+  (!$options['disable_to']["act_upload"]?'<option value="upload">'.$txt['act_upload'].'</option>':'').
+  (!$options['disable_to']["act_ftp"]?'<option value="ftp">'.$txt['act_ftp'].'</option>':'').
+  (!$options['disable_to']["act_mail"]?'<option value="mail">'.$txt['act_mail'].'</option>':'').
+  (!$options['disable_to']["act_boxes"]?'<option value="boxes">'.$txt['act_boxes'].'</option>':'').
+  (!$options['disable_to']["act_split"]?'<option value="split">'.$txt['act_split'].'</option>':'').
+  (!$options['disable_to']["act_merge"]?'<option value="merge">'.$txt['act_merge'].'</option>':'').
+  (!$options['disable_to']["act_md5"]?'<option value="md5">'.$txt['act_md5']." / Changer".'</option>':'').
+  (!$options['disable_to']["act_pack"]&&(@file_exists(CLASS_DIR."pear.php")||@file_exists(CLASS_DIR."tar.php")) ? "<option value=\"pack\">".$txt['act_pack']."</option>$nn" : "").
+  (!$options['disable_to']["act_zip"]&&(@file_exists(CLASS_DIR."pclzip.php"))?"<option value=\"zip\">".$txt['act_zip']."</option>$nn" : "").
+  (!$options['disable_to']["act_unzip"]&&(@file_exists(CLASS_DIR."unzip.php"))?"<option value=\"unzip\">".$txt['act_unzip']."</option>$nn" : "").
+  (!$options['disable_to']["act_rar"]&&(!$server["is_windows"] && @file_exists(CLASS_DIR."rar.php"))?"<option value=\"rar\">".$txt['act_rar']."</option>$nn" : "").
+  (!$options['disable_to']["act_unrar"]&&(@file_exists(ROOT_DIR.'/rar/rar')||@file_exists(ROOT_DIR.'/rar/unrar'))?"<option value=]\"unrar\">".$txt['act_unrar']."</option>$nn" : "").
+  (!$options['disable_to']["act_rename"] ? "<option value=\"rename\">".$txt['act_rename']."</option>$nn" : "").
+  (!$options['disable_to']["act_mrename"] ? "<option value=\"mrename\">".$txt['act_mrename']."</option>$nn" : "").
+  (!$options['disable_to']["act_delete"] ? "<option value=\"delete\">".$txt['act_delete']."</option>$nn" : "").
   '</select>&nbsp;&nbsp;';
  }
 ?>	
@@ -616,11 +616,11 @@ echo ($total_files>0 ? "(".$total_files.' file'.($total_files>1 ? 's' : '').') &
 <td><b><?php echo $gtxt['tabel_sz'];?></b></td>
 <?php
 echo 
-  (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]==1 && $show_column_sfile["md5"] ? '<td><b>' . 'MD5' . '</b></td>':'').
-  (!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) && $_COOKIE['showAll']!=1) ? ($show_column_sfile["downloadlink"] ? '<td><b>'.$txt['tabel_dl'].'</b></td>':'').
-  ($show_column_sfile["comments"] ? '<td><b>'.$txt['tabel_cmt'].'</b></td>' : '') : '').
-  ($show_column_sfile["date"] ? '<td><b>'.$gtxt['tabel_dt'].'</b></td>' : '').
-  ($show_column_sfile["age"] ? '<td><b class="sorttable_nosort">'.$gtxt['tabel_age'].'</b></td>' : '').
+  (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]==1 && $options['show_column_sfile']["md5"] ? '<td><b>' . 'MD5' . '</b></td>':'').
+  (!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) && $_COOKIE['showAll']!=1) ? ($options['show_column_sfile']["downloadlink"] ? '<td><b>'.$txt['tabel_dl'].'</b></td>':'').
+  ($options['show_column_sfile']["comments"] ? '<td><b>'.$txt['tabel_cmt'].'</b></td>' : '') : '').
+  ($options['show_column_sfile']["date"] ? '<td><b>'.$gtxt['tabel_dt'].'</b></td>' : '').
+  ($options['show_column_sfile']["age"] ? '<td><b class="sorttable_nosort">'.$gtxt['tabel_age'].'</b></td>' : '').
   ($feat_ajax["ajax_delete"]=='1' ? '<td><b class="sorttable_nosort">'.$gtxt['act_del'].'</b></td>' : '')
 ?>
 </tr>
@@ -656,7 +656,7 @@ echo
 ?>
 <tr id="brs<?php echo $total_files;?>" class="rowlist" onMouseDown="clk('cek_<?php echo $total_files;?>', this);" onMouseOut="if(document.getElementById('cek_<?php echo $total_files;?>').checked){this.className='rowlist_checked';} else{this.className='rowlist';}" align="center" title="<?php echo xmlentities(basename($file["name"]));?>">
  <td>
-  <?php echo ((!$disable_to["act_rename"] && $ajax_rename) ? '<div id="rename_container" onmouseup="ren(this, \'fn_'.$total_files.'\', \''.$file["date"].'\')"><div class="rename_es"></div></div>':'');?>
+  <?php echo ((!$options['disable_to']["act_rename"] && $ajax_rename) ? '<div id="rename_container" onmouseup="ren(this, \'fn_'.$total_files.'\', \''.$file["date"].'\')"><div class="rename_es"></div></div>':'');?>
   <input type=checkbox name="files[]" id="cek_<?php echo $total_files;?>" value="<?php echo $file["date"];?>" onClick="clk('cek_<?php echo $total_files;?>')">
   </td>
  <td id="fn_<?php echo $total_files;?>"><?php echo "<b><a href=\"". ($inCurrDir ? $Path.str_replace('\\', "/", substr(dirname($file["name"]), strlen(ROOT_DIR)))."/".xmlentities(basename($file["name"])) : $cl_Path["root"]."/".$cl_Path["download"].xmlentities(basename($file["name"]))) . "\">".xmlentities(basename($file["name"]))."</a></b>";?></td>
@@ -664,11 +664,11 @@ echo
  <?php 
  $flink = (isset($file["link"])?$file["link"]:"");
  echo 
-   (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]==1 && $show_column_sfile["md5"] ? "<td class=\"txtmd5\">{$file["md5"]}</td>":null).
-   (!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]!=1) ? ($show_column_sfile["downloadlink"] ? "<td title=\"{$flink}\">".($flink ? "<a href=\"{$flink}\">".trimlink($flink)."</a>" : "").'</td>':'').
-     ($show_column_sfile["comments"] ? '<td>'.(isset($file["comment"]) ? str_replace("\\r\\n", "<br>", $file["comment"]) : "").'</td>':''):'').
-   ($show_column_sfile["date"] ? '<td>'.str_replace(" ","&nbsp;",date("d.m.Y H:i:s", $file["date"])).'</td>':'').
-   ('<td><small>'.$file["age"].'</small></td>').
+   (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]==1 && $options['show_column_sfile']["md5"] ? "<td class=\"txtmd5\">{$file["md5"]}</td>":null).
+   (!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]!=1) ? ($options['show_column_sfile']["downloadlink"] ? "<td title=\"{$flink}\">".($flink ? "<a href=\"{$flink}\">".trimlink($flink)."</a>" : "").'</td>':'').
+     ($options['show_column_sfile']["comments"] ? '<td>'.(isset($file["comment"]) ? str_replace("\\r\\n", "<br>", $file["comment"]) : "").'</td>':''):'').
+   ($options['show_column_sfile']["date"] ? '<td>'.str_replace(" ","&nbsp;",date("d.m.Y H:i:s", $file["date"])).'</td>':'').
+   ($options['show_column_sfile']['age'] ? '<td><small>'.$file['age'].'</small></td>':'').
    ($feat_ajax["ajax_delete"]=="1" ? "<td><a id=\"dL-{$total_files}\" href=\"del.php?d={$_fdkey}&lineid={$total_files}\" rel=\"facebox\"> <img src=\"".IMAGE_DIR."rldel.png\" alt=\"X\"></a></td>" : "")
  ?>
 </tr>
@@ -678,7 +678,7 @@ echo
    } //end foreach
 
 	$n_column = 0;
-	foreach($show_column_sfile as $cocol => $colval){
+	foreach($options['show_column_sfile'] as $cocol => $colval){
       if($colval){
 	    switch($cocol)
 		{
@@ -938,31 +938,31 @@ var show2 = 0;
 <div align="center">
 <?php
 $CNfo = "<hr width=150>";
-if($showAccRsStatus){ // this mean == ($ch_curl == 1 && $exist_accrs && $premix_status)
+if($showAccRsStatus){ // this mean == ($ch_curl == 1 && $exist_accrs && $options['premix_status'])
  $CNfo.= "<div id=\"refresh\" style=\"float:right;\">&nbsp;<a href=\"javascript:void(0)\" title=\"{$gtxt['_refresh']} acc status\" onclick=\"stacc();this.blur();\"><small>{$gtxt['_refresh']}</small></a></div><div id=\"accshowresults\" style=\"display:none;\"></div><div id=\"accwaiting\" align=\"center\" style=\"display:none;\" title=\"please wait...\"></div><hr>";
 }
 
-if($auto_del_time>0){
-	if($auto_del_time<1) {
-	  $auto_del_time = floor(60 * $auto_del_time);
+if($options['auto_del_time']>0){
+	if($options['auto_del_time']<1) {
+	  $options['auto_del_time'] = floor(60 * $options['auto_del_time']);
 	  $txt['premix_used_3'] = "minute(s)";
 	}
-	$CNfo.= "<span class=\"c\">*{$gtxt['_autodel']}:&nbsp;<b class=\"g\">{$auto_del_time}</b>&nbsp;{$txt['premix_used_3']}</span>";
+	$CNfo.= "<span class=\"c\">*{$gtxt['_autodel']}:&nbsp;<b class=\"g\">{$options['auto_del_time']}</b>&nbsp;{$txt['premix_used_3']}</span>";
 }
-if($limitsize>0){
-  $CNfo.= "<br><span class=\"c\">*{$gtxt['_maxfilesize']}:&nbsp;<b class=\"s\">{$limitsize}</b>&nbsp;MB</span>";
+if($options['limitsize']>0){
+  $CNfo.= "<br><span class=\"c\">*{$gtxt['_maxfilesize']}:&nbsp;<b class=\"s\">{$options['limitsize']}</b>&nbsp;MB</span>";
 }
-if($lowlimitsize>0)	{
-  $CNfo.= "<br><span class=\"c\">*{$gtxt['_minfilesize']}:&nbsp;<b class=\"s\">{$lowlimitsize}</b>&nbsp;MB</span>";
+if($options['lowlimitsize']>0)	{
+  $CNfo.= "<br><span class=\"c\">*{$gtxt['_minfilesize']}:&nbsp;<b class=\"s\">{$options['lowlimitsize']}</b>&nbsp;MB</span>";
 }
-if($downloadLimitbyip && $downloadsPerIP > 0){
-  $CNfo.= "<br><span class=\"c\">*{$gtxt['_limitip']}:&nbsp;<b class=\"s\">{$downloadsPerIP}</b> per <b class=\"s\">{$downloadDelayPerIP}</b>s</span>";
+if($options['downloadLimitbyip'] && $options['downloadsPerIP'] > 0){
+  $CNfo.= "<br><span class=\"c\">*{$gtxt['_limitip']}:&nbsp;<b class=\"s\">{$options['downloadsPerIP']}</b> per <b class=\"s\">{$options['downloadDelayPerIP']}</b>s</span>";
 }
-if($pointboost>0){
+if($options['pointboost']>0){
   $CNfo.= "<br><span class=\"c\">*{$gtxt['_pointboost']}:&nbsp;<b class=\"s\">{$txt['_on']}</b></span>";
 }
-if(!empty($add_ext_5city)){
-  $CNfo.= "<br><span class=\"c\">*{$gtxt['_fakeext']}:&nbsp;<b><a style=\"color:red\" href=\"javascript:void(0)\" title=\"{$gtxt['_fakeext_desc']}\">{$add_ext_5city}</a></b></span>";
+if(!empty($options['add_ext_5city'])){
+  $CNfo.= "<br><span class=\"c\">*{$gtxt['_fakeext']}:&nbsp;<b><a style=\"color:red\" href=\"javascript:void(0)\" title=\"{$gtxt['_fakeext_desc']}\">{$options['add_ext_5city']}</a></b></span>";
 }
 $CNfo.= "<hr>";
 
@@ -1003,7 +1003,7 @@ echo "\n</script>";
 </tr>
 </table>
 <div id="preleft_nfo" style="display:none;">
-<?php if($navi_left["server_info"]) {if(@file_exists(CLASS_DIR."sinfo.php")) require_once(CLASS_DIR."sinfo.php");} 
+<?php if($options['navi_left']["server_info"]) {if(@file_exists(CLASS_DIR."sinfo.php")) require_once(CLASS_DIR."sinfo.php");} 
 $time = explode(" ", microtime());
 $endtime = $time[1] + $time[0]; unset($time);
 $totaltime = ($endtime - $begintime);
@@ -1013,7 +1013,7 @@ echo "<div style='padding-left:5px;'><small>{$server['property']}<br>Page Load: 
 <script type="text/javascript">
  var inner_left = document.getElementById('preleft_nfo').innerHTML;
  document.getElementById('left_NFO').innerHTML = inner_left;
- <?php if($limit_cpuload && isset($srvload)){?>
+ <?php if($options['limit_cpuload'] && isset($srvload)){?>
  setTimeout("document.getElementById('srvload').style.display='none'", 2500);
  <?php }?>
 </script>
@@ -1024,11 +1024,11 @@ echo "<div style='padding-left:5px;'><small>{$server['property']}<br>Page Load: 
 </body>
 </html>
 <?php
-if (($_GET["act"] == 'unrar_go') && !$disable_to["act_unrar"]) {
+if (($_GET["act"] == 'unrar_go') && !$options['disable_to']["act_unrar"]) {
   require_once(CLASS_DIR."options/unrar.php");
   unrar_go_go();
 }
-elseif (($_GET["act"] == 'rar_go') && !$disable_to["act_rar"]) {
+elseif (($_GET["act"] == 'rar_go') && !$options['disable_to']["act_rar"]) {
   require_once(CLASS_DIR."options/rar.php");
   rar_go_go();
 }

@@ -1,6 +1,6 @@
 <?php
 function xmail() {
-	global $disable_deleting, $optxt,$list;
+	global $options, $optxt,$list;
 	if (count ( $_GET ["files"] ) < 1) {
 			echo $optxt['select_one_file']."<br><br>";
 		} else {
@@ -29,7 +29,7 @@ function xmail() {
         </tr>
         <tr>
          <td>
-            <input type="checkbox" name="del_ok" <?php if(!$disable_to["act_del"]) echo "checked"; ?> <?php if($disable_to["act_del"]) echo "disabled"; ?>>&nbsp;<?php echo $optxt['del_success'];?>
+            <input type="checkbox" name="del_ok" <?php if(!$options['disable_to']["act_del"]) echo "checked"; ?> <?php if($options['disable_to']["act_del"]) echo "disabled"; ?>>&nbsp;<?php echo $optxt['del_success'];?>
          </td>
         </tr>
         <tr>
@@ -67,7 +67,7 @@ function xmail() {
 }
 
 function mail_go() {
-	global $list, $optxt, $fromaddr, $disable_to;
+	global $list, $optxt, $fromaddr, $options;
 	//require_once (CLASS_DIR . "mail.php");
 	if (! checkmail ( $_GET ["email"] )) {
 		echo $optxt['invalid_email']."<br><br>";
@@ -80,7 +80,7 @@ function mail_go() {
           {
             if(xmail("$fromaddr", $_GET[email], "File ".basename($file["name"]), "File: ".basename($file["name"])."\r\n"."Link: ".$file["link"].($file["comment"] ? "\r\nComments: ".str_replace("\\r\\n", "\r\n", $file["comment"]) : ""), $file["name"], $_GET["partSize"], $_GET["method"]))
               {
-               if ($_GET["del_ok"] && !$disable_to["act_del"])
+               if ($_GET["del_ok"] && !$options['disable_to']["act_del"])
                   {
                    if(@unlink($file["name"]))
                      {

@@ -1,6 +1,6 @@
 <?php
 function _split() {
-	global $PHP_SELF, $optxt,$list, $download_dir_is_changeable, $disable_deleting;
+	global $PHP_SELF, $optxt,$list, $options, $disable_deleting;
 	if (count ( $_GET ["files"] ) < 1) {
 		echo $optxt['select_one_file']."<br><br>";
 	} else {
@@ -32,7 +32,7 @@ function _split() {
                   </tr>
                   <tr>
                     <td>
-                      <input type="checkbox" name="del_ok" <?php if(!$disable_to["act_del"]) echo "checked"; ?> <?php if($disable_to["act_del"]) echo "disabled"; ?>>&nbsp;<?php echo $optxt['del_source_aft_split'];?>
+                      <input type="checkbox" name="del_ok" <?php if(!$options['disable_to']["act_del"]) echo "checked"; ?> <?php if($options['disable_to']["act_del"]) echo "disabled"; ?>>&nbsp;<?php echo $optxt['del_source_aft_split'];?>
                     </td>
                   </tr>
                   <tr>
@@ -67,12 +67,12 @@ function _split() {
 }
 
 function split_go() {
-	global $list, $optxt,$download_dir, $download_dir_is_changeable, $disable_deleting;
+	global $list, $optxt,$options;
     for($i = 0; $i < count($_GET["files"]); $i++) {
       $split_ok = true;
       $file = $list[$_GET["files"][$i]];
       $partSize = round(($_GET["partSize"][$i]) * 1024 * 1024);
-      $saveTo = ($download_dir_is_changeable ? stripslashes($_GET["saveTo"][$i]) : realpath($download_dir)).'/';
+      $saveTo = ($options['download_dir_is_changeable'] ? stripslashes($_GET["saveTo"][$i]) : realpath($options['download_dir'])).'/';
       $dest_name = basename($file["name"]);
       $fileSize = filesize($file["name"]);
       $totalParts = ceil($fileSize / $partSize);
@@ -142,7 +142,7 @@ function split_go() {
         }
         fclose($split_source);
         if ($split_ok) {
-          if ($_GET["del_ok"] && !$disable_to["act_del"]) {
+          if ($_GET["del_ok"] && !$options['disable_to']["act_del"]) {
             if(@unlink($file["name"])) {
               unset($list[$_GET["files"][$i]]);
               echo $optxt["source_del"]."<br><br>";

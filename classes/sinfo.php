@@ -73,7 +73,7 @@ if (!defined('RAPIDLEECH')) {
             function sload_winosname() {
                 $wUnameB = php_uname("v");
                 $wUnameBM = php_uname("r");
-                $wUnameB = preg_replace("@build @", "", $wUnameB);
+                $wUnameB = preg_replace("@build @i", "", $wUnameB);
                 if ($wUnameBM == "5.0" && ($wUnameB == "2195")) {
                     $wVer = "Windows 2000";
                 }
@@ -103,9 +103,9 @@ if (!defined('RAPIDLEECH')) {
               $osbuild = php_uname('r');
               }
              */ {
-                global $timezone;
-                //if(!isset($timezone)) $timezone = 7;
-                $zone = 3600 * $timezone;
+                global $options;
+                //if(!isset($options['timezone'])) $options['timezone'] = 7;
+                $zone = 3600 * $options['timezone'];
                 $unix_now = strtotime(date("d M Y H:i:s", time() - date("Z") + $zone));
                 $thetimeis = getdate($unix_now);
                 //$thetimeis = getdate(date("d-m-Y H:i:s", $unix_now));
@@ -125,7 +125,7 @@ if (!defined('RAPIDLEECH')) {
 
                 //if ($os == "windows"){
                 if ($server["is_windows"]) {
-                    if ($cpuUsageNFO) {
+                    if ($options['cpuUsageNFO']) {
                         if ($nocpus == 0 || $loadcpu == '') {
                             $cpulast = 0;
                             $wmi = new COM("Winmgmts://");
@@ -135,11 +135,11 @@ if (!defined('RAPIDLEECH')) {
                                 $nocpus++;
                                 $loadcpu.= " ~" . color_cpu($cpulast) . "%";
                             }
-                            $alert_sloadhigh = ($cpulast >= $ServerLoadAllowed);
+                            $alert_sloadhigh = ($cpulast >= $options['ServerLoadAllowed']);
                         }
                         echo '<div style="padding-top:3px;"></div><small><span class="c">'; //$loadcpu=''; $c=0;
                         echo '<b>' . $nocpus . ' </b>CPU' . $loadcpu . '</span>&nbsp;' .
-                        ($ServerLoadAllowed > 0 ? '&#187;&nbsp;(' . ($alert_sloadhigh ? '<blink>' : '') . color_cpu($cpulast) . ($alert_sloadhigh ? '</blink>' : '') . ' of <b>' . $ServerLoadAllowed . '</b>)' : '~') . '</small><br>' .
+                        ($options['ServerLoadAllowed'] > 0 ? '&#187;&nbsp;(' . ($alert_sloadhigh ? '<blink>' : '') . color_cpu($cpulast) . ($alert_sloadhigh ? '</blink>' : '') . ' of <b>' . $options['ServerLoadAllowed'] . '</b>)' : '~') . '</small><br>' .
                         '<img src="' . CLASS_DIR . 'bar.php?rating=' . round($cpulast, "2") . '" border="0"><br>';
                     }
                 }  //--end windows os
@@ -197,17 +197,17 @@ if (!defined('RAPIDLEECH')) {
 //--end getCpuUsage
 
 
-                    if ($cpuUsageNFO) {
+                    if ($options['cpuUsageNFO']) {
                         $cpu = getCpuUsage();
                         if ($cpu !== false) {
                             echo '<div style="padding-top:3px;"></div><small><span class="c">';
-                            if ($CpuLoadFormat == "percent") {
+                            if ($options['CpuLoadFormat'] == "percent") {
                                 if ($cpu) {
                                     $cpulast = 100 - $cpu['idle'];
                                 } else {
                                     $cpulast = 0;
                                 }
-                                echo "CPU :: " . color_cpu(round($cpulast, "0")) . "%</span>&nbsp;";  //' (Max allowed: ".$ServerLoadAllowed."%)<br>";
+                                echo "CPU :: " . color_cpu(round($cpulast, "0")) . "%</span>&nbsp;";  //' (Max allowed: ".$options['ServerLoadAllowed']."%)<br>";
                             } else {
                                 $stats = @exec('uptime');
                                 if (!$stats) {
@@ -215,10 +215,10 @@ if (!defined('RAPIDLEECH')) {
                                 }
                                 preg_match('/averages?: ([0-9\.]+),[\s]+([0-9\.]+),[\s]+([0-9\.]+)/', $stats, $regs);
                                 $cpulast = $regs[1];
-                                echo "CPU :: " . color_cpu($cpulast) . "</span>&nbsp;"; //." (Max allowed: ".$ServerLoadAllowed.")<br>";
+                                echo "CPU :: " . color_cpu($cpulast) . "</span>&nbsp;"; //." (Max allowed: ".$options['ServerLoadAllowed'].")<br>";
                             }
-                            $alert_sloadhigh = ($cpulast >= $ServerLoadAllowed);
-                            echo ($ServerLoadAllowed > 0 ? '&#187;&nbsp;(' . ($alert_sloadhigh ? '<blink>' : '') . color_cpu($cpulast) . ($alert_sloadhigh ? '</blink>' : '') . ' of <b>' . $ServerLoadAllowed . '</b>)' : '~') . '</small><br>' .
+                            $alert_sloadhigh = ($cpulast >= $options['ServerLoadAllowed']);
+                            echo ($options['ServerLoadAllowed'] > 0 ? '&#187;&nbsp;(' . ($alert_sloadhigh ? '<blink>' : '') . color_cpu($cpulast) . ($alert_sloadhigh ? '</blink>' : '') . ' of <b>' . $options['ServerLoadAllowed'] . '</b>)' : '~') . '</small><br>' .
                             '<img src="' . CLASS_DIR . 'bar.php?rating=' . round($cpulast, "2") . '" border="0"><br>';
                         }
                     } //--end linux cpuUsageNFO

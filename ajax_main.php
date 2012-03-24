@@ -18,7 +18,7 @@ if (isset($_POST['TBLoad'])) {
  require_once(CONFIG_DIR."config.php");
  require_once(CLASS_DIR."other.php");
 
- define('DOWNLOAD_DIR', (substr($download_dir, 0, 6) == "ftp://" ? '' : $download_dir));
+ define('DOWNLOAD_DIR', (substr($options['download_dir'], 0, 6) == "ftp://" ? '' : $options['download_dir']));
  
 // Check ACC RS Multi and Single ( acc.status )
 if (isset($_POST['accounts']) || isset($_POST['staccounts'])) {

@@ -31,7 +31,7 @@ function boxes() {
     <tr>
 	<td></td>
      <td>
-        <input type="checkbox" name="del_ok" <?php if(!$disable_to["act_del"]) echo "checked"; ?> <?php if($disable_to["act_del"]) echo "disabled"; ?>>&nbsp;<?php echo $optxt['del_success'];?>
+        <input type="checkbox" name="del_ok" <?php if(!$options['disable_to']["act_del"]) echo "checked"; ?> <?php if($options['disable_to']["act_del"]) echo "disabled"; ?>>&nbsp;<?php echo $optxt['del_success'];?>
      </td><td></td>
     </tr>
 	</table>
@@ -85,7 +85,7 @@ function boxes_go() {
           {
             if(xmail("$fromaddr", $v_mail, $optxt['_file']." ".basename($file["name"]), $optxt['_file'].": ".basename($file["name"])."\r\n"."Link: ".$file["link"].($file["comment"] ? "\r\nComments: ".str_replace("\\r\\n", "\r\n", $file["comment"]) : ""), $file["name"], $_GET["partSize"], $_GET["method"]))
               {
-                if ($_GET["del_ok"] && !$disable_to["act_del"])
+                if ($_GET["del_ok"] && !$options['disable_to']["act_del"])
                   {
                    if(@unlink($file["name"]))
                      {

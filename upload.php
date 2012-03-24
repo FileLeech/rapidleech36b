@@ -23,14 +23,14 @@ require_once(CONFIG_DIR."config.php");
 require_once(CLASS_DIR."other.php");
 // Force charset
 $charSet = 'UTF-8';
-define('DOWNLOAD_DIR', (substr($download_dir, 0, 6) == "ftp://" ? '' : $download_dir));
-define('TPL_PATH', 'tpl'. '/' . $csstype . '/');
+define('DOWNLOAD_DIR', (substr($options['download_dir'], 0, 6) == "ftp://" ? '' : $options['download_dir']));
+define('TPL_PATH', 'tpl'. '/' . $options['csstype'] . '/');
 define('IMAGE_DIR', MISC_DIR . TPL_PATH);
 
 header("Content-type: text/html; $charSet");
 
-if ($login===true){
-if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === false)
+if ($options['login']===true){
+if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($options['users'])) === false)
 	{
 		header("WWW-Authenticate: Basic realm=\"".$RL_VER."\"");
 		header("HTTP/1.0 401 Unauthorized");
@@ -74,7 +74,7 @@ if($list){
 <title>Uplot file <?php echo htmlspecialchars(basename($_REQUEST["filename"])); ?> to <?php echo $_REQUEST["uploaded"]; ?></title>
 <style type="text/css">
 <!--
-@import url("<?php print IMAGE_DIR; ?>style_sujancok<?php print $csstype;?>.css");
+@import url("<?php print IMAGE_DIR; ?>style_sujancok<?php print $options['csstype'];?>.css");
 -->
 .tdheadolgo { 
  background: transparent no-repeat url(<?php print IMAGE_DIR;?>rl_lgo.png);

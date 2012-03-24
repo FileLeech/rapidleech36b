@@ -47,8 +47,8 @@ print CREDITS;
 			$nocpus ++;
 		}
 		$cpulast = $cpulast / $nocpus;
-		//if ($cpulast >= $ServerLoadAllowed && ! isset ( $main )) {
-		if ($cpulast >= $ServerLoadAllowed) {
+		//if ($cpulast >= $options['ServerLoadAllowed'] && ! isset ( $main )) {
+		if ($cpulast >= $options['ServerLoadAllowed']) {
 			//html_error ( "Server load too high, come back later." );
 			$alert_sloadhigh = true;
 		}
@@ -64,7 +64,7 @@ print CREDITS;
 			}
 			
 			ob_start ();
-			if ($passthru_allowed) {
+			if ($options['passthru_allowed']) {
 				@passthru ( 'cat ' . $_statPath );
 				$stat = ob_get_contents ();
 				@ob_end_clean ();
@@ -113,7 +113,7 @@ print CREDITS;
 			}
 			return $percentages;
 		}
-		if ($CpuLoadFormat == "percent") {
+		if ($options['CpuLoadFormat'] == "percent") {
 			$cpu = sload_getCpuUsage ();
 			if ($cpu) {
 				$cpulast = 100 - $cpu ['idle'];
@@ -128,8 +128,8 @@ print CREDITS;
 			preg_match ( '/averages?: ([0-9\.]+),[\s]+([0-9\.]+),[\s]+([0-9\.]+)/', $stats, $regs );
 			$cpulast = $regs [1];
 		}
-		//if ($cpulast >= $ServerLoadAllowed && ! isset ( $main )) {
-		if ($cpulast >= $ServerLoadAllowed) {
+		//if ($cpulast >= $options['ServerLoadAllowed'] && ! isset ( $main )) {
+		if ($cpulast >= $options['ServerLoadAllowed']) {
 			//sloadhigh ( "Server load too high, come back later" );
 			$alert_sloadhigh = true;
 		}

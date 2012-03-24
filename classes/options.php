@@ -2,7 +2,7 @@
 if (!defined('RAPIDLEECH'))
   {  require_once("404.php");  exit;  }
   
-if (! $disable_action) {
+if (! $options['disable_action']) {
 
 if(substr($_GET["act"],-3,3)=="_go"){
 echo "

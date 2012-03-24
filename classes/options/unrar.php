@@ -1,7 +1,7 @@
 <?php
 
 function unrar() {
-  global $PHP_SELF, $txt, $optxt, $download_dir, $check_these_before_unzipping, $forbidden_filetypes, $list;
+  global $PHP_SELF, $txt, $optxt, $options, $list;
 	if (count ( $_GET ["files"] ) < 1) {
 		echo $optxt['select_one_file']."<br><br>";
 	} else {
@@ -46,10 +46,10 @@ function unrar_setCheckboxes(act, filestounrar) {
                 &nbsp;
 <?php
     unset ($rar);
-    $rar = new rlRar($file["name"], $check_these_before_unzipping ? $forbidden_filetypes : array('.xxx'));
+    $rar = new rlRar($file["name"], $options['check_these_before_unzipping'] ? $options['forbidden_filetypes'] : array('.xxx'));
     if ($rar->rar_return === false) { echo $optxt['_unrar']; }
     else {
-      $rar_list = $rar->listthem(@$_GET['passwords'][$i], $download_dir, $i);
+      $rar_list = $rar->listthem(@$_GET['passwords'][$i], $options['download_dir'], $i);
       if ($rar_list[0] == 'PASS') { $rar_passl_needed = true; echo $optxt['_passlist']; }
       elseif ($rar_list['NEEDP'] == true) { echo $optxt['_passext']; }
       elseif ($rar_list[0] == 'ERROR') { printf($optxt['_unrarerr'],$rar_list[1].' '.$rar_list[2]); }
@@ -104,7 +104,7 @@ function unrar_setCheckboxes(act, filestounrar) {
 
 
 function unrar_go() {
-  global $PHP_SELF, $optxt, $download_dir, $list;
+  global $PHP_SELF, $optxt, $options, $list;
 	if (count ( $_GET ["files"] ) < 1) {
 		echo $optxt['select_one_file']."<br><br>";
 	} else {
@@ -118,9 +118,9 @@ function unrar_go() {
     $rar_dld_in_webdir = false;
     if (dirname($PHP_SELF.'safe') === '/' || substr(ROOT_DIR, 0 - strlen(dirname($PHP_SELF.'safe'))) == dirname($PHP_SELF.'safe')) {
       $rar_tmp = (dirname($PHP_SELF.'safe') === '/' ? ROOT_DIR.'/' : substr(ROOT_DIR, 0, 0 - strlen(dirname($PHP_SELF.'safe'))).'/');
-      if (strpos(realpath($download_dir), $rar_tmp) === 0) {
+      if (strpos(realpath($options['download_dir']), $rar_tmp) === 0) {
         $rar_dld_in_webdir = true;
-        $rar_dld_webpath = '/'.substr(realpath($download_dir), strlen($rar_tmp)).'/';
+        $rar_dld_webpath = '/'.substr(realpath($options['download_dir']), strlen($rar_tmp)).'/';
       }
     }
   for($i = 0; $i < count($_GET["files"]); $i++) {
@@ -169,7 +169,7 @@ function unrar_go() {
 
 
 function unrar_go_go() {
-  global $optxt, $check_these_before_unzipping, $download_dir, $forbidden_filetypes, $list;
+  global $optxt, $options, $list;
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -185,18 +185,18 @@ function rar_st(elementid, st){
     if (count($_GET['filestounrar'][$i]) == 0) { continue; }
     foreach ($_GET['filestounrar'][$i] as $rar_item) {
       flush();
-      $rar = new rlRar($file["name"], $check_these_before_unzipping ? $forbidden_filetypes : array('.xxx'));
+      $rar = new rlRar($file["name"], $options['check_these_before_unzipping'] ? $options['forbidden_filetypes'] : array('.xxx'));
       if ($rar->rar_return === false) {
 ?>
 <script type="text/javascript">rar_st('<?php echo 'unrar'.$_GET["files"][$i].'-'.str_replace('=', '-', $rar_item); ?>', '<?php echo $optxt['rar_disappear']; ?>');</script>
 <?php
       }
       else {
-        $rar_result = $rar->extract(base64_decode($rar_item), $download_dir, $_GET['passwords'][$i], 'unrar'.$_GET["files"][$i].'-'.str_replace('=', '-', $rar_item), $i);
+        $rar_result = $rar->extract(base64_decode($rar_item), $options['download_dir'], $_GET['passwords'][$i], 'unrar'.$_GET["files"][$i].'-'.str_replace('=', '-', $rar_item), $i);
         echo $rar_result;
         if (strpos($rar_result, ", 'OK')") !== false) {
           _create_list();
-          $rar_tolist = realpath($download_dir).'/'.basename(base64_decode($rar_item));
+          $rar_tolist = realpath($options['download_dir']).'/'.basename(base64_decode($rar_item));
           $time = filemtime($rar_tolist); while (isset($list[$time])) { $time++; }
           $list[$time] = array("name" => $rar_tolist, "size" => bytesToKbOrMbOrGb(filesize($rar_tolist)), "date" => $time);
           if (!updateListInFile($list)) {

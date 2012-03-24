@@ -25,47 +25,47 @@ require_once(CONFIG_DIR . "config.php");
 require_once(CLASS_DIR . "other.php");
 // Load languages set for audl
 $vpage = "audl";
-require_once(LANG_DIR . "language.$lang.inc.php");
+require_once(LANG_DIR . "language.{$options['lang']}.inc.php");
 $charSet = (isset($charSet) && !empty($charSet) ? $charSet : 'charset=UTF-8');
-define('DOWNLOAD_DIR', (substr($download_dir, 0, 6) == "ftp://" ? '' : $download_dir));
-define('TPL_PATH', 'tpl' . '/' . $csstype . '/');
+define('DOWNLOAD_DIR', (substr($options['download_dir'], 0, 6) == "ftp://" ? '' : $options['download_dir']));
+define('TPL_PATH', 'tpl' . '/' . $options['csstype'] . '/');
 define('IMAGE_DIR', MISC_DIR . TPL_PATH);
 
 $ch_curl = (extension_loaded("curl") ? 1 : 0);
 error_reporting(6135);
 //===================
 //Cek ip yg banned || is it listed as authorized ip || check country limit
-if ($limited_edition || $limited_area) {
-    $dlimitation = array($limited_edition, $limited_area);
+if ($options['limited_edition'] || $options['limited_area']) {
+    $dlimitation = array($options['limited_edition'], $options['limited_area']);
     require_once(CLASS_DIR . "limit_district.php");
 }
 
-if (!$forbid_audl) {
-    if ($login === true) {
-        if (!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === false) {
+if (!$options['forbid_audl']) {
+    if ($options['login'] === true) {
+        if (!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($options['users'])) === false) {
             header('WWW-Authenticate: Basic realm="Rx08"');
             header('HTTP/1.0 401 Unauthorized');
-            exit("<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $csstype . ".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<h1>$RL_VER: NuLL</h1>$nn</body>$nn</html>");
+            exit("<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $options['csstype'] . ".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<h1>$RL_VER: NuLL</h1>$nn</body>$nn</html>");
         }
     }
 } else {
-    echo "<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $csstype . ".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>$RL_VER: <br>AuDL Disabled</h1>$nn</body>$nn</html>";
+    echo "<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $options['csstype'] . ".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>$RL_VER: <br>AuDL Disabled</h1>$nn</body>$nn</html>";
     exit();
 }
 
 _create_list();
-if ($downloadLimitbyip) {
+if ($options['downloadLimitbyip']) {
     $FilesDownloaded = 0;
     $StorageTaken = 0;
     $FilesDownloadedPerTime = 0;
     $back = $list;
-    $bshow_all = $show_all;
-    $show_all = false;
+    $bshow_all = $options['show_all'];
+    $options['show_all'] = false;
     _create_list(false);
-    $show_all = $bshow_all;
+    $options['show_all'] = $bshow_all;
     foreach ($list as $k => $file) {
         if (isset($file ['ip']) && $file ['ip'] == get_real_ip()) {
-            if (time () - $downloadDelayPerIP < $file ['date']) {
+            if (time () - $options['downloadDelayPerIP'] < $file ['date']) {
                 $FilesDownloadedPerTime++;
             }
             $FilesDownloaded++;
@@ -81,7 +81,7 @@ if ($downloadLimitbyip) {
 <title>ADL :: <?php echo $RL_VER;?> ::</title>
 <style type="text/css">
 <!--
-@import url("<?php print IMAGE_DIR;?>style_sujancok<?php print $csstype;?>.css");
+@import url("<?php print IMAGE_DIR;?>style_sujancok<?php print $options['csstype'];?>.css");
 -->
 .container td { background-color:#001825; padding:2px;}
 div.closer_btn{ background: transparent no-repeat url(<?php print IMAGE_DIR;?>closer.png);}
@@ -98,46 +98,47 @@ td.backaudl a div{
 </head>
 <body>
 <?php
-if($downloadLimitbyip){
- if ($FilesDownloadedPerTime >= $downloadsPerIP ) { 
-  html_error( "You have exceeded your download limit, you can only download ". $downloadsPerIP ." files in " . sec1time ( $downloadDelayPerIP ), 0);
+if($options['downloadLimitbyip']){
+ if ($FilesDownloadedPerTime >= $options['downloadsPerIP'] ) { 
+  html_error( "You have exceeded your download limit, you can only download ". $options['downloadsPerIP'] ." files in " . sec1time ( $options['downloadDelayPerIP'] ), 0);
  }
 }
 ?>
 <div class="head_container"><center>
-<a href="<?php echo $index_file;?>" alt="Rapidleech 2.3"><div class="tdheadolgo">&nbsp;</div></a></center>
+<a href="<?php echo $options['index_file'];?>" alt="Rapidleech 2.3"><div class="tdheadolgo">&nbsp;</div></a></center>
 </div>
 <center>
 <noscript><p></p><b><?php echo $gtxt['js_disable'];?></b></noscript>
 <?php
-if ($auto_del_time > 0) {
-    echo "<span class=\"c\">" . $gtxt['_autodel'] . ":&nbsp;<b class=\"g\">" . $auto_del_time . "</b>&nbsp;hour" . ($auto_del_time > 1 ? "s" : "") . "</span>";
-    //auto_del($auto_del_time);
-    purge_files($auto_del_time);
+if ($options['auto_del_time'] > 0) {
+    echo "<span class=\"c\">" . $gtxt['_autodel'] . ":&nbsp;<b class=\"g\">" . $options['auto_del_time'] . "</b>&nbsp;hour" . ($options['auto_del_time'] > 1 ? "s" : "") . "</span>";
+    //auto_del($options['auto_del_time']);
+    purge_files($options['auto_del_time']);
 }
-if ($audl > 0) {
-    echo "&nbsp;||&nbsp;<span class=\"c\">Link Allow:&nbsp;<b class=\"g\">" . $audl . "</b>&nbsp;link" . ($audl > 1 ? "s" : "") . "</span>";
+if ($options['audl'] > 0) {
+    echo "&nbsp;||&nbsp;<span class=\"c\">Link Allow:&nbsp;<b class=\"g\">" . $options['audl'] . "</b>&nbsp;link" . ($options['audl'] > 1 ? "s" : "") . "</span>";
 }
-if ($lowlimitsize > 0) {
-    echo "&nbsp;||&nbsp;<span class=\"c\">" . $gtxt['_minfilesize'] . ":&nbsp;<b class=\"s\">" . $lowlimitsize . "</b>&nbsp;MB</span>";
+if ($options['lowlimitsize'] > 0) {
+    echo "&nbsp;||&nbsp;<span class=\"c\">" . $gtxt['_minfilesize'] . ":&nbsp;<b class=\"s\">" . $options['lowlimitsize'] . "</b>&nbsp;MB</span>";
 }
-if ($limitsize > 0) {
-    echo "&nbsp;||&nbsp;<span class=\"c\">" . $gtxt['_maxfilesize'] . ":&nbsp;<b class=\"s\">" . $limitsize . "</b>&nbsp;MB</span>";
+if ($options['limitsize'] > 0) {
+    echo "&nbsp;||&nbsp;<span class=\"c\">" . $gtxt['_maxfilesize'] . ":&nbsp;<b class=\"s\">" . $options['limitsize'] . "</b>&nbsp;MB</span>";
 }
-if (!empty($add_ext_5city)) {
-    echo "&nbsp;||&nbsp;<span class=\"c\">" . $gtxt['_fakeext'] . ":&nbsp;<b><a style=\"color:red;\" href=\"javascript:void(0)\" title=\"Auto rename extension with this\">." . $add_ext_5city . "</a></b></span>";
+if (!empty($options['add_ext_5city'])) {
+    echo "&nbsp;||&nbsp;<span class=\"c\">" . $gtxt['_fakeext'] . ":&nbsp;<b><a style=\"color:red;\" href=\"javascript:void(0)\" title=\"Auto rename extension with this\">." . $options['add_ext_5city'] . "</a></b></span>";
 }
-if ($limit_timework) {
-    echo "<br><span class=\"c\">" . $gtxt['_timework'] . ":&nbsp;</span><b class=\"s\">" . $workstart . "</b>&nbsp;" . $gtxt['_upto'] . "&nbsp;<b class=\"s\">" . $workend . "</b>";
+if ($options['limit_timework']) {
+    echo "<br><span class=\"c\">" . $gtxt['_timework'] . ":&nbsp;</span><b class=\"s\">" . $options['workstart'] . "</b>&nbsp;" . $gtxt['_upto'] . "&nbsp;<b class=\"s\">" . $options['workend'] . "</b>";
 }
 ?>
 
 <?php
 if (isset($_REQUEST["crot"]) && $_REQUEST["crot"] == "step2" && isset($_POST["links"]))
 	{
-		$getlinks=explode("\r\n",trim($_POST["links"]));
+		$getlinks=explode("\r\n", htmlentities(trim($_POST["links"])));
 		foreach($getlinks as $key => $value)
 		{
+      $getlinks[$key] = urlcleaner($getlinks[$key]);
 			if(empty($getlinks[$key])) unset($getlinks[$key]);
 /*			$getlinks[$key] = urlcleaner($getlinks[$key]);
 			if(!preg_match("/^(http(s?):\/\/|ftp:\/\/{1})+[A-Za-z0-9\-_]+\\.+[A-Za-z0-9\.\/%&=\?\-_]+$/i", trim($getlinks[$key]), $mathces)){
@@ -145,26 +146,26 @@ if (isset($_REQUEST["crot"]) && $_REQUEST["crot"] == "step2" && isset($_POST["li
 			}*/
 		}
 		$getlinks = array_values($getlinks);
-		if (!count($getlinks) || (trim($_POST["links"]) == ""))
+		if (!count($getlinks) || (htmlentities(trim($_POST["links"])) == ""))
 		{
 		 echo '<script type="text/javascript">function gotoback(){au=d.location.href; au=au.substring(0, au.indexOf("?")); d.location.href=au;}</script>';
 		 die('<br/><br/><span style="color:red; background-color:#fec; padding:3px; border:2px solid #FFaa00"><b>'.$atxt['not_link'].'</b></span><br>'.
 			'<script type="text/javascript">setTimeout("gotoback()", 1500);</script>');		 
 		}
 		
-		if($audl>0){  // if there's a limitation in audl link submission
-		 if(count($getlinks) > $audl){
+		if($options['audl']>0){  // if there's a limitation in audl link submission
+		 if(count($getlinks) > $options['audl']){
 		 echo '
 <script type="text/javascript">function dopostback(){d.backpost.submit();}</script>
 <form action="'.basename($PHP_SELF).'" name="backpost" id="backpost" method="post">
 <div style="display:none;"><textarea name="bufferlink" id="bufferlink">'.$_POST["links"].'</textarea></div>
 </form>';		 
-$atxt['reach_lim_audl'] = str_replace('%link%', $audl, $atxt['reach_lim_audl']);
+$atxt['reach_lim_audl'] = str_replace('%link%', $options['audl'], $atxt['reach_lim_audl']);
 		 die('<span style="color:red; background-color:#fec; padding:3px; border:2px solid #FFaa00"><b>'.$atxt['reach_lim_audl'].'</b></span><br/><br/><a href="javascript:void(0);" onclick="dopostback()"><b>[ '.$gtxt['back_main'].' ]</b></a>'."\r\n".'</body></html>');
 		 }
 		}
 
-		$start_link= $index_file.'?';
+		$start_link= $options['index_file'].'?';
 		for ($i=0; $i<count($getlinks); $i++)
 			{   $sLnk = $getlinks[$i];
 				$getlinks[$i] = urlcleaner($getlinks[$i]);
@@ -220,13 +221,13 @@ $atxt['reach_lim_audl'] = str_replace('%link%', $audl, $atxt['reach_lim_audl']);
 ?>
 <script type="text/javascript" src="rscheck.js"></script>
 <script type="text/javascript">
-	var audl=<?php echo ($audl > 0 ? $audl : 0);?>; //batas max autodownload
+	var audl=<?php echo ($options['audl'] > 0 ? $options['audl'] : 0);?>; //batas max autodownload
 	var set_delay=0;
 	var delay_=0;
 	var current_dlink=-1;
 	var current_status=-1;
 	var current_iframe=0;
-	var quotaframe = <?php echo (is_numeric($iframealocate) ? (int)$iframealocate : 5);?>;  // How many iframe you will provide
+	var quotaframe = <?php echo (is_numeric($options['iframealocate']) ? (int)$options['iframealocate'] : 5);?>;  // How many iframe you will provide
 	var last_status = new Array();
 	var links = new Array();
 	var idwindow = new Array();
@@ -247,10 +248,10 @@ $atxt['reach_lim_audl'] = str_replace('%link%', $audl, $atxt['reach_lim_audl']);
      return (RE.test(input));
 	}
 	
-<?php if($audl > 0){
+<?php if($options['audl'] > 0){
 // protect audl being hijack with direct set value from url
 ?>	
-function forceAudl(){if(audl!=<?php echo $audl;?>){audl=<?php echo $audl;?>;};setTimeout("forceAudl()", 100);}	
+function forceAudl(){if(audl!=<?php echo $options['audl'];?>){audl=<?php echo $options['audl'];?>;};setTimeout("forceAudl()", 100);}	
 <?php }	?>
 	
 	function chk_readyiframe(){
@@ -299,7 +300,7 @@ function forceAudl(){if(audl!=<?php echo $audl;?>){audl=<?php echo $audl;?>;};se
 			
 			//bypass limit audl links brings auto button disapear, return false
 			if(audl > 0 && links.length > audl){			 
-			   alert('<?php echo str_replace('%link%', $audl, $atxt['reach_lim_audl']);?>');
+			   alert('<?php echo str_replace('%link%', $options['audl'], $atxt['reach_lim_audl']);?>');
 			   d.getElementById('audlbutton').style.display='none';
 			   return false;			 
 			}
@@ -415,7 +416,7 @@ function forceAudl(){if(audl!=<?php echo $audl;?>){audl=<?php echo $audl;?>;};se
 		 var tbody_row = tbody.getElementsByTagName("tr");
 		 link_sisa = eval(audl - tbody_row.length);
 		 if(link_sisa==0 || link_sisa<0){
-		  alert('<?php echo str_replace('%link%', $audl, $atxt['reach_lim_audl']);?>');
+		  alert('<?php echo str_replace('%link%', $options['audl'], $atxt['reach_lim_audl']);?>');
 		  return false;
 		 }
 		}
@@ -603,7 +604,7 @@ var btnaudl;
 		document.getElementById('curmetode').innerHTML = methtxt;
 	}
 
-<?php if($audl > 0){?>
+<?php if($options['audl'] > 0){?>
 forceAudl();
 <?php }?>
 </script>
@@ -651,7 +652,7 @@ forceAudl();
 </form>
 
 <span id="curmetode">Method <b class="g">Queue</b></span>
-<span id="iframealocate" title="Manual Method property">&nbsp;&nbsp;&#8212;&nbsp;&nbsp;IFrame ready: <b class="g" id="iframealocatevalue"><?php echo $iframealocate." of ".$iframealocate?></b></span>
+<span id="iframealocate" title="Manual Method property">&nbsp;&nbsp;&#8212;&nbsp;&nbsp;IFrame ready: <b class="g" id="iframealocatevalue"><?php echo $options['iframealocate']." of ".$options['iframealocate']?></b></span>
 <table style="border:1px solid #666" class="container">
 <tr>
 <td valign="top" class="backaudl">
@@ -689,13 +690,13 @@ forceAudl();
 	}
 	
 //SHOW TIME WORK
-if($limit_timework){
-    $is_worktime = cek_worktime($workstart, $workend);
+if($options['limit_timework']){
+    $is_worktime = cek_worktime($options['workstart'], $options['workend']);
 	$limitmsg="";
 	if(!$is_worktime){
 	  if(!empty($limitmsg)){$limitmsg.="<br>";}$limitmsg.=$gtxt['worktime_alert'];
 	  echo "<div style=\"padding-top:20px;padding-bottom:20px;\"><div class='warn_alert'>$limitmsg</div></div>";
-	  if($server_info){if(@file_exists(CLASS_DIR."sinfo.php")) require_once(CLASS_DIR."sinfo.php");}else echo "<hr>";
+	  if($options['navi_left']['server_info']){if(@file_exists(CLASS_DIR."sinfo.php")) require_once(CLASS_DIR."sinfo.php");}else echo "<hr>";
 	  echo "</body></html>";
 	  exit();
 	
@@ -742,7 +743,7 @@ function highlight(field) {
 
           <table align="center">
 		    <tr>
-			 <td><label><input type="checkbox" id="autochk_lnk" name="autochk_lnk" <?php echo ($autochecklink ? 'checked="checked"':"");?>>&nbsp;<?php echo $atxt['auto_check_link'];?></label>
+			 <td><label><input type="checkbox" id="autochk_lnk" name="autochk_lnk" <?php echo ($options['autochecklink'] ? 'checked="checked"':"");?>>&nbsp;<?php echo $atxt['auto_check_link'];?></label>
 			 </td>
 		    </tr>
             <tr>
@@ -758,7 +759,7 @@ function highlight(field) {
 			<tr><td><label><input type="checkbox" value="on" name=imageshack_acc id=imageshack_acc <?php if (isset($imageshack_acc) && is_array($imageshack_acc)) print ' checked'; ?>>&nbsp;<?php echo $atxt['acc_imgshack'];?></label></td>
 			</tr>
             <?php
-            if ($maysaveto === true)
+            if ($options['maysaveto'] === true)
                     {
             ?>
             <tr>

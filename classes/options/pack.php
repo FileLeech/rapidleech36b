@@ -1,6 +1,6 @@
 <?php
 function rl_pack() {
-	global $list, $optxt, $download_dir_is_changeable, $download_dir, $PHP_SELF;
+	global $list, $optxt, $options, $PHP_SELF;
 	
 	if (count ( $_GET ["files"] ) < 1) {
 		echo $optxt['select_one_file']."<br><br>";
@@ -28,11 +28,11 @@ function rl_pack() {
 			<td><input type="submit" value="Pack" /></td>
 		</tr>
 <?php
-  if ($download_dir_is_changeable) {
+  if ($options['download_dir_is_changeable']) {
 ?>
 		<tr>
 			<td><?php echo $optxt['saveto']; ?>:&nbsp;<input type="text" name="saveTo" size="30"
-			value="<?php echo addslashes ( $download_dir ); ?>" /></td>
+			value="<?php echo addslashes ( $options['download_dir'] ); ?>" /></td>
 		</tr>
 <?php
   }
@@ -44,11 +44,11 @@ function rl_pack() {
 }
 
 function pack_go() {
-	global $list, $download_dir_is_changeable, $download_dir, $optxt;
+	global $list, $options, $optxt;
 	if(count($_GET["files"]) < 1)
    { echo $optxt['select_one_file']."<br><br>"; break; }
 	$arc_name = basename($_POST["arc_name"].'.'.$_POST["arc_ext"]);	
-	$saveTo = ($download_dir_is_changeable ? stripslashes ( $_POST ["saveTo"] [$i] ) : realpath ( $download_dir )) . '/';
+	$saveTo = ($options['download_dir_is_changeable'] ? stripslashes ( $_POST ["saveTo"] [$i] ) : realpath ( $options['download_dir'] )) . '/';
 	$v_list = array();
 	if (!$_POST["arc_name"] || !$_POST["arc_ext"]) {
 		echo $optxt['enter_arc_name']."<br><br>"; break;
@@ -74,7 +74,7 @@ echo "File <b>".$arc_name."</b> ".$optxt['ready_exist']."<br><br>"; break;
 		$tar = new Archive_Tar ( $arc_name );
 		if ($tar->error != '') { echo $tar->error."<br /><br />"; }
 		else {
-			$remove_path = realpath($download_dir).'/';
+			$remove_path = realpath($options['download_dir']).'/';
 			$tar->createModify($v_list, '', $remove_path);
 			if (! file_exists ( $arc_name )) {
 			echo "<b class=\"r\">".$optxt['_error']."</b> ".$optxt['arcv_not_created']."<br><br>"; break;

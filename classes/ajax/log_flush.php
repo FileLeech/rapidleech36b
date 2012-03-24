@@ -4,7 +4,7 @@ if(!defined('RAPIDLEECH')){
 }
 
 if (isset($_POST['dellog']) || isset($_POST['fntrafic'])) {
-  foreach($loginCp as $u=>$p){
+  foreach($options['loginCp'] as $u=>$p){
 	$cp_login[0] = $u;
 	$cp_login[1] = $p;
   }
@@ -17,7 +17,7 @@ if (isset($_POST['dellog']) || isset($_POST['fntrafic'])) {
 	if($authtraf===$postauth){
 	 $fn_trafic = TRAFFIC_LST;
 	 if(@file_exists($fn_trafic)){
-	   $isinya = ($day_reset_trafic>0 ? '0:'.strtotime("now") : '0');
+	   $isinya = ($options['day_reset_trafic']>0 ? '0:'.strtotime("now") : '0');
 	   if(!write_traffic($fn_trafic, $isinya)) {   
 	     echo "&lt;!&gt;";   
 	   }

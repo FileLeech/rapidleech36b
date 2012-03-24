@@ -44,7 +44,7 @@ function unzip() {
 }
 
 function unzip_go() {
-	global $list, $optxt,$forbidden_filetypes, $download_dir, $check_these_before_unzipping;
+	global $list, $optxt,$options;
   $unzip_file = FALSE;
  require_once(CLASS_DIR."unzip.php");
   for($i = 0; $i < count($_GET["files"]); $i++)
@@ -55,7 +55,7 @@ function unzip_go() {
 		$zip = new dUnzip2($file["name"]);
 		//$zip->debug = true;
 		
-		if($check_these_before_unzipping)
+		if($options['check_these_before_unzipping'])
 			{
 			$allf = $zip->getList();
 			foreach($allf as $file => $property)
@@ -71,14 +71,14 @@ function unzip_go() {
 				}
 				
 				$zfiletype = strrchr($newName, ".");
-				if (is_array($forbidden_filetypes) && in_array(strtolower($zfiletype), $forbidden_filetypes))
+				if (is_array($options['forbidden_filetypes']) && in_array(strtolower($zfiletype), $options['forbidden_filetypes']))
 					{
 					exit($optxt['filetype']." $zfiletype ".$optxt['forbidden_unzip']."<script>alert('".$optxt['filetype']." $zfiletype ".$optxt['forbidden_unzip']."');var poslynx, hpath = document.location.href; poslynx = hpath.lastIndexOf('/'); hpath = hpath.substring(0,poslynx+1); window.document.location.href=hpath;</script>");
 					}
 				
 				}
 			}
-		$zip->unzipAll($download_dir);
+		$zip->unzipAll($options['download_dir']);
 		if($zip->getList() != false){
 			echo "<b>".$file["name"]."</b>&nbsp;".$optxt['unzip_success']."<br>";
 		}

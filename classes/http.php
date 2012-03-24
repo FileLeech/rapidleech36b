@@ -5,7 +5,7 @@ if (!defined('RAPIDLEECH')) {
 }
 
 if (!defined("LANG_DIR")) define("LANG_DIR", "languages/");
-require_once(LANG_DIR . "language.$lang.inc.php");
+require_once(LANG_DIR . "language.{$options['lang']}.inc.php");
 
 global $htxt, $gtxt;
 
@@ -92,7 +92,7 @@ function is_page($lpage) {
 }
 
 function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveToFile = 0, $proxy = 0, $pauth = 0, $auth = 0, $scheme = "http", $resume_from = 0, $XMLRequest=0) {
-    global $nn, $lastError, $PHP_SELF, $AUTH, $IS_FTP, $FtpBytesTotal, $FtpBytesReceived, $FtpTimeStart, $FtpChunkSize, $Resume, $bytesReceived, $fs, $forbidden_filetypes, $rename_these_filetypes_to, $bw_save, $force_name, $rename_prefix, $rename_suffix, $limitsize, $lowlimitsize, $limitbyip, $ipmu, $ada_acc, $pointboost, $add_ext_5city, $htxt, $gtxt, $mip_enabled, $storage_limit;
+    global $nn, $lastError, $PHP_SELF, $AUTH, $IS_FTP, $FtpBytesTotal, $FtpBytesReceived, $FtpTimeStart, $FtpChunkSize, $Resume, $bytesReceived, $fs, $force_name, $ipmu, $ada_acc, $htxt, $gtxt, $options;
     $scheme.= "://";
 
     if (($post !== 0) && ($scheme == "http://" || $scheme == "https://")) {
@@ -141,7 +141,7 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
 
 //write_file(CONFIG_DIR."request.txt", $request, 0); // add
 
-    if (isset($mip_enabled) && $mip_enabled) {
+    if (isset($options['mip_enabled']) && $options['mip_enabled']) {
         $mip_action = "download";
         echo "<p>Multi IP Enabled</b>...<br />\n";
         if (file_exists(CLASS_DIR . "mip.php")) @include(CLASS_DIR . "mip.php");
@@ -170,7 +170,7 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
             echo "GET: <b>" . $url . "</b>...<br />\n";
         } else {
             echo "<p>" . $htxt['_con_to'] . ": <b>" . $host . "</b> at port <b>" . $port . "</b>...<br />";
-            echo (isset($multi_ip) && $multi_ip ? "using IP: " . $mip_ip . "<br />\n" : "");
+            echo (isset($options['mip_enabled']) && $options['mip_enabled'] ? "using IP: " . $mip_ip . "<br />\n" : "");
         }
     }
 
@@ -227,28 +227,28 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
         $bytesTotal = trim(cut_str($header, "Content-Length:", "\n"));
 
         //check sizelimit feature  (it is in MB)
-        if ($limitsize > 0) {
-            if ($bytesTotal > $limitsize * 1024 * 1024) {
-                $lastError = $htxt['_sorry_tobig'] . ": " . $fileSize = bytesToKbOrMbOrGb($bytesTotal) . " &gt;&gt; " . $htxt['_max_filesize'] . " " . $limitsize . " MB";
+        if ($options['limitsize'] > 0) {
+            if ($bytesTotal > $options['limitsize'] * 1024 * 1024) {
+                $lastError = $htxt['_sorry_tobig'] . ": " . $fileSize = bytesToKbOrMbOrGb($bytesTotal) . " &gt;&gt; " . $htxt['_max_filesize'] . " " . $options['limitsize'] . " MB";
                 return false;
             }
         }
-        if ($lowlimitsize > 0) {
-            if ($bytesTotal < $lowlimitsize * 1024 * 1024) {
-                $lastError = $htxt['_sorry_tosmall'] . ": " . $fileSize = bytesToKbOrMbOrGb($bytesTotal) . " &gt;&gt; " . $htxt['_min_filesize'] . " " . $lowlimitsize . " MB";
+        if ($options['lowlimitsize'] > 0) {
+            if ($bytesTotal < $options['lowlimitsize'] * 1024 * 1024) {
+                $lastError = $htxt['_sorry_tosmall'] . ": " . $fileSize = bytesToKbOrMbOrGb($bytesTotal) . " &gt;&gt; " . $htxt['_min_filesize'] . " " . $options['lowlimitsize'] . " MB";
                 return false;
             }
         }
         // check storage limit (it is in MB)
-        if ($storage_limit > 0) {
+        if ($options['storage_limit'] > 0) {
             $curstorage = calcUsedSpace();
-            if (($curstorage + $bytesTotal) > $storage_limit * 1024 * 1024) {
-                $lastError = $htxt['_sorry_insuficient_storage'] . ": " . $fileSize = bytesToKbOrMbOrGb($curstorage) . " &gt;&gt; " . $htxt['_storage_limit'] . " " . $storage_limit . " MB";
+            if (($curstorage + $bytesTotal) > $options['storage_limit'] * 1024 * 1024) {
+                $lastError = $htxt['_sorry_insuficient_storage'] . ": " . $fileSize = bytesToKbOrMbOrGb($curstorage) . " &gt;&gt; " . $htxt['_storage_limit'] . " " . $options['storage_limit'] . " MB";
                 return false;
             }
         }
 
-        if ($limitbyip) {
+        if ($options['limitbyip']) {
             if ($ada_acc) {
                 $ahost = $host;
                 $hostfile = "hosts.php";
@@ -287,9 +287,9 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
             is_present($page_src, "To avoid creation of corrupted zip files, you cannot create a zip on this torrent until it is done downloading");
         }
 
-        $redir = "";
-        if (trim(preg_match('/[^\-]Location: *(.+)(\r|\n)+/i', $header, $redir))) {
-            $redirect = $redir[1];
+        $options['redir'] = "";
+        if (trim(preg_match('/[^\-]Location: *(.+)(\r|\n)+/i', $header, $options['redir']))) {
+            $redirect = $options['redir'][1];
             $lastError = $htxt['_error_redirectto'] . " [" . $redirect . "]";
             return FALSE;
         }
@@ -327,32 +327,32 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
             }
         }
 
-        if (!empty($add_ext_5city) || !empty($rename_suffix) || !empty($rename_prefix)) {
-            if (!empty($add_ext_5city)) {
-                $ext = str_replace(".", "", $add_ext_5city);
-                $File_Name = basename($saveToFile) . "." . $add_ext_5city;
+        if (!empty($options['add_ext_5city']) || !empty($options['rename_suffix']) || !empty($options['rename_prefix'])) {
+            if (!empty($options['add_ext_5city'])) {
+                $ext = str_replace(".", "", $options['add_ext_5city']);
+                $File_Name = basename($saveToFile) . "." . $options['add_ext_5city'];
             }
-            if (!empty($rename_prefix)) {
-                $File_Name = $rename_prefix . '_' . basename($saveToFile);
+            if (!empty($options['rename_prefix'])) {
+                $File_Name = $options['rename_prefix'] . '_' . basename($saveToFile);
             }
-            if (!empty($rename_suffix)) {
+            if (!empty($options['rename_suffix'])) {
                 $ext = strrchr(basename($saveToFile), ".");
                 $before_ext = explode($ext, basename($saveToFile));
-                $File_Name = $before_ext[0] . '_' . $rename_suffix . $ext;
+                $File_Name = $before_ext[0] . '_' . $options['rename_suffix'] . $ext;
             }
             $saveToFile = dirname($saveToFile) . PATH_SPLITTER . $File_Name;
         }
         $filetype = strrchr($saveToFile, ".");
-        if (is_array($forbidden_filetypes) && in_array(strtolower($filetype), $forbidden_filetypes)) {
-            if ($rename_these_filetypes_to !== false) {
-                $saveToFile = str_replace($filetype, $rename_these_filetypes_to, $saveToFile);
+        if (is_array($options['forbidden_filetypes']) && in_array(strtolower($filetype), $options['forbidden_filetypes'])) {
+            if ($options['rename_these_filetypes_to'] !== false) {
+                $saveToFile = str_replace($filetype, $options['rename_these_filetypes_to'], $saveToFile);
             } else {
                 $lastError = "The filetype $filetype is forbidden to be downloaded";
                 return false;
             }
         }
 
-        if ($pointboost > 0) {
+        if ($options['pointboost'] > 0) {
             global $_COOKIE;
             // get cookie for the last index FileName
             //$idfnbost = md5(basename($saveToFile));
@@ -373,7 +373,7 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
         }
 
 
-        if (@file_exists($saveToFile) && $bw_save) {
+        if (@file_exists($saveToFile) && $options['bw_save']) {
             html_error('Download: <a href="' . DOWNLOAD_DIR . basename($saveToFile) . '">' . basename($saveToFile) . '</a>', 0);
         }
 
@@ -412,7 +412,7 @@ function geturl($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $saveT
 
         $File_Name = basename($saveToFile);
         $ext = "";
-        if (!empty($add_ext_5city)) {
+        if (!empty($options['add_ext_5city'])) {
             $ext = strrchr(basename($saveToFile), ".");
             $File_Name = substr(basename($saveToFile), 0, -strlen($ext));
         }

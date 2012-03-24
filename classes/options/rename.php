@@ -1,6 +1,6 @@
 <?php
 function rl_rename() {
-	global $optxt,$disable_deleting, $list;
+	global $optxt,$options, $list;
 	if (count ( $_GET ["files"] ) < 1) {
 		 echo $optxt['select_one_file']."<br><br>";
 	} elseif ($disable_deleting) {
@@ -43,7 +43,7 @@ function rl_rename() {
 }
 
 function rename_go() {
-	global $optxt,$list, $forbidden_filetypes;
+	global $optxt,$list, $options;
      $smthExists = FALSE;
      for($i = 0; $i < count($_GET["files"]); $i++)
       {
@@ -67,7 +67,7 @@ function rename_go() {
 			
 			
             $filetype = strrchr($newName, ".");                      
-			if (is_array($forbidden_filetypes) && in_array(strtolower($filetype), $forbidden_filetypes))
+			if (is_array($options['forbidden_filetypes']) && in_array(strtolower($filetype), $options['forbidden_filetypes']))
 				{
 				print "The filetype $filetype is forbidden to be renamed<br><br>";
 				}

@@ -5,11 +5,11 @@ if(!defined('RAPIDLEECH')){
 
 if(isset($_POST['ren'])) {
  @clearstatcache();
- global $list, $forbidden_filetypes, $optxt, $timezone; 
+ global $list, $options, $optxt; 
  define('PATH_SPLITTER', (strstr(ROOT_DIR, "\\") ? "\\" : "/"));
  
  $vpage = "index";
- require_once(LANG_DIR."language.$lang.inc.php");
+ require_once(LANG_DIR."language.{$options['lang']}.inc.php");
  _create_list();
  //$charSet = 'charset=ISO-8859-1';
  $charSet = 'charset=UTF-8';
@@ -45,7 +45,7 @@ if(isset($_POST['ren'])) {
   $newName = dirname($oldName) . PATH_SPLITTER . $newName;
   
   $filetype = strrchr($newName, ".");                      
-  if(is_array($forbidden_filetypes) && in_array(strtolower($filetype), $forbidden_filetypes)){
+  if(is_array($options['forbidden_filetypes']) && in_array(strtolower($filetype), $options['forbidden_filetypes'])){
 	// ERROR
 	echo "((suc))0((/suc))<msg>The filetype ".$filetype." is forbidden to be renamed</msg>";
   }

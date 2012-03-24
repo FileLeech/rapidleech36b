@@ -5,15 +5,15 @@ if (!defined('RAPIDLEECH')) {
 }
 
 function auto_del($delay = 0) {
-    global $auto_del_time, $forbidden_filetypes;
+    global $options;
     if ($delay == 0) {
-        $delay = $auto_del_time;
+        $delay = $options['auto_del_time'];
     }
     $current_time = getdate();
     $dir = @dir(DOWNLOAD_DIR);
 
     while (false !== ($file = $dir->read())) {
-        if ($file != "." && $file != ".." && !in_array(strtolower(strrchr($file, ".")), $forbidden_filetypes) && substr($file, -4, 4) != ".htm" && substr($file, -5, 5) != ".html" && $file != FILES_LST && $file != ".htaccess") {
+        if ($file != "." && $file != ".." && !in_array(strtolower(strrchr($file, ".")), $options['forbidden_filetypes']) && substr($file, -4, 4) != ".htm" && substr($file, -5, 5) != ".html" && $file != FILES_LST && $file != ".htaccess") {
             $time = filemtime(DOWNLOAD_DIR . $file);
             if ($delay > 0) {
                 if (($time + ($delay * 60 * 60)) < $current_time["0"]) {
@@ -26,7 +26,7 @@ function auto_del($delay = 0) {
 }
 
 function ipcounter() {
-    global $heute, $delay_per_ip, $ipmu;
+    global $heute, $options, $ipmu;
     $xhandle = @opendir("tmp");
     if ($xhandle) {
         while ($buin = readdir($xhandle)) {
@@ -39,7 +39,7 @@ function ipcounter() {
         if (($ckusr != '') && ($ckusr > $heute)) {
             $heute = $ckusr;
         } else {
-            setcookie('rxyzusr', base64_encode(encEnti((string) $heute)), time() + ($delay_per_ip * 60 * 60));
+            setcookie('rxyzusr', base64_encode(encEnti((string) $heute)), time() + ($options['delay_per_ip'] * 60 * 60));
         }
         closedir($xhandle);
 
@@ -52,7 +52,7 @@ function ipcounter() {
             }
             $xd = filemtime("tmp/$buin");
             $altr = $time - $xd;
-            if ($altr > $delay_per_ip * 60 * 60) {
+            if ($altr > $options['delay_per_ip'] * 60 * 60) {
                 if (is_dir("tmp/$buin")) {
                     rmdir("tmp/$buin");
                 } else {
@@ -138,13 +138,13 @@ function get_real_ip() {
 
 //Check allow / Banned IP Address
 function chk_this_ip($meth, $user_ip) {
-    global $list_allow_ip, $list_baned_ip;
+    global $options;
     $ip_allow_ar = array();
 
     if ($meth == 'is_baned') {
-        $list_ip = $list_baned_ip;
+        $list_ip = $options['list_baned_ip'];
     } elseif ($meth == 'is_allow') {
-        $list_ip = $list_allow_ip;
+        $list_ip = $options['list_allow_ip'];
     }
 
     $ip_allow_ar = explode(',', $list_ip);
@@ -154,7 +154,7 @@ function chk_this_ip($meth, $user_ip) {
     $i = 0;
 
     if ($meth == 'is_allow' && !$ip_allow_ar[$i]) {
-        exit('Terminated.!<br>RL Authorization malfunction:: <b>$list_allow_ip</b> is_empty in (config.php)');
+        exit('Terminated.!<br>RL Authorization malfunction:: <b>'.$options['list_allow_ip'].'</b> is_empty in (config.php)');
     }
 
     while (!$check_is && ($ip_allow_ar[$i])) {
@@ -258,11 +258,11 @@ function mcd($armacc) {
   param:
   $iset : should it set autoDL true or not
   $forceNext: if download found error keep evaluate next link
-  $audl: wot method send from audl.php. eg. sims, queue, manual
+  $options['audl']: wot method send from audl.php. eg. sims, queue, manual
   ========== */
 
 function autoNext($iset, $forceNext, $audl) {
-    global $showautoclose, $timeautoclose;
+    global $options;
     $bfRet = "";
     $bfRet = "\r\n<script type='text/javascript'>\n";
     $bfRet.="try{if(parent.isAuto==true){id=parent.current_dlink;\n";
@@ -290,8 +290,8 @@ function autoNext($iset, $forceNext, $audl) {
             break;
     }
 
-    if (($showautoclose == "true") && $forceNext) {
-        $bfRet.="\r\n<!-- \n var time = " . $timeautoclose . ";\nif(autoDL==true && not_simultan){parent.nextlink(id);}\nfunction vbaccept(){\ntime--;frm = document.vbaccept;\nif(frm)frm.submit.value = 'Auto-Close through '+time+'';\n";
+    if (($options['showautoclose'] == "true") && $forceNext) {
+        $bfRet.="\r\n<!-- \n var time = " . $options['timeautoclose'] . ";\nif(autoDL==true && not_simultan){parent.nextlink(id);}\nfunction vbaccept(){\ntime--;frm = document.vbaccept;\nif(frm)frm.submit.value = 'Auto-Close through '+time+'';\n";
         $bfRet.="if(time>0){window.setTimeout(\"vbaccept()\",1);}\n else \nif(frm){frm.submit.value = 'done';\nfrm.submit.disabled=0;window.close(self);}}\n";
         if ($audl == 'sims') {
             $bfRet.="if(autoDL==true && not_simultan==false){if(window.opener!=null){vbaccept(); var da = document.getElementById('tdone'); da.href='javascript:if(autoDL==true && not_simultan){window.opener.nextlink(id);}window.close(self);'; document.getElementById('txtdone').innerHTML='Done';}}\n\n";
@@ -305,9 +305,9 @@ function autoNext($iset, $forceNext, $audl) {
 }
 
 function cek_worktime($workstart, $workend) {
-    global $timezone;
+    global $options;
     $tdebug = false;
-    $zone = 3600 * $timezone; // GMT +7 ~ Indonesia
+    $zone = 3600 * $options['timezone']; // GMT +7 ~ Indonesia
     $tn = getdate(strtotime(date("d M Y H:i:s", time() - date("Z") + $zone)));
     $dtstr = " Apr 1983 ";
     $tgl = "14";
@@ -365,8 +365,8 @@ function get_traffic($filena) {
 }
 
 function autoreset_traffic($days, $c_traf) {
-    global $timezone;
-    $zone = (3600 * $timezone);
+    global $options;
+    $zone = (3600 * $options['timezone']);
 
     if ($days > 0) {
         $reset_traffic = false;
@@ -400,8 +400,8 @@ function autoreset_traffic($days, $c_traf) {
 }
 
 function upd_traffictime($cur_traffic) {
-    global $timezone;
-    $zone = (3600 * $timezone);
+    global $options;
+    $zone = (3600 * $options['timezone']);
 
     $fn_trafic = TRAFFIC_LST;
     if (@file_exists($fn_trafic)) {
@@ -413,8 +413,8 @@ function upd_traffictime($cur_traffic) {
 }
 
 function timeremain_traffic($days, $start_date) {
-    global $timezone;
-    $zone = (3600 * $timezone);
+    global $options;
+    $zone = (3600 * $options['timezone']);
 
     $unix_now = strtotime("now") + $zone;
     $next_date = strtotime("+" . $days . " day", $start_date);
@@ -448,7 +448,7 @@ function chklatesvisitor($curvisit) {
 }
 
 function saveLogsys($curvisit) {
-    global $ipmu, $ref, $timezone;
+    global $ipmu, $ref, $options;
     if (!file_exists(LOG_PHP)
 
         )@touch(LOG_PHP);
@@ -463,7 +463,7 @@ function saveLogsys($curvisit) {
         $_php = "<?php if(!defined(\"RAPIDLEECH\")){\n require_once(\"404.php\");exit;\n}?>\n";
         //$style = "$_php\n<style>\nbody{\nfont-family:verdana;\n font-size:10px;\n color:#FFFFFF;\n background-color:#010e17;\n background-image:url(background_pm.gif);\n background-repeat:repeat-x;\n}\n.g{color:#00FF00;}\n.t{color:#00FF00;\nfont-size:14px;}\n</style>\n";
         $style = "$_php\n\n";
-        $h = $timezone; //  GMT+7 for Indonesia.
+        $h = $options['timezone']; //  GMT+7 for Indonesia.
         $ms = $h * 60 * 60;
         $gmdate = gmdate("d M Y H:i:s", time() + ($ms));
         $time = ('GMT+' . $h);
@@ -756,13 +756,13 @@ function itung(){if(di>0){ setTimeout("itung()",1000); di--; d.getElementById("t
 }
 
 function html_error($msg, $head = 1) {
-    global $PHP_SELF, $charSet, $gtxt, $csstype, $onGoing, $nn;
+    global $PHP_SELF, $charSet, $gtxt, $options, $onGoing, $nn;
     if ($head == 1) {
         echo('<html>');
         echo('<head>');
         echo('<meta http-equiv="Content-Type" content="text/html; charset=' . $charSet . '">');
         echo('<title>Upps...</title>');
-        echo('<link type="text/css" rel="stylesheet" href="' . IMAGE_DIR . 'style_sujancok' . $csstype . '.css" />');
+        echo('<link type="text/css" rel="stylesheet" href="' . IMAGE_DIR . 'style_sujancok' . $options['csstype'] . '.css" />');
         echo('</head>');
         echo('<body>');
         echo('<div class="head_container" align="center">');
@@ -797,8 +797,8 @@ function html_error($msg, $head = 1) {
 
 // Tambahan retry
 function html_retry($msg, $head = 1, $link, $cook=false) {
-    global $PHP_SELF, $gtxt, $alternatefree, $csstype, $charSet;
-    if (!$alternatefree) {
+    global $PHP_SELF, $gtxt, $options, $charSet;
+    if (!$options['alternatefree']) {
         html_error($msg, $head);
     }
 
@@ -807,7 +807,7 @@ function html_retry($msg, $head = 1, $link, $cook=false) {
         echo('<head>');
         echo('<meta http-equiv="Content-Type" content="text/html; charset=' . $charSet . '">');
         echo('<title>Upps...</title>');
-        echo('<link type="text/css" rel="stylesheet" href="' . IMAGE_DIR . 'style_sujancok' . $csstype . '.css" />');
+        echo('<link type="text/css" rel="stylesheet" href="' . IMAGE_DIR . 'style_sujancok' . $options['csstype'] . '.css" />');
         echo('</head>');
         echo('<body>');
         echo('<div class="head_container" align="center">');
@@ -934,12 +934,12 @@ function count_age($age) {
 }
 
 function _create_list($lynx = false, $medic=false, $d_showall=false) {
-    global $list, $_COOKIE, $show_all, $forbidden_filetypes, $show_column_sfile, $timezone;
+    global $list, $_COOKIE, $options;
     $glist = array();
-    $unix_now = ( time() - date("Z") + (3600 * $timezone));
+    $unix_now = ( time() - date("Z") + (3600 * $options['timezone']));
     if (!$d_showall)
         $d_showall = (isset($_COOKIE["showAll"]) ? $_COOKIE["showAll"] : false);
-    if (($show_all && ($d_showall == 1)) || $medic) {  // Show Everything
+    if (($options['show_all'] && ($d_showall == 1)) || $medic) {  // Show Everything
         if (!defined("ROOT_DIR")) {
             define('ROOT_DIR', realpath("./"));
         }
@@ -949,13 +949,13 @@ function _create_list($lynx = false, $medic=false, $d_showall=false) {
         $totsize = 0;
         $cnt = 0;
         while (false !== ($file = $dir->read())) {
-            if ($file != "." && $file != ".." && is_array($forbidden_filetypes)
-                    && !in_array(strtolower(strrchr($file, ".")), $forbidden_filetypes)
+            if ($file != "." && $file != ".." && is_array($options['forbidden_filetypes'])
+                    && !in_array(strtolower(strrchr($file, ".")), $options['forbidden_filetypes'])
                     && is_file(DOWNLOAD_DIR . $file) && basename($file) != FILES_LST) {
                 $file = DOWNLOAD_DIR . $file;
-                //$time = (($show_column_sfile["date"] || $lynx) ? (($inCurrDir!=TRUE) ? filectime(DOWNLOAD_DIR.basename($file)):filectime($file)) : '0');
+                //$time = (($options['show_column_sfile']["date"] || $lynx) ? (($inCurrDir!=TRUE) ? filectime(DOWNLOAD_DIR.basename($file)):filectime($file)) : '0');
                 $time = (($inCurrDir != TRUE) ? @filemtime(DOWNLOAD_DIR . basename($file)) : @filemtime($file));
-                $unix_zone = ( $time - date("Z") + (3600 * $timezone));
+                $unix_zone = ( $time - date("Z") + (3600 * $options['timezone']));
                 while (isset($glist[$unix_zone])) {
                     $unix_zone++;
                 }
@@ -966,7 +966,7 @@ function _create_list($lynx = false, $medic=false, $d_showall=false) {
                     "date" => $unix_zone,
                     "age" => count_age($agefile),
                 );
-                if ($show_column_sfile["md5"] && !$lynx)
+                if ($options['show_column_sfile']["md5"] && !$lynx)
                     $glist[$unix_zone]["md5"] = md5_file($file);
                 $totsize+=$size;
                 $cnt++;
@@ -989,7 +989,7 @@ function _create_list($lynx = false, $medic=false, $d_showall=false) {
                     foreach ($recfile as $field => $value) {
                         if (in_array($field, array("date", "age", "misc"))) {
                             $time = @filemtime($recfile["name"]);
-                            $unix_zone = ($time != $value ? $time - date("Z") + (3600 * $timezone) : $value);
+                            $unix_zone = ($time != $value ? $time - date("Z") + (3600 * $options['timezone']) : $value);
                             if ($field == "age") {
                                 $agefile = ($unix_now - $unix_zone);
                                 $listReformat[$key]["age"] = count_age($agefile);
@@ -1152,19 +1152,19 @@ function getSize($file) {
 }
 
 function purge_files($delay) {
-    global $timezone;
+    global $options;
     $cnt_deleted = 0;
     if (file_exists(FILES_LST) && is_numeric($delay) && $delay > 0) {
         $files_lst = file(FILES_LST);
         $files_new = "";
-        if (!isset($timezone)) $timezone = 7;
-        $unix_now = ( time() - date("Z") + (3600 * $timezone));
+        if (!isset($options['timezone'])) $options['timezone'] = 7;
+        $unix_now = ( time() - date("Z") + (3600 * $options['timezone']));
         foreach ($files_lst as $files_line) {
             $files_data = unserialize(trim($files_line));
             if (isset($files_data["name"]) && @file_exists($files_data["name"]) && is_file($files_data["name"])) {
                 $filedate = $files_data["date"];
                 //$filedate = @filectime($files_data["name"]);
-                //$unix_zone_filedate = ( $filedate - date("Z") + (3600 * $timezone));
+                //$unix_zone_filedate = ( $filedate - date("Z") + (3600 * $options['timezone']));
                 $unix_zone_filedate = ( $filedate );
                 if (($unix_now - $unix_zone_filedate) >= ($delay * 3600)) {
                     @unlink($files_data["name"]);
@@ -1182,15 +1182,15 @@ function purge_files($delay) {
 }
 
 function purge_files_ip($delay) {
-    global $timezone;
-    $unix_now = ( time() - date("Z") + (3600 * $timezone));
+    global $options;
+    $unix_now = ( time() - date("Z") + (3600 * $options['timezone']));
     if (file_exists(IP_L33CH_L0G) && is_numeric($delay) && $delay > 0) {
         $files_lst = file(IP_L33CH_L0G);
         $files_new = "";
         foreach ($files_lst AS $files_line) {
             $files_data = unserialize(trim($files_line));
             $filedate = @filemtime($files_data["name"]);
-            $unix_zone_filedate = ( $filedate - date("Z") + (3600 * $timezone));
+            $unix_zone_filedate = ( $filedate - date("Z") + (3600 * $options['timezone']));
             if ($unix_now - $unix_zone_filedate >= ($delay * 3600)) {
 
                 //file_put_contents("purge.log", date("d-m-Y H:i:s")." DELETE ".$files_data["name"]."\r\n", FILE_APPEND);

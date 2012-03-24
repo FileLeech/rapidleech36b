@@ -10,7 +10,7 @@ define ('CREDITS', '<small class="small-credits">Sakib Hossain | Slider234 | jms
 define ('IMAGE_DIR', 'misc/tpl/');
 require_once(CONFIG_DIR."config.php");
 require_once(CLASS_DIR."other.php");
-require_once(LANG_DIR."language.$lang.inc.php");
+require_once(LANG_DIR."language.{$options['lang']}.inc.php");
 $nn = "\r\n";
 $rev_num = '36B.Rv7.4';
 $RL_VER = 'Rx08.ii'.$rev_num;
@@ -19,35 +19,35 @@ $charSet = 'UTF-8';
 <html>
 <head>
 <title>Movie Thumbnailer</title>
-<link rel="shortcut icon" type="image/gif" href="<?php echo IMAGE_DIR?><?php echo $csstype;?>/ico_home.gif">
-<link href="<?php echo IMAGE_DIR?><?php echo $csstype;?>/style_sujancok<?php echo $csstype;?>.css" rel="stylesheet" type="text/css" />
+<link rel="shortcut icon" type="image/gif" href="<?php echo IMAGE_DIR?><?php echo $options['csstype'];?>/ico_home.gif">
+<link href="<?php echo IMAGE_DIR?><?php echo $options['csstype'];?>/style_sujancok<?php echo $options['csstype'];?>.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="jscolor/jscolor.js"></script>
 <script type="text/javascript" language="javascript" src="rsajax.js"></script>
 </head>
 <body>
 <div class="head_container"><center>
-<a href="<?php echo $index_file;?>" title="Rapidleech"><img src="<?php echo IMAGE_DIR?><?php echo $csstype;?>/rl_lgo.png" border="0"><h1></h1></a></div><br /><br /><br /></center>
+<a href="<?php echo $options['index_file'];?>" title="Rapidleech"><img src="<?php echo IMAGE_DIR?><?php echo $options['csstype'];?>/rl_lgo.png" border="0"><h1></h1></a></div><br /><br /><br /></center>
 <center><?php
-if (!$navi_left['showmtn'])
+if (!$options['navi_left']['showmtn'])
 {
     exit("<h1>Movie Thumbnailer is Disable</h1>");
 }
-if ($login===true){
-if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === false)
+if ($options['login']===true){
+if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($options['users'])) === false)
 	{
 		header('WWW-Authenticate: Basic realm="Rx08"');
 		header('HTTP/1.0 401 Unauthorized');
 		exit("<h1>$RL_VER: NuLL</h1>");
 	}
 }
-if($limited_edition || $limited_area)
+if($options['limited_edition'] || $options['limited_area'])
 {
-  $dlimitation = array($limited_edition, $limited_area);
+  $dlimitation = array($options['limited_edition'], $options['limited_area']);
   require_once(CLASS_DIR."limit_district.php");
 }
-if($limit_timework)
+if($options['limit_timework'])
 {  
-    $is_worktime = cek_worktime($workstart, $workend); 
+    $is_worktime = cek_worktime($options['workstart'], $options['workend']); 
     exit("<h1>".$gtxt['worktime_alert']."</h1>");
 }
 ?>
@@ -64,7 +64,7 @@ if($limit_timework)
 $exts=array(".3gp", ".3g2", ".asf", ".avi", ".dat", ".divx", ".dsm", ".evo", ".flv", ".m1v", ".m2ts", ".m2v", ".m4a", ".mj2", ".mjpg", ".mjpeg", ".mkv", ".mov", ".moov", ".mp4", ".mpg", ".mpeg", ".mpv", ".nut", ".ogg", ".ogm", ".qt", ".swf", ".ts", ".vob", ".wmv", ".xvid");
 $ext="";
 
-$files = vidlist($download_dir);
+$files = vidlist($options['download_dir']);
 foreach($files as $file)
 {
 	echo '<option value="'.$file.'">'.$file.'</option>';

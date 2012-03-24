@@ -1,6 +1,6 @@
 <?php
 function ftp() {
-	global $list, $optxt, $disable_deleting;
+	global $list, $optxt, $options;
 	if (count ( $_GET ["files"] ) < 1) {
 		echo $optxt['select_one_file']."<br><br>";
 	} else {
@@ -64,7 +64,7 @@ function ftp() {
               </tr>
               <tr>
                 <td>
-                  <input type="checkbox" name="del_ok" <?php if($disable_to["act_del"]) echo "disabled"; ?>>&nbsp;<?php echo $optxt['del_source_aft_upl'];?>
+                  <input type="checkbox" name="del_ok" <?php if($options['disable_to']["act_del"]) echo "disabled"; ?>>&nbsp;<?php echo $optxt['del_source_aft_upl'];?>
                 </td>
               </tr>
             </table>
@@ -104,7 +104,7 @@ function ftp() {
 }
 
 function ftp_go() {
-	global $list, $optxt, $disable_deleting;
+	global $list, $optxt, $options;
 	require_once (CLASS_DIR . "ftp.php");
     $ftp = new ftp();
     if(!$ftp->SetServer($_POST["host"], (int)$_POST["port"]))
@@ -178,7 +178,7 @@ function ftp_go() {
                                      echo "<script>pr(100, '".bytesToKbOrMbOrGb($FtpBytesTotal)."', ".$speed.")</script>\r\n";
                                      flush();
 
-                                     if($_GET["del_ok"] && !$disable_to["act_del"])
+                                     if($_GET["del_ok"] && !$options['disable_to']["act_del"])
                                       {
                                        if(@unlink($file["name"]))
                                         {

@@ -18,7 +18,7 @@ if(isset($_POST['TBLoad'])) {
  
  if(!isset($PHP_SELF)){ $PHP_SELF = !$PHP_SELF ? $_SERVER["PHP_SELF"] : $PHP_SELF;}
  $vpage = "index"; $rn = "\r\n";
- require_once(LANG_DIR."language.$lang.inc.php");
+ require_once(LANG_DIR."language.{$options['lang']}.inc.php");
  
  _create_list();
  $resXML = '';
@@ -32,9 +32,9 @@ if(isset($_POST['TBLoad'])) {
    
    //action files
    $resXML.= '<actions>'.$rn; 
-   if(!$disable_action){
+   if(!$options['disable_action']){
     $resXML.='<option>blank:-1:'.$gtxt['action'].'</option>'.$rn;
-    foreach($disable_to as $act => $val){
+    foreach($options['disable_to'] as $act => $val){
 	 if(!$val){
 	  $goodtogo = false;
 	  switch($act){
@@ -58,11 +58,11 @@ if(isset($_POST['TBLoad'])) {
    
    $feat_ajax = array();
    $ajax_rename_ada = @file_exists("rsajax_ren.js");
-   $feat_ajax["ajax_rename"] = (!$disable_to["act_rename"] && $ajax_rename_ada && !$disable_ajaxren ? '1' : '0');
+   $feat_ajax["ajax_rename"] = (!$options['disable_to']["act_rename"] && $ajax_rename_ada && !$options['disable_ajaxren'] ? '1' : '0');
    $resXML.= '<instantrename>'.($feat_ajax["ajax_rename"]).'</instantrename>'.$rn.$rn;
    
    $jQ_google_api_online = @fopen($jQ_google_api_file, "r");
-   $feat_ajax["ajax_delete"] = (!$disable_to["act_delete"] && $jQ_google_api_online ? '1' : '0');
+   $feat_ajax["ajax_delete"] = (!$options['disable_to']["act_delete"] && $jQ_google_api_online ? '1' : '0');
    $resXML.= '<ajaxdelete>'.($feat_ajax["ajax_delete"]).'</ajaxdelete>'.$rn.$rn;
    
    //querying header
@@ -71,22 +71,22 @@ if(isset($_POST['TBLoad'])) {
    $resXML.= ' <filename>'.$txt['tabel_name'].'</filename>'.$rn;
    $resXML.= ' <filesize>'.$gtxt['tabel_sz'].'</filesize>'.$rn;
    
-   if($_COOKIE['showAll']==1 && $show_column_sfile["md5"]==true){
+   if($_COOKIE['showAll']==1 && $options['show_column_sfile']["md5"]==true){
     $resXML.= ' <filemd5>MD5</filemd5>'.$rn;
    }
-   if($_COOKIE['showAll']!=1 && $show_column_sfile["downloadlink"]==true){   
+   if($_COOKIE['showAll']!=1 && $options['show_column_sfile']["downloadlink"]==true){   
     $resXML.= ' <filelink>'.$txt['tabel_dl'].'</filelink>'.$rn;
    }
-   if($show_column_sfile["comments"]==true){
+   if($options['show_column_sfile']["comments"]==true){
     $resXML.= ' <filecomment>'.$txt['tabel_cmt'].'</filecomment>'.$rn;
    }
-   if($show_column_sfile["date"]==true){
+   if($options['show_column_sfile']["date"]==true){
     $resXML.= ' <filedate>'.$gtxt['tabel_dt'].'</filedate>'.$rn;
    }
-   if($show_column_sfile["age"]==true){
+   if($options['show_column_sfile']["age"]==true){
     $resXML.= ' <fileage>'.$gtxt['tabel_age'].'</fileage>'.$rn;
    }
-   if($_COOKIE["showAll"]!=1 && $show_column_sfile["ip"]==true){
+   if($_COOKIE["showAll"]!=1 && $options['show_column_sfile']["ip"]==true){
     $resXML.= ' <fileip>'.$gtxt['tabel_ip'].'</fileip>'.$rn; 
    }
    
@@ -125,7 +125,7 @@ if(isset($_POST['TBLoad'])) {
 	$resXML.= ' <filesize>'.$_fsize.'</filesize>'.$rn;
 	   
 	   $_fdate = '';
-	   if($show_column_sfile["date"]==true){
+	   if($options['show_column_sfile']["date"]==true){
 	     $_fdate = str_replace(" ","((space))",date("d.m.Y H:i:s", $file["date"]));
 	     $_fdate = str_replace("&nbsp;","((space))",$_fdate);
 	$resXML.= ' <filedate>'.$_fdate.'</filedate>'.$rn;
@@ -135,13 +135,13 @@ if(isset($_POST['TBLoad'])) {
 	$resXML.= ' <fileage>'.$file["age"].'</fileage>'.$rn;
 	   
 	   $_fmd5 = '';
-	   if($_COOKIE['showAll']==1 && $show_column_sfile["md5"]==true) { 
+	   if($_COOKIE['showAll']==1 && $options['show_column_sfile']["md5"]==true) { 
 	    $_fmd5 = $file["md5"];
 	$resXML.= ' <filemd5>'.$_fmd5.'</filemd5>'.$rn;
 	   }
 	   
 	   $_flink = ''; $_flinktr = '';
-	   if($_COOKIE["showAll"]!=1 && $show_column_sfile["downloadlink"]==true){
+	   if($_COOKIE["showAll"]!=1 && $options['show_column_sfile']["downloadlink"]==true){
 		if($file["link"]==''){
 		 $filelink = '#';
 		 $trfilelink = ' ';
@@ -154,13 +154,13 @@ if(isset($_POST['TBLoad'])) {
 	   }
 	   
 	   $_fcomment = '';
-	   if($show_column_sfile["comments"]==true && $file["comment"]){
+	   if($options['show_column_sfile']["comments"]==true && $file["comment"]){
 	    $_fcomment = str_replace("\\r\\n", "<br/>", $file["comment"]);
 	$resXML.= ' <filecomment>'.$_fcomment.'</filecomment>'.$rn;
 	   }	
 	   
 	   $_fip = '';
-	   if($_COOKIE["showAll"]!=1 && $show_column_sfile["ip"]==true) {
+	   if($_COOKIE["showAll"]!=1 && $options['show_column_sfile']["ip"]==true) {
 	    $_fip = $file["ip"];
 	$resXML.= ' <fileip>'.$_fip.'</fileip>'.$rn;
 	   }
@@ -189,7 +189,7 @@ if(isset($_POST['TBLoad'])) {
       
    //count span column
     $n_column= 0;
-	foreach($show_column_sfile as $cocol => $colval){
+	foreach($options['show_column_sfile'] as $cocol => $colval){
       if($colval){
 	   switch($cocol){
 	     case "ip": // add colspan when not show all & column ip shown

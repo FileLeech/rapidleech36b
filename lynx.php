@@ -26,12 +26,12 @@ require_once(CLASS_DIR."other.php");
 
 // Load languages set for lynx
 $vpage = "lynx";
-require_once(LANG_DIR."language.$lang.inc.php");
+require_once(LANG_DIR."language.{$options['lang']}.inc.php");
 
 $charSet = (isset($charSet) && !empty($charSet) ? $charSet : 'charset=UTF-8');
 
-define('DOWNLOAD_DIR', (substr($download_dir, 0, 6) == "ftp://" ? '' : $download_dir));
-define('TPL_PATH', 'tpl'. '/' . $csstype . '/');
+define('DOWNLOAD_DIR', (substr($options['download_dir'], 0, 6) == "ftp://" ? '' : $options['download_dir']));
+define('TPL_PATH', 'tpl'. '/' . $options['csstype'] . '/');
 define('IMAGE_DIR', MISC_DIR . TPL_PATH);
 
 //$jQ_filename = "http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js";
@@ -42,23 +42,23 @@ $server = getServerPlatf();
 #=====================
 
 //Cek ip yg banned || is it listed as authorized ip || check country limit
-if($limited_edition || $limited_area)
+if($options['limited_edition'] || $options['limited_area'])
 {
-  $dlimitation = array($limited_edition, $limited_area);
+  $dlimitation = array($options['limited_edition'], $options['limited_area']);
   require_once(CLASS_DIR."limit_district.php");
 }
 
-if(!$forbid_lynx){
- if ($login===true){
- if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === false)
+if(!$options['forbid_lynx']){
+ if ($options['login']===true){
+ if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($options['users'])) === false)
 	{
 		header("WWW-Authenticate: Basic realm=\"Rx08\"");
 		header("HTTP/1.0 401 Unauthorized");
-		exit("<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<h1>$RL_VER: NuLL</h1>$nn</body>$nn</html>");
+		exit("<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$options['csstype'].".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<h1>$RL_VER: NuLL</h1>$nn</body>$nn</html>");
 	}
  }
 }else {
- echo "<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>:: $RL_VER :: <br>Lynx Disabled</h1>$nn</body>$nn</html>";
+ echo "<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$options['csstype'].".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>:: $RL_VER :: <br>Lynx Disabled</h1>$nn</body>$nn</html>";
  exit();
 }
 
@@ -96,7 +96,7 @@ function showAll(){
 </script>
 <style type="text/css">
 <!--
-@import url("<?php print IMAGE_DIR;?>style_sujancok<?php print $csstype;?>.css");
+@import url("<?php print IMAGE_DIR;?>style_sujancok<?php print $options['csstype'];?>.css");
 -->
 .tdheadolgo { 
  background: transparent no-repeat url(<?php print IMAGE_DIR;?>rl_lgo.png);
@@ -104,13 +104,13 @@ function showAll(){
 </style>
 </head><body>
 <div class="head_container"><center>
-<a href="<?php echo $index_file;?>" alt="Rapidleech 2.3"><div class="tdheadolgo">&nbsp;</div></a></center>
+<a href="<?php echo $options['index_file'];?>" alt="Rapidleech 2.3"><div class="tdheadolgo">&nbsp;</div></a></center>
 </div>
 <center>
 <?php
 //SHOW TIME WORK
-$is_worktime = cek_worktime($workstart, $workend);
-if(!$is_worktime && $limit_timework){
+$is_worktime = cek_worktime($options['workstart'], $options['workend']);
+if(!$is_worktime && $options['limit_timework']){
   $limitmsg="";
   if(!$is_worktime){
     if(!empty($limitmsg)){$limitmsg.="<br>";}$limitmsg.=$gtxt['worktime_alert'];
@@ -141,7 +141,7 @@ if(isset($list["files"]["totalsize"])){
 if($list)
 {
   $morethanone = (count($list)>1);
-  if ($show_all === true){
+  if ($options['show_all'] === true){
    unset($Path);
   }
 ?>
@@ -163,7 +163,7 @@ var dFile = new Object(); var text = "", thead, tfoot;
 
 <?php 
 
- echo "var _dlpath = '".($download_dir != "" ? "{$download_dir}" : "/")."';{$nn}{$nn}";
+ echo "var _dlpath = '".($options['download_dir'] != "" ? "{$options['download_dir']}" : "/")."';{$nn}{$nn}";
 
  
  foreach($list as $key => $file)
@@ -183,7 +183,7 @@ var dFile = new Object(); var text = "", thead, tfoot;
 	  
   echo 'total_size = "'.$total_size.'";'."$nn";
   echo 'c = "'.$c.'";'."$nn";
-  $lynx_del = ($deletelink_in_lynx && !$disable_to["act_delete"] && $jQ_online);
+  $lynx_del = ($options['deletelink_in_lynx'] && !$options['disable_to']["act_delete"] && $jQ_online);
 ?>
    
    thead = "<table id='intbl' cellpadding='1' cellspacing='1' class='sortable' style='display: none;'>";
@@ -226,7 +226,7 @@ if($list && $morethanone){
  echo "<a href=\"javascript:void(0);\" onclick=\"flist_match_hide();\">{$gtxt['chk_txt_matches']}</a> | ";
 }
 
-if($show_all === true)
+if($options['show_all'] === true)
   {
 ?>
 <a href="javascript:showAll();"><?php echo $gtxt['_show']."&nbsp;";?>
@@ -265,7 +265,7 @@ else
 
 </td></tr>
 </table>
-<script type="text/javascript">var dwindow = '<?php echo '_'.substr(md5(time()),0,7).'_'; ?>'; var Opt = new Array(); Opt = {"nC" : "<?php echo $c;?>", "AdL" : "<?php echo $auto_del_time; ?>", "DelLink" : <?php echo ($lynx_del ? "true" : "false");?>}; trparser();</script>
+<script type="text/javascript">var dwindow = '<?php echo '_'.substr(md5(time()),0,7).'_'; ?>'; var Opt = new Array(); Opt = {"nC" : "<?php echo $c;?>", "AdL" : "<?php echo $options['auto_del_time']; ?>", "DelLink" : <?php echo ($lynx_del ? "true" : "false");?>}; trparser();</script>
 
 <table width="60%" align=center cellpadding="0" cellspacing="0">
 <tbody id="checknavigat" style="DISPLAY: none;">
@@ -283,33 +283,33 @@ else
 <?php }?>
 <tr align=center><td id="usage"><br>
 <?php
-if($auto_del_time>0)
+if($options['auto_del_time']>0)
 	{
-	echo "<span class=\"c\">".$gtxt['_autodel'].":&nbsp;<b class=\"g\">".$auto_del_time."</b>&nbsp;hour".($auto_del_time>1?"s":"")."</span>";
-    //auto_del($auto_del_time);
-    purge_files($auto_del_time);
+	echo "<span class=\"c\">".$gtxt['_autodel'].":&nbsp;<b class=\"g\">".$options['auto_del_time']."</b>&nbsp;hour".($options['auto_del_time']>1?"s":"")."</span>";
+    //auto_del($options['auto_del_time']);
+    purge_files($options['auto_del_time']);
 	}
-if($lowlimitsize>0)
+if($options['lowlimitsize']>0)
 	{
-	echo "&nbsp;||&nbsp;<span class=\"c\">".$gtxt['_minfilesize'].":&nbsp;<b class=\"s\">".$lowlimitsize."</b>&nbsp;MB</span>";
+	echo "&nbsp;||&nbsp;<span class=\"c\">".$gtxt['_minfilesize'].":&nbsp;<b class=\"s\">".$options['lowlimitsize']."</b>&nbsp;MB</span>";
 	}
-if($limitsize>0)
+if($options['limitsize']>0)
 	{
-	echo "&nbsp;||&nbsp;<span class=\"c\">".$gtxt['_maxfilesize'].":&nbsp;<b class=\"s\">".$limitsize."</b>&nbsp;MB</span>";
+	echo "&nbsp;||&nbsp;<span class=\"c\">".$gtxt['_maxfilesize'].":&nbsp;<b class=\"s\">".$options['limitsize']."</b>&nbsp;MB</span>";
 	}
-if(!empty($add_ext_5city))
+if(!empty($options['add_ext_5city']))
 	{
-	echo "&nbsp;||&nbsp;<span class=\"c\">".$gtxt['_fakeext'].":&nbsp;<b><a style=\"color:red;\" href=\"javascript:void(0);\" title=\"Auto rename extension with this\">.$add_ext_5city</a></b></span>";
+	echo "&nbsp;||&nbsp;<span class=\"c\">".$gtxt['_fakeext'].":&nbsp;<b><a style=\"color:red;\" href=\"javascript:void(0);\" title=\"Auto rename extension with this\">.{$options['add_ext_5city']}</a></b></span>";
 	}
-if($limit_timework)
+if($options['limit_timework'])
 	{
-	echo "<br><span class=\"c\">".$gtxt['_timework'].":&nbsp;</span><b class=\"s\">$workstart</b>&nbsp;upto&nbsp;<b class=\"s\">$workend</b>";
+	echo "<br><span class=\"c\">".$gtxt['_timework'].":&nbsp;</span><b class=\"s\">{$options['workstart']}</b>&nbsp;upto&nbsp;<b class=\"s\">{$options['workend']}</b>";
 	}
 ?>
 <br>
 
 <?php
-if($navi_left["server_info"]){
+if($options['navi_left']["server_info"]){
   if(@file_exists(CLASS_DIR."sinfo.php")) {
     require_once(CLASS_DIR."sinfo.php");
 	$time = explode(" ", microtime());

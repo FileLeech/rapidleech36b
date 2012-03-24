@@ -27,7 +27,7 @@ function mrename() {
 }
 
 function mrename_go() {
-	global $optxt, $list, $forbidden_filetypes, $PHP_SELF;
+	global $optxt, $list, $options, $PHP_SELF;
 	if($_GET["yes"] && @trim($_REQUEST[extension]))
 		{	
 			$_REQUEST[extension]=@trim($_REQUEST[extension]);
@@ -41,7 +41,7 @@ function mrename_go() {
 							$file = $list[$_GET["files"][$i]];
 							if(file_exists($file["name"]))
 								{
-								if (is_array($forbidden_filetypes) && in_array('.'.strtolower($_REQUEST[extension]), $forbidden_filetypes))
+								if (is_array($options['forbidden_filetypes']) && in_array('.'.strtolower($_REQUEST[extension]), $options['forbidden_filetypes']))
 									{
 									print "The filetype $filetype is forbidden to be renamed<br><br>";
 									}

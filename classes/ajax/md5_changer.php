@@ -9,7 +9,7 @@ if (isset($_POST['md5fn'])) {
 	$fn = explode(":",$_POST['md5fn']);	
 	$idx = $fn[1];
 	if(is_readable(DOWNLOAD_DIR.($fn[0]))){
-	 if(!in_array(strtolower(strrchr($fn[0], ".")), $forbidden_filetypes)){ $ada = true; }
+	 if(!in_array(strtolower(strrchr($fn[0], ".")), $options['forbidden_filetypes'])){ $ada = true; }
 	}
 	if(!$ada){exit('<b class="r" title="Error or File Not Found!">&lt;!&gt;</b>');} // File not exist
 	

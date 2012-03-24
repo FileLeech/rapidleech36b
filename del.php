@@ -21,20 +21,20 @@ require_once (CLASS_DIR."other.php");
 
 // Load languages set for del
 $vpage = "del";
-require_once(LANG_DIR."language.$lang.inc.php");
+require_once(LANG_DIR."language.{$options['lang']}.inc.php");
 
 $charSet = (isset($charSet) && !empty($charSet) ? $charSet : 'charset=UTF-8');
 //$charSet = 'charset=UTF-8';
 
-define('DOWNLOAD_DIR', (substr($download_dir, 0, 6) == "ftp://" ? '' : $download_dir));
-define('TPL_PATH', 'tpl'. '/' . $csstype . '/');
+define('DOWNLOAD_DIR', (substr($options['download_dir'], 0, 6) == "ftp://" ? '' : $options['download_dir']));
+define('TPL_PATH', 'tpl'. '/' . $options['csstype'] . '/');
 define('IMAGE_DIR', MISC_DIR . TPL_PATH);
 error_reporting(6135);
 header("Content-type: text/html; $charSet");
 
 function notexist() {
-	global $msg, $VERSION, $rev_num, $RL_VER, $csstype, $dtxt;
-	echo "<html><head><title>:: ".$RL_VER." ::</title><meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\"><!--@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");--></style></head><body><br><h1>".$RL_VER.": NoP</h1><center><b class='r'>".$dtxt['_inexist']."</b><br><br><hr style='width:500;'>".$msg."<br>".$VERSION."</center></body></html>";
+	global $msg, $VERSION, $rev_num, $RL_VER, $options, $dtxt;
+	echo "<html><head><title>:: ".$RL_VER." ::</title><meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\"><!--@import url(\"".IMAGE_DIR."style_sujancok".$options['csstype'].".css\");--></style></head><body><br><h1>".$RL_VER.": NoP</h1><center><b class='r'>".$dtxt['_inexist']."</b><br><br><hr style='width:500;'>".$msg."<br>".$VERSION."</center></body></html>";
 	exit ();
 }
 
@@ -65,8 +65,8 @@ if(!isset($_GET['d'])) {
 	  $rotKey = (int)substr($rotKey, 1, strlen($rotKey));
 	  $hashdel = explode(":", trim(base64_decode(rotN($_GET ['d'],-($rotKey)))));
 	  $fileDate = (int) $hashdel[0];
-	  $backupshow_all = $show_all;
-	  $show_all = true;
+	  $backupshow_all = $options['show_all'];
+	  $options['show_all'] = true;
 	  _create_list(true, false, 1);
 	}
 	if(!$list) { 
@@ -76,7 +76,7 @@ if(!isset($_GET['d'])) {
 	  
       { // we load $list from show download mode
 	    unset($list);
-	    $show_all = $backupshow_all;
+	    $options['show_all'] = $backupshow_all;
 	    _create_list(true, false, 2);
 	  }
 	}
@@ -95,7 +95,7 @@ if(!$wajax){
 <meta name="robots" content="noindex, nofollow">
 <style type="text/css">
 <!--
-@import url("<?php print IMAGE_DIR;?>style_sujancok<?php print $csstype;?>.css");
+@import url("<?php print IMAGE_DIR;?>style_sujancok<?php print $options['csstype'];?>.css");
 -->
 .tdheadolgo { 
  background: transparent no-repeat url(<?php print IMAGE_DIR;?>rl_lgo.png);

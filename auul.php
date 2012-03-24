@@ -37,35 +37,35 @@ require_once(CONFIG_DIR."config.php");	// Reads the configuration file, so we ca
 
 // Include other useful functions
 require_once(CLASS_DIR."other.php");
-require_once(HOST_DIR.'download/'."hosts.php");
+require_once(HOST_DIR.'download/hosts.php');
 require_once(CLASS_DIR."http.php");
 
-define('DOWNLOAD_DIR', (substr($download_dir, 0, 6) == "ftp://" ? '' : $download_dir));	// Set the download directory constant
+define('DOWNLOAD_DIR', (substr($options['download_dir'], 0, 6) == "ftp://" ? '' : $options['download_dir']));	// Set the download directory constant
 
-define('TPL_PATH', 'tpl'. '/' . $csstype . '/');
+define('TPL_PATH', 'tpl'. '/' . $options['csstype'] . '/');
 define('IMAGE_DIR', MISC_DIR . TPL_PATH);
 
 // If you set password for your rapidleech site, this asks for the password
 //================
 
 //Cek ip yg banned || is it listed as authorized ip || check country limit
-if($limited_edition || $limited_area)
+if($options['limited_edition'] || $options['limited_area'])
 {
-  $dlimitation = array($limited_edition, $limited_area);
+  $dlimitation = array($options['limited_edition'], $options['limited_area']);
   require_once(CLASS_DIR."limit_district.php");
 }
 
-if(!$forbid_auul){
- if ($login===true){
- if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($users)) === false)
+if(!$options['forbid_auul']){
+ if ($options['login']===true){
+ if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($options['users'])) === false)
 	{
 		header('WWW-Authenticate: Basic realm="Rx08"');
 		header('HTTP/1.0 401 Unauthorized');
-		exit("<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\"><style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<h1>$RL_VER: NuLL</h1>$nn</body>$nn</html>");
+		exit("<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\"><style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$options['csstype'].".css\");$nn-->$nn</style>$nn</head>$nn<body>$nn<h1>$RL_VER: NuLL</h1>$nn</body>$nn</html>");
 	}
  }
 }else {
- echo "<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>:: $RL_VER :: <br>AuUL Disabled</h1>$nn</body>$nn</html>";
+ echo "<html>$nn<head>$nn<title>:: $RL_VER ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$options['csstype'].".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>:: $RL_VER :: <br>AuUL Disabled</h1>$nn</body>$nn</html>";
  exit();
 }
 
@@ -77,7 +77,7 @@ $page = 'auul';
 <title>AuUL :: <?php echo $RL_VER;?> ::</title>
 <style type="text/css">
 <!--
-@import url("<?php print IMAGE_DIR;?>style_sujancok<?php print $csstype;?>.css");
+@import url("<?php print IMAGE_DIR;?>style_sujancok<?php print $options['csstype'];?>.css");
 -->
 .container td {	background-color:#001825; padding:2px;}
 .tdheadolgo { 
@@ -141,7 +141,7 @@ function cleanResidue(){
 </head>
 <body>
 <div class="head_container"><center>
-<a href="<?php echo $index_file;?>" alt="Rapidleech 2.3"><div class="tdheadolgo">&nbsp;</div></a></center>
+<a href="<?php echo $options['index_file'];?>" alt="Rapidleech 2.3"><div class="tdheadolgo">&nbsp;</div></a></center>
 </div>
 <center>
 <?php

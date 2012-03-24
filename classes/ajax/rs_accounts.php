@@ -71,7 +71,7 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts']))
 		if($txtac!=":")
 			{
 			$ipmu = get_real_ip(); $authorized=0;
-			if(in_array($ipmu, $ip_premixstat_list))
+			if(in_array($ipmu, $options['ip_premixstat_list']))
 			{ $return_msg = "<small>Authorized&nbsp;IP&nbsp;detected:&nbsp;".$ipmu."</small>"; $authorized=1; }
 			else{$return_msg = "<small>&nbsp;</small>"; }
 			$detil = "<th title='Expiration date'>Expired</th>";

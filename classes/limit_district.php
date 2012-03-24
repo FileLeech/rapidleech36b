@@ -4,7 +4,7 @@ if (!defined('RAPIDLEECH'))
 
 if(!isset($ipmu)) $ipmu = get_real_ip();
 
-$pesankematian = "<html>$nn<head>$nn<title>:: {$RL_VER} ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$csstype.".css\");$nn-->$nn</style>$nn</head>$nn<body><br>$nn<h1>{$RL_VER}: Hey {$ipmu},";
+$pesankematian = "<html>$nn<head>$nn<title>:: {$RL_VER} ::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; $charSet\"><style type=\"text/css\">$nn<!--$nn@import url(\"".IMAGE_DIR."style_sujancok".$options['csstype'].".css\");$nn-->$nn</style>$nn</head>$nn<body><br>$nn<h1>{$RL_VER}: Hey {$ipmu},";
 
 //Cek ip yg banned
 if($dlimitation[0]){
@@ -34,9 +34,9 @@ if($dlimitation[1]){
   geoip_close($gi);
   
   $msg_district = (isset($country) && $country!="" ? "Welcome" . $list_country_name["{$country}"] : "");
-  $str_arr = str_replace(" ","", trim($allow_CID));
+  $str_arr = str_replace(" ","", trim($options['allow_CID']));
   $ar_allow_CID = ($str_arr!="" ? explode(",", $str_arr) : array());
-  $str_arr = str_replace(" ","", trim($baned_CID));
+  $str_arr = str_replace(" ","", trim($options['baned_CID']));
   $ar_baned_CID = ($str_arr!="" ? explode(",", $str_arr):array());
 
   if(count($ar_baned_CID)>0){

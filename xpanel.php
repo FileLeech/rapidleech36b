@@ -48,12 +48,12 @@ $nn = "\r\n";
 require_once($fileconfig);
 require_once(CLASS_DIR . "other.php");
 //needed in tpl, check if it false,. ajax will not load.
-$ajax_serverfiles = (@file_exists("rsajax.js") && !$disable_ajax);
+$ajax_serverfiles = (@file_exists("rsajax.js") && !$options['disable_ajax']);
 
 $PHP_SELF = !isset($PHP_SELF) ? $_SERVER["PHP_SELF"] : $PHP_SELF;
-$showcpanel2 = $allowcpanel;
+$showcpanel2 = $options['allowcpanel'];
 
-define('TPL_PATH', 'tpl' . '/' . $csstype . '/');
+define('TPL_PATH', 'tpl' . '/' . $options['csstype'] . '/');
 define('IMAGE_DIR', MISC_DIR . TPL_PATH);
 
 $arlang = getArrayfromfile(LANG_DIR, 'language.', '.inc.php', 'file');
@@ -62,11 +62,11 @@ $mip_list = (@file_exists(LOG_DIR . "mip_iplist.txt") ? file_get_contents(LOG_DI
 
 $cp_login = array();
 $defaultcp = false;
-if (!isset($loginCp)) {
-    $loginCp = array('admin' => 'admin');   //admin=>admin
+if (!isset($options['loginCp'])) {
+    $options['loginCp'] = array('admin' => 'admin');   //admin=>admin
     $defaultcp = true;
 } else {
-    foreach ($loginCp as $u => $p) {
+    foreach ($options['loginCp'] as $u => $p) {
         if ($u . $p === 'admin' . 'admin') {
             $defaultcp = true;
         }
@@ -75,14 +75,14 @@ if (!isset($loginCp)) {
     }
 }
 $rl_login = array();
-foreach ($users as $u_rl => $p_rl) {
+foreach ($options['users'] as $u_rl => $p_rl) {
     $rl_login[0] = $u_rl;
     $rl_login[1] = $p_rl;
 }
-if (isset($ip_premixstat_list)) {
+if (isset($options['ip_premixstat_list'])) {
     $cain_ip = '';
-    foreach ($ip_premixstat_list as $key => $value) {
-        $cain_ip.= $ip_premixstat_list[$key];
+    foreach ($options['ip_premixstat_list'] as $key => $value) {
+        $cain_ip.= $options['ip_premixstat_list'][$key];
         $cain_ip.= ", ";
     }
     $cain_ip = substr($cain_ip, 0, strlen($cain_ip) - 2);
@@ -100,17 +100,17 @@ if ($ada_acc) {
 @$task = $_REQUEST["mode"];
 #=========LOGIN Area=========
 if ($showcpanel2) {
-    foreach ($loginCp as $u => $p) {
+    foreach ($options['loginCp'] as $u => $p) {
         if (!empty($u) && !empty($p)) {
             if ($_SERVER["PHP_AUTH_USER"] != $u || $_SERVER["PHP_AUTH_PW"] != $p) {
                 header('WWW-Authenticate: Basic realm="::Rx08 CPanel::"');
                 header('HTTP/1_0 401 Unauthorized');
-                exit("<html>$nn<head>$nn<title>::Rx08 RL-CPanel::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $csstype . ".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>Rx08 RL-CPanel: NuLL</h1>$nn</body>$nn</html>");
+                exit("<html>$nn<head>$nn<title>::Rx08 RL-CPanel::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $options['csstype'] . ".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>Rx08 RL-CPanel: NuLL</h1>$nn</body>$nn</html>");
             }
         }
     }
 } else {
-    echo "<html>$nn<head>$nn<title>:: Rx08 RL-CPanel::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $csstype . ".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>:: Rx08 :: <br>RL-CPanel Disabled</h1>$nn</body>$nn</html>";
+    echo "<html>$nn<head>$nn<title>:: Rx08 RL-CPanel::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $options['csstype'] . ".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>:: Rx08 :: <br>RL-CPanel Disabled</h1>$nn</body>$nn</html>";
     exit();
 }
 #=========END LOGIN Area=========
@@ -387,7 +387,7 @@ function fieldfilter($fpar, $fu, $fp, $ff, $acc = "acc_DL") {
 # Filter level 2; check strict value; raise error if value not valid
 
 function write_config_file($config_file, $s) {
-    global $_debug, $close_config_page, $saved_success, $showpostn, $iserr, $day_reset_trafic;
+    global $_debug, $close_config_page, $saved_success, $showpostn, $iserr, $options;
     $ret_TEXT = '';
     $showpostn = true;
 
@@ -467,7 +467,7 @@ function write_config_file($config_file, $s) {
             }
 
             // saving traffic if changed
-            if ($day_reset_trafic != $_POST['day_reset_trafic']) {
+            if ($options['day_reset_trafic'] != $_POST['day_reset_trafic']) {
                 $cur_trf = get_traffic(TRAFFIC_LST);
                 upd_traffictime($cur_trf[0]);
             }
@@ -486,7 +486,7 @@ function write_config_file($config_file, $s) {
 #============= WRITE CONFIG ================
 
 if ($task == 'editor') {
-    if ($disableadvanceeditor) {
+    if ($options['disableadvanceeditor']) {
         exit("<html><head></head><body>
 <form action='" . basename($PHP_SELF) . "' name='frmmentalback' id='frmmentalback' method='post'>\n
 <input type='hidden' name='_lh' value='KSIAN.deh.GW'>\n
@@ -811,18 +811,162 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             // Build template config.php
             $_config = "<?php\nif (!defined('RAPIDLEECH'))\n  {require_once(\"404.php\");exit;}\n\n";
 
+            $_config .= "\$options = array(\n";
             $_config .= "//for security reason we add this value so you just can set manualy directly to this file\n" .
                     "//whether you want disable/enable advanced editor in xpanel.\n";
-            $_config .= "\$disableadvanceeditor = " . ($disableadvanceeditor == true ? 'true' : 'false') . ";\n";
-            $_config .= "\$xpanel_filename = '" . basename($PHP_SELF) . "'; // u need to allow this file in your htaccess if needed\n\n";
+            $_config .= "'disableadvanceeditor' => " . ($options['disableadvanceeditor'] == true ? 'true' : 'false') . ",\n";
+            $_config .= "'xpanel_filename' => '" . basename($PHP_SELF) . "', // u need to allow this file in your htaccess if needed\n\n";
 
             $_config .= "//set index filename, needed in audl incase you have a different name instead index.php\n";
-            $_config .= "\$index_file = '" . (($index_file != "" && strstr($index_file, ".")) ? "{$index_file}" : "index.php") . "';\n\n";
+            $_config .= "'index_file' => '" . (($options['index_file'] != "" && strstr($options['index_file'], ".")) ? "{$options['index_file']}" : "index.php") . "',\n\n";
 
             $_config .= "###-LOGIN-CONFIG\n";
-            $_config .= "\$allowcpanel =  true; // WARNING, set this to FALSE will Disable access to xpanel.\n";
-            $_config .= "\$loginCp = array('" . $_POST['newusercp'] . "'=>'" . $_POST['newpascp'] . "'); // user=>pass\n\n";
-            $_config .= "\$login = " . (isset($_POST['login']) && $_POST['login'] == 'on' ? 'true' : 'false') . ";\n\$users = array('" . (isset($_POST['user']) ? $_POST['user'] : "") . "' => '" . (isset($_POST['pass']) ? $_POST['pass'] : "") . "');  // user=>pass\n\n";
+            $_config .= "'allowcpanel' =>  true, // WARNING, set this to FALSE will Disable access to xpanel.\n";
+            $_config .= "'loginCp' => array('" . $_POST['newusercp'] . "'=>'" . $_POST['newpascp'] . "'), // user=>pass\n\n";
+            $_config .= "'login' => " . (isset($_POST['login']) && $_POST['login'] == 'on' ? 'true' : 'false') . ",\n'users' => array('" . (isset($_POST['user']) ? $_POST['user'] : "") . "' => '" . (isset($_POST['pass']) ? $_POST['pass'] : "") . "'),  // user=>pass\n\n";
+
+            $_config .= "#-LIMITATION-CONFIG\n";
+            $_config .= "'limitbyip' => " . (isset($_POST['limitbyip']) && $_POST['limitbyip'] == 'on' ? 'true' : 'false') . ", //limit RL by IP; dont forget chmod 777 to folder tmp\n";
+            $_config .= "'maximum_free_downloads' => " . $_POST['max_free_dl'] . ", //how many times it'll granted?\n";
+            $_config .= "'delay_per_ip' => " . $_POST['delayip'] . ", //(in hour) recycle allowable IP\n\n";
+
+            $_config .= "'auto_del_time' => " . $_POST['auto_delet'] . ", //(in hour) delete leeched file\n";
+            $_config .= "'limitsize' => " . $_POST['limitsize'] . ", //(in MB) limit upper-bound of filesize\n";
+            $_config .= "'lowlimitsize' => " . $_POST['lowlimitsize'] . ", //(in MB) limit lower-bound of filesize\n\n";
+
+            $_config .= "'storage_limit' => " . $_POST['storage_limit'] . ", //(in MB) limit your server files storage.  1 * 1024 = 1 GB; \n\n";
+
+            //$_config .= "\$cpulimit = ".$_POST['cpulimit'].";//CPU load percen to limit leeching \n\n";
+
+            $_config .= "'downloadLimitbyip' => " . (isset($_POST['downloadLimitbyip']) && $_POST['downloadLimitbyip'] == 'on' ? 'true' : 'false') . ", //limit RL by IP\n";
+            $_config .= "'downloadsPerIP' => " . $_POST['dl_limit_max'] . ", //how many times it'll granted?\n";
+            $_config .= "'downloadDelayPerIP' => " . $_POST['dl_per_ip'] . ", //(in second)\n\n";
+
+            $_config .= "'audl' => " . $_POST['audl'] . ", //how many link allow to auto-download work ?\n";
+            $_config .= "'auul' => " . $_POST['auul'] . ", //how many file allow to auto-upload work ?\n\n";
+
+            $_config .= "'limitbytraffic' => " . (isset($_POST['limitbytraffic']) && $_POST['limitbytraffic'] == 'on' ? 'true' : 'false') . ", //limit RL by Traffic Flow\n";
+            $_config .= "'max_trafic' => " . $_POST['max_trafic'] . ", // (in MB). eg: 1 GB = 1 * (1024) MB\n";
+            $_config .= "'date_trafic' => '" . $_POST['YetAnotherDate'] . "', // (d-day traffic quota expired). date in dd/mm/YYYY \n";
+            $_config .= "'day_reset_trafic' => " . $_POST['day_reset_trafic'] . ", // auto reset traffic. delay in days; \n\n";
+
+            $_config .= "'limited_edition' => " . (isset($_POST['limited_edition']) && $_POST['limited_edition'] == 'on' ? 'true' : 'false') . ", // limit authorization RL by ip address (banned and allowd list) \n";
+            $_config .= "'list_allow_ip' => '" . $_POST['list_allow_ip'] . "', // White list ip. eg. 111.111.111.111, 255.*.*.*  //--never blank this shit if you set \$options['limited_edition' => true \n";
+            $_config .= "'list_baned_ip' => '" . $_POST['list_baned_ip'] . "', // blacklist ip, u think so?!. eg. 111.111.111.111, 222.*.*.*, 212.212.212.* \n\n";
+
+            $_config .= "'limited_area' => " . (isset($_POST['limited_area']) && $_POST['limited_area'] == 'on' ? 'true' : 'false') . ", // limit authorization RL by ID Country\n";
+            $_config .= "'allow_CID' => '" . $_POST['allow_CID'] . "', // White list Country ID, blank mean all country is allowed. eg. ID, MY; // allow only Indonesia And Malaysia\n";
+            $_config .= "'baned_CID' => '" . $_POST['baned_CID'] . "', // Blacklist Country ID, blank mean no country is banned. eg. US; // all country from US being banned.\n\n";
+
+            $_config .= "'limit_timework' => " . (isset($_POST['limit_timework']) && $_POST['limit_timework'] == 'on' ? 'true' : 'false') . ", // limit your RL by time. Client's Current time depend on (Server timezone)\n";
+            $_config .= "'workstart' => '" . $_POST['workstart'] . "', // Your RL start to work\n";
+            $_config .= "'workend' => '" . $_POST['workend'] . "', // Your RL end to work\n\n";
+
+            $_config .= "'limit_cpuload' => " . ($_POST['cpulimit'] > 0 ? 'true' : 'false') . ", // limit cpu load and task server job\n";
+            $_config .= "'ServerLoadAllowed' => " . $_POST['cpulimit'] . ", // Maximum server load allowed; Disable = 0\n";
+            $_config .= "'CpuLoadFormat' => 'load', // Value = 'load' for load format; 'percent' for percent format\n";
+            $_config .= "((!function_exists('exec')&&!function_exists('shell_exec')) ? \$options['CpuLoadFormat'] = 'percent':null), //CpuLoadFormat must be in percent mode if required functions is not exists\n";
+            $_config .= "'passthru_allowed' => (!function_exists('passthru')?false:true) OR FALSE, // Does your host allows passthru?\n";
+            $_config .= "'MaxServerJob' => " . $_POST['serverjob'] . ", // Maximum server jobs at a time; Disable = 0\n\n";
+
+
+            $_config .= "###-FILE CONFIG\n";
+            $_config .= "'download_dir' => \"" . $_POST['dir'] . "\", // Your downloaded files are saved here;\n";
+            $_config .= "'download_dir_is_changeable' => " . (isset($_POST['dirchange']) && $_POST['dirchange'] == 'on' ? 'true' : 'false') . ", // To allow users to change the download dir ( index page )\n\n";
+            $_config .= "'maysaveto' => " . (isset($_POST['dirchangeaudl']) && $_POST['dirchangeaudl'] == 'on' ? 'true' : 'false') . ", // To allow users to change downloaded files to saved ( in audl )\n\n";
+
+            $_config .= "'forbidden_filetypes' => array('.htaccess', '.htpasswd', '.php', '.php3', '.php4', '.php5', '.phtml', '.asp', '.aspx', '.cgi'),\n";
+            $_config .= "'rename_these_filetypes_to' => '." . $rnfltp . "',\n";
+            $_config .= "'check_these_before_unzipping' => true,\n\n";
+
+            $_config .= "'disable_action' => " . (isset($_POST['disall']) && $_POST['disall'] == 'on' ? 'true' : 'false') . ", //no action menus\n";
+
+            $_config .= "'disable_to' => array( // disabled action files properties\n";
+
+            $field = array("act_upload", "act_ftp", "act_mail", "act_boxes", "act_split", "act_merge", "act_md5", "act_pack", "act_zip", "act_unzip", "act_rar", "act_unrar", "act_rename", "act_mrename", "act_delete");
+            $_config .= fillField($field);
+            $_config .= "),\n\n";
+
+            $_config .= "'show_column_sfile' => array(  // property server_file's column\n";
+            $field = array("md5", "downloadlink", "comments", "date", "age", "ip");
+            $_config .= fillField($field);
+            $_config .= "),\n\n";
+
+            $_config .= "'show_all' => " . ($_POST['showallfiles'] == 'on' ? 'true' : 'false') . ",\n";
+            $_config .= "'bw_save' => " . ($_POST['bandwidthsave'] == 'on' ? 'true' : 'false') . ", \n\n";
+
+            $_config .= "'deletelink_in_lynx' => " . ($_POST['deletelink_in_lynx'] == 'on' ? 'true' : 'false') . ", \n\n";
+
+            $_config .= "#Auto-Rename #\n";
+            $_config .= "'rename_prefix' => '" . $_POST['prefix'] . "',//eg. mysite => mysite_file_name.rar\n";
+            $_config .= "'rename_suffix' => '" . $_POST['suffix'] . "',//eg. mysite => file_name_mysite.rar\n";
+            $_config .= "'add_ext_5city' => '" . $_POST['extension'] . "',//eg. ccpb => file_name.rar.ccpb\n\n";
+
+            $_config .= "###-VIEW-CONFIG\n";
+            $_config .= "'navi_left' => array(\n";
+
+            $field = array("showcpanel", "showplugins", "showaudl", "showauul", "showlynx", "showmtn", "server_info");
+            $_config .= fillField($field);
+            $_config .= "),\n\n";
+
+            $_config .= "###-MOVIE-THUMBNAILER-CONFIG\n";
+            $_config .= "'mtn_col_row' => array(\n";
+            $_config .= "'mtn_colums' => " . $_POST['mtn_cs'] . ",\n";
+            $_config .= "'mtn_rows' => " . $_POST['mtn_rs'] . ",\n";
+            $_config .= "),\n";
+            $_config .= "'mtn_text' => '" . $_POST['mtn_text'] . "',\n";
+            $_config .= "'mtn_bgcolor' => '" . $_POST['bgcolor'] . "',\n";
+            $_config .= "'mtn_quality' => " . $_POST['mtn_quality'] . ",\n";
+            $_config .= "'mtn_edge' => " . $_POST['mtn_edge'] . ",\n";
+            $_config .= "'mtn_video_option' => array (\n";
+            $_config .= "'enable' => " . ($_POST['video_option'] == 'on' ? 'true' : 'false') . ",\n";
+            $_config .= "'txtcolor' => '" . $_POST['txtcolor'] . "',\n";
+            $_config .= "'txtfont' => '" . $_POST['txtfont'] . "',\n";
+            $_config .= "'txtsize' => " . $_POST['txtsize'] . ",\n";
+            $_config .= "),\n";
+            $_config .= "'mtn_time' => array(\n";
+            $_config .= "'enable' => " . ($_POST['mtn_time'] == 'on' ? 'true' : 'false') . ",\n";
+            $_config .= "'tcolor' => '" . $_POST['tcolor'] . "',\n";
+            $_config .= "),\n";
+            $_config .= "\n\n";
+
+            $field = array("forbid_audl", "forbid_auul", "forbid_lynx");
+            $_config .= fillField($field); // not an array sets
+
+            $_config .= "'cpuUsageNFO' => " . (isset($_POST['cpuUsageNFO']) && $_POST['cpuUsageNFO'] == 'on' ? 'true' : 'false') . ",  // require server_info = true\n";
+
+            $_config .= "'OnlineVisitor' => " . (isset($_POST['onlinevisit']) && $_POST['onlinevisit'] == 'on' ? 'true' : 'false') . ", //Show Online Visitor\n\n";
+
+            $_config .= "'premix_status' => " . (isset($_POST['showpremixstatus']) && $_POST['showpremixstatus'] == 'on' ? 'true' : 'false') . ", // enable acc premix status\n";
+            $_config .= "'ip_premixstat_list' => array(" . $cain_ip . "), // trusted ip, can view detil acc.\n\n";
+
+            $_config .= "###-MISC-CONFIG\n";
+            $_config .= "'no_cache' => " . (isset($_POST['nocache']) && $_POST['nocache'] == 'on' ? 'true' : 'false') . ",\n";
+            $_config .= "'redir' => " . (isset($_POST['redirrect']) && $_POST['redirrect'] == 'on' ? 'true' : 'false') . ",\n\n";
+
+
+            $_config .= "'disable_ajax' => " . (isset($_POST['disable_ajax']) && $_POST['disable_ajax'] == 'on' ? 'true' : 'false') . ", //switch to old method, No-Ajax in Serverfiles\n";
+            $_config .= "'disable_ajaxren' => " . (isset($_POST['disable_ajaxren']) && $_POST['disable_ajaxren'] == 'on' ? 'true' : 'false') . ", //toogle ajax instant rename. require: rsajax.js; rsajax_ren.js\n";
+
+            $_config .= "'logact' => " . (isset($_POST['logact']) && $_POST['logact'] == 'on' ? 'true' : 'false') . ", //do log-activity of the users\n";
+            $_config .= "'alternatefree' => " . (isset($_POST['alternatefree']) && $_POST['alternatefree'] == 'on' ? 'true' : 'false') . ", //Auto switch freedownload if premium not good\n";
+
+            $_config .= "'showautoclose' => " . (isset($_POST['auto_cl']) && $_POST['auto_cl'] == 'on' ? 'true' : 'false') . ",//autoclose popup when leeching in audl\n";
+            $_config .= "'timeautoclose' => " . $_POST['auto_close'] . ",\n";
+            $_config .= "'autochecklink' => " . (isset($_POST['autochecklink']) && $_POST['autochecklink'] == 'on' ? 'true' : 'false') . ", // Auto check submited link in audl\n\n";
+
+            $_config .= "'mip_enabled' => " . (isset($_POST['mip_enabled']) && $_POST['mip_enabled'] == 'on' ? 'true' : 'false') . ", //If you need to disable multiple ip support, set to false\n";
+            $_config .= "'mip_arotate' => " . (isset($_POST['mip_arotate']) && $_POST['mip_arotate'] == 'on' ? 'true' : 'false') . ", //Auto change to next ip after start transload process\n\n";
+
+            $_config .= "'iframealocate' => " . $_POST['iframealocate'] . ",//how many iframe to allocate in audl for manual method.\n";
+            $_config .= "'pointboost' => " . $_POST['pointbooster'] . ",//boost your RS-Point with this feature!!\n";
+            $_config .= "'autosubmit' => true,\n\n";
+
+            $_config .= "'timezone' => " . $_POST['timezone'] . ", // set Timezone. It is GMT+(7) for Indonesia.\n";
+            $_config .= "'lang' => '" . $arlang[$_POST['language']] . "', // set Language.\n";
+            //$_config .= "\$arCSS = getArrayfromfile(IMAGE_DIR, 'style_sujancok_', '.css');\n";
+            $_config .= "'csstype' => '" . $arCSS[$_POST['theme']] . "', // set Theme to your RL. eg. _default\n\n";
+            $_config .= ");\n\n";
 
             $_config .= "###-PREMIUM-CONFIG\n\n";
 
@@ -928,7 +1072,12 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             $_config .= fillField_premium("upload_acc", $field, $useulcc);
             $_config .= "\n\n";
 
-            $_config .= "# Acc info & drop down\n";
+            $_config .= "#Secret key for cookie encryption\n";
+            $_config .= "#Make up a random one to protect your premium cookies (max length: 56). Example: \$secretkey = 'UijSY5wjP1Ii'; - DO NOT use this example \$secretkey, or your premium accounts/cookies could be stolen!!\n";
+            $_config .= "#IF THIS IS NOT SET BEFORE YOU USE PREMIUM SERVICES, YOU WILL BE WARNED BY THE RAPIDLEECH SCRIPT. OTHERWISE YOUR PREMIUM ACCOUNTS AND/OR COOKIES COULD BE COMPROMISED!\n";
+            $_config .= "\$secretkey = '" . $_POST['secretkey'] . "';//Place your Secret Key\n\n";
+
+			$_config .= "# Acc info & drop down\n";
             $_config .= "\$ar_host_acc = array(\n";
             $_config .= "'rapidshare_com'       =>  'rapidshare.com',\n";
             $_config .= "'rs_de'          	=>  'rapidshare.de',\n";
@@ -970,150 +1119,6 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             $_config .= "'youtube'       	=>  'youtube.com',\n";
             $_config .= ");\n";
             $_config .= "\n\n";
-
-
-            $_config .= "#-LIMITATION-CONFIG\n";
-            $_config .= "\$limitbyip = " . (isset($_POST['limitbyip']) && $_POST['limitbyip'] == 'on' ? 'true' : 'false') . "; //limit RL by IP; dont forget chmod 777 to folder tmp\n";
-            $_config .= "\$maximum_free_downloads = " . $_POST['max_free_dl'] . "; //how many times it'll granted?\n";
-            $_config .= "\$delay_per_ip = " . $_POST['delayip'] . "; //(in hour) recycle allowable IP\n\n";
-
-            $_config .= "\$auto_del_time = " . $_POST['auto_delet'] . "; //(in hour) delete leeched file\n";
-            $_config .= "\$limitsize = " . $_POST['limitsize'] . "; //(in MB) limit upper-bound of filesize\n";
-            $_config .= "\$lowlimitsize = " . $_POST['lowlimitsize'] . "; //(in MB) limit lower-bound of filesize\n\n";
-
-            $_config .= "\$storage_limit = " . $_POST['storage_limit'] . "; //(in MB) limit your server files storage.  1 * 1024 = 1 GB; \n\n";
-
-            //$_config .= "\$cpulimit = ".$_POST['cpulimit'].";//CPU load percen to limit leeching \n\n";
-
-            $_config .= "\$downloadLimitbyip = " . (isset($_POST['downloadLimitbyip']) && $_POST['downloadLimitbyip'] == 'on' ? 'true' : 'false') . "; //limit RL by IP\n";
-            $_config .= "\$downloadsPerIP = " . $_POST['dl_limit_max'] . "; //how many times it'll granted?\n";
-            $_config .= "\$downloadDelayPerIP = " . $_POST['dl_per_ip'] . "; //(in second)\n\n";
-
-            $_config .= "\$audl = " . $_POST['audl'] . "; //how many link allow to auto-download work ?\n";
-            $_config .= "\$auul = " . $_POST['auul'] . "; //how many file allow to auto-upload work ?\n\n";
-
-            $_config .= "\$limitbytraffic = " . (isset($_POST['limitbytraffic']) && $_POST['limitbytraffic'] == 'on' ? 'true' : 'false') . "; //limit RL by Traffic Flow\n";
-            $_config .= "\$max_trafic = " . $_POST['max_trafic'] . "; // (in MB). eg: 1 GB = 1 * (1024) MB\n";
-            $_config .= "\$date_trafic = '" . $_POST['YetAnotherDate'] . "'; // (d-day traffic quota expired). date in dd/mm/YYYY \n";
-            $_config .= "\$day_reset_trafic = " . $_POST['day_reset_trafic'] . "; // auto reset traffic. delay in days; \n\n";
-
-            $_config .= "\$limited_edition = " . (isset($_POST['limited_edition']) && $_POST['limited_edition'] == 'on' ? 'true' : 'false') . "; // limit authorization RL by ip address (banned and allowd list) \n";
-            $_config .= "\$list_allow_ip = '" . $_POST['list_allow_ip'] . "'; // White list ip. eg. 111.111.111.111, 255.*.*.*  //--never blank this shit if you set \$limited_edition = true \n";
-            $_config .= "\$list_baned_ip = '" . $_POST['list_baned_ip'] . "'; // blacklist ip, u think so?!. eg. 111.111.111.111, 222.*.*.*, 212.212.212.* \n\n";
-
-            $_config .= "\$limited_area = " . (isset($_POST['limited_area']) && $_POST['limited_area'] == 'on' ? 'true' : 'false') . "; // limit authorization RL by ID Country\n";
-            $_config .= "\$allow_CID = '" . $_POST['allow_CID'] . "'; // White list Country ID, blank mean all country is allowed. eg. ID, MY; // allow only Indonesia And Malaysia\n";
-            $_config .= "\$baned_CID = '" . $_POST['baned_CID'] . "'; // Blacklist Country ID, blank mean no country is banned. eg. US; // all country from US being banned.\n\n";
-
-            $_config .= "\$limit_timework = " . (isset($_POST['limit_timework']) && $_POST['limit_timework'] == 'on' ? 'true' : 'false') . "; // limit your RL by time. Client's Current time depend on (Server timezone)\n";
-            $_config .= "\$workstart = '" . $_POST['workstart'] . "'; // Your RL start to work\n";
-            $_config .= "\$workend = '" . $_POST['workend'] . "'; // Your RL end to work\n\n";
-
-            $_config .= "\$limit_cpuload = " . ($_POST['cpulimit'] > 0 ? 'true' : 'false') . "; // limit cpu load and task server job\n";
-            $_config .= "  \$ServerLoadAllowed = " . $_POST['cpulimit'] . "; // Maximum server load allowed; Disable = 0\n";
-            $_config .= "  \$CpuLoadFormat = 'load'; // Value = 'load' for load format; 'percent' for percent format\n";
-            $_config .= "  ((!function_exists('exec')&&!function_exists('shell_exec'))?\$CpuLoadFormat = 'percent':null); //CpuLoadFormat must be in percent mode if required functions is not exists\n";
-            $_config .= "  \$passthru_allowed = (!function_exists('passthru')?false:true) OR FALSE; // Does your host allows passthru?\n";
-            $_config .= "  \$MaxServerJob = " . $_POST['serverjob'] . "; // Maximum server jobs at a time; Disable = 0\n\n";
-
-
-            $_config .= "###-FILE CONFIG\n";
-            $_config .= "\$download_dir = \"" . $_POST['dir'] . "\"; // Your downloaded files are saved here;\n";
-            $_config .= "\$download_dir_is_changeable = " . (isset($_POST['dirchange']) && $_POST['dirchange'] == 'on' ? 'true' : 'false') . "; // To allow users to change the download dir ( index page )\n\n";
-            $_config .= "\$maysaveto = " . (isset($_POST['dirchangeaudl']) && $_POST['dirchangeaudl'] == 'on' ? 'true' : 'false') . "; // To allow users to change downloaded files to saved ( in audl )\n\n";
-
-            $_config .= "\$forbidden_filetypes = array('.htaccess', '.htpasswd', '.php', '.php3', '.php4', '.php5', '.phtml', '.asp', '.aspx', '.cgi');\n";
-            $_config .= "\$rename_these_filetypes_to = '." . $rnfltp . "';\n";
-            $_config .= "\$check_these_before_unzipping = true;\n\n";
-
-            $_config .= "\$disable_action = " . (isset($_POST['disall']) && $_POST['disall'] == 'on' ? 'true' : 'false') . "; //no action menus\n";
-
-            $_config .= "\$disable_to = array( // disabled action files properties\n";
-
-            $field = array("act_upload", "act_ftp", "act_mail", "act_boxes", "act_split", "act_merge", "act_md5", "act_pack", "act_zip", "act_unzip", "act_rar", "act_unrar", "act_rename", "act_mrename", "act_delete");
-            $_config .= fillField($field);
-            $_config .= ");\n\n";
-
-            $_config .= "\$show_column_sfile = array(  // property server_file's column\n";
-            $field = array("md5", "downloadlink", "comments", "date", "age", "ip");
-            $_config .= fillField($field);
-            $_config .= ");\n\n";
-
-            $_config .= "\$show_all = " . ($_POST['showallfiles'] == 'on' ? 'true' : 'false') . ";\n";
-            $_config .= "\$bw_save = " . ($_POST['bandwidthsave'] == 'on' ? 'true' : 'false') . "; \n\n";
-
-            $_config .= "\$deletelink_in_lynx = " . ($_POST['deletelink_in_lynx'] == 'on' ? 'true' : 'false') . "; \n\n";
-
-            $_config .= "#Auto-Rename #\n";
-            $_config .= "\$rename_prefix = '" . $_POST['prefix'] . "';//eg. mysite => mysite_file_name.rar\n";
-            $_config .= "\$rename_suffix = '" . $_POST['suffix'] . "';//eg. mysite => file_name_mysite.rar\n";
-            $_config .= "\$add_ext_5city = '" . $_POST['extension'] . "';//eg. ccpb => file_name.rar.ccpb\n\n";
-
-            $_config .= "###-VIEW-CONFIG\n";
-            $_config .= "\$navi_left = array(\n";
-
-            $field = array("showcpanel", "showplugins", "showaudl", "showauul", "showlynx", "showmtn", "server_info");
-            $_config .= fillField($field);
-            $_config .= ");\n\n";
-
-            $_config .= "###-MOVIE-THUMBNAILER-CONFIG\n";
-            $_config .= "\$col_row = array(\n";
-            $_config .= "'mtn_colums' => " . $_POST['mtn_cs'] . ",\n";
-            $_config .= "'mtn_rows' => " . $_POST['mtn_rs'] . ",\n";
-            $_config .= ");\n";
-            $_config .= "\$mtn_text = '" . $_POST['mtn_text'] . "';\n";
-            $_config .= "\$bgcolor = '" . $_POST['bgcolor'] . "';\n";
-            $_config .= "\$mtn_quality = " . $_POST['mtn_quality'] . ";\n";
-            $_config .= "\$mtn_edge = " . $_POST['mtn_edge'] . ";\n";
-            $_config .= "\$video_option = array (\n";
-            $_config .= "'enable' => " . ($_POST['video_option'] == 'on' ? 'true' : 'false') . ",\n";
-            $_config .= "'txtcolor' => '" . $_POST['txtcolor'] . "',\n";
-            $_config .= "'txtfont' => '" . $_POST['txtfont'] . "',\n";
-            $_config .= "'txtsize' => " . $_POST['txtsize'] . ",\n";
-            $_config .= ");\n";
-            $_config .= "\$time = array(\n";
-            $_config .= "'enable' => " . ($_POST['mtn_time'] == 'on' ? 'true' : 'false') . ",\n";
-            $_config .= "'tcolor' => '" . $_POST['txtcolor'] . "',\n";
-            $_config .= ");\n";
-            $_config .= "\n\n";
-
-            $field = array("forbid_audl", "forbid_auul", "forbid_lynx");
-            $_config .= fillField($field, 1); // not an array sets
-
-            $_config .= " \$cpuUsageNFO = " . (isset($_POST['cpuUsageNFO']) && $_POST['cpuUsageNFO'] == 'on' ? 'true' : 'false') . ";  // require server_info = true\n";
-
-            $_config .= "\$OnlineVisitor = " . (isset($_POST['onlinevisit']) && $_POST['onlinevisit'] == 'on' ? 'true' : 'false') . "; //Show Online Visitor\n\n";
-
-            $_config .= "\$premix_status = " . (isset($_POST['showpremixstatus']) && $_POST['showpremixstatus'] == 'on' ? 'true' : 'false') . "; // enable acc premix status\n";
-            $_config .= "\$ip_premixstat_list = array(" . $cain_ip . "); // trusted ip, can view detil acc.\n\n";
-
-            $_config .= "###-MISC-CONFIG\n";
-            $_config .= "\$no_cache = " . (isset($_POST['nocache']) && $_POST['nocache'] == 'on' ? 'true' : 'false') . ";\n";
-            $_config .= "\$redir = " . (isset($_POST['redirrect']) && $_POST['redirrect'] == 'on' ? 'true' : 'false') . ";\n\n";
-
-
-            $_config .= "\$disable_ajax = " . (isset($_POST['disable_ajax']) && $_POST['disable_ajax'] == 'on' ? 'true' : 'false') . "; //switch to old method, No-Ajax in Serverfiles\n";
-            $_config .= "\$disable_ajaxren = " . (isset($_POST['disable_ajaxren']) && $_POST['disable_ajaxren'] == 'on' ? 'true' : 'false') . "; //toogle ajax instant rename. require: rsajax.js; rsajax_ren.js\n";
-
-            $_config .= "\$logact = " . (isset($_POST['logact']) && $_POST['logact'] == 'on' ? 'true' : 'false') . "; //do log-activity of the users\n";
-            $_config .= "\$alternatefree = " . (isset($_POST['alternatefree']) && $_POST['alternatefree'] == 'on' ? 'true' : 'false') . "; //Auto switch freedownload if premium not good\n";
-
-            $_config .= "\$showautoclose= " . (isset($_POST['auto_cl']) && $_POST['auto_cl'] == 'on' ? 'true' : 'false') . ";//autoclose popup when leeching in audl\n";
-            $_config .= "\$timeautoclose= " . $_POST['auto_close'] . ";\n";
-            $_config .= "\$autochecklink = " . (isset($_POST['autochecklink']) && $_POST['autochecklink'] == 'on' ? 'true' : 'false') . "; // Auto check submited link in audl\n\n";
-
-            $_config .= "\$mip_enabled= " . (isset($_POST['mip_enabled']) && $_POST['mip_enabled'] == 'on' ? 'true' : 'false') . "; //If you need to disable multiple ip support, set to false\n";
-            $_config .= "\$mip_arotate= " . (isset($_POST['mip_arotate']) && $_POST['mip_arotate'] == 'on' ? 'true' : 'false') . "; //Auto change to next ip after start transload process\n\n";
-
-            $_config .= "\$secretkey = '" . $_POST['secretkey'] . "';//Place your Secret Key\n";
-            $_config .= "\$iframealocate = " . $_POST['iframealocate'] . ";//how many iframe to allocate in audl for manual method.\n";
-            $_config .= "\$pointboost = " . $_POST['pointbooster'] . ";//boost your RS-Point with this feature!!\n";
-            $_config .= "\$autosubmit = true;\n\n";
-
-            $_config .= "\$timezone = " . $_POST['timezone'] . "; // set Timezone. It is GMT+(7) for Indonesia.\n";
-            $_config .= "\$lang = '" . $arlang[$_POST['language']] . "'; // set Language.\n";
-            //$_config .= "\$arCSS = getArrayfromfile(IMAGE_DIR, 'style_sujancok_', '.css');\n";
-            $_config .= "\$csstype = '" . $arCSS[$_POST['theme']] . "'; // set Theme to your RL. eg. _default\n\n";
 
             $_config .= "//define writable files\n";
             $_config .= "define('LOG_DIR', CONFIG_DIR.'logfile/');\n";
@@ -1184,7 +1189,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             </style>
             <style type="text/css">
                 <!--
-                @import url("<?php print IMAGE_DIR; ?>style_sujancok<?php print $csstype; ?>.css");
+                @import url("<?php print IMAGE_DIR; ?>style_sujancok<?php print $options['csstype']; ?>.css");
                 -->
             </style>
             <link rel="shortcut icon" type="image/gif" href="<?php echo IMAGE_DIR . 'ico_cpanel.gif?' . rand(11, 9999); ?>">

@@ -1,6 +1,6 @@
 <?php
 function merge() {
-	global $disable_deleting, $optxt, $list, $PHP_SELF;
+	global $options, $optxt, $list, $PHP_SELF;
 	if (count ( $_GET ["files"] ) !== 1) {
 		echo $optxt['select_crc_001_file_only']."<br><br>";
 	} else {
@@ -32,7 +32,7 @@ function merge() {
    </tr>
    <tr>
      <td>
-       <input type="checkbox" name="del_ok" <?php echo $disable_to["act_del"] ? 'disabled' : 'checked'; ?>>&nbsp;Delete source file after successful merge
+       <input type="checkbox" name="del_ok" <?php echo $options['disable_to']["act_del"] ? 'disabled' : 'checked'; ?>>&nbsp;Delete source file after successful merge
      </td>
    </tr>
 <?php
@@ -58,7 +58,7 @@ function merge() {
 }
 
 function merge_go() {
-	global $optxt, $list, $check_these_before_unzipping, $forbidden_filetypes, $disable_deleting;
+	global $optxt, $list, $options;
 	if (count ( $_GET ["files"] ) !== 1) {
 		echo $optxt['select_crc_001_file_only']."<br><br>";
 	} else {
@@ -129,7 +129,7 @@ function merge_go() {
                 if ($fc != strtoupper($data["crc32"])) { echo $optxt['crc32_unmatch']."<br><br>"; }
                 else {
                   echo "File <b>".$filename."</b> ".$optxt['success_merge']."<br><br>";
-                  if ($usingcrcfile && $fc != '00111111' && $_GET["del_ok"] && !$disable_to["act_del"]) {
+                  if ($usingcrcfile && $fc != '00111111' && $_GET["del_ok"] && !$options['disable_to']["act_del"]) {
                     if ($usingcrcfile) { $partfiles[] = $file["name"]; }
                     foreach ($partfiles as $part) {
                       if(@unlink($part)) {
