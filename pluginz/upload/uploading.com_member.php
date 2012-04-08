@@ -50,7 +50,7 @@ if ($continue_up)
 	$page = geturl("www.uploading.com", 80, "/login/", 0, 0, $post, 0 );
 	$cookies=BiscottiDiKaox($page);
 	$page = geturl("www.uploading.com", 80, "/", "http://www.uploading.com/login", $cookies);
-	is_notpresent($page, "logout", "Login failed<br>Wrong login/password?");
+	is_notpresent($page, "logout", "Login failed<br />Wrong login/password?");
 	
 	echo
 <<<HTML

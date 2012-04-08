@@ -1,10 +1,10 @@
 <?php
 
 function unrar() {
-  global $PHP_SELF, $txt, $optxt, $options, $list;
-	if (count ( $_GET ["files"] ) < 1) {
-		echo $optxt['select_one_file']."<br><br>";
-	} else {
+  global $PHP_SELF, $options, $list, $L;
+
+
+
   require_once(CLASS_DIR."rar.php");
 ?>
 <script type="text/javascript">
@@ -20,7 +20,7 @@ function unrar_setCheckboxes(act, filestounrar) {
 }
 /* ]]> */
 </script>
-  <form name="unrar_files" method="post" action="<?php echo $PHP_SELF; ?>">
+  <form name="unrar_files" method="post" action="<?php echo ROOT_URL.basename($PHP_SELF);?>">
     <table align="center">
       <tr>
         <td>
@@ -34,25 +34,26 @@ function unrar_setCheckboxes(act, filestounrar) {
             <tr align="center">
               <td colspan="2" class="rar-table-main">
                 <input type="hidden" name="files[<?php echo $i; ?>]" value="<?php echo $_GET["files"][$i]; ?>" />
-                <?php printf($optxt['_filefr'],htmlentities(basename($file["name"]))); ?>
+                <?php echo $L->sprintf($L->say['_filefr'],htmlentities(basename($file["name"]))); ?>
                 <br />
-                <a href="javascript:void(0);" onclick="unrar_setCheckboxes(1, <?php echo $i;?>);"><?php echo $txt['chk_all']; ?></a> |
-                <a href="javascript:void(0);" onclick="unrar_setCheckboxes(0, <?php echo $i;?>);"><?php echo $txt['chk_unchk']; ?></a> |
-                <a href="javascript:void(0);" onclick="unrar_setCheckboxes(2, <?php echo $i;?>);"><?php echo $txt['chk_invert']; ?></a>
+                <a href="javascript:unrar_setCheckboxes(1, <?php echo $i;?>);"><?php echo $L->say['chk_all']; ?></a> |
+                <a href="javascript:unrar_setCheckboxes(0, <?php echo $i;?>);"><?php echo $L->say['chk_unchk']; ?></a> |
+                <a href="javascript:unrar_setCheckboxes(2, <?php echo $i;?>);"><?php echo $L->say['chk_invert']; ?></a>
               </td>
             </tr>
-            <tr>					 
+
+            <tr>
               <td colspan="2" class="rar-table-side">
                 &nbsp;
 <?php
     unset ($rar);
     $rar = new rlRar($file["name"], $options['check_these_before_unzipping'] ? $options['forbidden_filetypes'] : array('.xxx'));
-    if ($rar->rar_return === false) { echo $optxt['_unrar']; }
+    if ($rar->rar_return === false) { echo $L->say['_unrar']; }
     else {
       $rar_list = $rar->listthem(@$_GET['passwords'][$i], $options['download_dir'], $i);
-      if ($rar_list[0] == 'PASS') { $rar_passl_needed = true; echo $optxt['_passlist']; }
-      elseif ($rar_list['NEEDP'] == true) { echo $optxt['_passext']; }
-      elseif ($rar_list[0] == 'ERROR') { printf($optxt['_unrarerr'],$rar_list[1].' '.$rar_list[2]); }
+      if ($rar_list[0] == 'PASS') { $rar_passl_needed = true; echo $L->say['_passlist']; }
+      elseif ($rar_list['NEEDP'] == true) { echo $L->say['_passext']; }
+      elseif ($rar_list[0] == 'ERROR') { echo $L->sprintf($L->say['_unrarerr'],$rar_list[1].' '.$rar_list[2]); }
     }
 ?>
                 <input type="<?php echo ($rar_list['NEEDP'] == true) ? 'password' : 'hidden'; ?>" name="passwords[]" value="<?php echo $_GET['passwords'][$i]; ?>" />
@@ -87,7 +88,7 @@ function unrar_setCheckboxes(act, filestounrar) {
       <tr>
         <td align="center">
           <input type="hidden" name="act" value="<?php echo $rar_passl_needed ? 'unrar' : 'unrar_go'; ?>" />
-          <input type="submit" value="<?php echo $rar_passl_needed ? $optxt['_trylist'] : $optxt['_unrarsel']; ?>" />
+          <input type="submit" value="<?php echo $rar_passl_needed ? $L->say['_trylist'] : $L->say['_unrarsel']; ?>" />
         </td>
       </tr>
       <tr>
@@ -98,16 +99,16 @@ function unrar_setCheckboxes(act, filestounrar) {
   </form>
 <?php
 }
-}
+
 
 
 
 
 function unrar_go() {
-  global $PHP_SELF, $optxt, $options, $list;
-	if (count ( $_GET ["files"] ) < 1) {
-		echo $optxt['select_one_file']."<br><br>";
-	} else {
+  global $PHP_SELF, $options, $list, $L;
+
+
+
   require_once(CLASS_DIR."rar.php");
 ?>
   <table align="center">
@@ -115,20 +116,20 @@ function unrar_go() {
       <td>
         <table>
 <?php
-    $rar_dld_in_webdir = false;
-    if (dirname($PHP_SELF.'safe') === '/' || substr(ROOT_DIR, 0 - strlen(dirname($PHP_SELF.'safe'))) == dirname($PHP_SELF.'safe')) {
-      $rar_tmp = (dirname($PHP_SELF.'safe') === '/' ? ROOT_DIR.'/' : substr(ROOT_DIR, 0, 0 - strlen(dirname($PHP_SELF.'safe'))).'/');
-      if (strpos(realpath($options['download_dir']), $rar_tmp) === 0) {
-        $rar_dld_in_webdir = true;
-        $rar_dld_webpath = '/'.substr(realpath($options['download_dir']), strlen($rar_tmp)).'/';
-      }
-    }
+
+
+
+
+
+
+
+
   for($i = 0; $i < count($_GET["files"]); $i++) {
     $file = $list[$_GET["files"][$i]];
     if (count($_GET['filestounrar'][$i]) == 0) { continue; }
 ?>
           <tr align="center">
-            <td colspan="2" class="rar-table-tlr"><?php printf($optxt['_extracting'],basename($file["name"])); ?></td>
+            <td colspan="2" class="rar-table-tlr"><?php echo $L->sprintf($L->say['_extracting'],basename($file["name"]));?></td>
           </tr>
 <?php
     foreach ($_GET['filestounrar'][$i] as $rar_item) {
@@ -136,12 +137,12 @@ function unrar_go() {
           <tr>
             <td class="rar-tbl-left">
 <?php
-        echo $rar_dld_in_webdir ? '<a href="'.$rar_dld_webpath.basename(base64_decode($rar_item)).'">' : '';
-        echo basename(base64_decode($rar_item));
-        echo $rar_dld_in_webdir ? '</a>' : '';
+
+      echo link_for_file(realpath($options['download_dir']).'/'.basename(base64_decode($rar_item)));
+
 ?>
             </td>
-            <td clas="rar-tbl-right" id="<?php echo 'unrar'.$_GET["files"][$i].'-'.str_replace('=', '-', $rar_item); ?>" align="center"><?php echo $optxt['_wait']; ?></td>
+            <td class="rar-tbl-right" id="<?php echo 'unrar'.$_GET["files"][$i].'-'.str_replace('=', '-', $rar_item); ?>" align="center"><?php echo $L->say['_waiting']; ?></td>
           </tr>
 <?php
     }
@@ -160,16 +161,16 @@ function unrar_go() {
       </td>
     </tr>
   </table>
-  <span id="unrar_finished" style="display:none;"><a href="<?php echo $PHP_SELF."?act=files"; ?>"><?php echo $optxt['_backlist']; ?></a><br /><br /><br /></span>
+  <span id="unrar_finished" style="display:none;"><a href="<?php echo ROOT_URL.basename($PHP_SELF)."?act=files"; ?>"><?php echo $L->say['_backlist']; ?></a><br /><br /><br /></span>
 <?php
 }
-}
+
 
 
 
 
 function unrar_go_go() {
-  global $optxt, $options, $list;
+  global $options, $list, $L;
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -188,7 +189,7 @@ function rar_st(elementid, st){
       $rar = new rlRar($file["name"], $options['check_these_before_unzipping'] ? $options['forbidden_filetypes'] : array('.xxx'));
       if ($rar->rar_return === false) {
 ?>
-<script type="text/javascript">rar_st('<?php echo 'unrar'.$_GET["files"][$i].'-'.str_replace('=', '-', $rar_item); ?>', '<?php echo $optxt['rar_disappear']; ?>');</script>
+<script type="text/javascript">rar_st('<?php echo 'unrar'.$_GET["files"][$i].'-'.str_replace('=', '-', $rar_item); ?>', '<?php echo $L->say['rar_disappear']; ?>');</script>
 <?php
       }
       else {
@@ -197,11 +198,11 @@ function rar_st(elementid, st){
         if (strpos($rar_result, ", 'OK')") !== false) {
           _create_list();
           $rar_tolist = realpath($options['download_dir']).'/'.basename(base64_decode($rar_item));
-          $time = filemtime($rar_tolist); while (isset($list[$time])) { $time++; }
+          $time = getNowzone(@filemtime($rar_tolist)); while (isset($list[$time])) { $time++; }
           $list[$time] = array("name" => $rar_tolist, "size" => bytesToKbOrMbOrGb(filesize($rar_tolist)), "date" => $time);
           if (!updateListInFile($list)) {
 ?>
-<script type="text/javascript">var tmp = document.getElementById('rar_finished'); tmp.innerHTML = "<?php echo $optxt['couldnt_upd_list']; ?><br /><br />" + tmp.innerHTML</script>;
+<script type="text/javascript">var tmp = document.getElementById('rar_finished'); tmp.innerHTML = "<?php echo $L->say['couldnt_upd_list']; ?><br /><br />" + tmp.innerHTML</script>;
 <?php
           }
         }

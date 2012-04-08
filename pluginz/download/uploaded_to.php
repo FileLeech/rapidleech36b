@@ -1,13 +1,13 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-    require_once ("404.php");
+    require_once ("index.html");
     exit ();
 }
 
 class uploaded_to extends DownloadClass {
 
     public function Download($link) {
-        global $premium_acc, $ul_cookie_login_value;
+        global $premium_acc, $options;
         if (preg_match('/http:\/\/uploaded\.to\/folder\/[^"]+/i', $link, $dir)) {
             if (!$dir[0]) {
                 html_error('Could\'nt find any link, please check again!');
@@ -23,16 +23,16 @@ class uploaded_to extends DownloadClass {
             is_present($page, "/404", "File not found");
         }
         unset($page);
-        if ($_REQUEST["ul_acc"] == "on" && (!empty($_GET["ul_cookie"]) || !empty($_GET["ul_hash"]) || !empty($ul_cookie_login_value))) {
+        if ($_REQUEST["ul_acc"] == "on" && (!empty($_GET["ul_cookie"]) || !empty($_GET["ul_hash"]) || !empty($premium_acc["uploaded_to"]["cookie"]))) {
             if (!empty($_GET["ul_cookie"])) {
                 $cookie = $_GET["ul_cookie"];
             } elseif (!empty($_GET["ul_hash"])) {
                 $cookie = strrev(dcd($_GET["ul_hash"]));
             } else {
-                $cookie = $ul_cookie_login_value;
+                $cookie = $premium_acc["uploaded_to"]["cookie"];
             }
             $this->DownloadPremium($link, $cookie);
-        } elseif (($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) || ($_REQUEST ["premium_acc"] == "on" && $premium_acc ["uploaded"] ["user"] && $premium_acc ["uploaded"] ["pass"])) {
+        } elseif (($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) || ($_REQUEST ["premium_acc"] == "on" && $premium_acc ["uploaded_to"] ["user"] && $premium_acc ["uploaded_to"] ["pass"])) {
             $this->DownloadPremium($link);
         } elseif ($_POST['step'] == "1") {
             $this->DownloadFree($link);
@@ -42,7 +42,7 @@ class uploaded_to extends DownloadClass {
     }
 
     private function Retrieve($link) {
-        global $download_dir;
+        global $options;
         $page = $this->GetPage($link);
         $Cookies = GetCookies($page);
         if (!preg_match('#(\d+)</span> seconds#', $page, $count)) {
@@ -55,12 +55,12 @@ class uploaded_to extends DownloadClass {
         $page = $this->GetPage($img);
         $headerend = strpos($page, "\r\n\r\n");
         $pass_img = substr($page, $headerend + 4);
-        write_file($download_dir . "uploaded_captcha.jpg", $pass_img);
+        write_file($options['download_dir'] . "uploaded_captcha.jpg", $pass_img);
         $data = $this->DefaultParamArr($link);
         $data["recaptcha_challenge_field"] = $ch;
         $data["step"] = "1";
         $data["Cookies"] = $Cookies;
-        $this->EnterCaptcha($download_dir . "uploaded_captcha.jpg", $data, "10");
+        $this->EnterCaptcha($options['download_dir'] . "uploaded_captcha.jpg", $data, "10");
         exit;
     }
 
@@ -93,16 +93,15 @@ class uploaded_to extends DownloadClass {
     private function login($loginc = false) {
         global $premium_acc;
         if (!$loginc) {
-            $user = ($_REQUEST["premium_user"] ? $_REQUEST["premium_user"] : $premium_acc["uploaded"]["user"]);
-            $pass = ($_REQUEST["premium_pass"] ? $_REQUEST["premium_pass"] : $premium_acc["uploaded"]["pass"]);
+            $user = ($_REQUEST["premium_user"] ? $_REQUEST["premium_user"] : $premium_acc["uploaded_to"]["user"]);
+            $pass = ($_REQUEST["premium_pass"] ? $_REQUEST["premium_pass"] : $premium_acc["uploaded_to"]["pass"]);
             if (empty($user) || empty($pass)) {
                 html_error("Login Failed: Username or Password is empty. Please check login data.");
             }
-            $posturl = "http://uploaded.to/";
             $post = array();
             $post["id"] = $user;
             $post["pw"] = $pass;
-            $page = $this->GetPage($posturl."io/login", 0, $post, $posturl."\r\nX-Requested-With: XMLHttpRequest"); //other way add xml request without edit http.php
+            $page = $this->GetPage("http://uploaded.to/io/login", 0, $post, 'http://uploaded.to/\r\nX-Requested-With: XMLHttpRequest'); //other way add xml request without edit http.php
             $cookie = GetCookies($page);
             is_present($page, 'err:"User and password do not match', 'Login Failed, please check your account');
         } elseif (strlen($loginc) == 84) {
@@ -111,7 +110,7 @@ class uploaded_to extends DownloadClass {
             html_error("[Cookie] Invalid cookie (" . strlen($loginc) . " != 84). Try to encode your cookie first!");
         }
 
-        $page = $this->GetPage($posturl."me", $cookie);
+        $page = $this->GetPage('http://uploaded.to/me', $cookie);
         $cookie = $cookie . '; ' . GetCookies($page);
         is_present($page, '<em>Free</em>', 'Account free, please check ur premium account');
         is_present($page, 'ocation: http://uploaded.to', 'Cookie failed, please check ur account');

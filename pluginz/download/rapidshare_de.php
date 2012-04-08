@@ -1,6 +1,9 @@
 <?php
 if (!defined('RAPIDLEECH'))
-  {require_once("404.php");exit;}
+  {
+  require_once("index.html");
+  exit;
+  }
 
 if (($_GET["premium_acc"] == "on" && $_GET["premium_user"] && $_GET["premium_pass"]) || ($_GET["premium_acc"] == "on" && $premium_acc["rs_de"]["user"] && $$premium_acc["rs_de"]["pass"]))
 	{
@@ -25,12 +28,11 @@ if (($_GET["premium_acc"] == "on" && $_GET["premium_user"] && $_GET["premium_pas
 		$Href = trim(cut_str($page,"Location:","\n"));
 		$Url = parse_url($Href);
 						
-		insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET[split] ? $_GET[partSize] : "")."&method=".$_GET[method]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "")."&auth=".$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
+		insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET['split'] ? $_GET['partSize'] : "")."&method=".$_GET['method']."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "")."&auth=".$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["audl"]) ? "&audl=doum" : ""));
 		}
 	else
 		{
-		 //html_error("Cannot use premium account");
-		  html_retry("Cannot use premium account",0,$LINK);
+		html_error("Cannot use premium account");
 		}
 	}
 else
@@ -92,7 +94,7 @@ else
 		html_error('Error getting access image url');
 		}
 					
-	if ($images_via_php === true)
+	if ($options['images_via_php'] === true)
 		{
 		$code = str_replace($access_image_url, $PHP_SELF."?image=".urlencode(trim(cut_str($code, '<img src="', '">')))."&referer=".urlencode($Url["scheme"]."://".$Url["host"]."/"), $code);
 		}
@@ -106,7 +108,7 @@ else
 		html_error("Error getting download link");
 		}
 	
-	$code = str_replace($FileAddr, $PHP_SELF.(isset($_GET["idx"]) ? "?idx=".$_GET["idx"] : ""), $code);
+	$code = str_replace($FileAddr, $PHP_SELF.(isset($_GET["audl"]) ? "?audl=doum" : ""), $code);				
 	$capthatag = cut_str($code,'here: <input','>');
 	$capthatag = cut_str($capthatag,'name="','"');
 					

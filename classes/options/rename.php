@@ -1,59 +1,50 @@
 <?php
 function rl_rename() {
-	global $optxt,$options, $list;
-	if (count ( $_GET ["files"] ) < 1) {
-		 echo $optxt['select_one_file']."<br><br>";
-	} elseif ($disable_deleting) {
-		echo $optxt['no_permision_rename'];
-	} else {
-    ?>
-    <form method="post">
-      <input type="hidden" name="act" value="rename_go">
-       <table align="center">
-        <tr>
-          <td>
-            <table>
-      <?php
-        for($i = 0; $i < count($_GET["files"]); $i++)
-          {
-            $file = $list[$_GET["files"][$i]];
-            ?>
-              <input type="hidden" name="files[]" value="<?php echo $_GET["files"][$i]; ?>">
-                  <tr>
-                    <td align="center"><b><?php echo htmlspecialchars(basename($file["name"])); ?></b></td>
-                  </tr>
-                  <tr>
-                    <td>
-					<table><tr>
-                      <td><?php echo $optxt['new_name'];?>:</td><td>&nbsp;<input type="text" name="newName[]" size="50" value="<?php echo htmlspecialchars(basename($file["name"])); ?>"></td>
-                    </tr></table>
-					</td>
-                  </tr>
-            <?php
-          }
-      ?>
-            </table>
-          </td>
-        </tr>
-      </table>
-	  <input type="submit" value="Rename">
-    </form>
-    <?php
-  }
+	global $list, $PHP_SELF, $L;
+?>
+<form method="post" action="<?php echo ROOT_URL.basename($PHP_SELF); ?>"><input type="hidden" name="act" value="rename_go" />
+		<table align="center" style="text-align: left;">
+			<tr>
+				<td>
+				<table>
+<?php
+	for($i = 0; $i < count ( $_GET ["files"] ); $i ++) {
+		$file = $list [$_GET ["files"] [$i]];
+?>
+<tr>
+	<td align="center"><input type="hidden" name="files[]" value="<?php echo $_GET ["files"] [$i]; ?>" /><b><?php echo htmlspecialchars(basename($file["name"])); ?></b></td>
+</tr>
+<tr>
+	<td><?php echo $L->say['new_name']; ?>:&nbsp;<input type="text" name="newName[]" size="25"
+		value="<?php echo htmlspecialchars(basename($file["name"])); ?>" /></td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+</tr>
+<?php
+	}
+?>
+                                  </table>
+				</td>
+				<td><input type="submit" value="Rename" /></td>
+			</tr>
+			<tr>
+				<td></td>
+			</tr>
+		</table>
+		</form>
+<?php
 }
 
 function rename_go() {
-	global $optxt,$list, $options;
-     $smthExists = FALSE;
-     for($i = 0; $i < count($_GET["files"]); $i++)
-      {
-        $file = $list[$_GET["files"][$i]];
-        
-        if(file_exists($file["name"]))
-          {
-            $smthExists = TRUE;
-            $newName = dirname($file["name"]) . PATH_SPLITTER . trim($_GET["newName"][$i]);
-			
+	global $list, $options, $L;
+	$smthExists = FALSE;
+	for($i = 0; $i < count ( $_POST ["files"] ); $i ++) {
+		$file = $list [$_POST ["files"] [$i]];
+		
+		if (file_exists ( $file ["name"] )) {
+			$smthExists = TRUE;
+			$newName = dirname ( $file ["name"] ) . PATH_SPLITTER . stripslashes(basename($_POST["newName"][$i]));
 			$rest = substr($newName, -1);
 			
 			if(!preg_match("/^[a-zA-Z0-9_]+$/i", $rest)) { $alpnum = false;}else{$alpnum = true;}
@@ -63,38 +54,26 @@ function rename_go() {
 				$rest = substr($newName, -1);
 				if(!preg_match("/^[a-zA-Z0-9_]+$/i", $rest)) { $alpnum = false;}else{$alpnum = true;}
 			}
+			$filetype = strrchr ( $newName, "." );
 			
-			
-			
-            $filetype = strrchr($newName, ".");                      
-			if (is_array($options['forbidden_filetypes']) && in_array(strtolower($filetype), $options['forbidden_filetypes']))
-				{
-				print "The filetype $filetype is forbidden to be renamed<br><br>";
+			if (is_array ( $options['forbidden_filetypes'] ) && in_array ( strtolower ( $filetype ), $options['forbidden_filetypes'] )) {
+				echo $L->sprintf($L->say['forbidden_rename'],$filetype)."<br /><br />";
+			} else {
+				if (@rename ( $file ["name"], $newName )) {
+					echo $L->sprintf($L->say['_renamed_to'],htmlspecialchars($file["name"]),htmlspecialchars(basename($newName)))."<br /><br />";
+					$list [$_POST ["files"] [$i]] ["name"] = $newName;
+				} else {
+					echo $L->sprintf($L->say['couldnt_rename_to'],$file['name'])."<br /><br />";
 				}
-			else
-				{
-				if(@rename($file["name"], $newName))
-					{
-					echo $optxt['_file']." <b>".htmlspecialchars($file["name"])."</b> ".$optxt['rename_to']." <b>".htmlspecialchars(basename($newName))."</b><br><br>";
-					$list[$_GET["files"][$i]]["name"] = $newName;
-					}
-				else
-					{
-					echo $optxt['couldnt_rename_to']." <b>".$file["name"]."</b>!<br><br>";
-					}
-				}
-          }
-        else
-         {
-           echo $optxt['_file']." <b>".$file["name"]."</b> ".$optxt['not_found']."<br><br>";
-         }
-      }
-     if($smthExists)
-       {
-         if(!updateListInFile($list))
-          {
-              echo $optxt['couldnt_upd']."<br><br>";
-          }
-       }
+			}
+		} else {
+			echo $L->sprintf($L->say['not_found'],$file['name'])."<br /><br />";
+		}
+	}
+	if ($smthExists) {
+		if (! updateListInFile ( $list )) {
+			echo $L->say['couldnt_upd']."<br /><br />";
+		}
+	}
 }
 ?>

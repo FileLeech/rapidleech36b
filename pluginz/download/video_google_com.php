@@ -1,7 +1,8 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
+<?php
+if (! defined ( 'RAPIDLEECH' ))
+{
+	require_once ("index.html");
+	exit ();
 }
 
 class video_google_com extends DownloadClass

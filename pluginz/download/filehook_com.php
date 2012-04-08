@@ -1,7 +1,7 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-  require_once("404.php");
-	exit();
+    require_once ("index.html");
+    exit ();
 }
 
 class filehook_com extends DownloadClass {

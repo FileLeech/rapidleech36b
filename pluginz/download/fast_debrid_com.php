@@ -75,6 +75,7 @@ class fast_debrid_com extends DownloadClass {
             $dlink = "http://$server.fast-debrid.com$dl[1]";
             $FileName = basename(parse_url($dlink, PHP_URL_PATH));
             $this->RedirectDownload($dlink, $FileName, $cookie);
+            
         } catch (Exception $e) {
             html_error($e->getMessage());
         }

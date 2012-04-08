@@ -36,7 +36,7 @@
 			$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $ref, $cookies, 0, 0, $_GET["proxy"],$pauth);
 			is_page($page);
 			$tmp=cut_str($page,'[url=',']');
-			if (!$tmp) html_error ('Error get download url <br>');
+			if (!$tmp) html_error ('Error get download url <br />');
 			$download_link=$tmp;
 
 // sert 15.10.2008

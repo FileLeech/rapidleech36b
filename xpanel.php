@@ -35,8 +35,8 @@ define('CLASS_DIR', 'classes/');
 define('MISC_DIR', 'misc/');
 define('LANG_DIR', 'languages/');
 
-define('VERSION', "RL-CPanel RC " . $ver_um . " by Idoenk :: nohuhu<br>[ TuxiNuX::<a href='javascript:void(0);' title='Kaskus.US #14'>CCPB</a> ]");
-define('ACCVER', "Rapidshare-ACC Checker [by: reiluke]<br><small>Thanks to limpy&amp;Viant77</small>");
+define('VERSION', "RL-CPanel RC " . $ver_um . " by Idoenk :: nohuhu<br />[ TuxiNuX::<a href='javascript:;' title='Kaskus.US #14'>CCPB</a> ]");
+define('ACCVER', "Rapidshare-ACC Checker [by: reiluke]<br /><small>Thanks to limpy&amp;Viant77</small>");
 define('CONFIG_FILE', 'config.php');  // define your config file name here
 
 define('ACC_EMBED', "<span class='g'>account embeded</span>");
@@ -110,7 +110,7 @@ if ($showcpanel2) {
         }
     }
 } else {
-    echo "<html>$nn<head>$nn<title>:: Rx08 RL-CPanel::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $options['csstype'] . ".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>:: Rx08 :: <br>RL-CPanel Disabled</h1>$nn</body>$nn</html>";
+    echo "<html>$nn<head>$nn<title>:: Rx08 RL-CPanel::</title>$nn<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">$nn<style type=\"text/css\">$nn<!--$nn@import url(\"" . IMAGE_DIR . "style_sujancok" . $options['csstype'] . ".css\");$nn-->$nn</style></head>$nn<body>$nn<h1>:: Rx08 :: <br />RL-CPanel Disabled</h1>$nn</body>$nn</html>";
     exit();
 }
 #=========END LOGIN Area=========
@@ -276,7 +276,7 @@ function numericPost($postname, $errmsg) {
     global $showpostn, $iserr;
     if (!is_numeric(trim($_POST[$postname])) || trim($_POST[$postname]) < 0) {
         $showpostn = true;
-        $iserr = '<b class="a">' . $errmsg . ' must be in positive numerical..</b><b class="b">!</b><br>';
+        $iserr = '<b class="a">' . $errmsg . ' must be in positive numerical..</b><b class="b">!</b><br />';
         return false;
     } else {
         return true;
@@ -300,7 +300,7 @@ function isblankfield($parentchk, $childfield) {
     if ($showpostn) {
         if (isset($_POST[$parentchk]) && $_POST[$parentchk] == 'on') {
             if (empty($_POST[$childfield])) {
-                $iserr = '<b class="a">[' . $parentchk . '] Account\'s Username or Password or Cookie is empty..</b><b class="b">!</b><br>';
+                $iserr = '<b class="a">[' . $parentchk . '] Account\'s Username or Password or Cookie is empty..</b><b class="b">!</b><br />';
                 return false;
             }
         }
@@ -395,11 +395,11 @@ function write_config_file($config_file, $s) {
     if (isset($_POST['limitbyip']) && $_POST['limitbyip'] == 'on') {
         if (empty($_POST['max_free_dl'])) {
             $showpostn = true;
-            $iserr = '<b class="a">Leeching per ip is empty..</b><b class="b">!</b><br>';
+            $iserr = '<b class="a">Leeching per ip is empty..</b><b class="b">!</b><br />';
             return false;
         } elseif (empty($_POST['delayip'])) {
             $showpostn = true;
-            $iserr = '<b class="a">Delay per ip is empty..</b><b class="b">!</b><br>';
+            $iserr = '<b class="a">Delay per ip is empty..</b><b class="b">!</b><br />';
             return false;
         }
     }
@@ -407,7 +407,7 @@ function write_config_file($config_file, $s) {
 
     if (isset($_POST["limitbytraffic"]) && $_POST["limitbytraffic"] == "on") {
         if (!preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $_POST['YetAnotherDate']) || (empty($_POST['max_trafic']))) {
-            $iserr = '<b class="a">Expire-Date Traffic is not a Date..</b><b class="b">!</b><br>';
+            $iserr = '<b class="a">Expire-Date Traffic is not a Date..</b><b class="b">!</b><br />';
             return false;
         }
     }
@@ -415,7 +415,7 @@ function write_config_file($config_file, $s) {
     if (isset($_POST["limit_timework"]) && $_POST["limit_timework"] == "on") {
         $regtime = '/^([0-9]{1,2}):([0-5][0-9]):([0-5][0-9])$/';
         if ((!preg_match($regtime, $_POST['workstart'])) || (!preg_match($regtime, $_POST['workend']))) {
-            $iserr = '<b class="a">Limit by Time is not a Time format..</b><b class="b">!</b><br>';
+            $iserr = '<b class="a">Limit by Time is not a Time format..</b><b class="b">!</b><br />';
             return false;
         }
     }
@@ -424,23 +424,23 @@ function write_config_file($config_file, $s) {
 
     if (empty($_POST['dir'])) {
         $showpostn = true;
-        $iserr = '<b class="a">Download directory is empty..</b><b class="b">!</b><br>';
+        $iserr = '<b class="a">Download directory is empty..</b><b class="b">!</b><br />';
         return false;
     }
 
     if (empty($_POST['newusercp']) || empty($_POST['newpascp'])) {
         $showpostn = true;
-        $iserr = '<b class="a">Username or Password login Cpanel is empty..</b><b class="b">!</b><br>';
+        $iserr = '<b class="a">Username or Password login Cpanel is empty..</b><b class="b">!</b><br />';
         return false;
     }
     if ((isset($_POST['login']) && $_POST['login'] == 'on') && (empty($_POST['user']) || empty($_POST['pass']))) {
         $showpostn = true;
-        $iserr = '<b class="a">Username or Password login index page is empty..</b><b class="b">!</b><br>';
+        $iserr = '<b class="a">Username or Password login index page is empty..</b><b class="b">!</b><br />';
         return false;
     }
 
     if ($_debug) {
-        $ret_TEXT.= "Debug Mode: <b class=a>ON</b><br>";
+        $ret_TEXT.= "Debug Mode: <b class=a>ON</b><br />";
         $ret_TEXT.= "<textarea name=\"edit_text\" cols=\"122\" rows=\"20\" width=\"100%\" readonly>" . ($s) . "</textarea>";
     }
 
@@ -453,7 +453,7 @@ function write_config_file($config_file, $s) {
 
         if (!$fp) {
             $showpostn = true;
-            $ret_TEXT.= "<b class=\"a\">Can't write to file..</b><b class=\"b\">!</b><br>";
+            $ret_TEXT.= "<b class=\"a\">Can't write to file..</b><b class=\"b\">!</b><br />";
             fclose($fp);
             return false;
         } else {
@@ -475,10 +475,10 @@ function write_config_file($config_file, $s) {
             $saved_success = true;
         }
     } else {
-        $ret_TEXT.= "<br>{$iserr}<br><b class=\"a\">An errors occur, configuration is not saved</b><br>";
+        $ret_TEXT.= "<br />{$iserr}<br /><b class=\"a\">An errors occur, configuration is not saved</b><br />";
     }
 
-    $ret_TEXT.= '<div style="height:10px;"></div><input id="btn_back" type="button" onClick="location.href=\'./' . basename($_SERVER['PHP_SELF']) . '?mode=\'" value="Go Back to Config">&nbsp;|&nbsp;<input type="button" onClick="location.href=\'./\'" value="Go to main">';
+    $ret_TEXT.= '<div style="height:10px;"></div><input id="btn_back" type="button" onclick="location.href=\'./' . basename($_SERVER['PHP_SELF']) . '?mode=\'" value="Go Back to Config">&nbsp;|&nbsp;<input type="button" onclick="location.href=\'./\'" value="Go to main">';
     return $ret_TEXT;
 }
 
@@ -509,7 +509,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
     $iserr = false;
     $t_head = "<b>File:&nbsp;&nbsp;&nbsp;&nbsp;" . CONFIG_FILE . " (" . view_size(filesize($fileconfig));
     $t_head.= ") &nbsp; &nbsp; &nbsp; attrib: &nbsp; &nbsp; " . view_perms_color($fileconfig) . "</b>";
-    $t_head.= "<br>You're&nbsp;logged&nbsp;with&nbsp;IP:&nbsp;<b class='g'>" . get_real_ip() . "</b><br><hr width=\"800\">";
+    $t_head.= "<br />You're&nbsp;logged&nbsp;with&nbsp;IP:&nbsp;<b class='g'>" . get_real_ip() . "</b><br /><hr width=\"800\">";
     $buffer_TEXT.= $t_head;
     if (isset($_GET["mode"])) {
         if ($_GET["mode"] == "editor") {
@@ -821,7 +821,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             $_config .= "'index_file' => '" . (($options['index_file'] != "" && strstr($options['index_file'], ".")) ? "{$options['index_file']}" : "index.php") . "',\n\n";
 
             $_config .= "###-LOGIN-CONFIG\n";
-            $_config .= "'allowcpanel' =>  true, // WARNING, set this to FALSE will Disable access to xpanel.\n";
+            $_config .= "'allowcpanel' =>  true; // WARNING, set this to FALSE will Disable access to xpanel.\n";
             $_config .= "'loginCp' => array('" . $_POST['newusercp'] . "'=>'" . $_POST['newpascp'] . "'), // user=>pass\n\n";
             $_config .= "'login' => " . (isset($_POST['login']) && $_POST['login'] == 'on' ? 'true' : 'false') . ",\n'users' => array('" . (isset($_POST['user']) ? $_POST['user'] : "") . "' => '" . (isset($_POST['pass']) ? $_POST['pass'] : "") . "'),  // user=>pass\n\n";
 
@@ -864,8 +864,8 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
 
             $_config .= "'limit_cpuload' => " . ($_POST['cpulimit'] > 0 ? 'true' : 'false') . ", // limit cpu load and task server job\n";
             $_config .= "'ServerLoadAllowed' => " . $_POST['cpulimit'] . ", // Maximum server load allowed; Disable = 0\n";
-            $_config .= "'CpuLoadFormat' => 'load', // Value = 'load' for load format; 'percent' for percent format\n";
-            $_config .= "((!function_exists('exec')&&!function_exists('shell_exec')) ? \$options['CpuLoadFormat'] = 'percent':null), //CpuLoadFormat must be in percent mode if required functions is not exists\n";
+            $_config .= "'CpuLoadFormat' => 'load'; // Value = 'load' for load format; 'percent' for percent format\n";
+            $_config .= "((!function_exists('exec')&&!function_exists('shell_exec')) ? \$options['CpuLoadFormat'] = 'percent':null); //CpuLoadFormat must be in percent mode if required functions is not exists\n";
             $_config .= "'passthru_allowed' => (!function_exists('passthru')?false:true) OR FALSE, // Does your host allows passthru?\n";
             $_config .= "'MaxServerJob' => " . $_POST['serverjob'] . ", // Maximum server jobs at a time; Disable = 0\n\n";
 
@@ -952,7 +952,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             $_config .= "'alternatefree' => " . (isset($_POST['alternatefree']) && $_POST['alternatefree'] == 'on' ? 'true' : 'false') . ", //Auto switch freedownload if premium not good\n";
 
             $_config .= "'showautoclose' => " . (isset($_POST['auto_cl']) && $_POST['auto_cl'] == 'on' ? 'true' : 'false') . ",//autoclose popup when leeching in audl\n";
-            $_config .= "'timeautoclose' => " . $_POST['auto_close'] . ",\n";
+            $_config .= "'timeautoclose' => " . $_POST['auto_close'] . ";\n";
             $_config .= "'autochecklink' => " . (isset($_POST['autochecklink']) && $_POST['autochecklink'] == 'on' ? 'true' : 'false') . ", // Auto check submited link in audl\n\n";
 
             $_config .= "'mip_enabled' => " . (isset($_POST['mip_enabled']) && $_POST['mip_enabled'] == 'on' ? 'true' : 'false') . ", //If you need to disable multiple ip support, set to false\n";
@@ -966,7 +966,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
             $_config .= "'lang' => '" . $arlang[$_POST['language']] . "', // set Language.\n";
             //$_config .= "\$arCSS = getArrayfromfile(IMAGE_DIR, 'style_sujancok_', '.css');\n";
             $_config .= "'csstype' => '" . $arCSS[$_POST['theme']] . "', // set Theme to your RL. eg. _default\n\n";
-            $_config .= ");\n\n";
+            $_config .= ");\n\n" .
 
             $_config .= "###-PREMIUM-CONFIG\n\n";
 
@@ -1169,7 +1169,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
 </script>";
                     $buffer_TEXT.= $buff_cleancookie_js;
                 }
-                $buffer_TEXT.= "\r\n<hr width=\"800\">\r\n<small>" . VERSION . "</small>\r\n</div>\r\n</td></tr>\r\n</table>\r\n</center>\r\n</body>\r\n</html><br>";
+                $buffer_TEXT.= "\r\n<hr width=\"800\">\r\n<small>" . VERSION . "</small>\r\n</div>\r\n</td></tr>\r\n</table>\r\n</center>\r\n</body>\r\n</html><br />";
                 //exit;
             }
         } // end xpanel dashboard
@@ -1218,7 +1218,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
                             if (isset($close_config_page))
                                 exit();
 
-                            include_once("xpanelform.tpl.php");
+                            include_once(CONFIG_DIR."xpanelform.tpl.php");
                         } // end fileconfig exist
                         echo "<hr width=\"800\">\r\n<small>" . VERSION . "</small>";
                             ?>
@@ -1226,7 +1226,7 @@ if ((!is_readable($fileconfig) or is_dir($fileconfig))) {
                     </td>
                 </tr>
             </table>
-            <br><img src="http://notepad-plus.sourceforge.net/commun/images/npp.animated.logo.gif" alt="notepad++">
+            <br /><img src="http://notepad-plus.sourceforge.net/commun/images/npp.animated.logo.gif" alt="notepad++">
         </center>
     </body>
 </html>

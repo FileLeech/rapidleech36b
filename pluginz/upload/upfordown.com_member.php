@@ -23,7 +23,7 @@ else{
 <tr><td nowrap>&nbsp;Password*<td>&nbsp;<input type=password name=password value='' style="width:160px;" />&nbsp;</tr>
 <tr><td colspan=2 align=center><input type=submit value='Upload' /></tr>
 </table>
-<center><br>Please make sure that filenames do not contain<br> invalid characters and start with a letter or number.</center>
+<center><br />Please make sure that filenames do not contain<br /> invalid characters and start with a letter or number.</center>
 </form>
 <?php
 }

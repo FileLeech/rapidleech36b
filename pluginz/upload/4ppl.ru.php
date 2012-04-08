@@ -24,7 +24,7 @@
 <div id=final width=100% align=center>Get final code</div>
 <?php		
 			is_page($upfiles);
-			is_notpresent ($upfiles,'Был загружен файл','Ошибка загрузки файла <br>'.$upfiles);
+			is_notpresent ($upfiles,'Был загружен файл','Ошибка загрузки файла <br />'.$upfiles);
 			$download_link=cut_str($upfiles,"value='","'");
 ?>
 <script>document.getElementById('final').style.display='none';</script>

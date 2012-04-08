@@ -23,7 +23,7 @@
 <div id=final width=100% align=center>Get final code</div>
 <?php		
 			is_page($upfiles);
-			if ((strpos($upfiles,'файл был успешо загружен') || strpos($upfiles,'файл уже был загружен'))===false) html_error ('Ошибка загрузки файла<br>'.$upfiles);
+			if ((strpos($upfiles,'файл был успешо загружен') || strpos($upfiles,'файл уже был загружен'))===false) html_error ('Ошибка загрузки файла<br />'.$upfiles);
 			$tmp=cut_str($upfiles,'http://megafile.uz/download.php?','"');
 			if ($tmp) {
 				$download_link='http://megafile.uz/download.php?'.$tmp;

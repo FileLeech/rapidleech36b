@@ -94,7 +94,7 @@ if (isset($_POST['action']))
 				{
 				$error=cut_str($page,'sys_msg>','<');
 				$error=Encode($error,"w");
-				html_error("Error Upload, vozmozhno na vash ip ban!<br>".$error);
+				html_error("Error Upload, vozmozhno na vash ip ban!<br />".$error);
 				}
             //print_r($page);
             $desc_id = "descr_".cut_str($page,"descr_",'"');
@@ -112,7 +112,7 @@ if (isset($_POST['action']))
     <input type="hidden" name="session_id" value=<?php echo $session_id?>>
     <input type="hidden" name="url" value=<?php echo $tmp_url?>>
     <input type="hidden" name="filename" value=<?php echo base64_encode($_REQUEST['filename']); ?>>
-    Please, enter the following figures specified on a picture:<br> <?php echo "(<span id='capt'>не удалось найти цифры, попробуйте ввести все</span>)<br>" ?> <img src="http://ifolder.ru<?php echo $img_link?>"> to here <input type="text" class="text" name="confirmed_number">
+    Please, enter the following figures specified on a picture:<br /> <?php echo "(<span id='capt'>не удалось найти цифры, попробуйте ввести все</span>)<br />" ?> <img src="http://ifolder.ru<?php echo $img_link?>"> to here <input type="text" class="text" name="confirmed_number">
     <input type="submit" name="action" value="Get Link's"  style="width:80px;">
 </form>
 </td></tr></table>

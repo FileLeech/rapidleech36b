@@ -1,8 +1,4 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
-}
+<?php
 
   $bir = $_POST['bir'];
 if($bir == "ok"){
@@ -65,12 +61,12 @@ if(preg_match_all('/Set-Cookie: *(.+);/', $page, $cook)){
 $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $free_link, $cookie, 0, 0, $_GET["proxy"],$pauth);
 		$headerend = strpos($page,"\r\n\r\n");
 		$pass_img = substr($page,$headerend+4);
-        $imgfile=$download_dir."bitroad_captcha.jpg";
+        $imgfile=$options['download_dir']."bitroad_captcha.jpg";
 		write_file($imgfile, $pass_img);
 
 		
-	print 	"<form method=\"post\" action=\"".$PHP_SELF.(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "")."\">$nn";
-	print	"<b>Please enter code:</b><br>$nn";
+	print 	"<form method=\"post\" action=\"".$PHP_SELF.(isset($_GET["audl"]) ? "?audl=doum" : "")."\">$nn";
+	print	"<b>Please enter code:</b><br />$nn";
 	print	"<img src=\"$imgfile\">$nn";
 	print	"<input name=\"bir\" value=\"ok\" type=\"hidden\">$nn";
 	print	"<input name=\"link\" value=\"http://bitroad.net/download3.php\" type=\"hidden\">$nn";

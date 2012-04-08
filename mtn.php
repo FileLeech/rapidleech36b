@@ -1,54 +1,46 @@
 ﻿<?php
+/*****************************************************
+ * Rapidleech 36B Rv.8
+ *
+ * $Id: mtn.php $
+ *****************************************************/
+
 define('RAPIDLEECH', 'yes');
-error_reporting(0);
-set_time_limit(0);
-session_start();
-define('CLASS_DIR', 'classes/');
-define('CONFIG_DIR', 'configs/');
-define('LANG_DIR', 'languages/');
+
+require_once "./global.php";
+
 define ('CREDITS', '<small class="small-credits">Sakib Hossain | Slider234 | jmsmarcelo | DarkNight</small><br />');
-define ('IMAGE_DIR', 'misc/tpl/');
-require_once(CONFIG_DIR."config.php");
-require_once(CLASS_DIR."other.php");
-require_once(LANG_DIR."language.{$options['lang']}.inc.php");
-$nn = "\r\n";
-$rev_num = '36B.Rv7.4';
-$RL_VER = 'Rx08.ii'.$rev_num;
-$charSet = 'UTF-8';
 ?>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Movie Thumbnailer</title>
-<link rel="shortcut icon" type="image/gif" href="<?php echo IMAGE_DIR?><?php echo $options['csstype'];?>/ico_home.gif">
-<link href="<?php echo IMAGE_DIR?><?php echo $options['csstype'];?>/style_sujancok<?php echo $options['csstype'];?>.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="jscolor/jscolor.js"></script>
-<script type="text/javascript" language="javascript" src="rsajax.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charSet; ?>" />
+<title>MTN :: <?php echo $RL_VER; ?> ::</title>
+<link type="text/css" href="<?php print ROOT_URL.IMAGE_DIR; ?>style_sujancok<?php print $options["csstype"]; ?>.css?<?php echo rand(1, 9999); ?>" rel="stylesheet" media="screen" />
+<link type="image/gif" rel="shortcut icon" href="<?php echo ROOT_URL.IMAGE_DIR . 'ico_home.gif?' . rand(11, 9999); ?>" />
+<script type="text/javascript" src="<?php echo ROOT_URL.STATIC_DIR; ?>js.php"></script>
+<script type="text/javascript" src="<?php echo ROOT_URL.STATIC_DIR; ?>jscolor/jscolor.js"></script>
+<script type="text/javascript" src="<?php echo ROOT_URL.STATIC_DIR; ?>ajax.js"></script>
 </head>
 <body>
 <div class="head_container"><center>
-<a href="<?php echo $options['index_file'];?>" title="Rapidleech"><img src="<?php echo IMAGE_DIR?><?php echo $options['csstype'];?>/rl_lgo.png" border="0"><h1></h1></a></div><br /><br /><br /></center>
-<center><?php
-if (!$options['navi_left']['showmtn'])
-{
-    exit("<h1>Movie Thumbnailer is Disable</h1>");
-}
-if ($options['login']===true){
-if(!isset($_SERVER['PHP_AUTH_USER']) || ($loggeduser = logged_user($options['users'])) === false)
-	{
-		header('WWW-Authenticate: Basic realm="Rx08"');
-		header('HTTP/1.0 401 Unauthorized');
-		exit("<h1>$RL_VER: NuLL</h1>");
+<a href="<?php echo ROOT_URL.$options['index_file']; ?>" class="tdheadolgo" title="Rapidleech"><span>Rapidleech36B</span></a>
+</center></div>
+<br />
+<center>
+<?php
+if ($options['limit_timework']) {
+	$is_worktime = cek_worktime($options['workstart'], $options['workend']);
+	$limitmsg = "";
+	if (!$is_worktime) {
+		$limitmsg.= (!empty($limitmsg) ? "<br />" : "") . $L->say['worktime_alert'];
+		echo "<div style=\"padding-top:20px;padding-bottom:20px;\"><div class='warn_alert'>" . $limitmsg . "</div></div>";
+		if ($options['navi_left']['server_info']) {
+			if (@file_exists(CLASS_DIR . "sinfo.php")) require_once(CLASS_DIR . "sinfo.php");
+		}else echo "<hr />";
+		echo "</body></html>";
+		exit();
 	}
-}
-if($options['limited_edition'] || $options['limited_area'])
-{
-  $dlimitation = array($options['limited_edition'], $options['limited_area']);
-  require_once(CLASS_DIR."limit_district.php");
-}
-if($options['limit_timework'])
-{  
-    $is_worktime = cek_worktime($options['workstart'], $options['workend']); 
-    exit("<h1>".$gtxt['worktime_alert']."</h1>");
 }
 ?>
 <font size="6" face="Arial">Movie Thumbnailer</font><br /><br /><br />
@@ -75,9 +67,9 @@ foreach($files as $file)
     </tr>
     <tr>
         <td colspan="2"><br /><br /><br />
-            <center><input style="height: 50px;width: 140px;font-size:x-large;background-color: #393136;" type="submit" value="Generate" name="mtn" /><br/><br/><br/>
-            <a href="index.php"><font size="2" face="Arial"><b>Back to RapidLeech</b></font></a><br/>
-            <a href="javascript:window.close();"><font size="2" face="Arial"><b>Close Windows</a></b></font><br/><br/></center>
+            <center><input style="height: 50px;width: 140px;font-size:x-large;background-color: #393136;" type="submit" value="Generate" name="mtn" /><br /><br /><br />
+            <a href="index.php"><font size="2" face="Arial"><b>Back to RapidLeech</b></font></a><br />
+            <a href="javascript:window.close();"><font size="2" face="Arial"><b>Close Windows</a></b></font><br /><br /></center>
         </td>
     </tr>
 </table>
@@ -89,7 +81,7 @@ foreach($files as $file)
 	</tr>
 </table>
 </form>
-<?php include('mtn/create.php');?>
+<?php include(CONFIG_DIR .'create.php');?>
 <br /><?php echo CREDITS;?>
 <br />
 </center>

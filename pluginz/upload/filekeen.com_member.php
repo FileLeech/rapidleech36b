@@ -55,7 +55,7 @@ if ($continue_up){
 		$cookies = implode(';',$cookie);
 		$xfss=cut_str($cookies,'xfss=',' ');
 	} else {
-		echo "<br><b><center>Login not found, empty or using non member upload.</center></b>\n";
+		echo "<br /><b><center>Login not found, empty or using non member upload.</center></b>\n";
 		$page = geturl("filekeen.com", 80, "/login.html");
 		is_page($page);
 		exit();

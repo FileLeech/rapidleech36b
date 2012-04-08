@@ -1,9 +1,10 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
-}
+<?php
 
+if (!defined('RAPIDLEECH'))
+  {
+  require_once("index.html");
+  exit;
+  }
 	$page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"], $Referer,0, 0, 0, $_GET["proxy"],$pauth);
 	is_page($page);
 	is_present($page,"deleted or not found","Sorry, the file you requested is either deleted or not found in our database.",0);
@@ -49,7 +50,7 @@ if (!defined('RAPIDLEECH')){
 	preg_match_all('/http:\/\/.+kewlshare\.com\/dl\/[^\'"]+/i', $page, $down);   
     $Url=parse_url($down[0][1]);
     $FileName = !$FileName ? basename($Url["path"]) : $FileName;
-    insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&port=".$Url["port"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&cookie=".urlencode($cookie)."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "")."&auth=".$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
+    insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&port=".$Url["port"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&cookie=".urlencode($cookie)."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "")."&auth=".$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["audl"]) ? "&audl=doum" : ""));
 	
 /*************************\  
 written by kaox 13/06/2009

@@ -52,7 +52,7 @@
 	$Url=parse_url($ref);
 	$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $uurl, $cookies, $gpost, 0, $_GET["proxy"],$pauth);
 	$ddl=cut_str($page,'Download Link:</b></td><td><a href="','"');
-	$del=cut_str($page,'Delete Link:</b></td><td><input type="text" onFocus="copy(this);" value="','"');
+	$del=cut_str($page,'Delete Link:</b></td><td><input type="text" onfocus="copy(this);" value="','"');
 	$download_link=$ddl;
 	$delete_link= $del;
 	

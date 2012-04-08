@@ -43,32 +43,50 @@ if ($continue_up)
         $post['login[account]'] = $_REQUEST['my_login'];
         $post['login[passwd]'] = $_REQUEST['my_pass'];
         $post['back'] = "http://www.115.com";
-        $post['goto'] = "http%3A%2F%2Fu.115.com";
+        $post['goto'] = "http%3A%2F%2F115.com";
 
         $page = geturl("passport.115.com", 80, "/?action=login", 0, 0, $post);            
         is_page($page);
         $cookie1 = GetCookies($page);
-        $linkaction =cut_str ($page ,'location.href = "','";');
-        if(!$linkaction)
+        
+      //  echo (" <div> Page : $page </div>");
+        
+        $errorcode =cut_str ($page , "name='error_code' value='","'");
+      //  echo (" <div> errorcode : $errorcode </div>");
+      
+        if($errorcode)
         {
              html_error("Error logging in - are your logins correct!", 0);
         } 
+      
+      //  $linkaction =cut_str ($page ,' Location: ','');
+      //  echo (" <div> linkaction : $linkaction </div>");
+      //  
+      //  if(!$linkaction)
+      //  {
+      //       html_error("Error logging in - are your logins correct!", 0);
+      //  } 
       //  $Url = parse_url($linkaction);
       //  $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), 0, $cookie1, 0, 0, $_GET["proxy"],$pauth);    
       //  is_page($page);
-      //      $cookie = GetCookies($page);
+      //  $cookie = GetCookies($page);
 ?>
 <script>document.getElementById('login').style.display='none';</script>
 <div id="info" width=100% align="center">Retrive upload ID</div>
 
 <?php 
-        $Url = parse_url("http://u.115.com/?ct=index&ac=my");
-        $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""),"http://u.115.com/?ct=index&ac=my", $cookie1, 0, 0, $_GET["proxy"],$pauth);    
+        $Url = parse_url("http://115.com/");
+        $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""),"http://www.115.com/", $cookie1, 0, 0, $_GET["proxy"],$pauth);    
+        
         $cookie = GetCookies($page);
-        $cookie_up =cut_str ($page ,"var USER_COOKIE = '","';");
+        
         $Upload_url=cut_str ($page ,'"aid":1,"upload_url":"','",');
         $Upload_url=str_replace('\/','/',$Upload_url);
-        //echo (" <div> Upload_url : $Upload_url </div>")
+        
+       // echo (" <div> Upload_url : $Upload_url </div>");
+        
+        $cookie_up =cut_str ($page ,"var USER_COOKIE = '","';");
+        
         if(!$Upload_url)
         {
             html_error($Upload_url, 0);

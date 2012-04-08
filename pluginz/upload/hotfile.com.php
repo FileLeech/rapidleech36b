@@ -12,11 +12,6 @@ if ($hotfile_username & $hotfile_password){
 	$_REQUEST['my_pass'] = $hotfile_password;
 	$_REQUEST['action'] = "FORM";
 	echo "<b><center>Use Default login/pass.</center></b>\n";
-} elseif (isset($upload_acc) && isset($upload_acc["hf_com"]["user"]) && $upload_acc["hf_com"]["user"] != '' && $upload_acc["hf_com"]["pass"] != '') {
-    $_REQUEST['my_login'] = $upload_acc["hf_com"]["user"];
-    $_REQUEST['my_pass'] = $upload_acc["hf_com"]["pass"];
-    $_REQUEST['action'] = "FORM";
-    echo "<b><center>Use Default login/pass.</center></b>\n";
 }
 if ($_REQUEST['action'] == "FORM")  
     $continue_up=true;

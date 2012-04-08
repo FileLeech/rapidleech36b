@@ -22,7 +22,7 @@ else{
 <tr><td nowrap>&nbsp;Login*<td>&nbsp;<input type=text name=login value='' style="width:160px;" />&nbsp;</tr>
 <tr><td nowrap>&nbsp;Password*<td>&nbsp;<input type=password name=password value='' style="width:160px;" />&nbsp;</tr>
 <tr><td nowrap><label for="name">&nbsp;Transload* 
-<td>&nbsp;Video<input type="radio" name="AV" value="video" onClick="javascript:var displ=this.checked?'':'none';document.getElementById('videoblock').style.display=displ;">
+<td>&nbsp;Video<input type="radio" name="AV" value="video" onclick="javascript:var displ=this.checked?'':'none';document.getElementById('videoblock').style.display=displ;">
 &nbsp; File<input type="radio" name="AV" value="file">  
 </table>
 <table border=0 id="videoblock" style="display: none;" cellspacing=0 align=center>
@@ -32,7 +32,7 @@ else{
 <tr><td nowrap>&nbsp;Title*<td>&nbsp;<input name="title" style="width:160px;" maxlength="60">&nbsp;</tr>
 <tr><td nowrap>&nbsp;Description*<td>&nbsp;<textarea name="description" style="width:160px;"></textarea>&nbsp;</tr>
 <tr><td nowrap>&nbsp;Tags*<td>&nbsp;<input name="tags" style="width:160px;" maxlength="120">&nbsp;</tr>
-<tr><td nowrap><td><small>&nbsp;Enter each tag seperated by a <br>&nbsp;comma,for example tag1,tag2 etc...</small></tr>
+<tr><td nowrap><td><small>&nbsp;Enter each tag seperated by a <br />&nbsp;comma,for example tag1,tag2 etc...</small></tr>
 <tr><td nowrap>&nbsp;Category*<td>&nbsp;<select name="category" id="vid-cat">
 <option value="-1"> - </option> 
 <option value="0">Animation</option> 
@@ -58,13 +58,13 @@ else{
 </select></tr>
 <tr><td nowrap><label for="name">&nbsp;Filter* 
 <td><input type="radio" name="vid-ex" value="0" checked="1"><small>Suitable for all audiences</tr>
-<td><td><input type="radio" name="vid-ex" value="1"><small>Suitable for adult (18+) audiences<br><br></small>
+<td><td><input type="radio" name="vid-ex" value="1"><small>Suitable for adult (18+) audiences<br /><br /></small>
 <tr><td nowrap><label for="name">&nbsp;Privacy Level* 
 <td><input type="radio" name="privacy" value="0" checked="1"><small>Open (Open to all)</tr></small>
 <td><td><input type="radio" name="privacy" value="1"><small>Secret (Not Publicly Visible)</small></tr>
 <tr><td colspan=2 align=center><small style="color:#FFEE00">* Required Field or upload will fail !</small></tr>
 </table>
-<br>
+<br />
 <center><input type=submit value='Upload' /><center>
 </form>
 <?php

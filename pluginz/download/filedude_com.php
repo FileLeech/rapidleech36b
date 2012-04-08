@@ -1,14 +1,15 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
+<?php
+
+if (!defined('RAPIDLEECH')) {
+    require_once("index.html");
+    exit;
 }
 
 class filedude_com extends DownloadClass {
 
     public function Download($link) {
         global $premium_acc;
-        if (($_REQUEST["premium_acc"] == "on" && $_REQUEST["premium_user"] && $_REQUEST["premium_pass"]) || ($_REQUEST["premium_acc"] == "on" && $premium_acc["filedude"]["user"] && $premium_acc["filedude"]["pass"])) {
+        if (($_REQUEST["premium_acc"] == "on" && $_REQUEST["premium_user"] && $_REQUEST["premium_pass"]) || ($_REQUEST["premium_acc"] == "on" && $premium_acc["filedude_com"]["user"] && $premium_acc["filedude_com"]["pass"])) {
             $this->DownloadPremium($link);
         } elseif ($_POST['step'] == 1) {
             return $this->DownloadFree($link);
@@ -54,8 +55,8 @@ class filedude_com extends DownloadClass {
     private function DownloadPremium($link){
         global $premium_acc;
         $post=array();
-        $post['user']=$_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["filedude"] ["user"];
-        $post['pass']=$_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["filedude"] ["pass"];
+        $post['user']=$_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["filedude_com"] ["user"];
+        $post['pass']=$_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["filedude_com"] ["pass"];
         $page=$this->GetPage("http://www.filedude.com/premium_login", 0, $post, $link);
         $Cookies=GetCookies($page);
         $page=$this->GetPage($link, $Cookies, 0, $link);

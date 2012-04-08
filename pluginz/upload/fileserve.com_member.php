@@ -1,7 +1,7 @@
 <?php
 ####### Account Info. ###########
-$fs_login = "";
-$fs_pass = "";
+$fs_login = "";//Set you username
+$fs_pass = "";//Set your password
 ##############################
 
 $not_done=true;
@@ -10,11 +10,6 @@ if ($fs_login & $fs_pass){
 	$_REQUEST['bin_login'] = $fs_login;
 	$_REQUEST['bin_pass'] = $fs_pass;
 	$_REQUEST['action'] = "FORM";
-	echo "\n";
-} elseif (isset($upload_acc) && isset($upload_acc["fileserve_mem"]["user"]) && $upload_acc["fileserve_mem"]["user"] != '' && $upload_acc["fileserve_mem"]["pass"] != '') {
-    $_REQUEST['bin_login'] = $upload_acc["fileserve_mem"]["user"];
-    $_REQUEST['bin_pass'] = $upload_acc["fileserve_mem"]["pass"];
-    $_REQUEST['action'] = "FORM";
 	echo "\n";
 }
 if ($_REQUEST['action'] == "FORM")
@@ -79,21 +74,24 @@ if ($continue_up)
 			
 			$url=parse_url($url);
 			$upfiles = upfile($url["host"], $url["port"] ? $url["port"] : 80, $url["path"] . ($url["query"] ? "?" . $url["query"] : ""), 0, $cookies, 0, $lfile, $lname, "file");
+			$fileSize = getSize($lfile);
+			//5 * 1024 * 1024 = 5MB
+			$x = ( integer ) (getSize($lfile) / (5 * 1024 * 1024)); //5mb per second
+			insert_timer( $x, "Wait for Redirect Download Link.","",true );
 ?>
 <script>document.getElementById('progressblock').style.display='none';</script>
 <?php
-			preg_match('#shortenCode":"(.+)"}#',$upfiles,$ddl);
-			preg_match('#deleteCode":"(.+)","sessionId#',$upfiles,$del);
-			if (!empty($ddl[1]))
+			if (preg_match('#shortenCode":"(.+)"}#',$upfiles,$ddl))
 			$download_link = 'http://www.fileserve.com/file/' . $ddl[1] . '/' . $lname;
 			else
 			html_error ('Didn\'t find downloadlink!');
-			if (!empty($del[1]))
-			$delete_link= 'http://www.fileserve.com/file/' . $ddl[1] . '/delete/' . $del[1];
+			if (preg_match('#deleteCode":"(.+)","sessionId#',$upfiles,$del))
+			$delete_link = 'http://www.fileserve.com/file/' . $ddl[1] . '/delete/' . $del[1];
 			else
 			html_error ('Didn\'t find deletelink!');
 }
 /**
 written by defport 11/08/2011
+updated by pasolvon 29/12/2011 -- adding timer by filesize
 **/   
 ?>

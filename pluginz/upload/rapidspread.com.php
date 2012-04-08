@@ -41,7 +41,7 @@
 			is_page($upfiles);
 			$locat=trim(cut_str($upfiles,'Location:',"\n"));
 			$download_link=cut_str($upfiles,'<a target="top" href="','"><b>');
-			//if (!$locat) html_error ('Error get location<br>'.$upfiles);
+			//if (!$locat) html_error ('Error get location<br />'.$upfiles);
 			//$download_link=cut_str($upfiles,'<a target="top" href="','"><b>');
 			//$Url=parse_url($locat);
 			//$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $ref, $cookies, 0, 0, $_GET["proxy"],$pauth);

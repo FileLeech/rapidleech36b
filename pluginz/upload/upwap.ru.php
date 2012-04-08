@@ -30,7 +30,7 @@
 			$tmp2=cut_str($upfiles,'<a href="/','"');
 			if (is_numeric($tmp1)) $id=$tmp1;
 			if (is_numeric($tmp2)) $id=$tmp2;
-			if (!$id) html_error ('Upload error <br>'.$upfiles);
+			if (!$id) html_error ('Upload error <br />'.$upfiles);
 			else $download_link='http://upwap.ru/'.$id.'/';
 ?>
 <script>document.getElementById('final').style.display='none';</script>

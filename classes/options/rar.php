@@ -1,20 +1,18 @@
 <?php
 
 function rar() {
-  global $optxt, $PHP_SELF, $list;
-	if (count ( $_GET ["files"] ) < 1) {
-		echo $optxt['select_one_file']."<br><br>";
-  } elseif (!is_file(ROOT_DIR.'/rar/rar')) { echo $optxt['rar_disappear'].'<br /><br />'; }
+  global $PHP_SELF, $list, $options, $L;
+  if (!is_file(ROOT_DIR.'/rar/rar')) { echo $L->say['rar_disappear'].'<br /><br />'; }
   else {
 ?>
-  <form name="rar_files" method="post" action="<?php echo $PHP_SELF; ?>">
-    <table style="text-align: left;" align="center">
+  <form name="rar_files" method="post" action="<?php echo ROOT_URL.basename($PHP_SELF); ?>">
+    <table align="center" class="rar-table">
       <tr>
         <td>
           <table>
             <tr>
               <td colspan="2" class="rar-table-main">
-                <b><?php echo $optxt['_filearcv']; ?></b>
+                <b><?php echo $L->say['_filearcv']; ?></b>
               </td>
             </tr>
 <?php
@@ -36,7 +34,7 @@ function rar() {
 ?>
             <tr>
               <td colspan="2" class="rar-table-all">
-                <b><?php echo $optxt['_namearcv']; ?></b>
+                <b><?php echo $L->say['_namearcv']; ?></b>
               </td>
             </tr>
             <tr>
@@ -46,23 +44,29 @@ function rar() {
             </tr>
             <tr>
               <td colspan="2" class="rar-table-tlr-3">
-                <b><?php echo $optxt['_raropt']; ?></b>
+                <b><?php echo $L->say['_raropt']; ?></b>
               </td>
             </tr>
             <tr>
               <td class="rar-left">
-                <?php echo $optxt['_rarcpr']; ?>
+                <?php echo $L->say['_rarcpr']; ?>
                 <select name="rar_opts[comp_lvl]">
-                  <option value="0" selected="selected"><?php echo $optxt['_store']; ?></option>
-                  <option value="1"><?php echo $optxt['_fastest']; ?></option>
-                  <option value="2"><?php echo $optxt['_fast']; ?></option>
-                  <option value="3"><?php echo $optxt['_normal']; ?></option>
-                  <option value="4"><?php echo $optxt['_good']; ?></option>
-                  <option value="5"><?php echo $optxt['_best']; ?></option>
+                  <option value="0" selected="selected"><?php echo $L->say['_store']; ?></option>
+<?php
+      if (!$options['disable_archive_compression']) {
+?>
+                  <option value="1"><?php echo $L->say['_fastest']; ?></option>
+                  <option value="2"><?php echo $L->say['_fast']; ?></option>
+                  <option value="3"><?php echo $L->say['_normal']; ?></option>
+                  <option value="4"><?php echo $L->say['_good']; ?></option>
+                  <option value="5"><?php echo $L->say['_best']; ?></option>
+<?php
+      }
+?>
                 </select>
               </td>
               <td class="rar-table-side">
-                <input type="checkbox" name="rar_opts[vols]" value="1" onclick="javascript:var displ=this.checked?'inline':'none';document.getElementById('rar_opts_vols').style.display=displ;var fc=document.getElementsByName('rar_opts[vols_s]')[0]; fc.focus(); fc.selectionStart = 0; fc.selectionEnd = fc.value.length;" /><?php echo $optxt['_volumes']; ?>
+                <input type="checkbox" name="rar_opts[vols]" value="1" onclick="javascript:var displ=this.checked?'inline':'none';document.getElementById('rar_opts_vols').style.display=displ;var fc=document.getElementsByName('rar_opts[vols_s]')[0]; fc.focus(); fc.selectionStart = 0; fc.selectionEnd = fc.value.length;" /><?php echo $L->say['_volumes']; ?>
                 <span id="rar_opts_vols" style="display:none">
                   <br />Size: <input type="text" size="3" name="rar_opts[vols_s]" value="1" />&nbsp;
                   <select name="rar_opts[vols_sm]">
@@ -79,41 +83,41 @@ function rar() {
             </tr>
             <tr>
               <td class="rar-left-2">
-                <input type="checkbox" name="rar_opts[delete]" value="1" /><?php echo $optxt['_delarcv']; ?>
+                <input type="checkbox" name="rar_opts[delete]" value="1"<?php echo ($options['disable_to']['act_del'] ? ' disabled="disabled"' : '');?> /><?php echo $L->say['_delarcv']; ?>
               </td>
               <td class="rar-table-side-2">
-                <input type="checkbox" name="rar_opts[solid]" value="1" /><?php echo $optxt['_solarcv']; ?>
+                <input type="checkbox" name="rar_opts[solid]" value="1" /><?php echo $L->say['_solarcv']; ?>
               </td>
             </tr>
             <tr>
               <td class="rar-left-3">
-                <input type="checkbox" name="rar_opts[rec_rec]" value="1" onclick="javascript:var displ=this.checked?'inline':'none';document.getElementById('rar_opts_rec_rec').style.display=displ; var fc=document.getElementsByName('rar_opts[rec_rec_s]')[0]; fc.focus(); fc.selectionStart = 0; fc.selectionEnd = fc.value.length;" /><?php echo $optxt['_recarcv']; ?>
+                <input type="checkbox" name="rar_opts[rec_rec]" value="1" onclick="javascript:var displ=this.checked?'inline':'none';document.getElementById('rar_opts_rec_rec').style.display=displ; var fc=document.getElementsByName('rar_opts[rec_rec_s]')[0]; fc.focus(); fc.selectionStart = 0; fc.selectionEnd = fc.value.length;" /><?php echo $L->say['_recarcv']; ?>
                 <span id="rar_opts_rec_rec" style="display:none">
                   <br />From 1 to 10: <input type="text" size="3" name="rar_opts[rec_rec_s]" value="1" />%
                 </span>
               </td>
               <td class="rar-table-side-3">
-                <input type="checkbox" name="rar_opts[test]" value="1" /><?php echo $optxt['_testarcv']; ?>
+                <input type="checkbox" name="rar_opts[test]" value="1" /><?php echo $L->say['_testarcv']; ?>
               </td>
             </tr>
             <tr>
               <td class="rar-left-4">
-                <input type="checkbox" name="rar_opts[use_pass1]" value="1" onclick="javascript:var displ=this.checked?'inline':'none';document.getElementById('rar_opts_pass').style.display=displ;document.getElementsByName('rar_opts[pass]')[0].focus();" /><?php echo $optxt['_pasarcv']; ?>
+                <input type="checkbox" name="rar_opts[use_pass1]" value="1" onclick="javascript:var displ=this.checked?'inline':'none';document.getElementById('rar_opts_pass').style.display=displ;document.getElementsByName('rar_opts[pass]')[0].focus();" /><?php echo $L->say['_pasarcv']; ?>
                 <span id="rar_opts_pass" style="display:none">
                   <br />
                   <input type="password" size="15" name="rar_opts[pass]" value="" />
                   <br />
-                  <input type="checkbox" name="rar_opts[use_pass2]" value="1" /><?php echo $optxt['_encarcv']; ?>
+                  <input type="checkbox" name="rar_opts[use_pass2]" value="1" /><?php echo $L->say['_encarcv']; ?>
                 </span>
               </td>
               <td class="rar-table-side-4">
-                <input type="checkbox" name="rar_opts[path_i]" value="1" onclick="javascript:var displ=this.checked?'inline':'none';document.getElementById('rar_opts_path_i').style.display=displ;document.getElementsByName('rar_opts[path_i_path]')[0].focus();" /><?php echo $optxt['_patharcv']; ?>
+                <input type="checkbox" name="rar_opts[path_i]" value="1" onclick="javascript:var displ=this.checked?'inline':'none';document.getElementById('rar_opts_path_i').style.display=displ;document.getElementsByName('rar_opts[path_i_path]')[0].focus();" /><?php echo $L->say['_patharcv']; ?>
                 <span id="rar_opts_path_i" style="display:none;"><br /><input type="text" size="15" name="rar_opts[path_i_path]" value="" /></span>
               </td>
             </tr>
             <tr>
               <td class="rar-left-5">
-                <input type="checkbox" name="rar_opts[separated]" value="1" /><?php echo $optxt['_separcv']; ?>
+                <input type="checkbox" name="rar_opts[separated]" value="1" /><?php echo $L->say['_separcv']; ?>
               </td>
               <td class="rar-table-side-5">
                 &nbsp;
@@ -133,7 +137,7 @@ function rar() {
       <tr>
         <td align="center">
           <input type="hidden" name="act" value="rar_go" />
-          <input type="submit" value="<?php echo $optxt['_rar']; ?>" />
+          <input type="submit" value="<?php echo $L->say['_rar']; ?>" />
         </td>
       </tr>
       <tr>
@@ -148,10 +152,7 @@ function rar() {
 
 
 function rar_go() {
-  global $PHP_SELF, $optxt, $list;
-	if (count ( $_GET ["files"] ) < 1) {
-		echo $optxt['select_one_file']."<br><br>";
-	} else {		
+  global $PHP_SELF, $list, $L;
   require_once(CLASS_DIR."rar.php");
 ?>
   <table align="center" style="text-align: left;">
@@ -174,12 +175,12 @@ function rar_go() {
         <table align="center">
           <tr>
             <td colspan="2" class="rar-table-tlr-4">
-              <?php printf($optxt['_crearcv'], ($_GET['rar_opts']['separated'] ? $name : $_GET['rar_opts']['rarfilename'])); ?>
+              <?php echo $L->sprintf($L->say['_crearcv'], ($_GET['rar_opts']['separated'] ? $name : $_GET['rar_opts']['rarfilename'])); ?>
             </td>
           </tr>
           <tr>
-            <td class="rar-left-6"><?php echo $optxt['_stat']; ?></td>
-            <td id="rar_status<?php echo $i; ?>" class="rar-right"><?php echo $optxt['_wait']; ?></td>
+            <td class="rar-left-6"><?php echo $L->say['_stat']; ?></td>
+            <td id="rar_status<?php echo $i; ?>" class="rar-right"><?php echo $L->say['_waiting']; ?></td>
           </tr>
           <tr>
             <td colspan="2" class="rar-table-space-2">&nbsp;</td>
@@ -195,15 +196,14 @@ function rar_go() {
       </td>
     </tr>
   </table>
-  <span id="rar_finished" style="display:none;"><a href="<?php echo $PHP_SELF."?act=files"; ?>"><?php echo $optxt['_backlist']; ?></a><br /><br /><br /></span>
+  <span id="rar_finished" style="display:none;"><a href="<?php echo ROOT_URL.basename($PHP_SELF)."?act=files"; ?>"><?php echo $L->say['_backlist']; ?></a><br /><br /><br /></span>
 <?php
-}
 }
 
 
 
 function rar_go_go() {
-  global $optxt, $options, $list;
+  global $options, $list, $L;
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -217,6 +217,9 @@ function rar_st(elementid, st){
   flush();
   require_once(CLASS_DIR."rar.php");
 
+  if ($options['disable_to']['act_del']) { $_GET['rar_opts']['delete'] = 0; }
+  if ($options['disable_archive_compression']) { $_GET['rar_opts']['comp_lvl'] = 0; }
+
   if ($_GET['rar_opts']['separated']) { $am = count($_GET['rar_opts']['filestorar']); }
   else { $am = 1; }
   for($i = 0; $i < $am; $i++) {
@@ -224,7 +227,7 @@ function rar_st(elementid, st){
     $rar = new rlRar($name, $options['check_these_before_unzipping'] ? $options['forbidden_filetypes'] : array('.xxx'));
     if ($rar->rar_return !== 'rar') {
 ?>
-<script type="text/javascript">rar_st('rar_status<?php echo $i; ?>', '<?php echo $optxt['rar_disappear']; ?>');</script>
+<script type="text/javascript">rar_st('rar_status<?php echo $i; ?>', '<?php echo $L->say['rar_disappear']; ?>');</script>
 <?php 
     }
     else {
@@ -255,19 +258,19 @@ function rar_st(elementid, st){
             $rar_f_dd_ = basename(strtolower($rar_f_dd));
             if ($tmp == substr($rar_f_dd_, 0, strlen($tmp)) && is_numeric(substr($rar_f_dd_, strlen($tmp), -4))) {
               $rar_f_dd = realpath($options['download_dir']).'/'.basename($rar_f_dd);
-              $time = filemtime($rar_f_dd); while (isset($list[$time])) { $time++; }
+              $time = getNowzone(@filemtime($rar_f_dd)); while (isset($list[$time])) { $time++; }
               $list[$time] = array("name" => $rar_f_dd, "size" => bytesToKbOrMbOrGb(filesize($rar_f_dd)), "date" => $time);
             }
           }
           closedir($rar_dir);
         }
         elseif (is_file($rar_tolist)) {
-          $time = filemtime($rar_tolist); while (isset($list[$time])) { $time++; }
+          $time = getNowzone(@filemtime($rar_tolist)); while (isset($list[$time])) { $time++; }
           $list[$time] = array("name" => $rar_tolist, "size" => bytesToKbOrMbOrGb(filesize($rar_tolist)), "date" => $time);
         }
         if (!updateListInFile($list)) {
 ?>
-<script type="text/javascript">var tmp = document.getElementById('rar_finished'); tmp.innerHTML = "<?php echo $optxt['couldnt_upd_list']; ?><br /><br />" + tmp.innerHTML</script>;
+<script type="text/javascript">var tmp = document.getElementById('rar_finished'); tmp.innerHTML = "<?php echo $L->say['couldnt_upd_list']; ?><br /><br />" + tmp.innerHTML</script>;
 <?php
         }
       }

@@ -12,11 +12,6 @@ if ($rapidshare_login & $rapidshare_pass){
 	$_REQUEST['my_pass'] = $rapidshare_pass;
 	$_REQUEST['action'] = "FORM";
 	echo "<b><center>Use Default login/pass.</center></b>\n";
-} elseif (isset($upload_acc) && isset($upload_acc["rs_com_pre"]["user"]) && $upload_acc["rs_com_pre"]["user"] != '' && $upload_acc["rs_com_pre"]["pass"] != '') {
-    $_REQUEST['my_login'] = $upload_acc["rs_com_pre"]["user"];
-    $_REQUEST['my_pass'] = $upload_acc["rs_com_pre"]["pass"];
-    $_REQUEST['action'] = "FORM";
-    echo "<b><center>Use Default login/pass.</center></b>\n";
 }
 if ($_REQUEST['action'] == "FORM")
     $continue_up=true;

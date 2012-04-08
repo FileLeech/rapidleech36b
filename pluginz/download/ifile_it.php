@@ -1,29 +1,29 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-	require_once("404.php");
+	require_once("index.html");
 	exit;
 }
 
 class ifile_it extends DownloadClass {
-	private $cookie, $_url, $_ukey, $dlreq, $captcha, $usecurl;
+	private $cookie, $_url, $_ukey, $dlreq, $captcha;
 	public function Download($link) {
-		global $premium_acc, $Referer, $htxt;
+		global $premium_acc, $Referer, $L;
 		$Referer = $link;
 		$this->cookie = array();
 		if (!function_exists('json_decode')) /* Load a class?... Or maybe we can add a 'json_decode' function in others.php... */ html_error("Error: Please enable JSON in php.");
 
 		// Check https support for login.
-		$this->usecurl = $cantlogin = false;
+		$cantlogin = false;
 		if (!extension_loaded('openssl')) {
 			if (extension_loaded('curl')) {
 				$cV = curl_version();
-				if (in_array('https', $cV['protocols'], true)) $this->usecurl = true;
-				else $cantlogin = true;
+				if (!in_array('https', $cV['protocols'], true)) $cantlogin = true;
 			} else $cantlogin = true;
-			if ($cantlogin) $this->changeMesg($htxt['_retrieving']."<br /><br />Https support: NO<br />Member Login disabled.");
+			if ($_REQUEST["premium_acc"] == "on" && !empty($premium_acc["ifile_it"]["apikey"])) $cantlogin = false;
+			if ($cantlogin) $this->changeMesg($L->say['_retrieving']."<br /><br />Https support: NO<br />Login disabled.");
 		}
 
-		if (!$cantlogin && $_REQUEST["premium_acc"] == "on" && ((!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) || ($premium_acc["ifile"]["user"] && $premium_acc["ifile"]["pass"]))) $this->Login($link);
+		if (!$cantlogin && $_REQUEST["premium_acc"] == "on" && (((!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) || ($premium_acc["ifile_it"]["user"] && $premium_acc["ifile_it"]["pass"])) || !empty($premium_acc["ifile_it"]["apikey"]))) $this->Login($link);
 		elseif ($_POST["skip"] == "true") $this->chkcaptcha($link);
 		else $this->Prepare($link);
 	}
@@ -129,67 +129,68 @@ class ifile_it extends DownloadClass {
 		exit;
 	}
 
-	private function GetPageS($link, $cookie = 0, $post = 0, $referer = 0, $auth = 0) {
-		if (!$referer) {
-			global $Referer;
-			$referer = $Referer;
-		}
-		$url = parse_url(trim($link));
-
-		if ($this->usecurl && $url['scheme'] == 'https') $page = $this->cURL($link, $cookie, $post, $referer, base64_decode($auth));
-		else $page = $this->GetPage($link, $cookie, $post, $referer, $auth);
-		return $page;
-	}
-
-	private function cURL($link, $cookie = 0, $post = 0, $referer = 0, $auth = 0) {
-		if (is_array($cookie)) $cookie = CookiesToStr($cookie);
-		$opt = array(CURLOPT_HEADER => 1, CURLOPT_COOKIE => $cookie, CURLOPT_REFERER => $referer,
-			CURLOPT_SSL_VERIFYPEER => 0, CURLOPT_SSL_VERIFYHOST => 0, CURLOPT_RETURNTRANSFER => 1,
-			CURLOPT_USERAGENT => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6) Gecko/20050317 Firefox/1.0.2");
-		if ($post != '0') {
-			$opt[CURLOPT_POST] = 1;
-			$opt[CURLOPT_POSTFIELDS] = formpostdata($post);
-		}
-		if ($auth) {
-			$opt[CURLOPT_HTTPAUTH] = CURLAUTH_BASIC;
-			$opt[CURLOPT_USERPWD] = $auth;
-		}
-		$ch = curl_init($link);
-		foreach ($opt as $O => $V) { // Using this instead of 'curl_setopt_array'
-			curl_setopt($ch, $O, $V);
-		}
-		$page = curl_exec($ch);
-		$errz = curl_errno($ch);
-		$errz2 = curl_error($ch);
-		curl_close($ch);
-
-		if ($errz != 0) html_error("IF:[cURL:$errz] $errz2");
-		return $page;
-	}
-
 	private function Login($link) {
-		global $premium_acc;
+		global $premium_acc, $L;
 
-		if (!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) $pA = true;
-		else $pA = false;
-		$user = ($pA ? $_REQUEST["premium_user"] : $premium_acc["ifile"]["user"]);
-		$pass = ($pA ? $_REQUEST["premium_pass"] : $premium_acc["ifile"]["pass"]);
-		if (empty($user) || empty($pass)) html_error("Login Failed: Username or Password are empty. Please check login data.");
+		// Ping api
+		$page = $this->GetPage('http://ifile.it/api-ping.api');
+		is_notpresent($page, '"message":"pong"', "Error: ifile.it api is down?.");
 
-		$post = array();
-		$post["username"] = urlencode($user);
-		$post["password"] = urlencode($pass);
-		$page = $this->GetPageS("https://secure.ifile.it/account-signin_p.html", $this->cookie, $post, 'https://secure.ifile.it/account-signin.html');
-		$this->cookie = GetCookiesArr($page);
+		if (empty($premium_acc["ifile_it"]["apikey"])) {
+			if (!empty($_REQUEST["premium_user"]) && !empty($_REQUEST["premium_pass"])) $pA = true;
+			else $pA = false;
+			$user = ($pA ? $_REQUEST["premium_user"] : $premium_acc["ifile_it"]["user"]);
+			$pass = ($pA ? $_REQUEST["premium_pass"] : $premium_acc["ifile_it"]["pass"]);
+			if (empty($user) || empty($pass)) html_error("Login Failed: Username or Password are empty. Please check login data.");
 
-		is_present($page, 'error=SIGNIN_FAILURE', "Login failed: Username or Password is incorrect.");
-		is_notpresent($page, "Set-Cookie: if_akey=", "Login Failed: Cannot get cookie.");
+			$post = array();
+			$post["username"] = urlencode($user);
+			$post["password"] = urlencode($pass);
+			$page = $this->GetPage('https://secure.ifile.it/api-fetch_apikey.api', 0, $post);
+			$rply = $this->Get_Reply($page);
 
-		$this->Prepare($link);
+			if ($rply['status'] != 'ok') html_error("Login Failed: ".htmlentities($rply['message']));
+			if (empty($rply['akey'])) html_error("Login Failed: Akey not found.");
+		} else {
+			$rply = array();
+			$rply['akey'] = $premium_acc["ifile_it"]["apikey"];
+		}
+
+		$this->cookie = array();
+		$this->cookie['if_akey'] = $rply['akey'];
+
+		$page = $this->GetPage('http://ifile.it/api-fetch_account_info.api', 0, array('akey'=>$rply['akey']));
+		$rply = $this->Get_Reply($page);
+
+		if ($rply['status'] != 'ok') html_error("Cannot check acc status: ".htmlentities($rply['message']));
+		if (empty($rply['user_group']))  html_error("Cannot check acc type");
+
+		// If isn't a normal account, should be premium/tester/vip...
+		if ($rply['user_group'] != 'normal') return $this->PremiumDL($link);
+		else {
+			$this->changeMesg($L->say['_retrieving']."<br /><b>Account isn\\\'t premium</b><br />Using it as member.");
+			return $this->Prepare($link);
+		}
+	}
+
+	private function PremiumDL($link) {
+		$page = $this->GetPage($link);
+		is_present($page, "ifile.it/?error=", "File not Found or Deleted");
+		if (!preg_match("@var[\s|\t]+__ukey[\s|\t]*=[\s|\t]*'([^']+)'@i", $page, $ukey)) html_error("Error: FileID not found.");
+
+		$page = $this->GetPage('http://ifile.it/api-fetch_download_url.api', 0, array('akey' => $this->cookie['if_akey'], 'ukey' => $ukey[1]));
+		$rply = $this->Get_Reply($page);
+
+		if ($rply['status'] != 'ok') html_error("Error getting premium dlink: ".htmlentities($rply['message']));
+		if (empty($rply['download_url'])) html_error("Error getting premium dlink... Empty?");
+
+		$filename = parse_url($rply['download_url']);$filename = urldecode(basename($filename["path"]));
+		return $this->RedirectDownload($rply['download_url'], $filename);
 	}
 }
 
 //[16-Oct-2011] Written by Th3-822.
 //[21-Nov-2011] Captcha now doesn't allow hotlinking, fixed. - Th3-822
+//[09-Dec-2011] Added premium acc support (non tested) & apikey support. - Th3-822
 
 ?>

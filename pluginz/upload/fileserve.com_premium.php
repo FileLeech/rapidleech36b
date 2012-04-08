@@ -17,9 +17,6 @@ if ($_REQUEST ['action'] == "FORM" or (strlen($fs_login) > 0 && strlen($fs_pass)
 	if (strlen($fs_login) > 0 && strlen($fs_pass) > 0) {
 		$_REQUEST['my_login'] = $fs_login;
 		$_REQUEST['my_pass'] = $fs_pass;
-	} elseif (isset($upload_acc) && isset($upload_acc["fileserve_pre"]["user"]) && $upload_acc["fileserve_pre"]["user"] != '' && $upload_acc["fileserve_pre"]["pass"] != '') {
-		$_REQUEST['my_login'] = $upload_acc["fileserve_pre"]["user"];
-		$_REQUEST['my_pass'] = $upload_acc["fileserve_pre"]["pass"];
 	}
 } else {
 	echo "<table border=1 style='width: 540px;' cellspacing=0 align=center>";
@@ -80,7 +77,7 @@ if ($continue_up) {
 	
 	preg_match('/id="userId" value="(.+?)"/', $page, $result);
 	$userId = $result[1];		
-	//echo "userId: ".$userId."<BR>";
+	//echo "userId: ".$userId."<br />";
 	//$cookie = GetCookies( $page );
 	$page = geturl("www.fileserve.com", 80, "/upload-track.php", $Referer,$cookie, 0, 0, "");
 

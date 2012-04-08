@@ -1,6 +1,6 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-    require_once("404.php");
+    require_once("index.html");
     exit;
 }
 
@@ -8,20 +8,20 @@ class filesend_net extends DownloadClass {
 
     public function Download($link) {
 
-        $happy = $this->GetPage($link);
-        is_present($happy, 'File Not Found');
-        $v_tony = GetCookies($happy);
+        $page = $this->GetPage($link);
+        is_present($page, 'File Not Found');
+        $cookie = GetCookies($page);
 
-        if (!preg_match('#time = (\d+);#', $happy, $wait)) html_error('Error: Timer id not found???');
+        if (!preg_match('#time = (\d+);#', $page, $wait)) html_error('Error: Timer id not found???');
         $this->CountDown($wait[1]);
-        $orphan = cut_str($happy, '<form method="POST"', '</form>');
-        if (!preg_match('%<input type="hidden" name="(\w+)" value="(\w+)">%', $orphan, $twin)) html_error('Error: Post ID not found???');
-        $family = array($twin[1] => $twin[2], 'download' => '');
-        $ruud = cut_str($orphan, 'action="', '"');
-        if (!$ruud) html_error('Error: Download link not found???');
-        $sadness = parse_url($ruud);
-        $vreets = basename($sadness['path']);
-        $this->RedirectDownload($ruud, $vreets, $v_tony, $family);
+        $temp = cut_str($page, '<form method="POST"', '</form>');
+        if (!preg_match('%<input type="hidden" name="(\w+)" value="(\w+)">%', $temp, $check)) html_error('Error: Post ID not found???');
+        $post = array($check[1] => $check[2], 'download' => '');
+        $dlink = cut_str($temp, 'action="', '"');
+        if (!$dlink) html_error('Error: Download link not found???');
+        $Url = parse_url($dlink);
+        $FileName = basename($Url['path']);
+        $this->RedirectDownload($dlink, $FileName, $cookie, $post);
         exit();
     }
 }

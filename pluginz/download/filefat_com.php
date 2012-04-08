@@ -1,14 +1,14 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-  require_once("404.php");
-	exit();
+    require_once ("index.html");
+    exit ();
 }
 
 class filefat_com extends DownloadClass {
 
     public function Download($link) {
         global $premium_acc;
-            if ($_REQUEST['premium_acc'] == 'on' && (($_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || ($premium_acc['filefat']['user'] && $premium_acc['filefat']['pass']))) {
+            if ($_REQUEST['premium_acc'] == 'on' && (($_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || ($premium_acc['filefat_com']['user'] && $premium_acc['filefat_com']['pass']))) {
                 $this->Premium($link);
             } elseif ($_POST['step'] == '1') {
                 $this->Free($link);
@@ -92,8 +92,8 @@ class filefat_com extends DownloadClass {
             $post = array();
             $post['op'] = "login";
             $post['redirect'] = urlencode('http://http://filefat.com/');
-            $post['login'] = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["filefat"] ["user"];
-            $post['password'] = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["filefat"] ["pass"];
+            $post['login'] = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["filefat_com"] ["user"];
+            $post['password'] = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["filefat_com"] ["pass"];
             $post['x'] = rand(0,88);
             $post['y'] = rand(0,16);
             $page = $this->GetPage('http://www.filefat.com/login.html', 0, $post, 'http://www.filefat.com/');
@@ -118,6 +118,7 @@ class filefat_com extends DownloadClass {
             $Url = parse_url($dl[0]);
             $FileName = basename($Url['path']);
             $this->RedirectDownload($dl[0], $FileName, $cookie, 0, $link);
+            exit();
     }
 }
 

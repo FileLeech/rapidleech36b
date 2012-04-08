@@ -1,6 +1,6 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-    require_once("404.php");
+    require_once("index.html");
     exit;
 }
 
@@ -13,7 +13,7 @@ class fileflyer_com extends DownloadClass {
         is_present($page, "Removed", "The file has been removed or has been expired!");
         if (stristr($page, 'class="handlinkblocked"')) {
 
-            $pass = ($_REQUEST ["premium_pass"] ? $_REQUEST ["premium_pass"] : $premium_acc ["fileflyer"] ["pass"]);
+            $pass = ($_REQUEST ["premium_pass"] ? $_REQUEST ["premium_pass"] : $premium_acc ["fileflyer_com"] ["pass"]);
             if (empty($pass)) html_error("This link required premium account!");
 
             if (!preg_match('/<form name="form1" method="post" action="(.*)"/U', $page, $pre)) html_error('Error: Premium link not found?');
@@ -31,9 +31,9 @@ class fileflyer_com extends DownloadClass {
             is_notpresent($page, "Access enabled", "Invalid premium codes");
         }
         $cookie = GetCookies($page);
-        if (!preg_match('@http:\/\/.+fileflyer\.com\/d\/[^\"]+@', $page, $dl)) html_error ('Error: Download link not found, plugin need to be updated!');
+        if (!preg_match('@http:\/\/.+fileflyer\.com\/d\/[^"]+@', $page, $dl)) html_error ('Error: Download link not found, plugin need to be updated!');
         $dlink = trim($dl[0]);
-        $filename = parse_ul($dlink);
+        $filename = parse_url($dlink);
         $FileName = basename($filename['path']);
         $this->RedirectDownload($dlink, $FileName, $cookie, 0, $Referer);
         exit();

@@ -41,7 +41,7 @@
             $download_link = cut_str($tmp,'="','"');
             $tmp = cut_str($page,"delete_link",">");
             $delete_link = cut_str($tmp,'value="','"');
-			if (strpos($page,'Duplicate Alert! file already exists on the system')) echo '<br>Duplicate Alert! file already exists on the system<br>';
+			if (strpos($page,'Duplicate Alert! file already exists on the system')) echo '<br />Duplicate Alert! file already exists on the system<br />';
 
 // sert 19.07.2008
 ?>

@@ -1,14 +1,14 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-  require_once("404.php");
-	exit();
+    require_once("index.html");
+    exit;
 }
 
 class filesmonster_com extends DownloadClass {
 
     public function Download($link) {
         global $premium_acc;
-        if ($_REQUEST['premium_acc'] == 'on' && (($_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || ($premium_acc['filesmonster']['user'] && $premium_acc['filesmonster']['pass']))) {
+        if ($_REQUEST['premium_acc'] == 'on' && (($_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || ($premium_acc['filesmonster_com']['user'] && $premium_acc['filesmonster_com']['pass']))) {
             $this->Premium($link);
         } elseif ($_POST['step'] == '1') {
             $this->DownloadFree($link);
@@ -19,7 +19,8 @@ class filesmonster_com extends DownloadClass {
 
     private function Retrieve($link) {
         $page = $this->GetPage($link);
-        is_present($page, "File was deleted", "File was deleted by owner or it was deleted for violation of copyrights");
+        is_present($page, "File was deleted");
+        is_present($page, "You need Premium membership to download files larger than 1.0 GB.");
         //check the file size
         $flsize = cut_str($page, 'File size:</td>', '</tr>');
         preg_match('/(\d+)\.([0-9]) MB/', $flsize, $match);
@@ -88,8 +89,8 @@ class filesmonster_com extends DownloadClass {
 
         $post = array();
         $post['act'] = "login";
-        $post['user'] = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["filesmonster"] ["user"];
-        $post['pass'] = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["filesmonster"] ["pass"];
+        $post['user'] = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["filesmonster_com"] ["user"];
+        $post['pass'] = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["filesmonster_com"] ["pass"];
         $post['login'] = "Login";
         $page = $this->GetPage("http://filesmonster.com/login.php", 0, $post, "http://filesmonster.com/");
         is_present($page, 'Username/Password can not be found in our database!', 'Username/password invalid');

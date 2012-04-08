@@ -54,7 +54,7 @@ $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Ur
 		write_file($imgfile, $pass_img);
 
 	print 	"<form method=\"post\" action=\"".$PHP_SELF.(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : "")."\">$nn";
-	print	"<b>Please enter code:</b><br>$nn";
+	print	"<b>Please enter code:</b><br />$nn";
 	print	"<img src=\"$imgfile\">$nn";
 	print	"<input name=\"ylo\" value=\"ok\" type=\"hidden\">$nn";
 	print	"<input name=\"link\" value=\"$link type=\"hidden\">$nn";

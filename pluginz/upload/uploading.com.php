@@ -12,11 +12,6 @@ if ($uploading_com_login & $uploading_com_pass){
 	$_REQUEST['my_pass'] = $uploading_com_pass;
 	$_REQUEST['action'] = "FORM";
 	echo "<b><center>Use Default login/pass.</center></b>\n";
-} elseif (isset($upload_acc) && isset($upload_acc["uploading_up"]["user"]) && $upload_acc["uploading_up"]["user"] != '' && $upload_acc["uploading_up"]["pass"] != '') {
-    $_REQUEST['my_login'] = $upload_acc["uploading_up"]["user"];
-    $_REQUEST['my_pass'] = $upload_acc["uploading_up"]["pass"];
-    $_REQUEST['action'] = "FORM";
-    echo "<b><center>Use Default login/pass.</center></b>\n";
 }
 if ($_REQUEST['action'] == "FORM")
     $continue_up=true;
@@ -52,7 +47,7 @@ if ($continue_up)
                         $cookie=GetCookies($page);
                         $page = geturl("uploading.com", 80, "/", "http://uploading.com/login_form/", $cookie);
                         is_page($page);
-                        is_notpresent($page, "top_user_panel", "Login failed<br>Wrong login/password?");
+                        is_notpresent($page, "top_user_panel", "Login failed<br />Wrong login/password?");
 ?>
 <script>document.getElementById('login').style.display='none';</script>
 <div id=info width=100% align=center>Retrive upload ID</div>

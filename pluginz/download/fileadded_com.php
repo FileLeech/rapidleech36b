@@ -1,7 +1,7 @@
-<?php    
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
+<?php
+if (! defined ( 'RAPIDLEECH' )) {
+	require_once ("index.html");
+	exit ();
 }
 
 class fileadded_com extends DownloadClass {

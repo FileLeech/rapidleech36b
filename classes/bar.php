@@ -1,5 +1,4 @@
 <?php
-
 function drawRating() {
 	if (isset($_GET['rating'])) {
 		$rating = $_GET['rating'];

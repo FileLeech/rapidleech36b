@@ -1,6 +1,6 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-    require_once("404.php");
+    require_once ("index.html");
     exit();
 }
 
@@ -10,14 +10,13 @@ class filedino_com extends DownloadClass {
         global $premium_acc;
 
         // Checking link...
-        if (substr($link, -1) == '/')
-            $link = substr($link, 0, -1);
+        if (substr($link, -1) == '/') $link = substr($link, 0, -1);
         if (!$_POST['step']) {
             $page = $this->GetPage($link, 'lang=english');
             is_present($page, "File Not Found");
         }
 
-        if ($_REQUEST["premium_acc"] == "on" && (($_REQUEST["premium_user"] && $_REQUEST["premium_pass"]) || ($premium_acc["filedino"]["user"] && $premium_acc["filedino"]["pass"]))) {
+        if ($_REQUEST["premium_acc"] == "on" && (($_REQUEST["premium_user"] && $_REQUEST["premium_pass"]) || ($premium_acc["filedino_com"]["user"] && $premium_acc["filedino_com"]["pass"]))) {
             $this->Premium($link);
         } elseif ($_POST['step'] == '1') {
             $this->FreeDL($link);
@@ -36,11 +35,11 @@ class filedino_com extends DownloadClass {
         $post['method_free'] = '+';
 
         $page = $this->GetPage($link, 'lang=english', $post);
-        if (!preg_match('@/challenge\?k=([^"|\']+)(?:"|\')@i', $page, $rpid)) html_error('Error: Captcha not found.', 0);
+        if (preg_match('/<p class="err">(.*)<br />/', $page, $errmsg)) html_error($errmsg[1]);
+        if (!preg_match('@\/challenge\?k=([^"|\']+)(?:"|\')@i', $page, $rpid)) html_error('Error: Captcha not found.', 0);
 
         $capt = $this->GetPage("http://www.google.com/recaptcha/api/challenge?k=" . $rpid[1]);
-        if (!preg_match('/challenge \: \'([^\']+)/i', $capt, $ch))
-            html_error("Error getting CAPTCHA data.", 0);
+        if (!preg_match('/challenge \: \'([^\']+)/i', $capt, $ch)) html_error("Error getting CAPTCHA data.", 0);
 
         $this->CountDown(10);
 
@@ -112,8 +111,8 @@ class filedino_com extends DownloadClass {
     private function Login() {
         global $premium_acc;
         $pA = ($_REQUEST["premium_user"] && $_REQUEST["premium_pass"] ? true : false);
-        $user = ($pA ? $_REQUEST["premium_user"] : $premium_acc["filedino"]["user"]);
-        $pass = ($pA ? $_REQUEST["premium_pass"] : $premium_acc["filedino"]["pass"]);
+        $user = ($pA ? $_REQUEST["premium_user"] : $premium_acc["filedino_com"]["user"]);
+        $pass = ($pA ? $_REQUEST["premium_pass"] : $premium_acc["filedino_com"]["pass"]);
 
         if (empty($user) || empty($pass)) html_error("Login Failed: User or Password is empty. Please check login data.", 0);
         $post = array();

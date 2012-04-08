@@ -21,11 +21,6 @@ function processUpload( $mediafire_login, $mediafire_pass, $lfile, $lname )
 		$_REQUEST['my_pass'] = $mediafire_pass;
 		$_REQUEST['action'] = "FORM";
 		echo "<b><center>Use Default login/pass.</center></b>\n";
-	} elseif (isset($upload_acc) && isset($upload_acc["mediafire_up"]["user"]) && $upload_acc["mediafire_up"]["user"] != '' && $upload_acc["mediafire_up"]["pass"] != '') {
-		$_REQUEST['my_login'] = $upload_acc["mediafire_up"]["user"];
-		$_REQUEST['my_pass'] = $upload_acc["mediafire_up"]["pass"];
-		$_REQUEST['action'] = "FORM";
-		echo "<b><center>Use Default login/pass.</center></b>\n";
 	}
 	
 	if ( $_REQUEST ['action'] == "FORM" )

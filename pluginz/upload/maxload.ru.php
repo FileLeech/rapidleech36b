@@ -23,7 +23,7 @@
 <div id=final width=100% align=center>Get final code</div>
 <?php		
 			is_page($upfiles);
-			if (strpos($upfiles,'<div class="error">')) echo "Error: ".cut_str($upfiles,'<div class="error">','</div>')."<br><br>$upfiles";
+			if (strpos($upfiles,'<div class="error">')) echo "Error: ".cut_str($upfiles,'<div class="error">','</div>')."<br /><br />$upfiles";
 			$download_link=cut_str($upfiles,'value="','"');;
 ?>
 <script>document.getElementById('final').style.display='none';</script>

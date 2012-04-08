@@ -1,6 +1,6 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-    require_once ("404.php");
+    require_once ("index.html");
     exit ();
 }
 
@@ -10,7 +10,7 @@ class share_online_biz extends DownloadClass {
 
     public function Download($link) {
         global $premium_acc;
-        if (($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) || ($_REQUEST ["premium_acc"] == "on" && $premium_acc ["shareonline"] ["user"] && $premium_acc ["shareonline"] ["pass"])) {
+        if (($_REQUEST ["premium_acc"] == "on" && $_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) || ($_REQUEST ["premium_acc"] == "on" && $premium_acc ["shareonline_biz"] ["user"] && $premium_acc ["shareonline_biz"] ["pass"])) {
             $this->DownloadPremium($link);
         } else if ($_POST["step"] == "1") {
             $this->DownloadLink($link);
@@ -50,8 +50,8 @@ class share_online_biz extends DownloadClass {
     private function DownloadPremium($link) {
         global $premium_acc;
         preg_match('#([A-Z0-9]+)#', $link, $link_id);
-        $username = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["shareonline"] ["user"];
-        $password = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["shareonline"] ["pass"];
+        $username = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["shareonline_biz"] ["user"];
+        $password = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["shareonline_biz"] ["pass"];
         $url = 'http://api.share-online.biz/account.php?username=' . $username . '&password=' . $password . '&act=userDetails';
         $page = $this->GetPage($url, 0, 0, 0);
         is_present($page, "EXCEPTION input data invalid", "Check your login details!");

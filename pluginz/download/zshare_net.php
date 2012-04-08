@@ -1,7 +1,7 @@
 <?php
-if (!defined('RAPIDLEECH')){
-  require_once("404.php");
-  exit;
+if (!defined('RAPIDLEECH')) {
+    require_once("index.html");
+    exit;
 }
 
 class zshare_net extends DownloadClass {

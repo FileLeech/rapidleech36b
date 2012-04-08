@@ -1,5 +1,9 @@
 order deny,allow
 
+<FilesMatch "\.(js|css|html|htm|php|xml|swf|flv|ashx)$">
+SetOutputFilter DEFLATE
+</FilesMatch>
+
 <files ~ "\.(?i:s?php.*|cgi|p[l|y]|sh|asp|[d|s|p]?html?)$">
 deny from all
 </files>
@@ -8,7 +12,6 @@ deny from all
 allow from all
 </files>
 
-#Uncomment the 3 lines below, ONLY when you want to run the checker.php!
 #<files checker.php>
 #allow from all
 #</files>
@@ -25,11 +28,11 @@ allow from all
 allow from all
 </files>
 
-<files lynx.php>
+<files mtn.php>
 allow from all
 </files>
 
-<files mtn.php>
+<files lynx.php>
 allow from all
 </files>
 
@@ -41,23 +44,11 @@ allow from all
 allow from all
 </files>
 
-<files js.php>
-allow from all
-</files>
-
 <files ~ "\.upload.html$">
 allow from all
 </files>
 
-<files ajax_lnk.php>
-allow from all
-</files>
-
 <files ajax_main.php>
-allow from all
-</files>
-
-<files hash.php>
 allow from all
 </files>
 

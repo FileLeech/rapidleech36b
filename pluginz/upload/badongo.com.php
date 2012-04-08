@@ -16,8 +16,8 @@
 				$post["cou"]="en";
 				$page = geturl("www.badongo.com", 80, "/", "http://www.badongo.com/login", 0, $post, 0, "");
 				is_page($page);
-				if (!strpos($page,$badongo_login)){$mem="";echo"<br><b>Error Login. Use no member upload</b><br>";}else
-					{echo"<br><b>Login OK. Use member upload</b><br>";}
+				if (!strpos($page,$badongo_login)){$mem="";echo"<br /><b>Error Login. Use no member upload</b><br />";}else
+					{echo"<br /><b>Login OK. Use member upload</b><br />";}
 				$cookies=GetCookies($page);
 			}
 //            $page = geturl("badongo.com", 80, "/", "", 0, 0, 0, "");
@@ -61,7 +61,7 @@
 				$tmp=cut_str($page,'downBtn','</a>');
 				$tmp=cut_str($tmp,'a href="','"');
 			}
-			if (!$tmp) html_error("Error get download link<br>".$page);
+			if (!$tmp) html_error("Error get download link<br />".$page);
 			$download_link=$tmp;
 			$tmp=trim(cut_str($page,'http://www.badongo.com/delete/',"'"));
             if ($tmp) $delete_link="http://www.badongo.com/delete/".$tmp;

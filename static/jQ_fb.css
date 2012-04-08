@@ -1,0 +1,162 @@
+#facebox .tl, #facebox .tr, #facebox .br, #facebox .bl  {
+  background:url(images/jointrans.png);
+}
+#facebox .bu {
+  background:url(images/b.png);
+}
+#facebox .bl {
+  background-position: 0px 0;
+}
+#facebox .br {
+  background-position: -10px 0;
+}
+#facebox .tl {
+  background-position: -20px 0;
+}
+#facebox .tr {
+  background-position: -30px 0;
+}
+
+input.blueButton{
+	width:auto;
+	margin:10px 0 0 2px;
+	padding:3px 4px 3px 4px;
+	color:white;
+	background-color:#3B5998 !important;
+	outline:none;
+	border:1px solid #0F205B;
+	font-weight:bold;
+}
+
+.blueButton:active{
+	background-color:#006600;
+	padding:4px 3px 2px 5px;
+}
+
+.close_image {
+ background-position: -1px -1px;
+}
+
+div.close_image:hover {
+ background-position: -18px -1px;
+}
+
+#facebox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  text-align: left;
+}
+
+#facebox .fbpopup {
+  position: relative;
+}
+
+#facebox table {
+  border-collapse: collapse;
+}
+
+#facebox td {
+  border-bottom: 0;
+  padding: 0;
+}
+
+#facebox .body {
+  /*padding: 10px;*/
+  /*background: #fff;*/
+  /*background-image: url(fb_grad.gif);*/
+  background-color: #E6E6E6;
+  color:#382027;
+  width: 370px;
+  border: 1px solid #293738;
+}
+
+#facebox .ngeload {
+  font-weight:bold;
+  font-size:15px;
+  color:#484848;
+  text-align: left;
+  padding:10px 0 0 20px;
+  height:2.5em;
+}
+
+#facebox .image {
+  text-align: center;
+}
+
+#facebox img {
+  border: 0;
+  margin: 0;
+}
+
+#facebox .header {
+  background-color: #6C83B3;
+  padding: 5px 0 5px 10px;
+  margin: 0;
+  line-height: 20px;
+  font-size:12px;
+  font-weight:bold;
+  border: 1px solid #4848FF;
+  /*text-align: right;*/
+}
+
+#facebox #thead_title{
+  color: #FDFDFD;
+  font-weight:bold;
+  padding-top:10px;
+}
+
+#facebox .header .close_image {  
+  margin: 0 5px 0 2px;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+  float:right;
+}
+
+#facebox .tl, #facebox .tr, #facebox .bl, #facebox .br {
+  height: 10px;
+  width: 10px;
+  overflow: hidden;
+  padding: 0;
+}
+
+#facebox_overlay {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height:100%;
+  width:100%;
+}
+
+#facebox .facebox_hide {
+  z-index:-100;
+}
+
+#facebox .facebox_overlayBG {
+  background-color: #000;
+  z-index: 99;
+}
+
+#facebox hr{
+  padding:0;
+  margin:0;
+}
+#facebox .footer_container{
+  color:#000;  
+  background-color: #CDCDCD;
+  padding:4px 0 5px 0;
+}
+
+/*replace class g for green*/
+#facebox .g{
+ color:#000 !important;
+}
+
+
+* html #facebox_overlay { /* ie6 hack */
+  position: absolute;
+  height: expression(document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + 'px');
+}
+
