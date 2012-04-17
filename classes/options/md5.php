@@ -22,11 +22,11 @@ function rl_md5() {
 	 function ntfy(){
 	  var msg = "How this MD5 Changer is working?\n\n"; msg += "It is modifying your file by adding single or more char to the end of file.\n"; msg += "It's not guaranted it works properly for every file,\nsomeside effect like corrupted files may occurs.\n"; msg += "Select Impurity Char to pick char(s) that may suitable to your file instead using the default char: 0 (zero)\n\n"; msg += "T_T''"; alert(msg);}
 	</script>
-	<form name="frmMD5" id="frmMD5" action="<?php echo ROOT_URL.basename($PHP_SELF);?>">
+	<form name="frmMD5" id="frmMD5" action="<?php echo $PHP_SELF;?>">
 	   <input type="hidden" id="misionMd5" name="misionMd5" value="">
 	</form>
 	<?php 
-	echo $L->say['you_selected'];?>&nbsp;<b class="g"><?php echo $n_md5;?></b>&nbsp;files.<div id="changeall"><?php echo $L->say['you_sure_ch_md5'];?><br>
+	echo $L->say['you_selected'];?>&nbsp;<b class="g"><?php echo $n_md5;?></b>&nbsp;files.<div id="changeall"><?php echo $L->say['you_sure_ch_md5'];?><br />
 	<input type="button" name="md5ch" onclick="chAll();" value="<?php echo $L->say['_yes'];?>"></div><div style="padding-top:8px;"></div>
 	<table align="center" border=0 cellspacing="1" cellpadding="3">
 		<tr class="rowtitleChangemd5">
@@ -68,7 +68,7 @@ function rl_md5() {
 	  }
 	}
 	?>
-	</table><br>
+	</table><br />
 	<script type="text/javascript">
 	 var mproces = d.getElementById('md5_process');
 	 mproces.style.display = 'none';

@@ -14,7 +14,7 @@ function merge() {
 			echo $L->say['merge_file']." <b>".basename(substr($file["name"], 0, -4))."</b><br /><br />";
 			$usingcrcfile = (substr ( $file ["name"], - 4 ) === '.001') ? false : true;
 ?>
-<form method="post" action="<?php echo ROOT_URL.basename($PHP_SELF); ?>"><input type="hidden" name="files[0]" value="<?php echo $_GET ["files"] [0]; ?>" />
+<form method="post" action="<?php echo $PHP_SELF; ?>"><input type="hidden" name="files[0]" value="<?php echo $_GET ["files"] [0]; ?>" />
 <table>
 <?php
 			if ($usingcrcfile) {

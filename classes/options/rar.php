@@ -2,10 +2,10 @@
 
 function rar() {
   global $PHP_SELF, $list, $options, $L;
-  if (!is_file(ROOT_DIR.'/rar/rar')) { echo $L->say['rar_disappear'].'<br /><br />'; }
+  if (!is_file(BINARY_DIR.'/rar/rar')) { echo $L->say['rar_disappear'].'<br /><br />'; }
   else {
 ?>
-  <form name="rar_files" method="post" action="<?php echo ROOT_URL.basename($PHP_SELF); ?>">
+  <form name="rar_files" method="post" action="<?php echo $PHP_SELF; ?>">
     <table align="center" class="rar-table">
       <tr>
         <td>

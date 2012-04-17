@@ -2,7 +2,7 @@
 function delete() {
 	global $list, $PHP_SELF, $L;
 ?>
-<form method="post" action="<?php echo ROOT_URL.basename($PHP_SELF);?>"><input type="hidden" name="act" value="delete_go" />
+<form method="post" action="<?php echo $PHP_SELF;?>"><input type="hidden" name="act" value="delete_go" />
 <?php
 	echo $L->say[count($_GET['files']) > 1 ? '_files' : '_file'].':';
 	foreach ($_GET['files'] as $k => $v) {

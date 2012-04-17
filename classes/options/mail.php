@@ -2,7 +2,7 @@
 function rl_mail() {
 	global $options, $list, $PHP_SELF, $L;
 ?>
-<form method="post" action="<?php echo ROOT_URL.basename($PHP_SELF);?>"><input type="hidden" name="act" value="mail_go" />
+<form method="post" action="<?php echo $PHP_SELF;?>"><input type="hidden" name="act" value="mail_go" />
 <?php echo $L->say['_file']; ?>:
 <?php
 	for($i = 0; $i < count ( $_GET ["files"] ); $i ++) {

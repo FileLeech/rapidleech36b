@@ -2,7 +2,7 @@
 function boxes() {
 	global $list, $options, $PHP_SELF, $L;
 ?>
-<form method="post" action="<?php echo ROOT_URL.basename($PHP_SELF);?>"><input type="hidden" name="act" value="boxes_go" />
+<form method="post" action="<?php echo $PHP_SELF;?>"><input type="hidden" name="act" value="boxes_go" />
 
 <?php
 	echo count ( $_GET ["files"] ) . " file" . (count ( $_GET ["files"] ) > 1 ? "s" : "") . ":<br />";

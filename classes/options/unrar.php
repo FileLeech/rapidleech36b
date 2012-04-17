@@ -20,7 +20,7 @@ function unrar_setCheckboxes(act, filestounrar) {
 }
 /* ]]> */
 </script>
-  <form name="unrar_files" method="post" action="<?php echo ROOT_URL.basename($PHP_SELF);?>">
+  <form name="unrar_files" method="post" action="<?php echo $PHP_SELF;?>">
     <table align="center">
       <tr>
         <td>

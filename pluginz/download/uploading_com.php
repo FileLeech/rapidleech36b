@@ -16,7 +16,7 @@ class uploading_com extends DownloadClass {
             if (empty($this->cookie['SID'])) html_error("Error: Cookie [SID] not found!");
         }
         $this->link = $link;
-        if ($_REQUEST["upl_acc"] == "on" && (!empty($_GET["upl_cookie"]) || !empty($_GET["upl_hash"]) || !empty($premium_acc["uploading_com"]["cookie"]))) {
+        if (($_REQUEST["upl_acc"] == "on" && (!empty($_GET["upl_cookie"]) || !empty($_GET["upl_hash"]))) || ($_REQUEST['premium_acc'] == 'on' && !empty($premium_acc["uploading_com"]["cookie"]))) {
             if (!empty($_GET["upl_cookie"])) {
                 $cookie = $_GET["upl_cookie"];
             } elseif (!empty($_GET["upl_hash"])) {

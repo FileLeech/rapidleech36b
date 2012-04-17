@@ -2,7 +2,7 @@
 function zip() {
 	global $list, $options, $PHP_SELF, $L;
 ?>
-<form name="ziplist" method="post" action="<?php echo ROOT_URL.basename($PHP_SELF);?>"><input type="hidden" name="act" value="zip_go" />
+<form name="ziplist" method="post" action="<?php echo $PHP_SELF;?>"><input type="hidden" name="act" value="zip_go" />
 	<table cellspacing="5">
 		<tr>
 			<td align="center"><strong><?php echo $L->say['add_zip'];?></strong></td>

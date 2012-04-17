@@ -16,39 +16,15 @@ if (!isset($litehead)) {
 		$spacer = '<div class="embd_acc"><\/div>';
 
 		foreach ($premium_acc as $host_acc => $val) {
-			$acc_txt.= (isset($premium_acc[$host_acc]["user"]) ? ($premium_acc[$host_acc]["user"] != '' && $premium_acc[$host_acc]["pass"] != '' ? $ar_host_acc[$host_acc] . $spacer : '') : $ar_host_acc[$host_acc] . " multi acc" . $spacer);
-		}
-		// Premium account cookie
-		if (isset($premium_acc['depositfiles_com']['cookie'])) {
-			$acc_txt.= ($premium_acc['depositfiles_com']['cookie'] != '' ? "depositfiles.com cookie" . $spacer : '');
-		}
-		if (isset($premium_acc['hotfile_com']['cookie'])) {
-			$acc_txt.= ($premium_acc['hotfile_com']['cookie'] != '' ? "hotfile.com cookie" . $spacer : '');
-		}
-		if (isset($premium_acc['netload_in']['cookie'])) {
-			$acc_txt.= ($premium_acc['netload_in']['cookie'] != '' ? "netload.in cookie" . $spacer : '');
-		}
-		if (isset($premium_acc['rapidshare_com']['cookie'])) {
-			$acc_txt.= ($premium_acc['rapidshare_com']['cookie'] != '' ? "rapidshare.com cookie" . $spacer : '');
-		}
-		if (isset($premium_acc['uploaded_to']['cookie'])) {
-			$acc_txt.= ($premium_acc['uploaded_to']['cookie'] != '' ? "uploaded.to cookie" . $spacer : '');
-		}
-		if (isset($premium_acc['uploading_com']['cookie'])) {
-			$acc_txt.= ($premium_acc['uploading_com']['cookie'] != '' ? "uploading.com cookie" . $spacer : '');
-		}
-		// Premium account with only damn single key
-		if (isset($premium_acc['fileflyer_com']['key'])) {
-			$acc_txt.= ($premium_acc['fileflyer_com']['key'] != '' ? "fileflyer.com key" . $spacer : '');
-		}
-		if (isset($premium_acc['letitbit_net']['key'])) {
-			$acc_txt.= ($premium_acc['letitbit_net']['key'] != '' ? "letitbit.net key" . $spacer : '');
-		}
-		if (isset($premium_acc['shareflare_net']['key'])) {
-			$acc_txt.= ($premium_acc['shareflare_net']['key'] != '' ? "shareflare.net key" . $spacer : '');
-		}
-		if (isset($premium_acc['vip-file_com']['key'])) {
-			$acc_txt.= ($premium_acc['vip-file_com']['key'] != '' ? "vip-file.com key" . $spacer : '');
+			if (isset($premium_acc[$host_acc]['user'])) {
+				$acc_txt .= ($premium_acc[$host_acc]['user'] != '' && $premium_acc[$host_acc]['pass'] != '' ? $ar_host_acc[$host_acc] . $spacer : '');
+			} // end user & pass configuration
+			if (isset($premium_acc[$host_acc]['cookie'])) {
+				$acc_txt .= ($premium_acc[$host_acc]['cookie'] != '' ? $ar_host_acc[$host_acc] . " cookie" . $spacer : '');
+			}
+			if (isset($premium_acc[$host_acc]['key'])) {
+				$acc_txt .= ($premium_acc[$host_acc]['key'] != '' ? $ar_host_acc[$host_acc] . " key" . $spacer : '');
+			}
 		}
 		$ar_rscom = (isset($premium_acc["rapidshare_com"]) ? $premium_acc["rapidshare_com"] : false);
 	} //-end embed acc need

@@ -58,7 +58,7 @@ if ($server["is_windows"]) {
 				$_statPath = '/proc/stat';
 			}
 			ob_start();
-			@passthru('cat ' . $_statPath);
+			@readfile($_statPath);
 			$stat = @ob_get_contents();
 			@ob_end_clean();
 			if (substr($stat, 0, 3) == 'cpu') {
@@ -91,7 +91,7 @@ if ($server["is_windows"]) {
 				$percentages = array();
 
 				foreach ($delta as $k => $v) {
-					$percentages[$k] = round($v / $deltaTotal * 100, 2);
+					$percentages[$k] = @round($v / $deltaTotal * 100, 2);
 				}
 				return $percentages;
 			} else {

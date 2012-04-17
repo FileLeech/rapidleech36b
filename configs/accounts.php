@@ -50,7 +50,7 @@ if (!defined('RAPIDLEECH')) {
 //$premium_acc["oron_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["real-debrid_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["sendspace_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["shareonline_biz"] = array('user' => '', 'pass' => '');
+//$premium_acc["share-online_biz"] = array('user' => '', 'pass' => '');
 //$premium_acc["speedyshare_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["turbobit_net"] = array('user' => '', 'pass' => '');
 //$premium_acc["ugotfile_com"] = array('user' => '', 'pass' => '');
@@ -61,6 +61,7 @@ if (!defined('RAPIDLEECH')) {
 //$premium_acc["wupload_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["youtube_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["filegaze_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["slingfile_com"] = array('user' => '', 'pass' => '');
 
 ###Premium cookie configuration, dont use this if you have already set another premium account config
 //$premium_acc["depositfiles_com"] = array('cookie' => '');
@@ -68,6 +69,7 @@ if (!defined('RAPIDLEECH')) {
 //$premium_acc["rapidshare_com"] = array('cookie' => '');
 //$premium_acc["uploaded_to"] = array('cookie' => '');
 //$premium_acc["uploading_com"] = array('cookie' => '');
+//$premium_acc["netload_in"] = array('cookie' => '');
 
 ###Premium key configuration, dont use this if you have already set another premium account config
 //$premium_acc["fileflyer_com"] = array('pass' => '');
@@ -89,7 +91,6 @@ $premium_acc_audl = false;
 //$upload_acc["crocko_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["depositfiles_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["extabit_com"] = array('user' => '', 'pass' => '');
-//$upload_acc["fast-debrid_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["file4sharing_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["fileape_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["filedino_com"] = array('user' => '', 'pass' => '');
@@ -118,18 +119,17 @@ $premium_acc_audl = false;
 //$upload_acc["netload_in"] = array('user' => '', 'pass' => '');
 //$upload_acc["netuploaded_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["oron_com"] = array('user' => '', 'pass' => '');
-//$upload_acc["real-debrid_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["sendspace_com"] = array('user' => '', 'pass' => '');
-//$upload_acc["shareonline_biz"] = array('user' => '', 'pass' => '');
+//$upload_acc["share-online_biz"] = array('user' => '', 'pass' => '');
 //$upload_acc["speedyshare_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["turbobit_net"] = array('user' => '', 'pass' => '');
 //$upload_acc["ugotfile_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["uploaded_to"] = array('user' => '', 'pass' => '');
 //$upload_acc["uploading_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["uploadstation_com"] = array('user' => '', 'pass' => '');
-//$upload_acc["vBulletin_acc"] = array('user' => '', 'pass' => '');
 //$upload_acc["wupload_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["youtube_com"] = array('user' => '', 'pass' => '');
+//$upload_acc["filegaze_com"] = array('user' => '', 'pass' => '');
 
 #Secret key for cookie encryption
 #Make up a random one to protect your premium cookies (max length: 56). Example: $secretkey = 'UijSY5wjP1Ii'; - DO NOT use this example $secretkey, or your premium accounts/cookies could be stolen!!
@@ -193,5 +193,6 @@ $ar_host_acc = array(
 'wupload_com' => 'wupload.com',
 'youtube_com' => 'youtube.com',
 'filegaze_com' => 'filegaze.com',
+'slingfile_com' => 'slingfile.com',
 );
 ?>

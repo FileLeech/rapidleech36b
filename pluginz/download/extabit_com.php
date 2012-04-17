@@ -86,13 +86,13 @@ class extabit_com extends DownloadClass {
         is_notpresent($page, "auth_uid", "Login Failed");
         $page = $this->GetPage($link, $Cookies);
         is_present($page, "File not found", "File not found");
-        if (preg_match("#Location: (.*)#", $page, $tmp)) {
-            $page = $this->GetPage(trim($tmp[1]), $Cookies);
-            $Cookies.="; " . GetCookies($page);
-        }
-        if (!preg_match('#http://\w+\d+.extabit.com/[^"]+#', $page, $dlink)) {
-            html_error("Error 1x01: Plugin is out of date");
-        }
+		if (preg_match("#Location: (http://([^/]+\.)?extabit\.com/file[^\r|\n]+)#i", $page, $tmp)) {
+			$page = $this->GetPage(trim($tmp[1]), $Cookies);
+			$Cookies.="; " . GetCookies($page);
+		}
+		if (!preg_match("#http://[a-z]\d+\.extabit\.com/[^\r|\n|\"|\']+#i", $page, $dlink)) {
+			html_error("Error 1x01: Plugin is out of date");
+		}
         $this->RedirectDownload($dlink[0], "Extabit", $Cookies, 0, trim($tmp[1]));
         exit;
     }

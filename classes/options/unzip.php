@@ -2,7 +2,7 @@
 function unzip() {
 	global $list, $PHP_SELF, $L;
 ?>
-<form method="post" action="<?php echo ROOT_URL.basename($PHP_SELF); ?>">
+<form method="post" action="<?php echo $PHP_SELF; ?>">
 <input type="hidden" name="act" value="unzip_go" />
 	<table align="center">
 		<tr>

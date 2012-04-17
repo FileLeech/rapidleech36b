@@ -79,18 +79,20 @@ class shareflare_net extends DownloadClass {
 
     private function ContinueDownload($link, $cookie, $page) {
 
-        if (stristr($page, 'Wait your turn')) {
-            return $this->BeforeDownload($link, $cookie, $this->GetPage($link, $cookie, 0, $link));
-        }
-        
-        if (!preg_match('@http:\/\/.+download(\d+)?\/sha(\d+)?\/[^\'"]+@i', $page, $dl)) html_error('Error: Download link not found, plugin need to be updated!');
-        $dlink = trim($dl[0]);
-        $filename = parse_url($dlink);
-        $FileName = basename($filename['path']);
-        $this->RedirectDownload($dlink, $FileName, $cookie, 0, $link);
+        if (!preg_match('/"(http(s)?:\/\/[\w.]+\/d\/[^|\r|\n|"]+)" : "direct_link/i', $page, $dl)) {
+			if (stristr($page, 'Wait your turn')) {
+				return $this->BeforeDownload($link, $cookie, $this->GetPage($link, $cookie, 0, $link));
+			} else {
+				html_error('Error: Download link not found, plugin need to be updated!');
+			}
+		}
+        $dlink = trim($dl[1]);
+		$filename = basename(parse_url($dlink, PHP_URL_PATH));
+        $this->RedirectDownload($dlink, $filename, $cookie, 0, $link);
         exit();
     }
 }
 
 //shareflare.net free download plugin by Ruud v.Tony 14-10-2011
+//fixed for new shareflare format by Ruud v.Tony 09-04-2012
 ?>

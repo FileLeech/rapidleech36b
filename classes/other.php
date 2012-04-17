@@ -1401,7 +1401,7 @@ function renderActions() {
 	return $return;
 }
 
-function vidlist($dir, $exts) {
+function vidlist($dir, $exts = '') {
 	$results = array();
 	$handler = opendir($dir);
 	while ($file = readdir($handler)) {

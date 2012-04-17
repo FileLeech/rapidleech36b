@@ -16,8 +16,8 @@ $tcolor = $options['mtn_time']['tcolor'];
 $ed = $options['mtn_edge'];
 $bg = $options['mtn_bgcolor'];
 $q = $options['mtn_quality'];
-$exec_dir = BINARY_DIR. 'media/mtn';
-$font_dir = STATIC_DIR. 'font/';
+$exec_dir = BINARY_DIR . 'media/mtn';
+$font_dir = STATIC_DIR . 'font/';
 if ($_POST['video'] != "") {
 	$files = $options['download_dir'] . $vdofile;
 	if ($_POST['all'] == "true") {
@@ -41,10 +41,10 @@ if ($_POST['video'] != "") {
 		$vdofile = str_ireplace($ext, "_s.jpg", $vdo);
 		if (file_exists(getcwd() . $options['download_dir'] . $vdofile)) {
 			$image = $options['download_dir'] . $vdofile;
-			echo '<h2><a href="' . $options['download_dir'] .  $vdofile . '">' . $vdo . '</a></h2>';
+			echo '<h2><a href="' . $options['download_dir'] . $vdofile . '">' . $vdo . '</a></h2>';
 			echo "<img src=\"$image\">";
 		} else {
-			echo '<BR />Error in generating <b><i>' . $vdo . '</i></b> <BR />';
+			echo '<br />Error in generating <b><i>' . $vdo . '</i></b> <br />';
 		}
 	}
 }

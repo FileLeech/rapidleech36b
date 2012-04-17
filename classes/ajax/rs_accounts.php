@@ -134,9 +134,9 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts'])) {
 			/* -------------------------------------------- */
 			/* Modified by haris182 - 19 Agustus 2010 */
 			/* -------------------------------------------- */
-			$text = "http://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails_v1&type=prem&login=" . $User . "&password=" . $Pass;
+			$text = "http://api.rapidshare.com/cgi-bin/rsapi.cgi?sub=getaccountdetails&withcookie=1&login=" . $User . "&password=" . $Pass;
 
-			$results = file_get_contents($text);
+			$results = @file_get_contents($text);
 
 			preg_match("/tskb=(.*)/", $results, $traffic);
 			preg_match("/email=(.*)/", $results, $emailnye);

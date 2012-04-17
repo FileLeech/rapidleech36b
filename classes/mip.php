@@ -47,16 +47,16 @@ $mip_action = "download"; @include('mip.php');
 
 IF OLDER RAPIDLEECH:
 REPLACE
-echo "<p>Connected to proxy: <b>".$proxyHost."</b> at port <b>".$proxyPort."</b>...<br>\n";
+echo "<p>Connected to proxy: <b>".$proxyHost."</b> at port <b>".$proxyPort."</b>...<br />\n";
 TO:
-echo "<p>Connected to proxy: <b>".$proxyHost."</b> at port <b>".$proxyPort."</b>...<br>\n";
-echo "using IP: ".$mip_ip."<br>\n";
+echo "<p>Connected to proxy: <b>".$proxyHost."</b> at port <b>".$proxyPort."</b>...<br />\n";
+echo "using IP: ".$mip_ip."<br />\n";
 
 REPLACE
-echo "<p>Connected to: <b>".$host."</b> at port <b>".$port."</b>...<br>";
+echo "<p>Connected to: <b>".$host."</b> at port <b>".$port."</b>...<br />";
 TO:
-echo "<p>Connected to: <b>".$host."</b> at port <b>".$port."</b>...<br>";
-echo "using IP: ".$mip_ip."<br>\n";
+echo "<p>Connected to: <b>".$host."</b> at port <b>".$port."</b>...<br />";
+echo "using IP: ".$mip_ip."<br />\n";
 
 IF NEWER RAPIDLEECH:
 
@@ -64,13 +64,13 @@ REPLACE:
 echo '<p>'.sprintf(lang(89),$proxyHost,$proxyPort).'<br />';
 TO:
 echo '<p>'.sprintf(lang(89),$proxyHost,$proxyPort).'<br />';
-echo "using IP: ".$mip_ip."<br>\n";
+echo "using IP: ".$mip_ip."<br />\n";
 
 REPLACE
 printf(lang(90),$host,$port);
 TO:
 printf(lang(90),$host,$port);
-echo "<br>using IP: ".$mip_ip."<br>\n";
+echo "<br />using IP: ".$mip_ip."<br />\n";
 */
 
 /*
@@ -142,7 +142,7 @@ else {
 <?php
 	}
 	elseif ($mip_action == "download") {
-//if (!isset($_GET['image'])) {	echo "<br><br><br><br>"; var_export($_GET); echo "<br><br>"; var_export($_POST); echo "<br><br><br><br>"; }
+//if (!isset($_GET['image'])) {	echo "<br /><br /><br /><br />"; var_export($_GET); echo "<br /><br />"; var_export($_POST); echo "<br /><br /><br /><br />"; }
 		$mip_found = false;
 		$mip_rlink = trim(urldecode(isset($_POST['link']) ? $_POST['link'] : $_GET['link']));
 		$mip_url = $url;

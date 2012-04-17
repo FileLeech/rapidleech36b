@@ -37,6 +37,15 @@ while (false !== ($entry = $d->read())) {
             case 'filerio.com':
                 $host['filekeen.com'] = $host['filerio.com'];
                 break;
+            case 'filesonic.com':
+                $filesonic_domains = array('asia', 'at', 'be', 'bg', 'cc', 'ch', 'cl', 'co.id', 'co.il', 'co.nz', 'co.th', 'com.au',
+                    'com.eg', 'com.hk', 'com.eg', 'com.tr', 'com.vn', 'cz', 'es', 'fi', 'fr', 'gr', 'hk', 'hr', 'hu', 'in', 'it', 'jp',
+                    'kr', 'me', 'mx', 'my', 'net', 'ml', 'pe', 'pk', 'pt', 'ro', 'rs', 'se', 'sg', 'sk', 'tw', 'ua', 'vn');
+                foreach ($filesonic_domains as $tld) {
+                    $host["filesonic.$tld"] = $host['filesonic.com'];
+                }
+                $host['sharingmatrix.com'] = $host['filesonic.com'];
+                break;
             case 'freakshare.com':
                 $host['freakshare.net'] = $host['freakshare.com'];
                 break;

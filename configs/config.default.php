@@ -171,8 +171,6 @@ $options = array(
 'mip_arotate' => false, //Auto change to next ip after start transload process
 
 'upload_html_disable' => false, // true - Disable *.upload.html creation
-'myuploads_disable' => false, // true - Disabled, myuploads.txt creation
-
 'autosubmit' => true,
 
 'timezone' => 0, // set Timezone. 0 Mean using time in UTC (GMT+0)

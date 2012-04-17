@@ -2,7 +2,7 @@
 function rl_rename() {
 	global $list, $PHP_SELF, $L;
 ?>
-<form method="post" action="<?php echo ROOT_URL.basename($PHP_SELF); ?>"><input type="hidden" name="act" value="rename_go" />
+<form method="post" action="<?php echo $PHP_SELF; ?>"><input type="hidden" name="act" value="rename_go" />
 		<table align="center" style="text-align: left;">
 			<tr>
 				<td>

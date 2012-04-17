@@ -33,7 +33,7 @@ class filegaze_com extends DownloadClass {
 		$page = $this->GetPage($this->link, $this->cookie, $post, $this->link);
 		$form = cut_str($page, '<Form name="F1" method="POST"', '</Form>');
 		is_present($form, '<input type="password" name="password" class="myForm">', 'This file is password protected!');
-		is_present($form, cut_str($form, '<p class="err">', '<br>'));
+		is_present($form, cut_str($form, '<p class="err">', '<br />'));
 		if (preg_match('/(\d+)<\/span> seconds/', $form, $wait)) $this->CountDown ($wait[1]);
 		if (!preg_match_all('/<input type="hidden" name="([^\r\n"]+)" value="([^\r\n"]+)?">/', $form, $match)) html_error('Can\'t find post form [FREE] data 2, try to set curl to true in $options in your config.php!');
 		$match = array_combine($match[1], $match[2]);

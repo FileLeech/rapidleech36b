@@ -70,7 +70,7 @@ if ($server["is_windows"]) {
 		$percentages = array();
 
 		foreach ($delta as $k => $v) {
-			$percentages [$k] = round($v / $deltaTotal * 100, 2);
+			$percentages [$k] = @round($v / $deltaTotal * 100, 2);
 		}
 		return $percentages;
 	}

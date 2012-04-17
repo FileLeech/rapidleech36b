@@ -2,7 +2,7 @@
 function mrename() {
 	global $list, $PHP_SELF, $L;
 ?>
-<form method="post" action="<?php echo ROOT_URL.basename($PHP_SELF); ?>"><input type="hidden" name="act" value="mrename_go" />
+<form method="post" action="<?php echo $PHP_SELF; ?>"><input type="hidden" name="act" value="mrename_go" />
 <?php echo $L->say['_file']; ?>:
 <?php
 	for($i = 0; $i < count ( $_GET ["files"] ); $i ++) {

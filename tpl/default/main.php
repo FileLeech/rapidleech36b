@@ -113,7 +113,7 @@ if($options["limitbyip"]){
 }
 ?>
 
-<form action="<?php echo ROOT_URL.basename($PHP_SELF);?>" name="transload" method="post"<?php if ($options['new_window']) { echo ' target="_blank"'; } ?>>
+<form action="<?php echo $PHP_SELF;?>" name="transload" method="post"<?php if ($options['new_window']) { echo ' target="_blank"'; } ?>>
 <table class="tab-content" id="tb1" cellspacing="5" width="100%"<?php if($options["limitbyip"]){if($trheute>$options["maximum_free_downloads"]){print ' style="display:none;"';}}?>>
 <tbody>
 <tr>
