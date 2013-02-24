@@ -45,7 +45,7 @@
 			$locat=$ref.str_replace('./','',$locat);
 			$Url=parse_url($locat);
 			$page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $ref, 0, 0, 0, $_GET["proxy"],$pauth);
-			echo 'ftp://'.cut_str($page,'"ftp://','"').'<br />';
+			echo 'ftp://'.cut_str($page,'"ftp://','"').'<br>';
 			$download_link=cut_str($page,"copy('","')");
 ?>
 <script>document.getElementById('final').style.display='none';</script>

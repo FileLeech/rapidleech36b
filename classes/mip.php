@@ -2,9 +2,9 @@
 /*
 This value stored in config.php already
 //If you need to disable multiple ip support, set to false
-$mip_enabled = true;
+$options['mip_enabled'] = true;
 //Auto change to next ip after start transload process
-$mip_arotate = true;
+$options['mip_arotate'] = true;
 
 -- end config
 
@@ -82,7 +82,7 @@ if (!defined('RAPIDLEECH')) {
 	exit();
 }
 
-if (!$options["mip_enabled"]) {
+if (!$options['mip_enabled']) {
 	$mip_ip = "Default IP";
 	$fp = @fsockopen($proxyHost ? $scheme.$proxyHost : $scheme.$host, $proxyPort ? $proxyPort : $port, $errno, $errstr, 60);
 }
@@ -122,7 +122,7 @@ else {
 	array_merge($mip_fileas);
 	if ($mip_action == "select") {
 		$mip_ip = null;
-		if ($options["mip_arotate"]) {
+		if ($options['mip_arotate']) {
 			$mip_ip = @file_get_contents(LOG_DIR."mip_iplast.txt") or -1;
 			$mip_ip = intval($mip_ip) + 1;
 			$mip_ip = (!isset($mip_iplist[$mip_ip]) || trim($mip_iplist[$mip_ip]) == null ? 0 : $mip_ip);

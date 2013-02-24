@@ -7,6 +7,7 @@ if (!defined('RAPIDLEECH')) {
 
 class videobb_com extends DownloadClass {
 	public function Download($link) {
+		global $premium_acc, $L;
 		$link = str_replace('videobb.com/video/', 'videobb.com/watch_video.php?v=', $link);
 		$page = $this->GetPage($link);
 		is_present ($page, "Video is not available", "Video is not available - " . cut_str($page, '<font size="4">', '</font>'));

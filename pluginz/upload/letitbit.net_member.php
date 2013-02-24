@@ -127,7 +127,7 @@ function IWillNameItLater($cookie, $decrypt=true) {
 }
 
 function SkipLoginC($user, $pass, $filename = 'letitbit_ul.php') {
-	global $cookie, $hash, $maxdays, $secretkey;
+	global $cookie, $hash, $maxdays, $options;
 	$maxdays = 3; // Max days to keep cookies saved
 	if (!defined('DOWNLOAD_DIR')) {
 		global $options;
@@ -145,10 +145,10 @@ function SkipLoginC($user, $pass, $filename = 'letitbit_ul.php') {
 	$hash = hash('crc32b', $user.':'.$pass);
 	if (array_key_exists($hash, $savedcookies)) {
 		if (time() - $savedcookies[$hash]['time'] >= ($maxdays * 24 * 60 * 60)) return login($user, $pass); // Ignore old cookies
-		$_secretkey = $secretkey;
-		$secretkey = sha1($user.':'.$pass);
+		$_secretkey = $options['secretkey'];
+		$options['secretkey'] = sha1($user.':'.$pass);
 		$cookie = IWillNameItLater($savedcookies[$hash]['cookie']);
-		$secretkey = $_secretkey;
+		$options['secretkey'] = $_secretkey;
 
 		$page = geturl("letitbit.net", 80, "/", 'http://letitbit.net/', $cookie, 0, 0, $_GET["proxy"], $pauth);is_page($page);
 		if (stripos($page, 'title="Logout">Logout</a>') === false) return login($user, $pass);
@@ -159,7 +159,7 @@ function SkipLoginC($user, $pass, $filename = 'letitbit_ul.php') {
 }
 
 function SaveCookies($user, $pass, $filename = 'letitbit_ul.php') {
-	global $cookie, $maxdays, $secretkey;
+	global $cookie, $maxdays, $options;
 	$filename = DOWNLOAD_DIR.basename($filename);
 	if (file_exists($filename)) {
 		$file = file($filename);
@@ -170,10 +170,10 @@ function SaveCookies($user, $pass, $filename = 'letitbit_ul.php') {
 		foreach ($savedcookies as $k => $v) if (time() - $v['time'] >= ($maxdays * 24 * 60 * 60)) unset($savedcookies[$k]);
 	} else $savedcookies = array();
 	$hash = hash('crc32b', $user.':'.$pass);
-	$_secretkey = $secretkey;
-	$secretkey = sha1($user.':'.$pass);
+	$_secretkey = $options['secretkey'];
+	$options['secretkey'] = sha1($user.':'.$pass);
 	$savedcookies[$hash] = array('time' => time(), 'cookie' => IWillNameItLater($cookie, false));
-	$secretkey = $_secretkey;
+	$options['secretkey'] = $_secretkey;
 
 	write_file($filename, "<?php exit(); ?>\r\n" . serialize($savedcookies));
 }

@@ -154,7 +154,7 @@ if ($continue_up) {
 	if (preg_match('@<error>(.*)</error>@i', $upfiles, $err)) html_error("Error: (".htmlentities($err[1], ENT_QUOTES).") .", 0);
 	if (!preg_match('@<yt:videoid>([^<]+)</yt:videoid>@i', $upfiles, $vid)) html_error("Error: Video ID not found.", 0);
 
-	echo "<p style='text-align:center;font-weight:bold;'>Please check your video in your <a href='http://www.youtube.com/my_videos'>youtube page</a> for details/errors.<br />The '".lang(71)."' link is for go to 'edit video' page.</p>\n";
+	echo "<p style='text-align:center;font-weight:bold;'>Please check your video in your <a href='http://www.youtube.com/my_videos'>youtube page</a> for details/errors.<br />The 'Admin-Link' link is for go to 'edit video' page.</p>\n";
 	$download_link = "http://www.youtube.com/watch?v=".$vid[1];
 	$adm_link = "http://www.youtube.com/my_videos_edit?ns=1&video_id={$vid[1]}&next=%2Fmy_videos";
 }
@@ -187,10 +187,10 @@ function YT_cURL($link, $post) {
 
 // upfile function edited for YT upload.
 function UploadToYoutube($host, $port, $url, $dkey, $uauth, $XMLReq, $file, $filename) {
-	global $nn, $lastError, $sleep_time, $sleep_count;
+	global $nn, $lastError, $sleep_time, $sleep_count, $L;
 
 	if (!is_readable($file)) {
-		$lastError = sprintf(lang(65),$file);
+		$lastError = $L->sprintf($L->say['error_read_file'],$file);
 		return FALSE;
 	}
 
@@ -208,20 +208,20 @@ function UploadToYoutube($host, $port, $url, $dkey, $uauth, $XMLReq, $file, $fil
 	$errno = 0; $errstr = "";
 	$fp = @stream_socket_client("$host:$port", $errno, $errstr, 120, STREAM_CLIENT_CONNECT);
 
-	if (!$fp) html_error(sprintf(lang(88),$host,$port));
+	if (!$fp) html_error($L->sprintf($L->say['_couldnt_con_to'],$host,$port));
 	if ($errno || $errstr) {
 		$lastError = $errstr;
 		return false;
 	}
 
 	echo "<p>";
-	printf(lang(90),$host,$port);
+	$L->sprintf($L->say['_con_to'],$host,$port);
 	echo "</p>";
 
-	echo(lang(104).' <b>'.$filename.'</b>, '.lang(56).' <b>'.bytesToKbOrMb($fileSize).'</b>...<br />');
+	echo $L->sprintf($L->say['_filesize'], $filename, bytesToKbOrMb($fileSize)).'<br />';
 	global $id;
 	$id = md5(time() * rand( 0, 10 ));
-	require(TEMPLATE_DIR . '/uploadui.php');
+	require(TEMPLATE_DIR . 'uploadui.php');
 	flush();
 
 	$timeStart = getmicrotime();
@@ -238,7 +238,7 @@ function UploadToYoutube($host, $port, $url, $dkey, $uauth, $XMLReq, $file, $fil
 		if ($data === false) {
 			fclose($fs);
 			fclose($fp);
-			html_error (lang(112));
+			html_error ($L->say['_error_readdata']);
 		}
 
 		if (($sleep_count !== false) && ($sleep_time !== false) && is_numeric($sleep_time) && is_numeric($sleep_count) && ($sleep_count > 0) && ($sleep_time > 0)) {
@@ -255,7 +255,7 @@ function UploadToYoutube($host, $port, $url, $dkey, $uauth, $XMLReq, $file, $fil
 		if ($sendbyte === false) {
 			fclose($fs);
 			fclose($fp);
-			html_error(lang(113));
+			html_error($L->say['_error_senddata']);
 		}
 
 		$totalsend += $sendbyte;

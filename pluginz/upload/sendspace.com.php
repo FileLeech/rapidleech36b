@@ -77,7 +77,7 @@ function biscotti($content) {
 			$page=geturl("www.sendspace.com", 80, "/", "http://www.sendspace.com/", $cook, 0, 0, $_GET["proxy"]);
 			unset($post);
 			}else{
-				echo("<br /> <b>No enter login & pass</b> to sendspace.com <br /><br />");
+				echo("<br> <b>No enter login & pass</b> to sendspace.com <br><br>");
 			}
 
             $tmp = cut_str($page,'DESTINATION','>');            

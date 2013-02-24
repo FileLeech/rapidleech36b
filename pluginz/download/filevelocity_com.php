@@ -50,7 +50,7 @@ class filevelocity_com extends DownloadClass {
             echo "</form></center>\n</body>\n</html>";
             exit();
         }
-        is_present($page, cut_str($page, '<div class="err">', '<br />'));
+        is_present($page, cut_str($page, '<div class="err">', '<br>'));
         if (!preg_match('@Location: (http(s)?:\/\/[^\r\n]+)@i', $page, $dl)) html_error("Error[DownloadLink-FREE] not found!");
         $dlink = trim($dl[1]);
         $filename = basename(parse_url($dlink, PHP_URL_PATH));

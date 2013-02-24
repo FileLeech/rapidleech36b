@@ -161,7 +161,7 @@ function unrar_go() {
       </td>
     </tr>
   </table>
-  <span id="unrar_finished" style="display:none;"><a href="<?php echo ROOT_URL.basename($PHP_SELF)."?act=files"; ?>"><?php echo $L->say['_backlist']; ?></a><br /><br /><br /></span>
+  <span id="unrar_finished" style="display:none;"><a href="<?php echo $PHP_SELF."?act=files"; ?>"><?php echo $L->say['_backlist']; ?></a><br /><br /><br /></span>
 <?php
 }
 

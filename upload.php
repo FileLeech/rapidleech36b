@@ -37,7 +37,7 @@ header("Content-type: text/html; charset=$charSet");
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charSet; ?>" />
-<link type="text/css" href="<?php echo ROOT_URL . IMAGE_DIR; ?>style_sujancok<?php echo $options["csstype"]; ?>.css?<?php echo rand(1, 9999); ?>" rel="stylesheet" media="screen" />
+<link type="text/css" href="<?php echo IMAGE_DIR; ?>style_sujancok<?php echo $options["csstype"]; ?>.css?<?php echo rand(1, 9999); ?>" rel="stylesheet" media="screen" />
 <title>Uplot file <?php echo htmlspecialchars(basename($_REQUEST["filename"])); ?> to <?php echo $_REQUEST["uploaded"]; ?></title>
 <script type="text/javascript">
 /* <![CDATA[ */

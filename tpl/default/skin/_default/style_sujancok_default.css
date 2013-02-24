@@ -2,11 +2,9 @@ body {
 	font-family: Tahoma;
 	font-size: 11px;
 	color: #FFFFFF;
-	/*background-color: #cccccc;*/
-	
-	background-attachment: fixed;
-	background-image: url(background_pm.gif);
 	background-color: #010E17;
+	background-image: url(background_pm.gif);
+	background-attachment: fixed;
 	background-repeat: repeat-x;
 	background-position: left top;
 	margin: 0px;
@@ -31,32 +29,6 @@ img{
 	border:0
 }
 
-
-/* header title & main tab  */
-/* =======================  */
-#navcell1, #navcell2, #navcell3, #navcell4, #navcell5 {
-  background: #ececec;
-  -moz-box-shadow: 1px 1px 3px #292929;
-  -moz-border-radius: 5px;
-  -webkit-box-shadow: 1px 1px 3px #292929;
-  
-  font-size: 15px;
-  font-family: 'Lobster', cursive;
-  text-shadow: 0 1px 2px #000;
-  
-  color: #F76FDB;
-  padding: 10px 20px;
-}
-
-a.rltitle:hover{
-  text-decoration:none;
-}
-.rltitle{
-    text-shadow: 1px 5px 10px #000;
-	font-size: 40px;
-	font-family: Lobster;
-}
-
 /*most for xpanel*/
 .tablexpanel{
  border:1px solid #666;
@@ -77,31 +49,23 @@ tr.tdacchead{background-color:#23354B;}
 tr.tdacchead:hover{background-color:#43658F;}
 .tdlog{height:25px; padding:0 0 0 6px; width:250px;}
 ul{padding-left:2em;}
-.spc{clear:both; height:5px;} 
+.spc{clear:both; height:5px;}
 /*--end. most for xpanel*/
 
 .head_container{
-/*	background-color: #0C2234;
+	background-color: #0C2234;
 	margin-top:-7px;
-*/
-   padding:8px 0px;
-}
-.tdheadolgo span, .nav-leftimg span{
-   visibility:hidden;
+	padding:8px 0px;
 }
 
-.tdheadolgo:hover, .nav-leftimg:hover{
-  text-decoration:none;
+.tdheadolgo, .tdheadolgo h1 {
+	height:60px;
+	width:331px;
+	display:block;
+	background: transparent no-repeat url(rl_lgo.png);
 }
-.tdheadolgo{
-   width:331px;
-   height:60px;
-   display:block;
-   background: transparent no-repeat url(rl_lgo.png);
-}
-
-.container td {
-background-color:#001825; padding:2px;
+.tdheadolgo h1 {
+	height:49px;
 }
 
 tr {font-family: Tahoma; font-size: 11px; line-height: 14.5px; color: #FFFFFF;}
@@ -135,7 +99,7 @@ button,select,input[type=submit],input[type=button],input[type=reset]{background
   border:1px solid #BCBCBC;
 }
 .tbl_acc td, .tbl_acc th{
- border:1px solid #BCBCBC; 
+ border:1px solid #BCBCBC;
 }
 .tbl_acc td{
  padding:0 5px 0 5px;
@@ -151,7 +115,7 @@ button,select,input[type=submit],input[type=button],input[type=reset]{background
  width: 100%; height: 140px
 }
 .dv_acc_progress{
- border:#BBBBBB 1px solid; 
+ border:#BBBBBB 1px solid;
  width:300px; height:10px;
 }
 .dv_acc_progress #progress{
@@ -167,9 +131,9 @@ button,select,input[type=submit],input[type=button],input[type=reset]{background
 .g{color:#00FF00}
 .c{color:#ccc}
 .s{color:#FF8700}
-.y {	color:#FFFF00;}
-.r {	color:#FF0000;}
-.n {	color:#0000D2;	}
+.y {color:#FFFF00;}
+.r {color:#FF0000;}
+.n {color:#0000D2;	}
 
 .warn_alert{
   background:#800000;
@@ -201,91 +165,76 @@ div.acthistory_prompt .closer_btn{position:fixed; padding-bottom:5px;}
 
 
 /*Left Menu*/
-td.left_mnu a, td.backaudl a div {
-background: transparent no-repeat url(left_mnu.png);
-}
-
 td.left_mnu a div, td.backaudl a div{
  width: 107px; height: 25px;
+ background: transparent no-repeat url(left_mnu.png);
 }
-td.left_mnu div{
- margin-top:0;
+td.left_mnu a div{
+ padding-bottom:2px;
 }
-
-.nav-leftimg {
-   width:107px;
-   height:25px;
-   display:block;
-   margin-top:3px;
-}
-
-#left_cpanel{ 
+div#left_cpanel{
  background-position: 0 0;
 }
-#left_plugin{
+div#left_plugin{
  background-position: -109px 0;
 }
-#left_audl{
+div#left_audl{
  background-position: -218px 0;
 }
-#left_auul{
+div#left_auul{
  background-position: -327px 0;
 }
-#left_lynx {
-background: transparent no-repeat url(listedfile.gif);
+div#left_lynx{
+ background: transparent no-repeat url(listedfile.gif);
 }
-#left_mtn {
-background: transparent no-repeat url(mtn.png);
+div#left_mtn{
+ background-position: -434px 0;
 }
-
 
 .splugins{
- background-color:#657B87; 
- color:#eee; 
- padding:1px; 
- width:102px; 
+ background-color:#657B87;
+ color:#eee;
+ padding:1px;
+ width:102px;
  margin:-2px auto 3px 1px
 }
 
 /*MenuUtama*/
 .menuUtama td{
- /* width: 77px; height: 29px; */
+ width: 77px; height: 31px;
  cursor: pointer;
+ background: transparent no-repeat url(mnuUtama.png);
 }
 
-/*
-#navcell1{ 
+#navcell1{
  background-position: 0px 0;
 }
-#navcell2{ 
+#navcell2{
  background-position: -77px 0;
 }
-#navcell3{ 
+#navcell3{
  background-position: -154px 0;
 }
-#navcell4{ 
+#navcell4{
  background-position: -231px 0;
 }
-#navcell5{ 
+#navcell5{
  background-position: -308px 0;
 }
-*/
 
-.tab-on {
-  /* border: 2px solid #85cbeb; */
-  background-color: #85cbeb !important;
+.tab-on, .tab-onr{
+	border: 2px solid #85cbeb;
 }
 
-.tab-off{
-  /*  border: 2px solid #17668C; */
-  margin-left: 10px !important;
+.tab-off, .tab-offr{
+	border: 2px solid #17668C;
 }
 
 .show-table {display: block;}
 
 .hide-table {display: none;}
 .filelist_title{
- background-color:#4B433B; 
+ background-color:#4B433B;
  color: white;
 }
 
@@ -318,15 +267,15 @@ div#parentcontainer #dvrelease{
  width: 100%; white-space: nowrap;
 }
 #flcontainer {
- overflow: auto; 
+ overflow: auto;
 }
 #flheader td, #sffooter td{
  font-weight: bold;
- color: white; 
+ color: white;
  text-align:center;
 }
 tr#sffooter{
- background-color:#4B433B; 
+ background-color:#4B433B;
 }
 
 #flcontainer td{
@@ -340,7 +289,7 @@ tr#sffooter{
 }
 
 #flist_match_search{
-   background: white url(../../../../static/images/rs_search.png) no-repeat left center;
+   background: white url(rs_search.png) no-repeat left center;
    padding-left:22px;
    background-color: transparent;
 }
@@ -362,24 +311,30 @@ tr#sffooter{
 }
 .style2 {font-weight: bold}
 
+.container td { background-color:#001825; padding:2px;}
+
+/*Auto Download*/
 .audlcontainer{
  border:1px solid #666;
  background-color:#002335;
 }
+/*End Auto Download*/
 
+/*Auto Upload*/
 #diviframe{
- background-color: #fff;
- padding: 5px 0 0 0;
- width: 95%;
+	background-color: #fff;
+	padding: 5px 0 0 0;
+	width: 95%;
 }
 #closer{
- margin:0;
- float:right;
- padding: 0 10px 10px 0;
+	margin:0;
+	float:right;
+	padding: 0 10px 10px 0;
 }
 #myul_iframe{
- border:0;
+	border:0;
 }
+/*End Auto Upload*/
 
 #li { padding:2px 0; text-align:left; margin-left:5px; list-style:none; }
 
@@ -405,14 +360,14 @@ tr.acc_chk{line-height: 10px;}
 .accnfo {line-height: 9px; font-size: 9px;}
 
 #lnksupport{
-  text-align:center; 
-  padding:3px; 
-  color:#3B5998; 
-  margin:0 auto; 
-  width:400px; 
-  font-size:9px; 
+  text-align:center;
+  padding:3px;
+  color:#3B5998;
+  margin:0 auto;
+  width:400px;
+  font-size:9px;
   height:50px;
-  overflow:auto; 
+  overflow:auto;
   border:1px solid #666
 }
 
@@ -428,14 +383,14 @@ tr.acc_chk{line-height: 10px;}
 }
 
 /*button closer google*/
-div.closer_btn{ cursor: pointer; margin:0; padding:0; width: 16px; height: 16px; line-height:10px; background: no-repeat url(closer.png);}
+div.closer_btn{ cursor: pointer; margin:0; padding:0; width: 16px; height: 16px; line-height:10px; background: transparent no-repeat url(closer.png);}
 div.closer_btn:hover{ background-position: -17px 0;}
 
 /*InstantRename-Button*/
 #rename_container{
  width:38px;
 }
-.rename_es, .rename_es_save{ 
+.rename_es, .rename_es_save{
  float: right;
  height:17px;
  width: 17px;
@@ -446,55 +401,21 @@ div.rename_es_save {
 }
 
 /*progress bar*/
-.ftpprogress {
-background-color:#FFFFFF;
-margin:1px;
-width:0%;
-height:8px;
-}
-/* The progressbar for upload and download, including the outer div holder */
-.progressouter {
-border:1px solid #FFFFFF; width:300px; height:10px;
-}
-.progressdown {
-background-color:#FFFFFF;
-width:0%;
-height:8px;
-margin: 1px;
-}
-.progressup {
-background-color:#FFFFFF;
-width:0%;
-height:8px;
-margin: 1px;
-}
-/* Transfer UIs (User interfaces) */
-.transloadui {
-font-family: Tahoma;
-font-size: 11px;
-}
-.uploadui {
-font-family: Tahoma;
-font-size: 11px;
-}
 div.progressborder{
- border:#FFFFFF 1px solid; 
+ border:#FFFFFF 1px solid;
 }
 div.progressborder #progress {
- background-color:#88ECF4 !important; 
+ background-color:#88ECF4 !important;
 }
 
 /* any printed error messages */
 .htmlerror{
-color:red; 
-background-color:#fec; 
-padding:3px; 
+color:red;
+background-color:#fec;
+padding:3px;
 line-height: 30px;
-border:2px solid #ffaa00; 
+border:2px solid #ffaa00;
 border: thin solid #FF8040;;
-}
-.embd_acc{
-padding-top:.1em;
 }
 .font-black {
 color:#000;
@@ -505,6 +426,10 @@ color:#05F;
 .caption {
 font-family: Tahoma;
 font-size: 11px;
+}
+/* Printed premium account*/
+.embd_acc{
+padding-top:.1em;
 }
 /* Rar-Table CSS - RAR.php */
 td.rar-table-left {
@@ -598,41 +523,41 @@ border-top:1px solid #666;
 
 /* UnRar-Table CSS - UnRAR.php */
 td.rar-table-main{
-border-right:1px solid #666; 
-border-left:1px solid #666; 
-border-top:1px solid #666; 
-padding:6px; 
+border-right:1px solid #666;
+border-left:1px solid #666;
+border-top:1px solid #666;
+padding:6px;
 background-color:transparent;
 }
 
 td.rar-table-side{
-border-right:1px solid #666; 
+border-right:1px solid #666;
 border-left:1px solid #666;
-padding:2px; 
+padding:2px;
 background-color:transparent;
 }
 
 td.rar-table-top{
-border-top:1px solid #666; 
+border-top:1px solid #666;
 }
 
 td.rar-table-tlr{
-border-right:1px solid #666; 
-border-left:1px solid #666; 
-border-top:1px solid #666; 
-padding:2px; 
+border-right:1px solid #666;
+border-left:1px solid #666;
+border-top:1px solid #666;
+padding:2px;
 background-color:transparent;
 }
 
 td.rar-tbl-left{
 border-left:1px solid #666;
-padding:2px; 
+padding:2px;
 background-color:transparent;
 }
 
 td.rar-tbl-right{
 border-right:1px solid #666;
-padding:2px; 
+padding:2px;
 background-color:transparent;
 }
 
@@ -642,9 +567,8 @@ border-top:1px solid #666;
 /*Finish UnRar-Tabel CSS*/
 
 .rar-debug{
-background:#666; 
+background:#666;
 border:2px solid #fff;
 color:#fff;
 }
-
 

@@ -24,7 +24,7 @@ $cookie=GetCookies($page);
 $upladid=cut_str($page,"type=\"hidden\" name=\"uploadId\" value=\"","\"/>");
 $nsv=cut_str($page,"enctype=\"multipart/form-data\" action=\"http://www",".zippyshare.com");
 
-echo "<br />uploadId: {$uploadid} & nsv: {$nsv} <br />";
+echo "<br>uploadId: {$uploadid} & nsv: {$nsv} <br>";
 
 $url =parse_url("http://www".$nsv.".zippyshare.com/upload?uploadId=".$upladid);
 

@@ -86,7 +86,7 @@ if ($continue_up)
 			is_page($page);
 			$tmp=cut_str($page,'Download link',true);
 			$tmp=cut_str($tmp,'href="','"');
-			if (!$tmp) html_error ('Error get download url <br />'.$page);
+			if (!$tmp) html_error ('Error get download url <br>'.$page);
 			$download_link=$tmp;
 			$tmp=cut_str($page,'Delete link',true);
 			$tmp=cut_str($tmp,'href="','"');

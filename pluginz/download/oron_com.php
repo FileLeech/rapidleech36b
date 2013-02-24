@@ -22,7 +22,6 @@ class oron_com extends DownloadClass {
     }
 
     private function DownloadFree() {
-		global $L;
         if ($_REQUEST['down_direct'] == '1') {
             $this->link = urldecode($_POST['link']);
 
@@ -53,7 +52,7 @@ class oron_com extends DownloadClass {
             }
             $this->page = $this->GetPage($this->link, 0, $post, $this->link);
         }
-        if (preg_match('%<p class="err">(.*)<br />%', $this->page, $msg)) html_error($msg[1]);
+        if (preg_match('%<p class="err">(.*)<br>%', $this->page, $msg)) html_error($msg[1]);
         if (preg_match('#(\d+)</span> seconds#', $this->page, $wait)) $this->CountDown($wait[1]);
         if (preg_match('@api\/challenge[?]k=([^"]+)@i', $this->page, $cap) && preg_match('@api\/noscript[?]k=([^"]+)@i', $this->page, $cap)) {
             //download the captcha image (AGAIN!)
@@ -70,7 +69,7 @@ class oron_com extends DownloadClass {
             $data = array_merge($this->DefaultParamArr($this->link), array_combine($match[1], $match[2]));
             $data['challenge'] = $ch;
             
-            global $PHP_SELF;
+            global $PHP_SELF, $L;
             echo "\n<center><form name='dl' action='$PHP_SELF' method='post' ><br />\n";
             foreach ($data as $name => $value) {
                 echo '<input type="hidden" name="' . $name . '" value="' . $value . '" />' . "\n";

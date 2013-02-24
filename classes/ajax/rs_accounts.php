@@ -1,6 +1,6 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-	require_once("index.html");
+	require_once('index.html');
 	exit;
 }
 
@@ -66,10 +66,9 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts'])) {
 	//Header--untuk RS Acc Status
 	if ($accstatus != 0) {
 		if ($txtac != ":") {
-			$ipmu = get_real_ip();
 			$authorized = 0;
-			if (in_array($ipmu, $options['ip_premixstat_list'])) {
-				$return_msg = "<small>Authorized&nbsp;IP&nbsp;detected:&nbsp;" . $ipmu . "</small>";
+			if (in_array($visitors->userip, $options['ip_premixstat_list'])) {
+				$return_msg = "<small>Authorized&nbsp;IP&nbsp;detected:&nbsp;" . $visitors->userip . "</small>";
 				$authorized = 1;
 			} else {
 				$return_msg = "<small>&nbsp;</small>";
@@ -200,9 +199,9 @@ if (isset($_POST['accounts']) || isset($_POST['staccounts'])) {
 					//$rapids[1] = "-";
 					$rfpoints = "-";
 					$accauth = "<td><a href=\"javascript:;\" onclick=\"login('" . $User . "','" . $Pass . "','" . $loginfunc . "');\">" . $User . "</a></td>" .
-							"<td>" . $Pass . "</td><td align=center>" . $frpoints[1] . "</td><td align=center>" . $rapids[1] . "</td><td align=center>" . $rfpoints . "</td>" .
-							"<td align=right>" . bytesToKbOrMbOrGb($traffic[1] * 1024) . "</td>" .
-							"<td align=right>" . $valid[1] . "</td>";
+						"<td>" . $Pass . "</td><td align=center>" . $frpoints[1] . "</td><td align=center>" . $rapids[1] . "</td><td align=center>" . $rfpoints . "</td>" .
+						"<td align=right>" . bytesToKbOrMbOrGb($traffic[1] * 1024) . "</td>" .
+						"<td align=right>" . $valid[1] . "</td>";
 					$rpu = "<td align=center><span title='Security&nbsp;Lock'>" . $slocktext . "</span></td><td><span>" . $emailnye[1] . "</span></td>";
 					$trhead = "<tr class=\"acc_chk\"";
 					$ret_acc = $User . ":" . $Pass . ":" . $rapids[1] . ":" . $slipOut . $emailnye[1] . ":";
@@ -236,5 +235,5 @@ if ($accstatus != 0) {
 	exit($return_msg);
 }
 exit();
-//end (isset($_POST['accounts']) || isset($_POST['staccounts']))  
+//end (isset($_POST['accounts']) || isset($_POST['staccounts']))
 ?>

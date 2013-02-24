@@ -1,6 +1,6 @@
 <?php
 if (!defined('RAPIDLEECH')) {
-	require_once ( "index.html" );
+	require_once('index.html');
 	exit;
 }
 
@@ -16,14 +16,14 @@ if (isset($_POST['TBLoad'])) {
 	_create_list();
 	$resXML = '';
 	{
-	/* ==try with XML== */
+		/* ==try with XML== */
 
 		if ($list) {
 			$resXML = '<data>' . $rn;
 
 			//action files
 			$resXML.= '<actions>' . $rn;
-			if (!$options["disable_action"]) {
+			if (!$options['disable_action']) {
 				$resXML.='<option>blank:-1:' . $L->say['action'] . '</option>' . $rn;
 
 				foreach ($options["disable_to"] as $k => $val) {
@@ -91,13 +91,13 @@ if (isset($_POST['TBLoad'])) {
 			if ((!isset($_COOKIE['showAll']) || ( isset($_COOKIE['showAll']) && $_COOKIE['showAll'] != 1 ) ) && $options["show_column_sfile"]["downloadlink"] == true) {
 				$resXML.= ' <filelink>' . $L->say['tabel_dl'] . '</filelink>' . $rn;
 			}
-			if ($options["show_column_sfile"]["comments"] == true) {
+			if ($options['show_column_sfile']["comments"] == true) {
 				$resXML.= ' <filecomment>' . $L->say['tabel_cmt'] . '</filecomment>' . $rn;
 			}
-			if ($options["show_column_sfile"]["date"] == true) {
+			if ($options['show_column_sfile']["date"] == true) {
 				$resXML.= ' <filedate>' . $L->say['tabel_dt'] . '</filedate>' . $rn;
 			}
-			if ($options["show_column_sfile"]["age"] == true) {
+			if ($options['show_column_sfile']["age"] == true) {
 				$resXML.= ' <fileage>' . $L->say['tabel_age'] . '</fileage>' . $rn;
 			}
 			if ((!isset($_COOKIE['showAll']) || ( isset($_COOKIE['showAll']) && $_COOKIE['showAll'] != 1 ) ) && $options["show_column_sfile"]["ip"] == true) {

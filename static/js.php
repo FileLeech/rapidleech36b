@@ -5,7 +5,7 @@ if (!isset($_GET['mod']) and isset($_SERVER['QUERY_STRING'])) {
   $_GET['mod'] = $_SERVER['QUERY_STRING'];
 }
 $nn = "\r\n";
-$validpage = array('main','audl', 'auul', 'lynx', 'mtn');
+$validpage = array('main','audl', 'auul', 'lynx', 'mtn', 'xpanel');
 
 $req = urldecode($_GET['mod']);
 $validSearch = preg_match("/^[a-zA-Z0-9_]+$/i", $req);
@@ -26,21 +26,9 @@ require_once(CONFIG_DIR . 'config.php');
 define('TEMPLATE_DIR', 'tpl/' . $options['template_used'] . '/');
 define('IMAGE_DIR', TEMPLATE_DIR . 'skin/'. $options["csstype"] . '/');
 
-$loca["thisFile"] = str_replace('\\','/',(__FILE__));
-$loca["docRoot"] = $_SERVER['DOCUMENT_ROOT'] . (substr($_SERVER['DOCUMENT_ROOT'],-1) != "/" ? "/":"");
-$webRoot  = str_replace(array($loca["docRoot"], STATIC_DIR . basename(__FILE__) ), '', $loca["thisFile"]);
-unset($loca);
-if($webRoot=="/") $webRoot = "";
-define('ROOT_URL', "http://". $_SERVER["SERVER_NAME"] . "/" . $webRoot);
-
 // Language initialisation
 require_once(CLASS_DIR."lang.class.php");
 $L = new RxLang;
-$L->set_path(LANG_DIR);
-
-// Load language
-$L->set_language($options['lang']);
-$L->load();
 $charSet = $L->settings["charset"];
 unset($options);
 
@@ -94,21 +82,19 @@ php_js_strings[36] = "<?php echo $L->say['_uploading'];?>";
 php_js_strings[37] = "<?php echo $L->say['_pwait_sec'];?>";
 php_js_strings[281] = "<?php echo $L->say['local_time'];?>";
 
-var IMG_DIR_TPL = '<?php echo ROOT_URL.IMAGE_DIR;?>';
-var STATIC_DIR = '<?php echo ROOT_URL.STATIC_DIR;?>';
-var phpjx = '<?php echo ROOT_URL.'ajax_main.php';?>';
+var IMG_DIR_TPL = '<?php echo IMAGE_DIR;?>';
+var STATIC_DIR = '<?php echo STATIC_DIR;?>';
+var phpjx = '<?php echo 'ajax_main.php';?>';
+var hash = '<?php echo CLASS_DIR . 'ajax/hash.php';?>';
 
 // Frame Buster
 if (top != self) {
 	try {
-		if (top.location.host != self.location.host) {
-			top.location = self.location;
-		}
+		if (top.location.host != self.location.host) throw 1;
 	} catch (err) {
-		top.location = self.location;
+		top.location.replace(self.location.protocol + '//' + self.location.host + self.location.pathname);
 	}
 }
-
 function deleteCookie(name, path, domain) {
 	if (getCookie(name)) {
 		d.cookie = name + "=" + ((path) ? "; path=" + path : "") + ((domain) ? "; domain=" + domain : "") + "; expires=Thu, 01-Jan-70 00:00:01 GMT";
@@ -143,25 +129,9 @@ function showAll(){
 function urlload(){
 	location.href = location.href.split('?',1)+'?act=files';
 }
-function clk(idck){
-	var cur = d.getElementById(idck).checked;
-	d.getElementById(idck).checked = !cur;
-}
 function highlight(field) {
 	field.focus(); field.select();
 }
-function fc(caption,displaytext) {
-	if(c>0) {
-		d.getElementById("dl").innerHTML = caption + php_js_strings[37].replace('{1}', c.toFixed(1));
-		c = c - 0.5;
-		setTimeout("fc('"+caption+"','"+displaytext+"')", 500);
-	} else {
-		d.getElementById("dl").style.display="none";
-		d.getElementById("code").innerHTML = unescape(displaytext);
-	}
-}
-
-// ===== batas global =====
 <?php
 if($req == 'main' OR $req == 'auul'){
 ?>
@@ -184,9 +154,8 @@ function setCheckboxes(act) {
 		}
 	}
 }
-// end-($req == 'main' OR $req == 'auul')
 <?php
-}
+} // end-($req == 'main' OR $req == 'auul')
 if($req == 'main' OR $req == 'lynx'){
 ?>
 function gosetfacebook(){
@@ -196,15 +165,23 @@ function gosetfacebook(){
 		})
 	});
 }
-// end -($req == 'main' OR $req == 'lynx')
 <?php
-}
-if($req == 'main'){
+} // end -($req == 'main' OR $req == 'lynx')
+if($req == 'main' OR $req == 'lynx' OR $req == 'auul'){
 ?>
-function neoClass_tab(id){
+function clk(idck) {
+	var cur = document.getElementById(idck).checked;
+	document.getElementById(idck).checked = !cur;
+}
+<?php
+} // end -($req == 'main' OR $req == 'lynx' OR $req == 'auul')
+if($req == 'main') {
+?>
+function neoClass_tab(id) {
 	var tbobj = d.getElementById("tb" + id);
 	d.getElementById("navcell" + id).className = "tab-on";
 	tbobj.className = "tab-content show-table";
+	//alert(tbobj.className);
 }
 function switchCell(m) {
 	var style;
@@ -228,8 +205,8 @@ function clearSettings()  {
 
 	d.cookie = "clearsettings = 1;";
 }
-function clear(name) {
-	d.cookie = name + " = " + "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+function clear() {
+	for (var i = 0; i < arguments.length; i++) d.cookie = arguments[i] + ' = ' + '; expires=Thu, 01-Jan-70 00:00:01 GMT';
 }
 function showAdd() {
 	d.getElementById('add').style.display = show ? 'none' : '';
@@ -263,8 +240,8 @@ function delFtpParams() {
 	d.getElementById("hrefSetFtpParams").style.color = "#0000FF";
 	d.getElementById("hrefDelFtpParams").style.color = "#808080";
 }
-function setParam(param) {
-	d.cookie = param + "=" + d.getElementById(param).value;
+function setParam() {
+	for (var i = 0; i < arguments.length; i++) d.cookie = arguments[i] + '=' + d.getElementById(arguments[i]).value;
 }
 function pr(percent, received, speed) {
 	d.getElementById("received").innerHTML = '<b>' + received + '</b>';
@@ -289,21 +266,19 @@ function zip() {
 	}
 }
 function new_transload_window() {
-	var tmp = new Date();
-	tmp = tmp.getTime();
+	var tmp = (new Date()).getTime();
 	$('form[name=transload]').attr('target', 'rapidleech_'+tmp);
 	var options = "width=700,height=320,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no";
 	window.open('','rapidleech_'+tmp, options);
 	window.setTimeout("$('form[name=transload]').submit();", 200);
 }
-//end-$req == 'main'
 <?php
-}
+} //end-$req == 'main'
 if($req == 'lynx'){
 ?>
-function trparser(){
+function trparser() {
 	var _tpl = "", i = 0;
-	for(var date in dFile) {
+	for (var date in dFile) {
 		pfile = dFile[date];
 		_tpl = dtemplate;
 		// do replacement string;  10-May-2009, 23:09
@@ -312,36 +287,36 @@ function trparser(){
 		dDate = dDate.split(" ");
 		_tpl = _tpl.replace(/\(\(chkidx\)\)/g, i);
 		_tpl = _tpl.replace(/\(\(filename\)\)/g, (pfile["name"]));
-		_tpl = _tpl.replace(/\(\(filelink\)\)/g, (_dlpath + (pfile["name"])) );
+		_tpl = _tpl.replace(/\(\(filelink\)\)/g, (_dlpath + (pfile["name"])));
 		_tpl = _tpl.replace(/\(\(filesize\)\)/g, pfile["size"]);
-		_tpl = _tpl.replace(/\(\(formatdate\)\)/g, dDate[1]+'-'+dDate[2]+'-'+dDate[3].substr(2,2)+', '+dDate[4].substr(0,2)+':'+dDate[4].substr(3,2)+':'+dDate[4].substr(6,2));
+		_tpl = _tpl.replace(/\(\(formatdate\)\)/g, dDate[1] + '-' + dDate[2] + '-' + dDate[3].substr(2, 2) + ', ' + dDate[4].substr(0, 2) + ':' + dDate[4].substr(3, 2) + ':' + dDate[4].substr(6, 2));
 		_tpl = _tpl.replace(/\(\(fileage\)\)/g, pfile["age"]);
 		_tpl = _tpl.replace(/\(\(dlpath\)\)/g, _dlpath);
 		_tpl = _tpl.replace(/\(\(b64filename\)\)/g, pfile["delkey"]);
-		text+= _tpl;
+		text += _tpl;
 		i++;
 	}
 }
-
 var idwindow = new Array();
 function opennewwindow(id) {
 	var options = "width=700,height=250,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,copyhistory=no";
 	var start_link = d.getElementById(id);
-	idwindow[id] = window.open(start_link, dwindow+id, options);
-	idwindow[id].opener=self;
+	idwindow[id] = window.open(start_link, dwindow + id, options);
+	idwindow[id].opener = self;
 	idwindow[id].focus();
 }
-function sAll(niLai){
+function sAll(niLai) {
 	var dc;
-	diq=d.getElementById('add_comment').checked=false;
-	d.getElementById('comment').style.display='none';
-	for (i=0;i< Opt["nC"] ;i++) {
-		d.getElementById('chkfL-'+i).checked=niLai;
-		dc = d.getElementById('brs'+i);
-		if(niLai){
-			dc.className='rowlist_checked';
-		}else{
-			dc.className='rowlist';
+	diq = d.getElementById('add_comment').checked = false;
+	d.getElementById('comment').style.display = 'none';
+	for (i = 0; i < Opt["nC"]; i++) {
+		d.getElementById('chkfL-' + i).checked = niLai;
+		dc = d.getElementById('brs' + i);
+		//if(niLai){dc.bgColor='#B1F4AE';}else{dc.bgColor='#D49659';}
+		if (niLai) {
+			dc.className = 'rowlist_checked';
+		} else {
+			dc.className = 'rowlist';
 		}
 	}
 }
@@ -354,8 +329,7 @@ function GenTag() {
 		var Simultan = true; //set this true if your server allow simultan download
 		var codeTagOnly = d.getElementById('wterm').checked ? false : true; //true is without Term of Download
 		var DelLink = Opt["DelLink"] && d.getElementById('dellnk').checked;
-		var poslynx,
-		hostpath = d.location.href;
+		var poslynx, hostpath = d.location.href;
 		poslynx = hostpath.lastIndexOf("/");
 		hostpath = hostpath.substring(0, poslynx + 1);
 		if (!codeTagOnly) {
@@ -379,7 +353,6 @@ function GenTag() {
 				cLnk++;
 			}
 		}
-
 		delink = delink + "\n[/CODE][/SIZE][/SPOILER]";
 		if (buFF != '') {
 			buFF = "[CODE]" + (buFF) + "\n[/CODE]";
@@ -394,7 +367,6 @@ function GenTag() {
 			}
 			buFF += ttip4;
 			if (!codeTagOnly) {
-
 				buFF += "[/SIZE]";
 			}
 		}
@@ -405,18 +377,14 @@ function GenTag() {
 		dca.style.display = displ;
 		d.getElementById('cmtarea').value = buFF;
 		trwarn.style.display = 'none';
-
 	} else {
 		dca.style.display = 'none';
 		d.getElementById('td_warn').innerHTML = '<div class="acthistory_result" style="width:200px;">'+php_js_strings[35]+'</div>';
 		trwarn.style.display = '';
-
 	}
 }
-
-//end-$req == 'lynx'
 <?php
-}
+} //end-$req == 'lynx'
 ?>
 // =========Below is global use============
 
@@ -663,17 +631,17 @@ function getthedate(){
 	var hours=mydate.getHours();
 	var minutes=mydate.getMinutes();
 	var seconds=mydate.getSeconds();
-	var dn="AM";
-	if (hours>=12) dn="PM";
+	var dn='AM';
+	if (hours>=12) dn='PM';
 	if (hours>12) hours=hours-12;
 	if (hours==0) hours=12;
-	if (hours<=9) hours="0"+hours;
-	if (minutes<=9) minutes="0"+minutes;
-	if (seconds<=9) seconds="0"+seconds;
+	if (hours<=9) hours='0'+hours;
+	if (minutes<=9) minutes='0'+minutes;
+	if (seconds<=9) seconds='0'+seconds;
 
-	var cdate="<span style=\"color:#999\">"+hours+":"+minutes+":"+seconds+" "+dn+"&nbsp;</span><span style=\"color:#FF8700\">("+php_js_strings[281]+")</span>";
+	var cdate='<span style="color:#999">'+hours+':'+minutes+':'+seconds+' '+dn+'&nbsp;</span><span style="color:#FF8700">('+php_js_strings[281]+')</span>';
 	$('#clock').html(cdate);
-	setTimeout("getthedate()",1000);
+	setTimeout('getthedate()',1000);
 }
 
 // =====================

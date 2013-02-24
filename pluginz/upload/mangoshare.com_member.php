@@ -95,7 +95,7 @@ if ($continue_up)
 <?php 	
 
 		  preg_match('/http:\/\/.+killcode[^\'"]+/', $page, $del);
-		  $download_link = trim ( cut_str ( $page, 'onfocus="copy(this);">[URL=', ']' ) );
+		  $download_link = trim ( cut_str ( $page, 'onFocus="copy(this);">[URL=', ']' ) );
 		  if(empty($download_link)){
 		  write_file($options['download_dir']."mango_err.log", $page);
 		  html_error("Error, no download link retrieved, check error log.","0");

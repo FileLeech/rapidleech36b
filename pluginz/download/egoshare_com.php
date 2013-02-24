@@ -73,7 +73,7 @@ if ($eg == 'ok') {
 	
 
 	print 	"<form method=\"post\" action=\"$PHP_SELF\">$nn";
-	print	"<b>Please enter code:</b><br />$nn";
+	print	"<b>Please enter code:</b><br>$nn";
 	print	"<img src=\"{$options['download_dir']}egoshare_captcha.jpg?id=".$randnum."\" >$nn";
 	print	"<input name=\"link\" value=\"$LINK\" type=\"hidden\">$nn";
 	print	"<input name=\"referer\" value=\"$LINK\" type=\"hidden\">$nn";

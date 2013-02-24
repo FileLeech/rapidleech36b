@@ -37,7 +37,7 @@ class bitshare_com extends DownloadClass {
             is_present($this->page, "Your Traffic is used up for today. Upgrade to premium to continue!");
             if (preg_match('@<span id="blocktimecounter">(\d+) seconds<\/span>@', $this->page, $wait) && !strpos($this->page, "var blocktime = 0;")) {
                 echo  ("<center><font color='red'><b>You reached your hourly traffic limit.</b></font></center>");
-                $this->JSCountdown($wait[1]);
+                JSCountDown($wait[1]);
             }
             if (!preg_match('@url: "([^"]+)",@', $this->page, $rd)) html_error("Error: Post Link [FREE] not found!");
             if (!preg_match('@var ajaxdl = "([^"]+)";@i', $this->page, $ajax)) html_error("Error: Ajax ID [FREE] not found!");

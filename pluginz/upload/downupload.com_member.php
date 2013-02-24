@@ -92,7 +92,7 @@ if ($continue_up)
     $gpost['op'] = "upload_result" ;
     $Url=parse_url($ref);
     $page = geturl($Url["host"], 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), $uurl, $cookies, $gpost, 0, $_GET["proxy"],$pauth);
-    $ddl=cut_str($page,'style="width:98%;" rows=3 onfocus="copy(this);">','<');
+    $ddl=cut_str($page,'style="width:98%;" rows=3 onFocus="copy(this);">','<');
     $download_link = $ddl;
 }
 

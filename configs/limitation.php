@@ -4,8 +4,9 @@ if (!defined('RAPIDLEECH')) {
 	exit;
 }
 
-if ($options["limitbyip"]) {
-	ipcounter(); // check and count real ip downloader
+if ($options['limitbyIP']) {
+	if ($visitors->is_error != 0) html_error($visitors->ret_msg);
+	$visitors->ipcounter(); // check and count real ip downloader
 	$ada_acc = false;
 	if (isset($premium_acc)) {
 		foreach ($premium_acc as $dhost => $val) {
@@ -16,7 +17,7 @@ if ($options["limitbyip"]) {
 		}
 	}
 	// check if max download reach
-	$trheute = $heute + 1;
+	$trheute = $visitors->heute + 1;
 	if ($trheute > $options["maximum_free_downloads"]) {
 		$msgNya = $L->sprintf($L->say['alert_premix_free'], $options["maximum_free_downloads"], $options["delay_per_ip"]);
 	}
@@ -55,10 +56,11 @@ if ($options["storage_limit"] > 0) {
 // Check download limit by ip
 $FilesDownloadedPerTime = 0;
 $is_dllimit = false;
-if ($options["downloadLimitbyip"]) {
-	_create_list_LIP();
+if ($options['downloadLimitbyIP']) {
+	if ($visitors->is_error != 0) html_error($visitors->ret_msg);
+	$visitors->_create_list_LIP();
 	foreach ($list as $k => $file) {
-		if ($file ["ip"] == $ipmu) {
+		if ($file ["ip"] == $visitors->userip) {
 			if (TIME_NOW - $options["downloadDelayPerIP"] < $file ['date']) {
 				$FilesDownloadedPerTime++;
 			}
@@ -69,7 +71,7 @@ if ($options["downloadLimitbyip"]) {
 
 // Check cpuload
 $alert_sloadhigh = false;
-if (($options["cpuUsageNFO"]) && file_exists(CLASS_DIR . 'sload.php')) {
+if ($options['cpuUsageNFO'] && file_exists(CLASS_DIR . 'sload.php')) {
 	$nocpus = 0; $loadcpu = '';
 	if (!isset($_GET["link"]) && !isset($_POST["link"])) {
 		$main = 1;
@@ -78,7 +80,7 @@ if (($options["cpuUsageNFO"]) && file_exists(CLASS_DIR . 'sload.php')) {
 	// will return $alert_sloadhigh
 	require_once(CLASS_DIR . 'sload.php');
 	// force alert_sloadhigh false if no limit_cpuload
-	if (!$options["limit_cpuload"]) $alert_sloadhigh = false;
+	if (!$options['limit_cpuload']) $alert_sloadhigh = false;
 }
 
 
@@ -103,7 +105,7 @@ if ($is_expired || $is_exceed || !$is_worktime || $storage_exceed || $alert_sloa
 	}  // limit_cpuload alerted
 	if ($is_dllimit) {
 		$limit_msg.=($limit_msg != "" ? "<br />" : $L->sprintf($L->say['exceed_download'], $options["downloadsPerIP"], sec1time($options["downloadDelayPerIP"])));
-	}  // downloadLimitbyip alerted
+	}  // downloadLimitbyIP alerted
 	if (!$is_worktime) {
 		if (!empty($limitmsg)) $limitmsg.="<br />";
 		$limitmsg.=$L->sprintf($L->say['worktime_alert'], $options["workstart"]);

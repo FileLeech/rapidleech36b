@@ -5,6 +5,11 @@
  * $Id: timers.class.php - 05apr2010-Idx $
  *****************************************************/
 
+if (!defined('RAPIDLEECH')) {
+	require_once("../404.php");
+	exit();
+}
+
 class timer {
 
 	/**

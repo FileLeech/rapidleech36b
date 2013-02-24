@@ -5,8 +5,7 @@ if (!defined('RAPIDLEECH')) {
 }
 
 class netload_in extends DownloadClass {
-	
-	public $cookie, $page, $link;
+
     public function Download($link) {
         global $premium_acc, $Referer;
 
@@ -19,16 +18,22 @@ class netload_in extends DownloadClass {
                 $this->page = $this->GetPage($this->link);
             }
             is_present($this->page, 'Code: ER_NFF', 'Error[File not found]!');
-			$this->cookie = GetCookiesArr($this->page);
         }
-        if (($_REQUEST["cookieuse"] == "on" && preg_match("/cookie_user=([a-zA-Z0-9%]+);?/i", $_REQUEST["cookie"]) !== false) || ($_REQUEST["premium_acc"] == "on" && !empty($premium_acc["netload_in"]["cookie"])) || ($_REQUEST["net_acc"] == "on" && (!empty($_GET["net_cookie"]) || !empty($_GET["net_hash"])))) {
+        if ($_REQUEST['premium_acc'] == 'on' && (($_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || ($premium_acc['netload_in']['user'] && $premium_acc['netload_in']['pass']))) {
             return $this->Login();
-		} elseif ($_REQUEST['premium_acc'] == 'on' && (($_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || ($premium_acc['netload_in']['user'] && $premium_acc['netload_in']['pass']))) {
-            return $this->Login();
-        } elseif ($_REQUEST['step'] == 'passpre') {
-			return $this->Premium(true);
-        } elseif ($_REQUEST['step'] == 'passfree') {
-			return $this->Retrieve(true);
+        } elseif ($_REQUEST['step'] == 'password') {
+            $post['file_id'] = $_POST['file_id'];
+            $post['password'] = $_POST['password'];
+            $post['submit'] = $_POST['submit'];
+            $this->link = urldecode($_POST['link']);
+            if (!empty($_POST['cookie'])) {
+                $this->cookie = decrypt(urldecode($_POST['cookie']));
+                $this->page = $this->GetPage($this->link, $this->cookie, $post, $Referer);
+                return $this->Premium();
+            } else {
+                $this->page = $this->GetPage($this->link, 0, $post, $Referer);
+                return $this->Retrieve();
+            }
         } elseif ($_REQUEST['step'] == 'captcha') {
             return $this->Free();
         } else {
@@ -36,28 +41,20 @@ class netload_in extends DownloadClass {
         }
     }
 
-    private function Retrieve($password = false) {
+    private function Retrieve() {
         global $Referer;
-		
-		if ($password) {
-            $post['file_id'] = $_POST['file_id'];
-            $post['password'] = $_POST['password'];
-            $post['submit'] = $_POST['submit'];
-            $this->link = urldecode($_POST['link']);
-			$this->cookie = urldecode($_POST['cookie']);
-			$this->page = $this->GetPage($this->link, $this->cookie, $post, $Referer);
-		}
+
         if (stristr($this->page, 'This file is password-protected!')) {
             $form = cut_str($this->page, '<form name="form" method="post"', '</form>');
             if (!preg_match('%action="([^"]+)"%', $form, $pw)) html_error("Error[getFreePassLink]");
             $this->link = 'http://netload.in/' . $pw[1];
             if (!preg_match_all('%<input type="(hidden|submit)" value="([^"]+)?" name="([^"]+)" \/>%', $form, $match)) html_error("Error[getFreePostPass]");
-			if (is_array($this->cookie)) $this->cookie = CookiesToStr ($this->cookie);
             $data = array_merge($this->DefaultParamArr('http://netload.in/' . $pw[1]), array_combine($match[3], $match[2]));
-            $data['step'] = 'passfree';
+            $data['step'] = 'password';
             $this->EnterPassword($data);
             exit();
         }
+        $this->cookie = GetCookies($this->page);
         if (!preg_match('%<div class="Free_dl"><a href="([^"]+)">%', $this->page, $temp)) html_error('Error[getFreeLink]');
         $this->link = 'http://netload.in/' . html_entity_decode($temp[1], ENT_QUOTES, 'UTF-8');
         $this->page = $this->GetPage($this->link, $this->cookie, 0, $Referer);
@@ -103,63 +100,36 @@ class netload_in extends DownloadClass {
 
     private function Login() {
         global $premium_acc;
-		
-		$usecookie = false;
-		if ($_REQUEST['cookieuse'] == 'on') {
-			if (preg_match("/cookie_user=([a-zA-Z0-9%]+);?/i", $_REQUEST["cookie"], $c)) $usecookie = $c[1];
-		} elseif ($_REQUEST['net_acc'] == 'on') {
-			if (!empty($_GET["net_cookie"])) $usecookie = $_GET["net_cookie"];
-			elseif (!empty($_GET["net_hash"])) $usecookie = strrev(dcd($_GET["net_hash"]));
-		} elseif (!empty($premium_acc['netload_in']['cookie'])) {
-			$usecookie = $premium_acc['netload_in']['cookie'];
-		}
-		
-        $posturl = 'http://netload.in/';
-		if (!$usecookie) {
-			$user = ($_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc["netload_in"]["user"]);
-			$pass = ($_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc["netload_in"]["pass"]);
-			if (empty($user) || empty($pass)) html_error("Login Failed: User [$user] or Password [$pass] is empty. Please check login data.");
 
-			$post['txtuser'] = $user;
-			$post['txtpass'] = $pass;
-			$post['txtcheck'] = 'login';
-			$post['txtlogin'] = 'Login';
-			$page = $this->GetPage($posturl . 'index.php', $this->cookie, $post, $posturl);
-			is_present($page, '/index.php?id=15', 'Login failed, invalid username or password???');
-			$this->cookie = GetCookiesArr($page, $this->cookie);
-		} else {
-			$this->cookie['cookie_user'] = $usecookie;
-		}
+        $user = ($_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc["netload_in"]["user"]);
+        $pass = ($_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc["netload_in"]["pass"]);
+        if (empty($user) || empty($pass)) html_error("Login Failed: User [$user] or Password [$pass] is empty. Please check login data.");
+
+        $posturl = 'http://netload.in/';
+        $post['txtuser'] = $user;
+        $post['txtpass'] = $pass;
+        $post['txtcheck'] = 'login';
+        $post['txtlogin'] = 'Login';
+        $this->page = $this->GetPage($posturl . 'index.php', 0, $post, $posturl);
+        is_present($this->page, '/index.php?id=15', 'Login failed, invalid username or password???');
+        $this->cookie = GetCookies($this->page);
         //check the premium account (IMPORTANT!)
-        $page = $this->GetPage($posturl . 'index.php?id=2', $this->cookie);
-		is_notpresent($page, '<a href="/index.php?id=2">My Account</a>', 'Invalid cookie!');
-        is_present($page, 'Order Premium Account now', 'Account Status : FREE!');
+        $this->page = $this->GetPage($posturl . 'index.php?id=2', $this->cookie);
+        is_present($this->page, 'Order Premium Account now', 'Account Status : FREE!');
         //start download the link
+        $this->page = $this->GetPage($this->link, $this->cookie, 0, $this->link);
 
         return $this->Premium();
     }
 
-    private function Premium($password = false) {
-		global $Referer;
-		
-		if ($password) {
-            $post['file_id'] = $_POST['file_id'];
-            $post['password'] = $_POST['password'];
-            $post['submit'] = $_POST['submit'];
-            $this->link = urldecode($_POST['link']);
-			$this->cookie = decrypt(urldecode($_POST['cookie']));
-			$this->page = $this->GetPage($this->link, $this->cookie, $post, $Referer);
-		} else {
-			$this->page = $this->GetPage($this->link, $this->cookie, 0, $this->link);
-		}
+    private function Premium() {
         if (stristr($this->page, 'This file is password-protected!')) {
             $form = cut_str($this->page, '<form name="form" method="post"', '</form>');
             if (!preg_match('%action="([^"]+)"%', $form, $pw)) html_error("Error[getPrePassLink]");
             if (!preg_match_all('%<input type="(hidden|submit)" value="([^"]+)?" name="([^"]+)" \/>%', $form, $match)) html_error("Error[getPrePostPass]");
-			
-			if (is_array($this->cookie)) $this->cookie = CookiesToStr ($this->cookie);
+            
             $data = array_merge($this->DefaultParamArr('http://netload.in/' . $pw[1], encrypt($this->cookie)), array_combine($match[3], $match[2]));
-            $data['step'] = 'passpre';
+            $data['step'] = 'password';
             $this->EnterPassword($data);
             exit();
         }

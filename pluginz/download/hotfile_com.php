@@ -33,14 +33,8 @@ class hotfile_com extends DownloadClass {
 			unset($page);
 		}
 
-        if ($_REQUEST["hf_acc"] == "on" && (!empty($_GET["hf_cookie"]) || !empty($_GET["hf_hash"]) || !empty($premium_acc["hotfile_com"]["cookie"]))) {
-            if (!empty($_GET["hf_cookie"])) {
-                $cookie = $_GET["hf_cookie"];
-            } elseif (!empty($_GET["hf_hash"])) {
-                $cookie = strrev(dcd($_GET["hf_hash"]));
-            } else {
-                $cookie = $premium_acc["hotfile_com"]["cookie"];
-            }
+		if (($_REQUEST["cookieuse"] == "on" && preg_match("/auth\s?=\s?(\w{64})/i", $_REQUEST["cookie"], $c)) || ($_REQUEST["premium_acc"] == "on" && $premium_acc["hotfile_com"]["cookie"])) {
+			$cookie = (empty($c[1]) ? $premium_acc["hotfile_com"]["cookie"] : $c[1]);
 			$this->DownloadPremium($link, $cookie);
 		} elseif (($_REQUEST["premium_acc"] == "on" && $_REQUEST["premium_user"] && $_REQUEST["premium_pass"]) ||
 			($_REQUEST["premium_acc"] == "on" && $premium_acc["hotfile_com"]["user"] && $premium_acc["hotfile_com"]["pass"])) {
@@ -61,7 +55,7 @@ class hotfile_com extends DownloadClass {
 			if ($hl > 0) {
 				$data = $this->DefaultParamArr($link);
 				$data['step'] = '2';
-				$this->JSCountdown($hl, $data, 'You reached your hourly traffic limit');
+				JSCountDown($hl, $data, 'You reached your hourly traffic limit');
 			} else {
 				insert_timer(($t[0]/1000)+1, "Waiting captcha/link timelock:");
 			}

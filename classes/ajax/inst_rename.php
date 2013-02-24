@@ -39,7 +39,7 @@ if (isset($_POST['ren'])) {
 		$newName = dirname($oldName) . PATH_SPLITTER . $newName;
 
 		$filetype = strrchr($newName, ".");
-		if (is_array($options["forbidden_filetypes"]) && in_array(strtolower($filetype), $options["forbidden_filetypes"])) {
+		if (is_array($options['forbidden_filetypes']) && in_array(strtolower($filetype), $options['forbidden_filetypes'])) {
 			// ERROR
 			echo "((suc))0((/suc))<msg>" . $L->sprintf($L->say['forbidden_rename'], $filetype) . "</msg>";
 		} else {

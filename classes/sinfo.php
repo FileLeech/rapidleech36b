@@ -32,7 +32,7 @@ $gd_enable = ( extension_loaded('gd') && function_exists('gd_info') );
 
 
 if ($server["is_windows"]) {
-	if ($options["cpuUsageNFO"] && isset($nocpus) && isset($loadcpu)) {
+	if ($options["cpuUsageNFO"]) {
 		if ($nocpus == 0 || $loadcpu == '') {
 			$cpulast = 0;
 			$wmi = new COM("Winmgmts://");
@@ -51,7 +51,7 @@ if ($server["is_windows"]) {
 	} //--end windows os
 } elseif ($server["is_linux"]) {
 
-	if ($options["cpuUsageNFO"] && isset($nocpus) && isset($loadcpu)) {
+	if ($options["cpuUsageNFO"]) {
 
 		function getStat($_statPath) {
 			if (trim($_statPath) == '') {

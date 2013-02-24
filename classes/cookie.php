@@ -4,7 +4,7 @@ if (!defined('RAPIDLEECH')) {
 	exit();
 }
 
-if ($_COOKIE ["clearsettings"]) {
+if (!empty($_COOKIE["clearsettings"])) {
 	setcookie("domail", "", TIME_NOW - 3600);
 	setcookie("email", "", TIME_NOW - 3600);
 	setcookie("saveto", "", TIME_NOW - 3600);
@@ -22,7 +22,7 @@ if ($_COOKIE ["clearsettings"]) {
 	setcookie("premium_pass", "", TIME_NOW - 3600);
 }
 
-if ($_REQUEST ["savesettings"] == "on") {
+if (isset($_REQUEST["savesettings"]) && $_REQUEST["savesettings"] == "on") {
 	setcookie("savesettings", TRUE, TIME_NOW + 800600);
 	if ($_REQUEST ["domail"] == "on") {
 		setcookie("domail", TRUE, TIME_NOW + 800600);

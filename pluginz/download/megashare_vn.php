@@ -1,4 +1,4 @@
-<?php    
+<?php
 if (!defined('RAPIDLEECH')){
   require_once("404.php");
   exit;
@@ -18,7 +18,7 @@ class megashare_vn extends DownloadClass {
     }
     private function DownloadPremium($link){
         global $premium_acc;
-        $page=sslcurl("https://id.megaplus.vn/login?service=http%3A%2F%2Fshare.vnn.vn%2Fmegavnnplus.php%3Fservice%3Dlogin");
+        $page=$this->GetPage("https://id.megaplus.vn/login?service=http%3A%2F%2Fshare.vnn.vn%2Fmegavnnplus.php%3Fservice%3Dlogin");
         $Cookies=GetCookies($page);
         $lt=cut_str($page, 'name="lt" value="', '"');
         $post=array();
@@ -27,7 +27,7 @@ class megashare_vn extends DownloadClass {
         $post["lt"]=$lt;
         $post["_eventId"]="submit";
         $post["submit"]="%C3%90%C4%82NG+NH%E1%BA%ACP+";
-        $page=sslcurl("https://id.megaplus.vn/login?service=http%3A%2F%2Fshare.vnn.vn%2Fmegavnnplus.php%3Fservice%3Dlogin", $Cookies, $post);
+        $page=$this->GetPage("https://id.megaplus.vn/login?service=http%3A%2F%2Fshare.vnn.vn%2Fmegavnnplus.php%3Fservice%3Dlogin", $Cookies, $post);
         $Cookies.="; ".GetCookies($page);
         if (!preg_match("#Location: (.*)#i", $page, $tlink)){
             html_error("Error 1x01: Plugin is out of date");

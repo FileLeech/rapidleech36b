@@ -5,7 +5,7 @@ if (!defined('RAPIDLEECH')) {
 }
 
 ###-PREMIUM-CONFIG
-//$premium_acc = array();
+$premium_acc = array();
 ### Remove '//' from the beginning and enter your username and password for enable premium account ###
 //$premium_acc["rapidshare_com"] = array('user' => '', 'pass' => '');
 // For multiple rapidshare premium accounts only - if you are using multiple accounts below, comment out the line above
@@ -31,7 +31,6 @@ if (!defined('RAPIDLEECH')) {
 //$premium_acc["fileserving_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["filesflash_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["filesmonster_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["filesonic_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["freakshare_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["furk_net"] = array('user' => '', 'pass' => '');
 //$premium_acc["gigasize_com"] = array('user' => '', 'pass' => '');
@@ -54,20 +53,23 @@ if (!defined('RAPIDLEECH')) {
 //$premium_acc["speedyshare_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["turbobit_net"] = array('user' => '', 'pass' => '');
 //$premium_acc["ugotfile_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["uploaded_to"] = array('user' => '', 'pass' => '');
+//$premium_acc["uploaded_net"] = array('user' => '', 'pass' => '');
 //$premium_acc["uploading_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["uploadstation_com"] = array('user' => '', 'pass' => '');
-//$premium_acc["vBulletin_acc"] = array('user' => '', 'pass' => '');
-//$premium_acc["wupload_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["youtube_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["filegaze_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["slingfile_com"] = array('user' => '', 'pass' => '');
+//$premium_acc ["filemates_com"] = array('user' => '', 'pass' => '');
+//$premium_acc ["sharpfile_com"] = array('user' => '', 'pass' => '');
+//$premium_acc ["howfile_com"] = array('user' => '', 'pass' => '');
+//$premium_acc ["speedshare_eu"] = array('user' => '', 'pass' => '');
+//$premium_acc ["luckyshare_net"] = array('user' => '', 'pass' => '');
 
 ###Premium cookie configuration, dont use this if you have already set another premium account config
 //$premium_acc["depositfiles_com"] = array('cookie' => '');
 //$premium_acc["hotfile_com"] = array('cookie' => '');
 //$premium_acc["rapidshare_com"] = array('cookie' => '');
-//$premium_acc["uploaded_to"] = array('cookie' => '');
+//$premium_acc["uploaded_net"] = array('cookie' => '');
 //$premium_acc["uploading_com"] = array('cookie' => '');
 //$premium_acc["netload_in"] = array('cookie' => '');
 
@@ -75,10 +77,7 @@ if (!defined('RAPIDLEECH')) {
 //$premium_acc["fileflyer_com"] = array('pass' => '');
 //$premium_acc["letitbit_net"] = array('pass' => '');
 //$premium_acc["shareflare_net"] = array('pass' => '');
-//$premium_acc["vip_file_com"] = array('pass' => '');
-
-#Auto Download Premium Account #
-$premium_acc_audl = false;
+//$premium_acc["vip-file_com"] = array('pass' => '');
 
 #Upload Account #
 //$upload_acc = array();
@@ -102,7 +101,6 @@ $premium_acc_audl = false;
 //$upload_acc["fileserving_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["filesflash_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["filesmonster_com"] = array('user' => '', 'pass' => '');
-//$upload_acc["filesonic_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["freakshare_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["furk_net"] = array('user' => '', 'pass' => '');
 //$upload_acc["gigasize_com"] = array('user' => '', 'pass' => '');
@@ -124,17 +122,11 @@ $premium_acc_audl = false;
 //$upload_acc["speedyshare_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["turbobit_net"] = array('user' => '', 'pass' => '');
 //$upload_acc["ugotfile_com"] = array('user' => '', 'pass' => '');
-//$upload_acc["uploaded_to"] = array('user' => '', 'pass' => '');
+//$upload_acc["uploaded_net"] = array('user' => '', 'pass' => '');
 //$upload_acc["uploading_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["uploadstation_com"] = array('user' => '', 'pass' => '');
-//$upload_acc["wupload_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["youtube_com"] = array('user' => '', 'pass' => '');
 //$upload_acc["filegaze_com"] = array('user' => '', 'pass' => '');
-
-#Secret key for cookie encryption
-#Make up a random one to protect your premium cookies (max length: 56). Example: $secretkey = 'UijSY5wjP1Ii'; - DO NOT use this example $secretkey, or your premium accounts/cookies could be stolen!!
-#IF THIS IS NOT SET BEFORE YOU USE PREMIUM SERVICES, YOU WILL BE WARNED BY THE RAPIDLEECH SCRIPT. OTHERWISE YOUR PREMIUM ACCOUNTS AND/OR COOKIES COULD BE COMPROMISED!
-$secretkey = '';
 
 # Acc info & drop down
 $ar_host_acc = array(
@@ -155,21 +147,23 @@ $ar_host_acc = array(
 'filefactory_com' => 'filefactory.com',
 'filefat_com' => 'filefat.com',
 'filejungle_com' => 'filejungle.com',
+'filemates_com' => 'filemates.com',
 'filepost_com' => 'filepost.com',
 'fileserve_com' => 'fileserve.com',
 'fileserving_com' => 'fileserving.com',
 'filesflash_com' => 'filesflash.com',
 'filesmonster_com' => 'filesmonster.com',
-'filesonic_com' => 'filesonic.com',
 'freakshare_com' => 'freakshare.com',
 'furk_net' => 'furk.net',
 'gigasize_com' => 'gigasize.com',
 'hellshare_com' => 'hellshare.com',
 'hotfile_com' => 'hotfile.com',
+'howfile_com' => 'howfile.com',
 'ifile_it' => 'ifile.it',
 'jumbofiles_com' => 'jumbofiles.com',
 'kickload_com' => 'kickload.com',
 'letitbit_net' => 'letitbit.net',
+'luckyshare_net' => 'luckyshare.net',
 'maknyos_com' => 'maknyos.com',
 'mediafire_com' => 'mediafire.com',
 'megashare_com' => 'megashare.com',
@@ -183,16 +177,17 @@ $ar_host_acc = array(
 'sendspace_com' => 'sendspace.com',
 'shareflare_net' => 'shareflare.net',
 'share-online_biz' => 'share-online.biz',
+'sharpfile_com' => 'sharpfile.com',
+'speedshare_eu' => 'speedshare.eu',
 'speedyshare_com' => 'speedyshare.com',
 'turbobit_net' => 'turbobit.net',
 'ugotfile_com' => 'ugotfile.com',
-'uploaded_to' => 'uploaded.to',
+'uploaded_net' => 'uploaded.net',
 'uploading_com' => 'uploading.com',
 'uploadstation_com' => 'uploadstation.com',
-'vBulletin_acc' => 'vbulletin.acc',
-'wupload_com' => 'wupload.com',
 'youtube_com' => 'youtube.com',
 'filegaze_com' => 'filegaze.com',
 'slingfile_com' => 'slingfile.com',
+'vip-file_com' => 'vip-file.com',
 );
 ?>

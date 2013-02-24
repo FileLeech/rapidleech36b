@@ -16,7 +16,7 @@ if (!isset($litehead)) {
 		$spacer = '<div class="embd_acc"><\/div>';
 
 		foreach ($premium_acc as $host_acc => $val) {
-			if (isset($premium_acc[$host_acc]['user'])) {
+			if (isset($premium_acc[$host_acc]['user']) && isset($premium_acc[$host_acc]['pass'])) {
 				$acc_txt .= ($premium_acc[$host_acc]['user'] != '' && $premium_acc[$host_acc]['pass'] != '' ? $ar_host_acc[$host_acc] . $spacer : '');
 			} // end user & pass configuration
 			if (isset($premium_acc[$host_acc]['cookie'])) {
@@ -39,7 +39,7 @@ if (!isset($litehead)) {
 	}
 
 	// like sess-id :P
-	$usrajxnuid = str_replace("=", "", base64_encode(str_replace(".", "", $ipmu) . ':' . '4jaX'));
+	$usrajxnuid = str_replace("=", "", base64_encode(str_replace(".", "", $visitors->userip) . ':' . '4jaX'));
 
 	$userck_std_mode = (isset($_GET["ajax"]) && isset($_GET["ausv"]) ) || (isset($_COOKIE["rl_ajax"]));
 
@@ -58,12 +58,13 @@ if (!isset($litehead)) {
 	$showAccRsStatus = ($ch_curl == 1 && $exist_accrs && $options["premix_status"]);
 } // end not litehead
 
-$jQ_google_api_file = ROOT_URL.STATIC_DIR . "jquery.min.js";
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+$jQ_google_api_file = STATIC_DIR . "jquery.min.js";
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo ($charSet != "" ? $charSet : "utf-8"); ?>" />
-<link rel="shortcut icon" type="image/gif" href="<?php echo (isset($shortcut_icon) ? $shortcut_icon : ROOT_URL.IMAGE_DIR . 'ico_home.gif') . '?' . rand(11, 9999); ?>" />
+<link rel="shortcut icon" type="image/gif" href="<?php echo (isset($shortcut_icon) ? $shortcut_icon : IMAGE_DIR . 'ico_home.gif') . '?' . rand(11, 9999); ?>" />
 <title><?php
 if (!isset($page_title)) {
 	echo ':: ' . $RL_VER . ' ::';
@@ -71,15 +72,15 @@ if (!isset($page_title)) {
 	echo htmlentities($page_title);
 }
 ?></title>
-<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css' />
-<link type="text/css" href="<?php print ROOT_URL.IMAGE_DIR; ?>style_sujancok<?php print $options["csstype"]; ?>.css?<?php echo rand(1, 9999); ?>" rel="stylesheet" media="screen" />
+<link type="text/css" href="<?php print IMAGE_DIR; ?>style_sujancok<?php print $options["csstype"]; ?>.css?<?php echo rand(1, 9999); ?>" rel="stylesheet" media="screen" />
 <script type="text/javascript" src="<?php echo $jQ_google_api_file; ?>"></script>
-<script type="text/javascript" src="<?php echo ROOT_URL.STATIC_DIR; ?>js.php?main"></script>
 <?php
 if (!isset($litehead)) {
 ?>
-<script type="text/javascript" src="<?php echo ROOT_URL.STATIC_DIR; ?>ajax.js"></script>
-<link type="text/css" href="<?php echo ROOT_URL.STATIC_DIR; ?>jQ_fb.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="<?php echo STATIC_DIR; ?>js.php?main"></script>
+<script type="text/javascript" src="<?php echo STATIC_DIR; ?>ajax.js"></script>
+<script type="text/javascript" src="<?php echo STATIC_DIR; ?>jQ_fb.js"></script>
+<link type="text/css" href="<?php echo STATIC_DIR; ?>jQ_fb.css" rel="stylesheet" media="screen" />
 <script type="text/javascript">
 /* <![CDATA[ */
 var ajxtmr;
@@ -122,9 +123,9 @@ function slip(Obj){var lst='<?php echo $L->say['hide_last_act'];?>';
    var d_hist = $('#act_history');
    if( d_txt.html() == lst ){
      d_txt.html('<?php echo $L->say['show_last_act'];?>');
-     d_img.attr('src', '<?php echo ROOT_URL.IMAGE_DIR;?>plus.png'); d_hist.hide();
+     d_img.attr('src', '<?php echo IMAGE_DIR;?>plus.png'); d_hist.hide();
    }else{
-     d_txt.html(lst); d_img.attr('src', '<?php echo ROOT_URL.IMAGE_DIR;?>min.png');
+     d_txt.html(lst); d_img.attr('src', '<?php echo IMAGE_DIR;?>min.png');
      d_hist.show();
    } d_img.blur(); return false;
 }
@@ -134,16 +135,11 @@ function slip(Obj){var lst='<?php echo $L->say['hide_last_act'];?>';
 /* ]]> */
 </script>
 <?php
-} // end not liteheade
+} // end not litehead
 ?>
 </head>
 <body>
 <?php if (isset($srvload) && $alert_sloadhigh) { echo $srvload; } ?>
-
 <div class="head_container"><center>
-<div class="subtitle1">easiest transfer files to your server</div>
-<a class="rltitle" href="<?php echo (!isset($shortcut_icon) ? ROOT_URL.$options['index_file'] : "javascript:;"); ?>" title="Rapidleech">
-<span class="rltitle">Rapidleech</span>
-</a>
-<div class="subtitle2">plugmod by eqbal moded idoenk</div>
-</center></div>
+<a href="<?php echo (!isset($shortcut_icon) ? $options['index_file'] : "javascript:;"); ?>" class="tdheadolgo" title="Rapidleech"></a></center>
+</div>

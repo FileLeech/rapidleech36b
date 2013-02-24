@@ -10,13 +10,13 @@ if ((isset($_GET["act"]) || isset($_POST["act"])) && @$_GET["act"] !== 'files') 
 		$buftxt = "<script type='text/javascript'>" .
 				"function slip(){var txt, lst='" . $L->say['hide_last_act'] . "'; var d_txt = d.getElementById('act_hist_txt'); " .
 				"var d_img = d.getElementById('act_hist_img');var d_hist = d.getElementById('act_history');txt = d_txt.innerHTML;" .
-				"if(txt==lst){ d_txt.innerHTML = '" . $L->say['show_last_act'] . "'; d_img.src = '" . ROOT_URL.IMAGE_DIR . "plus.png'; d_hist.style.display = 'none';" .
+				"if(txt==lst){ d_txt.innerHTML = '" . $L->say['show_last_act'] . "'; d_img.src = '" . IMAGE_DIR . "plus.png'; d_hist.style.display = 'none';" .
 				"}else{" .
-				"d_txt.innerHTML = lst; d_img.src = '" . ROOT_URL.IMAGE_DIR . "min.png'; d_hist.style.display = '';}" .
+				"d_txt.innerHTML = lst; d_img.src = '" . IMAGE_DIR . "min.png'; d_hist.style.display = '';}" .
 				"return false;" .
 				"}</script>" .
 				"<label onclick='return slip();'><span id='act_hist_txt'>" . $L->say['hide_last_act'] . "</span>" .
-				"<input id='act_hist_img' type='image' src='" . ROOT_URL.IMAGE_DIR . "min.png' /></label>" .
+				"<input id='act_hist_img' type='image' src='" . IMAGE_DIR . "min.png' /></label>" .
 				"<div id='act_history' class='acthistory_result'>";
 	}elseif($_GET["act"]!='files'){
 		$buftxt = "<script type='text/javascript'>" .
@@ -24,7 +24,7 @@ if ((isset($_GET["act"]) || isset($_POST["act"])) && @$_GET["act"] !== 'files') 
 				"d_shlast.style.display = (flag?'':'none'); d_hist.style.display = (flag?'none':'');}" .
 				"</script>" .
 				"<label id='showlast' onclick='closeit(false);' style='display:none;'><span id='act_hist_txt'>" . $L->say['show_last_act'] . "</span>" .
-				"<input id='act_hist_img' type='image' src='" . ROOT_URL.IMAGE_DIR . "plus.png' /></label>" .
+				"<input id='act_hist_img' type='image' src='" . IMAGE_DIR . "plus.png' /></label>" .
 				"<div id='act_history' class='acthistory_prompt'><div class='closer_btn' onclick='closeit(true);'>" .
 				"<span>" . $L->say['close'] . "</span></div><div style='padding-bottom:12px;'></div>";
 	}

@@ -119,8 +119,8 @@ $l['banned_c'] = "Your country is banned, disappear now..!";
 $l['disabled'] = "disabled";
 $l['not_writable'] = "<b>{1}</b> is not writable, please make sure it is chmod to 777"; // {1}=path or file
 $l['file_not_exists'] = "[FILE]: <b>{1}</b> is not exist."; // {1}= file
-$l['dir_not_exists'] = "Fatal Error, [DIR]: <b>{1}</b> not exist. Check \$options['download_dir'] in your config file."; // {1}= dir
-$l['malfunction_ip'] = "<b>Terminated.!</b> RL Authorization malfunction:: <b>\$list_allow_ip</b> is_empty in (config.php)";
+$l['dir_not_exists'] = "Fatal Error, [DIR]: <b>{1}</b> not exist."; // {1}= dir
+$l['malfunction_ip'] = "<b>Terminated.!</b> RL Authorization malfunction:: <b>\$options['list_allow_ip']</b> is_empty in (config.php)";
 //main php
 $l['cpanel'] = "Control Panel";
 $l['plugins'] = "Plugins";
@@ -275,6 +275,7 @@ $l['try_free_dl'] = "Trying free download mode.";
 $l['execute'] = "Execute";
 $l['alert_srvload'] = "<code>LimitServerLoad Mode: <b>ON</b></code>";
 $l['con_lost'] = "Connection lost";
+$l['no_host'] = "No host file found";
 // http.php
 $l['_pwait'] = "Please wait";
 $l['_pwait_sec'] = "Please wait <b>{1}</b> seconds..."; // {1} = number of seconds
@@ -490,7 +491,7 @@ $l['_started'] = "started..";
 $l['audl_start'] = "Start auto download";
 $l['add_link'] = "Add links";
 $l['error_interval'] = "Errors in the interval of delay (from 1 to 3600 seconds)";
-$l['reach_lim_audl'] = "Sorry you can not proceed more than %link% Links at once.";
+$l['reach_lim_audl'] = "Sorry you can not proceed more than {1} Links at once.";
 $l['auto_check_link'] = "Auto Check Links";
 $l['quota_reach'] = "Quota iframe reached. All iframe is busy..";
 $l['one_by_one'] = "One-by-one (Queue)";
@@ -502,6 +503,7 @@ $l['iframe_ready'] = "IFrame ready:";
 $l['add_more'] = "add more link here...";
 $l['ytube_select'] = "YouTube Video Format Selector";
 $l['ytube_fmt'] = "&amp;fmt=";
+$l['ytube_dlink'] = "Direct Link";
 $l['ytube_auto'] = "Auto-get the highest quality format available";
 $l['ytube_38'] = "38 [Video: MP4 4096x3072 | Audio: AAC 2ch 44.10kHz]";
 $l['ytube_37'] = "37 [Video: MP4 1920x1080 | Audio: AAC 2ch 44.10kHz]";
@@ -514,6 +516,12 @@ $l['ytube_43'] = "43 [Video: WebM 640x360 | Audio: Vorbis 2ch 44.10kHz]";
 $l['ytube_18'] = "18 [Video: MP4 480x360 | Audio: AAC 2ch 44.10kHz]";
 $l['ytube_5'] = "5 [Video: FLV 400x240 | Audio: MP3 1ch 22.05kHz]";
 $l['ytube_17'] = "17 [Video: 3GP 176x144 | Audio: AAC 2ch 44.10kHz]";
+$l['run_servside'] = "Run Server Side";
+$l['_delay'] = "Delay Time";
+$l['_delaysec'] = "Delay (in seconds)";
+// auul
+$l['reach_lim_auul'] = "Sorry you can not proceed more than {1} Files at once.";
+$l['no_file_host'] = "No files or hosts selected for upload.";
 // lynx
 $l['term_download'] = "Term of Download:";
 $l['term_nosimultan'] = "Can't be simultan, (must do one by one)";

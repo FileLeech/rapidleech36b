@@ -12,10 +12,6 @@ deny from all
 allow from all
 </files>
 
-#<files checker.php>
-#allow from all
-#</files>
-
 <files audl.php>
 allow from all
 </files>
@@ -36,18 +32,6 @@ allow from all
 allow from all
 </files>
 
-<files bar.php>
-allow from all
-</files>
-
-<files upload.php>
-allow from all
-</files>
-
-<files ~ "\.upload.html$">
-allow from all
-</files>
-
 <files ajax_main.php>
 allow from all
 </files>
@@ -57,6 +41,14 @@ allow from all
 </files>
 
 <files 404.php>
+allow from all
+</files>
+
+<files upload.php>
+allow from all
+</files>
+
+<files ~ "\.upload.html$">
 allow from all
 </files>
 

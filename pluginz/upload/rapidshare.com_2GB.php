@@ -121,7 +121,7 @@ class RS
 
 	public function upload()
 	{
-		require (TEMPLATE_DIR . '/uploadui.php');
+		require (TEMPLATE_DIR . 'uploadui.php');
 		$timeStart = getmicrotime();
 		if (!($fh = fopen($this->file, 'r'))) throw new Exception('Unable to open file: ' . $this->filename);
 		$rsip = gethostbyname($this->fulluploadserver['host']);

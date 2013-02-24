@@ -16,7 +16,7 @@ class downtown_vc extends DownloadClass {
     }
 
     private function Submit($links) {
-        global $PHP_SELF;
+        global $PHP_SELF, $L;
         if (!is_array($links) && count($links) < 1) html_error("No links found or \$links isn't an array.");
         echo "\n<center><form name='multilink_form' action='$PHP_SELF' method='post' >\n";
         echo "\n<h4>Select a host for download this file:</h4><br />\n";

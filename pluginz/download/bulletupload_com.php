@@ -65,7 +65,7 @@ class bulletupload_com extends DownloadClass {
             $this->EnterCaptcha($imgfile, $data, 20);
             exit();
         }
-        is_present($page, cut_str($page, '<div class="err">', '<br />'));
+        is_present($page, cut_str($page, '<div class="err">', '<br>'));
         if (!preg_match('@http:\/\/[\d.]+(:\d+)?\/[^|\r|\n|"]+@', $page, $dl)) html_error("Error: Download Link [FREE] not found!");
         $dlink = trim($dl[0]);
         $filename = basename(parse_url($dlink, PHP_URL_PATH));

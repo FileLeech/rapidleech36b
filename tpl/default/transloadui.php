@@ -1,16 +1,20 @@
+<?php
+if (!defined('RAPIDLEECH')) {
+	require_once("index.html");
+	exit();
+}
+?>
 <br />
-<table align="center" cellspacing="0" cellpadding="0" class="transloadui">
+<table cellspacing="0" cellpadding="0" style="FONT-FAMILY: Tahoma; FONT-SIZE: 11px;">
 <tr>
 <td></td>
 <td>
-<div class="progressouter">
-<div style="width:298px">
-<div id="progress" class="progressdown"></div>
-</div>
-</div>
+ <div style="border:#BBBBBB 1px solid; width:300px; height:10px;" class="progressborder">
+ 	<div id="progress" style="background-color:#18f20d; margin:1px; width:0%; height:8px;"></div>
+ </div>
 </td>
 <td></td>
-</tr>
+<tr>
 <tr>
 <td align="left" id="received">0 KB</td>
 <td align="center" id="percent">0%</td>
@@ -21,8 +25,7 @@
 <div id="resume" align="center"></div>
 <script type="text/javascript">
 /* <![CDATA[ */
-function pr(percent, received, speed)
-{
+function pr(percent, received, speed) {
 	document.getElementById("received").innerHTML = '<b>' + received + "<\/b>";
 	document.getElementById("percent").innerHTML = '<b>' + percent + "%<\/b>";
 	document.getElementById("progress").style.width = percent + '%';
@@ -31,8 +34,7 @@ function pr(percent, received, speed)
 	return true;
 }
 
-function mail(str, field)
-{
+function mail(str, field) {
 	document.getElementById("mailPart." + field).innerHTML = str;
 	return true;
 }

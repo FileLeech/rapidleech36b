@@ -25,7 +25,6 @@ if (!defined('RAPIDLEECH')) {
 //   _cmp_list_enums()
 //   file_data_size_time()
 //   _create_list()
-//   _create_list_LIP()
 //   checkmail()
 //   fixfilename()
 //   getfilesize()
@@ -34,7 +33,6 @@ if (!defined('RAPIDLEECH')) {
 //   defport()
 //   getSize()
 //   purge_files()
-//   purge_files_ip()
 //   file_put_contents()
 //   file_get_contents()
 //   http_chunked_decode()
@@ -56,7 +54,6 @@ if (!defined('RAPIDLEECH')) {
 //   xmlentities()
 //   strip_quotes()
 //   buildRetryform()
-//   get_real_ip()
 //   chk_this_ip()
 //   dcd()
 //   mcd()
@@ -73,9 +70,9 @@ if (!defined('RAPIDLEECH')) {
 //   relink_path()
 //   utf8_strrev()
 //   checkStrict()
-//   ip counter()
 //   renderAction()
 //   vidlist()
+//   autodel_formatted()
 //   ________()
 }
 
@@ -116,9 +113,7 @@ function login_check() {
 
 		function logged_user($ul) {
 			foreach ($ul as $user => $pass) {
-				if ($_SERVER['PHP_AUTH_USER'] == $user && $_SERVER['PHP_AUTH_PW'] == $pass) {
-					return true;
-				}
+				if ($_SERVER['PHP_AUTH_USER'] == $user && $_SERVER['PHP_AUTH_PW'] == $pass) return true;
 			}
 			return false;
 		}
@@ -135,40 +130,34 @@ function login_check() {
 	}
 }
 
-function is_present($lpage, $mystr, $strerror = "", $head = 0) {
-	$strerror = $strerror ? $strerror : $mystr;
-	if (stripos($lpage, $mystr) !== false) {
-		html_error($strerror, $head);
-	}
+function is_present($lpage, $mystr, $strerror = '', $head = 0) {
+	if (stripos($lpage, $mystr) !== false) html_error((!empty($strerror) ? $strerror : $mystr), $head);
 }
 
 function is_notpresent($lpage, $mystr, $strerror, $head = 0) {
-	if (stripos($lpage, $mystr) === false) {
-		html_error($strerror, $head);
-	}
+	if (stripos($lpage, $mystr) === false) html_error($strerror, $head);
 }
 
-function insert_location($newlocation) {
-	if (isset($_GET ["GO"]) && $_GET ["GO"] == "GO") {
-		list ( $location, $list ) = explode("?", $newlocation);
-		$list = explode("&", $list);
-		foreach ($list as $l) {
-			list ( $name, $value ) = explode("=", $l);
-			$_GET [$name] = $value;
+function insert_location($inputs, $action = 0) {
+	if (!is_array($inputs)) {
+		if (strpos($inputs, '?') !== false) list($action, $inputs) = explode('?', $inputs, 2);
+		$query = explode('&', $inputs);
+		$inputs = array();
+		foreach ($query as $q) {
+			list($name, $value) = explode('=', $q, 2);
+			if (empty($name) || empty($value)) continue;
+			$inputs[$name] = $value;
 		}
-	} else {
-		global $nn;
-		list ( $location, $list ) = explode("?", $newlocation);
-		$list = explode("&", $list);
-		print "<form action=\"$location\" method=\"post\">" . $nn;
-		foreach ($list as $l) {
-			list ( $name, $value ) = explode("=", $l);
-			print "<input type=\"hidden\" name=\"$name\" value=\"$value\" />" . $nn;
-		}
-		echo ('<script type="text/javascript">void(document.forms[0].submit());</script>');
-		echo ('</form>');
-		echo ('</body>');
-		echo ('</html>');
+		unset($query);
+	}
+	if (isset($_GET['GO']) && $_GET['GO'] == 'GO') $_GET = array_merge($_GET, $inputs);
+	else {
+		if ($action === 0) $action = $_SERVER['SCRIPT_NAME'];
+		$fname = 'r' . TIME_NOW . 'l';
+		echo "\n<form name='$fname' " . (!empty($action) ? "action='$action' " : '') . "method='POST'>\n";
+		foreach ($inputs as $name => $value)
+			echo "\t<input type='hidden' name='$name' value='$value' />\n";
+		echo "</form>\n<script type='text/javascript'>void(document.$fname.submit());</script>\n</body>\n</html>";
 		flush();
 	}
 }
@@ -195,39 +184,16 @@ function cut_str($str, $left, $right, $cont=1) {
 }
 
 function write_file($file_name, $data, $trunk = 1) {
-	if ($trunk == 1) {
-		$mode = "wb";
-	} elseif ($trunk == 0) {
-		$mode = "ab";
-	}
+	if ($trunk == 1) $mode = 'wb';
+	elseif ($trunk == 0) $mode = 'ab';
 	$fp = fopen($file_name, $mode);
-	if (!$fp) {
-		return FALSE;
-	} else {
-		if (!flock($fp, LOCK_EX)) {
-			return FALSE;
-		} else {
-			if (!fwrite($fp, $data)) {
-				return FALSE;
-			} else {
-				if (!flock($fp, LOCK_UN)) {
-					return FALSE;
-				} else {
-					if (!fclose($fp)) {
-						return FALSE;
-					}
-				}
-			}
-		}
-	}
+	if (!$fp || !flock($fp, LOCK_EX) || !fwrite($fp, $data) || !flock($fp, LOCK_UN) || !fclose($fp)) return FALSE;
 	return TRUE;
 }
 
 function read_file($file_name, $count = -1) {
-	if ($count == - 1) {
-		$count = filesize($file_name);
-	}
-	$fp = fopen($file_name, "rb");
+	if ($count == -1) $count = filesize($file_name);
+	$fp = fopen($file_name, 'rb');
 	flock($fp, LOCK_SH);
 	$ret = fread($fp, $count);
 	flock($fp, LOCK_UN);
@@ -250,38 +216,43 @@ function getmicrotime() {
 }
 
 function html_error($msg, $newwin = 1, $retry = 0) {
-	global $PHP_SELF, $options, $L, $RL_VER, $nn;
-	//if ($head == 1)
-	if (!headers_sent()) {
-		$litehead = 1;
-		include(TEMPLATE_DIR . 'header.php');
-	}
+	global $PHP_SELF, $options, $L, $RL_VER, $onGoing, $nn;
 
-	echo ('<div align="center">');
-	echo ('<span class="htmlerror"><b>' . $msg . '</b></span><br /><br />');
-
-	if ($retry == 1) {
-		echo buildRetryform($msg);
-	} elseif ($options['new_window'] && $newwin) {
-		echo '<a href="javascript:window.close();">' . $L->say['closewin'] . '</a>';
-	} else {
-		echo ('<a id="tdone" href="' . $PHP_SELF . '"><b>' . $L->say['back_main'] . '</b></a>');
-	}
-	if ($audlparam != '') {
-		$audlparam = explode('|', $audlparam);
-		if ($audlparam[0] != '') {
-			$audlparam[0] = true;
+	if (strtolower(basename($PHP_SELF)) == 'audl.php' && isset($_REQUEST['GO']) && $_REQUEST['GO'] == 'GO' && $_REQUEST['server_side'] == 'on' && !empty($GLOBALS['isHost'])) throw new Exception($msg); // Audl-Server Side, called from a plugin.
+	else {
+		//if ($head == 1)
+		if (!headers_sent()) {
+			$litehead = 1;
+			$page_title = 'Upps...';
+			include(TEMPLATE_DIR . 'header.php');
 		}
-		if ($audlparam[1] == '') {
-			$audlparam[1] = 'none';
-		}
-		echo autoNext($audlparam[0], false, $audlparam[1]);
-	}
-	flush();
-	echo ('</div>');
-	echo ($nn . '</body></html>');
 
-	exit();
+		echo ('<div align="center">');
+		echo ('<span class="htmlerror"><b>' . $msg . '</b></span><br /><br />');
+
+		if ($retry == 1) {
+			echo buildRetryform($msg);
+		} elseif (!empty($options['new_window']) && $newwin) {
+			echo '<a href="javascript:window.close();">' . $L->say['closewin'] . '</a>';
+		} else {
+			echo ('<a id="tdone" href="' . $PHP_SELF . '"><b>' . $L->say['back_main'] . '</b></a>');
+		}
+		if ($audlparam != '') {
+			$audlparam = explode('|', $audlparam);
+			if ($audlparam[0] != '') {
+				$audlparam[0] = true;
+			}
+			if ($audlparam[1] == '') {
+				$audlparam[1] = 'none';
+			}
+			echo autoNext($audlparam[0], false, $audlparam[1]);
+		}
+		flush();
+		echo ('</div>');
+//		if ($onGoing) ongoingRemove();
+		echo ($nn . '</body></html>');
+		exit();
+	}
 }
 
 function sec1time($time) {
@@ -330,15 +301,10 @@ function sec2time($time) {
 
 function updateListInFile($list) {
 	if (is_array($list) && count($list) > 0) {
-		foreach ($list as $key => $value) {
-			$list [$key] = serialize($value);
-		}
+		foreach ($list as $key => $value) $list [$key] = serialize($value);
 		//echo file_put_contents ( FILES_LST, implode ( "\r\n", $list ) . "\r\n" );
-		if (!file_put_contents(FILES_LST, implode("\r\n", $list) . "\r\n") && count($list) > 0) {
-			return FALSE;
-		} else {
-			return TRUE;
-		}
+		if (!file_put_contents(FILES_LST, implode("\r\n", $list) . "\r\n") && count($list) > 0) return FALSE;
+		else return TRUE;
 	} elseif (@file_exists(FILES_LST)) {
 		// Truncate files.lst instead of removing it since we don't have full
 		// read/write permission on the configs folder
@@ -350,11 +316,8 @@ function updateListInFile($list) {
 
 function _cmp_list_enums($a, $b) {
 	//return strcmp ( $a ["name"], $b ["name"] );
-	if (isset($a["date"]) && isset($b["date"])) {
-		return strcmp($a["date"], $b["date"]);
-	} else {
-		return strcmp($a["name"], $b["name"]);
-	}
+	if (isset($a["date"]) && isset($b["date"])) return strcmp($a["date"], $b["date"]);
+	else return strcmp($a["name"], $b["name"]);
 }
 
 function file_data_size_time($file) {
@@ -366,14 +329,10 @@ function file_data_size_time($file) {
 	}
 	if ($size === false && $options['2gb_fix'] && file_exists($file) && !is_dir($file) && !is_link($file)) {
 		if (substr(PHP_OS, 0, 3) !== "WIN") {
-			@exec('stat' . (stristr(@php_uname('s'), 'bsd') !== false ? '-f %m ' : ' -c %Y ') . escapeshellarg($file), $time, $tmp);
-			if ($tmp == 0) {
-				$time = trim(implode($time));
-			}
-			@exec('stat' . (stristr(@php_uname('s'), 'bsd') !== false ? '-f %z ' : ' -c %s ') . escapeshellarg($file), $size, $tmp);
-			if ($tmp == 0) {
-				$size = trim(implode($size));
-			}
+			@exec('stat' . (stripos(@php_uname('s'), 'bsd') !== false ? '-f %m ' : ' -c %Y ') . escapeshellarg($file), $time, $tmp);
+			if ($tmp == 0) $time = trim(implode($time));
+			@exec('stat' . (stripos(@php_uname('s'), 'bsd') !== false ? '-f %z ' : ' -c %s ') . escapeshellarg($file), $size, $tmp);
+			if ($tmp == 0) $size = trim(implode($size));
 		}
 	}
 	if ($size === false || $time === false) {
@@ -385,12 +344,12 @@ function file_data_size_time($file) {
 function _create_list($lynx = false, $medic=false, $d_showall=false) {
 	global $list, $_COOKIE, $options;
 	$glist = array();
-	//$unix_now = ( TIME_NOW - date("Z") + (3600 * $options["timezone"]));
-	if (!$d_showall) $d_showall = (isset($_COOKIE["showAll"]) ? $_COOKIE["showAll"] : false);
-	if (($options["show_all"] && ($d_showall == 1)) || $medic) {
+	$showall = ($options['show_all'] && ((isset($_COOKIE['showAll']) && $_COOKIE['showAll']) || $d_showall)) || $medic ? true : false;
+//	if (!$d_showall) $d_showall = (isset($_COOKIE["showAll"]) ? $_COOKIE["showAll"] : false);
+//	if (($options["show_all"] && ($d_showall == 1)) || $medic) {
+	if ($showall) {
 		// Show Everything
-		$totsize = 0; $cnt = 0;
-		$dir = @dir(DOWNLOAD_DIR);
+		$totsize = 0; $cnt = 0; $dir = @dir(DOWNLOAD_DIR);
 		while (false !== ($file = $dir->read())) {
 			if ($file != "." && $file != ".." && is_array($options["forbidden_filetypes"]) && !in_array("." . get_extension($file), $options["forbidden_filetypes"]) && is_file(DOWNLOAD_DIR . $file) && basename($file) != basename(FILES_LST) && basename($file) != 'index.html' && basename($file) != 'index.php') {
 				$file = DOWNLOAD_DIR . $file;
@@ -410,9 +369,7 @@ function _create_list($lynx = false, $medic=false, $d_showall=false) {
 			$glist["files"]["totalfile"] = $cnt;
 			$glist["files"]["misc"] = "files";
 		}
-	} else {
-
-		// Show Downloaded
+	} else {  // Show Downloaded
 		if (@file_exists(FILES_LST)) {
 			$glist = file(FILES_LST);
 			$glistReformat = null;
@@ -445,31 +402,8 @@ function _create_list($lynx = false, $medic=false, $d_showall=false) {
 	$list = $glist;
 }
 
-function _create_list_LIP() {
-	global $list;
-	$glist = array();
-	$glistReformat = null;
-	if (@file_exists(IP_L33CH_L0G)) {
-		$glist = file(IP_L33CH_L0G);
-		foreach ($glist as $key => $record) {
-			foreach (unserialize($record) as $field => $value) {
-				$listReformat[$key][$field] = $value;
-				if ($field == "date") $date = $value;
-			}
-			$glist[$date] = $listReformat[$key];
-			unset($glist[$key], $glistReformat[$key]);
-		}
-	}
-	$list = $glist;
-}
-
 function checkmail($mail) {
-	if (strlen($mail) == 0) {
-		return false;
-	}
-	if (!preg_match("/^[a-z0-9_\.-]{1,20}@(([a-z0-9-]+\.)+(com|net|org|mil|" . "edu|gov|arpa|info|biz|inc|name|[a-z]{2})|[0-9]{1,3}\.[0-9]{1,3}\.[0-" . "9]{1,3}\.[0-9]{1,3})$/is", $mail)) {
-		return false;
-	}
+	if (strlen($mail) == 0 || strpos($mail, '@') === false || strpos($mail, '.') === false || !preg_match('/^[a-z0-9_\.-]{1,20}@(([a-z0-9-]+\.)+(com|net|org|mil|edu|gov|arpa|info|biz|inc|name|[a-z]{2})|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})$/is', $mail)) return false;
 	return true;
 }
 
@@ -477,33 +411,28 @@ function checkmail($mail) {
 
 function fixfilename($fname, $fpach = '') {
 	$f_name = basename($fname);
-	$f_dir = dirname(preg_replace("@\.\./@i", "", $fname));
+	$f_dir = dirname(preg_replace('@\.\./@i', '', $fname));
 	$f_dir = ($f_dir == '.') ? '' : $f_dir;
-	$f_dir = preg_replace("@\.\./@i", "", $f_dir);
-	$fpach = preg_replace("@\.\./@i", "", $fpach);
-	$f_name = preg_replace("@\.(php|hta|pl|cgi|sph)@i", ".xxx", $f_name);
+	$f_dir = preg_replace('@\.\./@i', '', $f_dir);
+	$fpach = preg_replace('@\.\./@i', '', $fpach);
+	$f_name = preg_replace('@\.(((s|\d)?php)|(hta)|(p[l|y])|(cgi)|(sph))@i', '.xxx', $f_name);
 	$ret = ($fpach) ? $fpach . DIRECTORY_SEPARATOR . $f_name : ($f_dir ? $f_dir . DIRECTORY_SEPARATOR : '') . $f_name;
 	return $ret;
 }
 
 function getfilesize($f) {
-	global $is_windows;
+	global $server;
 	$stat = stat($f);
 
-	if ($is_windows) return sprintf("%u", $stat [7]);
-	if (($stat [11] * $stat [12]) < 4 * 1024 * 1024 * 1024) return sprintf("%u", $stat [7]);
+	if ($server['is_windows'] || (($stat[11] * $stat[12]) < 4 * 1024 * 1024 * 1024)) return sprintf('%u', $stat[7]);
 
 	global $max_4gb;
 	if ($max_4gb === false) {
-		$tmp_ = trim(@shell_exec(" ls -Ll " . @escapeshellarg($f)));
-		while (strstr($tmp_, '  ')) {
-			$tmp_ = @str_replace('  ', ' ', $tmp_);
-		}
+		$tmp_ = trim(@shell_exec(' ls -Ll ' . @escapeshellarg($f)));
+		while (strstr($tmp_, '  ')) $tmp_ = @str_replace('  ', ' ', $tmp_);
 		$r = @explode(' ', $tmp_);
-		$size_ = $r [4];
-	} else {
-		$size_ = - 1;
-	}
+		$size_ = $r[4];
+	} else $size_ = -1;
 
 	return $size_;
 }
@@ -515,7 +444,7 @@ function bytesToKbOrMb($bytes) {
 
 // Updated function to be able to format up to Yotabytes!
 function bytesToKbOrMbOrGb($bytes) {
-	if (is_numeric($bytes)) {
+	if (is_numeric($bytes) && $bytes >= 0) {
 		$s = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
 		$e = floor(log($bytes) / log(1024));
 		//return sprintf ( '%.2f ' . $s [$e], @($bytes / pow ( 1024, floor ( $e ) )) );
@@ -528,10 +457,9 @@ function bytesToKbOrMbOrGb($bytes) {
 }
 
 function defport($urls) {
-	if ($urls ["port"] !== '' && isset($urls ["port"])) return $urls ["port"];
-
-	switch (strtolower($urls ["scheme"])) {
-		case "http" :
+	if (!empty($urls['port'])) return $urls['port'];
+	switch (strtolower($urls['scheme'])) {
+		case 'http' :
 			return '80';
 		case "https" :
 			return '443';
@@ -543,7 +471,8 @@ function defport($urls) {
 function getSize($file) {
 	$size = filesize($file);
 	if ($size < 0) {
-		if (!(strtoupper(substr(PHP_OS, 0, 3)) == 'WIN')) {
+		if (strtoupper(substr(PHP_OS, 0, 3)) != 'WIN') {
+			$size = @escapeshellarg($file);
 			$size = trim(`stat -c%s $file`);
 		} else {
 			$fsobj = new COM("Scripting.FileSystemObject");
@@ -557,7 +486,6 @@ function getSize($file) {
 function purge_files($delay) {
 	global $options;
 	if (file_exists(FILES_LST) && is_numeric($delay) && $delay > 0) {
-
 		$files_lst = file(FILES_LST);
 		$files_new = "";
 		$deleted["count"] = 0;
@@ -565,8 +493,7 @@ function purge_files($delay) {
 		foreach ($files_lst as $files_line) {
 			$files_data = unserialize(trim($files_line));
 			if (isset($files_data["name"]) && @file_exists($files_data["name"]) && is_file($files_data["name"])) {
-				$filedate = getNowzone(@filemtime($files_data["name"]));
-				if ((TIME_NOW - $filedate) >= ($delay * 3600)) {
+				if ((TIME_NOW - $files_data["date"]) >= ($delay * 60)) {
 					@unlink($files_data["name"]);
 					$deleted["count"]++;
 					$deleted["files"][] = $options["download_dir"] . basename($files_data["name"]);
@@ -575,27 +502,11 @@ function purge_files($delay) {
 				}
 			}
 		}
+		//file_put_contents("purge.log", "\r\n\r\n", FILE_APPEND);
 		file_put_contents(FILES_LST, $files_new);
 	}
-	purge_files_ip($delay);
-	//return $cnt_deleted;
+//	purge_files_ip($delay);
 	return $deleted;
-}
-
-// Delete ip log user download
-function purge_files_ip($delay) {
-	if (file_exists(IP_L33CH_L0G) && is_numeric($delay) && $delay > 0) {
-		$files_lst = file(IP_L33CH_L0G);
-		$files_new = "";
-		foreach ($files_lst as $files_line) {
-			$files_data = unserialize(trim($files_line));
-			$filedate = getNowzone(@filemtime($files_data["name"]));
-			if (TIME_NOW - $filedate < ($delay * 3600)) {
-				$files_new .= $files_line;
-			}
-		}
-		file_put_contents(IP_L33CH_L0G, $files_new);
-	}
 }
 
 // PHP4 compatibility
@@ -645,8 +556,7 @@ if (!function_exists('http_chunked_decode')) {
 
 	// Added implementation from a comment at php.net's function page
 	function http_chunked_decode($chunk) {
-		$pos = 0;
-		$len = strlen($chunk);
+		$pos = 0; $len = strlen($chunk);
 		$dechunk = null;
 
 		while (($pos < $len) && ($chunkLenHex = substr($chunk, $pos, ($newlineAt = strpos($chunk, "\n", $pos + 1)) - $pos))) {
@@ -691,14 +601,13 @@ function is__writable($path) {
 }
 
 function link_for_file($filename, $only_link = false, $checktime = false) {
-	global $PHP_SELF;
-	$inCurrDir = strstr(dirname($filename), ROOT_DIR) ? TRUE : FALSE;
+	$inCurrDir = strpos(dirname($filename), ROOT_DIR) !== FALSE ? TRUE : FALSE;
 	if ($inCurrDir) {
-		$Path = parse_url($PHP_SELF);
+		$Path = parse_url($_SERVER ['SCRIPT_NAME']);
 		$Path = substr($Path["path"], 0, strlen($Path["path"]) - strlen(strrchr($Path["path"], "/")));
 		$Path = str_replace('\\', '/', $Path . substr(dirname($filename), strlen(ROOT_DIR) - 1));
-	} elseif (dirname($PHP_SELF . 'safe') != '/') {
-		$in_webdir_path = dirname(str_replace('\\', '/', $PHP_SELF . 'safe'));
+	} elseif (dirname($_SERVER ['SCRIPT_NAME'] . 'safe') != '/') {
+		$in_webdir_path = dirname(str_replace('\\', '/', $_SERVER ['SCRIPT_NAME'] . 'safe'));
 		$in_webdir_sub = substr_count($in_webdir_path, '/');
 		$in_webdir_root = str_replace('\\', '/', ROOT_DIR);
 		for ($i = 1; $i <= $in_webdir_sub; $i++) {
@@ -712,31 +621,20 @@ function link_for_file($filename, $only_link = false, $checktime = false) {
 		}
 	} else {
 		$Path = FALSE;
-		if ($only_link) {
-			return '';
-		}
+		if ($only_link) return '';
 	}
 	$basename = xmlentities(basename($filename));
 	$Path = htmlentities($Path) . '/' . rawurlencode(basename($filename));
 	$current_link = $time = '';
-	if ($checktime) {
-		$time = @filemtime($Path);
-	}
-	if ($only_link) {
-		$current_link = 'http://' . urldecode($_SERVER['HTTP_HOST']) . $Path;
-	} elseif ($Path === FALSE) {
-		$current_link = '<span>' . $basename . '</span>';
-	} else {
-		$current_link = '<a href="' . $Path . '">' . $basename . '</a>';
-	}
-	if ($checktime) {
-		return array($current_link, $time);
-	} else {
-		return $current_link;
-	}
+	if ($checktime) $time = @filemtime($Path);
+	if ($only_link) $current_link = 'http://' . urldecode($_SERVER['HTTP_HOST']) . $Path;
+	elseif ($Path === FALSE) $current_link = '<span>' . $basename . '</span>';
+	else $current_link = '<a href="' . $Path . '">' . $basename . '</a>';
+	if ($checktime) return array($current_link, $time);
+	else return $current_link;
 }
 
-/**
+/*
  * Textarea for debugging variable
  * @param string The variable you want to debug
  * @param int Column for variable display
@@ -744,13 +642,20 @@ function link_for_file($filename, $only_link = false, $checktime = false) {
  * @param bool Options to continue or not process
  * @param string Charset encoding for htmlentities
  */
-function textarea($var, $cols = 200, $rows = 30, $stop = false, $char = '') {
+
+function textarea($var, $cols = 200, $rows = 30, $stop = false, $char = 'UTF-8') {
 	$cols = ($cols == 0) ? 200 : $cols;
 	$rows = ($rows == 0) ? 30 : $rows;
+	if ($char === false) $char = 'ISO-8859-1';
 	echo "\n<br /><textarea cols='$cols' rows='$rows' readonly='readonly'>";
-	if (is_array($var)) echo htmlentities(print_r($var, true), ENT_QUOTES, $char);
-	else echo htmlentities($var, ENT_QUOTES, $char);
-	echo "</textarea><br />\n";
+	if (is_array($var)) $text = htmlentities(print_r($var, true), ENT_QUOTES, $char);
+	else $text = htmlentities($var, ENT_QUOTES, $char);
+	if (empty($text) && !empty($var)) { // Fix "empty?" textarea bug
+		$char = ($char == 'ISO-8859-1') ? '' : 'ISO-8859-1';
+		if (is_array($var)) $text = htmlentities(print_r($var, true), ENT_QUOTES, $char);
+		else $text = htmlentities($var, ENT_QUOTES, $char);
+	}
+	echo "$text</textarea><br />\n";
 	if ($stop) exit;
 }
 
@@ -762,12 +667,23 @@ function jstime() {
 
 function check_referer() {
 	$refhost = !empty($_SERVER['HTTP_REFERER']) ? cut_str($_SERVER['HTTP_REFERER'], '://', '/') : false;
-	if (!$refhost) return;
+	if (empty($refhost)) return;
 
-	if (!empty($_SERVER['HTTP_HOST'])) $httphost = preg_replace('@(:\d+)$@', '', $_SERVER['HTTP_HOST']);
-	$httphost = !empty($httphost) && $httphost != $_SERVER['SERVER_NAME'] ? "|($httphost)" : '';
+	//Remove the port.
+	$httphost = ($pos = strpos($_SERVER['HTTP_HOST'], ':')) !== false ? substr($_SERVER['HTTP_HOST'], 0, $pos) : $_SERVER['HTTP_HOST'];
+	$refhost = ($pos = strpos($refhost, ':')) !== false ? substr($refhost, 0, $pos) : $refhost;
+	// If there is a login on the referer, remove it.
+	$refhost = ($pos = strpos($refhost, '@')) !== false ? substr($refhost, $pos + 1) : $refhost;
 
-	if (!preg_match(str_replace('.', '\.', "@({$_SERVER['SERVER_NAME']})|({$_SERVER['SERVER_ADDR']})$httphost(:\d+)?$@i"), $refhost)) {
+	$whitelist = array($httphost, 'localhost', 'rapidleech.com');
+	$is_ext = ($refhost == $_SERVER['SERVER_ADDR'] ? false : true);
+	if ($is_ext) foreach ($whitelist as $host)
+			if (host_matches($host, $refhost)) {
+				$is_ext = false;
+				break;
+			}
+
+	if ($is_ext) {
 		// Uncomment next line if you want rickroll the users from Form leechers.
 		// header("Location: http://www.youtube.com/watch?v=oHg5SJYRHA0");
 		html_error($L->sprintf($L->say['not_allowed_leech'], $refhost, 'Referer not allowed.'));
@@ -775,7 +691,33 @@ function check_referer() {
 }
 
 function rebuild_url($url) {
-	return $url['scheme'] . "://" . (!empty($url['user']) && !empty($url['pass']) ? rawurlencode($url['user']) . ":" . rawurlencode($url['pass']) . "@" : '') . $url['host'] . (!empty($url['port']) && $url['port'] != 80 && $url['port'] != 443 ? ":" . $url['port'] : "") . (empty($url['path']) ? "/" : $url['path']) . (!empty($url['query']) ? "?" . $url['query'] : "") . (!empty($url['fragment']) ? "#" . $url['fragment'] : "");
+	return $url['scheme'] . '://' . (!empty($url['user']) && !empty($url['pass']) ? rawurlencode($url['user']) . ':' . rawurlencode($url['pass']) . '@' : '') . $url['host'] . (!empty($url['port']) && $url['port'] != 80 && $url['port'] != 443 ? ':' . $url['port'] : '') . (empty($url['path']) ? '/' : $url['path']) . (!empty($url['query']) ? '?' . $url['query'] : '') . (!empty($url['fragment']) ? '#' . $url['fragment'] : '');
+}
+
+function host_matches($site, $host) {
+	if (empty($site) || empty($host)) return false;
+	if (strtolower($site) == strtolower($host)) return true;
+	$slen = strlen($site);
+	$hlen = strlen($host);
+	if (($pos = strripos($host, $site)) !== false && ($pos + $slen == $hlen) && $pos > 1 && substr($host, $pos - 1, 1) == '.') return true;
+	return false;
+}
+
+function GetDefaultParams() {
+	global $options;
+	$DParam = array();
+	if (isset($_GET['useproxy']) && $_GET['useproxy'] == 'on' && !empty($_GET['proxy'])) {
+		global $pauth;
+		$DParam['useproxy'] = 'on';
+		$DParam['proxy'] = $_GET['proxy'];
+		if ($pauth) $DParam['pauth'] = urlencode(encrypt($pauth));
+	}
+	if (isset($_GET['autoclose'])) $DParam['autoclose'] = '1';
+	if (isset($_GET['idx'])) $DParam['idx'] = $_GET['idx'];
+	if (($options['download_dir_is_changeable'] || $options['maysaveto']) && !empty($_GET['path'])) $DParam['saveto'] = urlencode($_GET['path']);
+	$params = array('add_comment', 'domail', 'comment', 'email', 'split', 'partSize', 'method', 'uploadlater', 'uploadtohost');
+	foreach ($params as $key) if (!empty($_GET[$key])) $DParam[$key] = $_GET [$key];
+	return $DParam;
 }
 
 // This function manualy set server timezone,
@@ -798,23 +740,17 @@ function getNowzone($t='') {
 }
 
 // This function check primary file and folder
-// returned filesize of the FILES_LST
 function checkExistence() {
-	global $L;
+	global $options, $L;
 	//Checking DOWNLOAD_DIR
 	if (file_exists(DOWNLOAD_DIR)) {
-		if (!is__writable(DOWNLOAD_DIR)) {
-			html_error($L->sprintf($L->say['not_writable'], DOWNLOAD_DIR));
-		}
+		if (!is__writable(DOWNLOAD_DIR)) html_error($L->sprintf($L->say['not_writable'], DOWNLOAD_DIR));
 	} else {
 		html_error($L->sprintf($L->say['dir_not_exists'], DOWNLOAD_DIR));
 	}
-
 	// Check FILES_LST is not writable,
 	if (file_exists(FILES_LST)) {
-		if (!is__writable(FILES_LST)) {
-			html_error($L->sprintf($L->say['not_writable'], FILES_LST));
-		}
+		if (!is__writable(FILES_LST)) html_error($L->sprintf($L->say['not_writable'], FILES_LST));
 		return @filesize(FILES_LST);
 	} else {
 		html_error($L->sprintf($L->say['file_not_exists'], FILES_LST));
@@ -931,37 +867,6 @@ function buildRetryform($msg, $delay = 15) {
 	return $form;
 }
 
-// Get real IP
-function get_real_ip() {
-	$ipRL = false;
-	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-		$ipRL = $_SERVER['HTTP_CLIENT_IP'];
-	}
-	if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-		$ips = explode(", ", $_SERVER['HTTP_X_FORWARDED_FOR']);
-		if ($ipRL) {
-			array_unshift($ips, $ipRL);
-			$ipRL = false;
-		}
-		for ($i = 0; $i < count($ips); $i++) {
-			if (!preg_match("/^(10|172\.16|192\.168)\./i", $ips[$i])) {
-				if (version_compare(phpversion(), "5.0.0", ">=")) {
-					if (ip2long($ips[$i]) != false) {
-						$ipRL = $ips[$i];
-						break;
-					}
-				} else {
-					if (ip2long($ips[$i]) != - 1) {
-						$ipRL = $ips[$i];
-						break;
-					}
-				}
-			}
-		}
-	}
-	return ($ipRL ? $ipRL : $_SERVER['REMOTE_ADDR']);
-}
-
 //Check allow / Banned IP Address
 function chk_this_ip($meth, $user_ip) {
 	global $options, $L;
@@ -1008,8 +913,7 @@ function chk_this_ip($meth, $user_ip) {
 
 //encryption
 function dcd($c) {
-	$pt = "";
-	$bfC = $c;
+	$pt = ""; $bfC = $c;
 	if ($c == "") {
 		return $pt;
 	}
@@ -1057,9 +961,7 @@ function encEnti($v) {
 }
 
 function decEnti($c) {
-	$pt = "";
-	$pj = strlen($c);
-	$i = 0;
+	$pt = ""; $pj = strlen($c); $i = 0;
 	if ($pj % 2 != 0) {
 		return false;
 	}
@@ -1088,12 +990,13 @@ function rotN($s, $n) {
 }
 
 function encrypt($string) {
-	global $secretkey;
+	global $options;
 	if (empty($string)) {
 		return '';
 	}
-	if (!$secretkey) {
-		return html_error('Value for $secretkey is empty, please create a random one (56 chars max) in your config!', 0);
+	$secretkey = $options['secretkey'];
+	if (empty($secretkey) || $secretkey == 'UijSY5wjP1Ii') {
+		return html_error("Value for \$options['secretkey'] is empty or use default secretkey value, please create a random one (56 chars max) in your configs/config.php!", 0);
 	}
 	require_once 'class.pcrypt.php';
 	/*
@@ -1101,19 +1004,20 @@ function encrypt($string) {
 	  ALGO: BLOWFISH
 	  KEY:  Your secret key :) (max lenght: 56)
 	 */
-	$crypt = new pcrypt(MODE_CBC, "BLOWFISH", "$secretkey");
+	$crypt = new pcrypt(MODE_CBC, "BLOWFISH", $secretkey);
 
 	// Return encrypted string
 	return $crypt->encrypt($string);
 }
 
 function decrypt($string) {
-	global $secretkey;
+	global $options;
 	if (empty($string)) {
 		return '';
 	}
-	if (!$secretkey) {
-		return html_error('Value for $secretkey is empty, please create a random one (56 chars max) in your config!', 0);
+	$secretkey = $options['secretkey'];
+	if (empty($secretkey) || $secretkey == 'UijSY5wjP1Ii') {
+		return html_error("Value for \$options['secretkey'] is empty or use default secretkey value, please create a random one (56 chars max) in your configs/config.php!", 0);
 	}
 	require_once 'class.pcrypt.php';
 	/*
@@ -1121,7 +1025,7 @@ function decrypt($string) {
 	  ALGO: BLOWFISH
 	  KEY:  Your secret key :) (max lenght: 56)
 	 */
-	$crypt = new pcrypt(MODE_CBC, "BLOWFISH", "$secretkey");
+	$crypt = new pcrypt(MODE_CBC, "BLOWFISH", $secretkey);
 
 	// Return decrypted string
 	return $crypt->decrypt($string);
@@ -1166,14 +1070,14 @@ function autoNext($iset, $forceNext, $audl) {
 			break;
 	}
 
-	if ($options["showautoclose"] == "true" && $forceNext) {
-		$bfRet.="\r\n<!-- \n var time = " . $options["timeautoclose"] . ";\nif(autoDL==true && not_simultan){parent.nextlink(id);}\nfunction vbaccept(){\ntime--;frm = document.vbaccept;\nif(frm)frm.submit.value = 'Auto-Close through '+time+'';\n";
+	if ($options['showautoclose'] == true && $forceNext) {
+		$bfRet.="\r\n<!-- \n var time = " . $options['timeautoclose'] . ";\nif(autoDL==true && not_simultan){parent.nextlink(id);}\nfunction vbaccept(){\ntime--;frm = document.vbaccept;\nif(frm)frm.submit.value = 'Auto-Close through '+time+'';\n";
 		$bfRet.="if(time>0){window.setTimeout(\"vbaccept()\",1);}\n else \nif(frm){frm.submit.value = 'done';\nfrm.submit.disabled=0;window.close(self);}}\n";
 		if ($audl == 'sims') {
 			$bfRet.="if(autoDL==true && not_simultan==false){ if(window.opener!=null){vbaccept(); var da = document.getElementById('tdone'); da.href='javascript:if(autoDL==true && not_simultan){window.opener.nextlink(id);}window.close(self);'; document.getElementById('txtdone').innerHTML='Done';}}\n\n";
 		}
 		$bfRet.="--></script>";
-		$bfRet.="<form id=vbaccept name=vbaccept><input type=submit name=submit style='color:#fff;' value=\"done\" disabled></form>";
+		$bfRet.="<form id='vbaccept' name='vbaccept'><input type='submit' name='submit' style='color:#fff;' value='done' disabled></form>";
 	} else {
 		$bfRet.="\r\nif(autoDL==true && not_simultan){parent.nextlink(id);}\n if(autoDL==true && not_simultan==false){if(window.opener!=null){\r\n var da = document.getElementById('tdone');  \n da.href='javascript:if(autoDL==true && not_simultan){window.opener.nextlink(id);} window.close(self);';\n document.getElementById('txtdone').innerHTML='Close';}}</script>";
 	}
@@ -1235,9 +1139,9 @@ function count_age($age) {
 		$sec = $age;
 	}
 	return $jam_str .
-			(isset($min) && $min > 0 ? $min . " " . $L->say['minutes'] : "") .
-			(isset($sec) && $sec > 0 ? $sec . " " . $L->say['seconds'] : "") .
-			($L->say['ago'] != "" ? " " . $L->say['ago'] : "");
+		(isset($min) && $min > 0 ? $min . " " . $L->say['minutes'] : "") .
+		(isset($sec) && $sec > 0 ? $sec . " " . $L->say['seconds'] : "") .
+		($L->say['ago'] != "" ? " " . $L->say['ago'] : "");
 }
 
 // get working time
@@ -1273,7 +1177,6 @@ function cek_worktime($workstart, $workend) {
 	if ($tdebug) {
 		echo $tn . "<br />" . "$tgl $dtstr $tnH:$tnM:$tnS<br />$nowUnix<br />" . "$workstart-" . $wstart . "-" . $wend . "-$workend";
 	}
-
 	if (($nowUnix - $wstart) > 0 && ($wend - $nowUnix) > 0) {
 		return true;
 	} else {
@@ -1322,47 +1225,6 @@ function checkStrict() {
 	$dir->close();
 }
 
-// check and count ip download
-function ipcounter() {
-	global $heute, $options, $ipmu;
-	$xhandle = @opendir("tmp");
-	if ($xhandle) {
-		while ($buin = readdir($xhandle)) {
-			if (preg_match("@$ipmu@i", $buin)) {
-				$heute = $heute + 1;
-			}
-		}
-		$ckusr = decEnti((string) base64_decode(urldecode($_COOKIE['rxyzusr'])));
-		$ckusr = (is_numeric($ckusr) ? $ckusr : '0');
-		if (($ckusr != '') && ($ckusr > $heute)) {
-			$heute = $ckusr;
-		} else {
-			setcookie('rxyzusr', base64_encode(encEnti((string) $heute)), TIME_NOW + ($options['delay_per_ip'] * 60 * 60));
-		}
-		closedir($xhandle);
-
-		error_reporting(0);
-		$xhandle = @opendir("tmp");
-		while ($buin = readdir($xhandle)) {
-			if ($buin == "." || $buin == "..") {
-				$buin = "fu";
-			}
-			$xd = @filemtime("tmp/$buin");
-			$xd = getNowzone($xd);
-			$altr = TIME_NOW - $xd;
-			if ($altr > $options['delay_per_ip'] * 60 * 60) {
-				if (is_dir("tmp/$buin")) {
-					@rmdir("tmp/$buin");
-				} else {
-					@unlink("tmp/$buin");
-				}
-			}
-		}
-		closedir($xhandle);
-		error_reporting(1);
-	}
-}
-
 /**
  * Renders the file actions, this function does NOT output directly to the browser
  *
@@ -1380,7 +1242,7 @@ function renderActions() {
 	if (!$options['disable_to']['act_boxes']) $return .= '<option value="boxes">' . $L->say['act_boxes'] . '</option>';
 	if (!$options['disable_to']['act_split']) $return .= '<option value="split">' . $L->say['act_split'] . '</option>';
 	if (!$options['disable_to']['act_merge']) $return .= '<option value="merge">' . $L->say['act_merge'] . '</option>';
-	if (!$options['disable_to']['act_md5']) $return .= '<option value="md5">' . $L->say['act_md5'] . " / Changer". '</option>';
+	if (!$options['disable_to']['act_md5']) $return .= '<option value="md5">' . $L->say['act_md5'] . " / Changer" . '</option>';
 	if ((file_exists(CLASS_DIR . "pear.php") || file_exists(CLASS_DIR . "tar.php")) && !$options['disable_to']['act_pack']) $return .= '<option value="pack">' . $L->say['act_pack'] . '</option>';
 	if (file_exists(CLASS_DIR . "pclzip.php") && !$options['disable_to']['act_zip']) $return .= '<option value="zip">' . $L->say['act_zip'] . '</option>';
 	if (file_exists(CLASS_DIR . "unzip.php") && !$options['disable_to']['act_unzip']) $return .= '<option value="unzip">' . $L->say['act_unzip'] . '</option>';
@@ -1419,339 +1281,18 @@ function vidlist($dir, $exts = '') {
 	return $results;
 }
 
-function view_size($size) {
-	if (!is_numeric($size)) {
-		return FALSE;
+/* return the formatted output of auto delete time */
+function autodel_formatted($delay) {
+	global $L;
+	if ($delay < 1) {
+		$delay = round($delay * 60);
+		$unit_time = $L->say['seconds'];
+	} elseif ($delay > 60) {
+		$delay = round($delay / 60, 1);
+		$unit_time = $L->say['hours'];
 	} else {
-		if ($size >= 1073741824) {
-			$size = round($size / 1073741824 * 100) / 100 . "&nbsp;GB";
-		} elseif ($size >= 1048576) {
-			$size = round($size / 1048576 * 100) / 100 . "&nbsp;MB";
-		} elseif ($size >= 1024) {
-			$size = round($size / 1024 * 100) / 100 . "&nbsp;KB";
-		} else {
-			$size = $size . "&nbsp;B";
-		}
-		return $size;
+		$unit_time = $L->say['minutes'];
 	}
+	return array($delay, $unit_time);
 }
-
-function lnkfilter($siLink) {
-	$linkres = $siLink;
-	if (strpos($siLink, "rapid*share.com/") || (strpos($siLink, "rapid^share.com/")) || (strpos($siLink, "rapdshare.com/"))) {
-		$rssuspect = array('rapid*share.com/', 'rapid^share.com/', 'rapdshare.com/');
-		$rsabs = 'rapidshare.com/';
-		$linkres = str_replace($rssuspect, $rsabs, $linkres);
-	}
-	return $linkres;
-}
-
-function get_traffic($filena) {
-	$isinya = array(' ', null);
-	$fl = @fopen($filena, "r");
-	if ($fl) {
-		$buftxt = @fgets($fl);
-		@fclose($fl);
-		$isinya = explode(":", trim($buftxt));
-	}
-	if (!is_numeric($isinya[0])) {
-		$isinya[0] = 0;
-	}
-	return $isinya;
-}
-
-function autoreset_traffic($days, $c_traf) {
-	global $options;
-	$zone = (3600 * $options['timezone']);
-
-	if ($days > 0) {
-		$reset_traffic = false;
-		$start_date = $c_traf[1];
-		$unix_now = strtotime("now") + $zone;
-
-		if (!preg_match("/\d{10}/i", $start_date)) {
-			$start_date = $unix_now;
-		} else {
-			if ($start_date > $unix_now) {
-				$start_date = $unix_now;
-				$reset_traffic = true;
-			}
-		}
-
-		$next_date = strtotime("+" . $days . " day", $start_date);
-
-		if ($next_date <= $unix_now) {
-			$reset_traffic = true;
-			$start_date = $unix_now;
-		}
-
-		if ($next_date <= $start_date) {
-			$value_trafic = ($reset_traffic ? '0' : $c_traf[0]);
-			$start_date = upd_traffictime($value_trafic); // reset traffic
-		}
-		return $start_date;
-	} else {
-		return false;
-	}
-}
-
-function upd_traffictime($cur_traffic) {
-	global $options;
-	$zone = (3600 * $options['timezone']);
-
-	$fn_trafic = TRAFFIC_LST;
-	if (@file_exists($fn_trafic)) {
-		$unix_now = strtotime("now") + $zone;
-		$value_trafic = $cur_traffic . ":" . $unix_now;
-		$ret = @write_traffic($fn_trafic, $value_trafic);
-		return $unix_now;
-	}
-}
-
-function timeremain_traffic($days, $start_date) {
-	global $options;
-	$zone = (3600 * $options['timezone']);
-
-	$unix_now = strtotime("now") + $zone;
-	$next_date = strtotime("+" . $days . " day", $start_date);
-	return ( $next_date - $unix_now );
-}
-
-// Log System
-function chklatesvisitor($curvisit) {
-	$err = false;
-	$latestvisit = false;
-	if (!file_exists(LASTLOG_LST)) @touch(LASTLOG_LST);
-	//Check is this user the last IP
-	if (@file_exists(LASTLOG_LST)) {
-		$fl = fopen(LASTLOG_LST, 'r');
-		$buftxt = @fread($fl, @filesize(LASTLOG_LST));
-		fclose($fl);
-		if ($buftxt != "") {
-			if ($curvisit === $buftxt) {
-				$latestvisit = true;
-			}
-		}
-	} else {
-		$err = true;
-	}
-	if ($err) {
-		echo "<br />an error occurs with log system.";
-	}
-	return $latestvisit;
-}
-
-function saveLogsys($curvisit) {
-	global $ipmu, $ref, $options;
-	if (!file_exists(LOG_PHP)) @touch(LOG_PHP);
-
-	if (@file_exists(LOG_PHP)) {
-		// Get current content
-		$fl = fopen(LOG_PHP, 'r');
-		$buftxt = @fread($fl, @filesize(LOG_PHP));
-		fclose($fl);
-
-		$buftxt = cut_str($buftxt, "<isi id='isilog'>", "</isi>");
-		$_php = "<?php if(!defined(\"RAPIDLEECH\")){\n require_once(\"404.php\");exit;\n}?>\n";
-		//$style = "$_php\n<style>\nbody{\nfont-family:verdana;\n font-size:10px;\n color:#FFFFFF;\n background-color:#010e17;\n background-image:url(background_pm.gif);\n background-repeat:repeat-x;\n}\n.g{color:#00FF00;}\n.t{color:#00FF00;\nfont-size:14px;}\n</style>\n";
-		$style = "$_php\n\n";
-		$h = $options['timezone']; //  GMT+7 for Indonesia.
-		$ms = $h * 60 * 60;
-		$gmdate = gmdate("d M Y H:i:s", time() + ($ms));
-		$time = ('GMT+' . $h);
-		$agent = $_SERVER['HTTP_USER_AGENT'];
-		$fl2 = fopen(LOG_PHP, 'w+');
-		$dash = "";
-		for ($i = 0; $i <= 50; $i++) {
-			$dash.="-";
-		}
-		$title = "<b class='t'>Log System <small>(descending sorted)</small></b><br />";
-		$towrite =
-				"$style<body>$title\n<isi id='isilog'><br />\nDate: $gmdate $time" . ($ref != "" ? "<br />\nRefferer: $ref" : "") .
-				"<br />\nBrowser: $agent<br />\nUser IP: <b class='g'>$ipmu</b><br />$dash\n$buftxt</isi></body>";
-		fwrite($fl2, $towrite);
-		fclose($fl2);
-		// Update IP Visitor
-		$fl = fopen(LASTLOG_LST, 'w');
-		fwrite($fl, $curvisit);
-		fclose($fl);
-	} else {
-		$err = true;
-	}
-	if ($err) {
-		echo "<br />an error occurs with log system.";
-	}
-}
-
-//---- Log System
-//Online User
-function GetOnline() {
-	if (!file_exists(VISITOR_LST)) @touch(VISITOR_LST);
-	if (@file_exists(VISITOR_LST)) {
-		$timeoffset = 15; // time offset for online user
-		$onlines = file_get_contents(VISITOR_LST);
-		$onlineList = unserialize($onlines);
-		$online = 0;
-		if (is_array($onlineList)) {
-			foreach ($onlineList as $time) {
-				if (time() - $time < $timeoffset * 60) {
-					$online++;
-				}
-			}
-		}
-		return $online;
-	}
-}
-
-function UpdateOnline() {
-	global $ipmu;
-	if (!file_exists(VISITOR_LST)) @touch(VISITOR_LST);
-	if (@file_exists(VISITOR_LST)) {
-		$onlines = file_get_contents(VISITOR_LST);
-		$onlineList = unserialize($onlines);
-		//$onlineList[$_SERVER['REMOTE_ADDR']] = time();
-		$onlineList[$ipmu] = time();
-		$content = serialize($onlineList);
-		file_put_contents(VISITOR_LST, $content);
-	}
-}
-
-//--End Online User
-
-function ongoingAdd() {
-	global $onGoing;
-	if (!file_exists(ONGOING_LST)) @touch(ONGOING_LST);
-	if (@file_exists(ONGOING_LST)) {
-		$ongoings = file_get_contents(ONGOING_LST);
-		(is_numeric($ongoings) ? $ongoings++ : $ongoings = 1);
-		file_put_contents(ONGOING_LST, $ongoings);
-	}
-	$onGoing = true;
-}
-
-function ongoingGet() {
-	if (@file_exists(ONGOING_LST)) {
-		$ongoings = file_get_contents(ONGOING_LST);
-		return (int) $ongoings;
-	}
-}
-
-function ongoingRemove() {
-	global $onGoing;
-	if (@file_exists(ONGOING_LST)) {
-		$ongoings = file_get_contents(ONGOING_LST);
-		(is_numeric($ongoings) ? ($ongoings > 0 ? $ongoings-- : 0) : $ongoings = 0);
-		file_put_contents(ONGOING_LST, $ongoings);
-	}
-	$onGoing = false;
-}
-
-function write_traffic($fname, $isi) {
-	$fl = fopen($fname, "w");
-	if (!$fl) {
-		return FALSE;
-	} else {
-		if (!flock($fl, LOCK_EX)) {
-			return FALSE;
-		} else {
-			if (!fwrite($fl, $isi)) {
-				return FALSE;
-			} else {
-				if (!flock($fl, LOCK_UN)) {
-					return FALSE;
-				} else {
-					if (!fclose($fl)) {
-						return FALSE;
-					}
-				}
-			}
-		}
-	}
-	//@fclose($fname);
-	return TRUE;
-}
-
-#============================
-
-function updateCozEmpty($f) {
-	global $list;
-	updateListInFile($list);
-}
-
-function getBigFilesize($file) {
-	$INT = 4294967295; //2147483647+2147483647+1;
-	$size = filesize($file);
-	$fp = @fopen($file, 'r');
-	if ($fp) {
-		fseek($fp, 0, SEEK_END);
-		if (ftell($fp) == 0) {
-			$size += $INT;
-		}
-		if ($size < 0) {
-			$size += $INT;
-		}
-		@fclose($fp);
-	}
-	return $size;
-}
-
-// Load language in language folder; get css type; return array
-function getArrayfromfile($loc, $predmatch, $succmatch, $find='file') {
-	if ($loc == '') {
-		return false;
-	}
-	$_CONSTANTS['D_DIR'] = $loc;
-	$cleanfn = array();
-	$dir = @dir($_CONSTANTS['D_DIR']);
-	if ($dir) {
-		while (false !== ($file = $dir->read())) {
-			switch ($find) {
-				case 'file':
-					if ($file != "." && $file != ".." && is_file($_CONSTANTS['D_DIR'] . $file)) {
-						preg_match("/$predmatch([a-zA-Z0-9_]+)$succmatch/", $file, $match);
-						if (count($match) > 0) {
-							$cleanfn[] = $match[1];
-						}
-					}
-					break;
-				case 'dir':
-					if ($file != "." && $file != ".." && is_dir($_CONSTANTS['D_DIR'] . $file)) {
-						preg_match("/$predmatch([a-zA-Z0-9_]+)$succmatch/", $file, $match);
-						if (count($match) > 0) {
-							$cleanfn[] = $match[1];
-						}
-					}
-					break;
-			}
-		}
-	}
-	return $cleanfn;
-}
-
-// This generate for pointboost manner
-function genReload($dlink, $dlay, $cktahu, $numindex) {
-	$nn = "\r\n";
-	$html_form = $nn . '<div style="padding-top:10px;"><b>Pointboost mode-<span class="g">ON</span></b><br /><small>This page will reload in [<b id="tmr" class="g">~</b>] seconds</small></div>';
-	$html_form .= '<input type="button" name="reboost" value=" GO " onclick="document.frmbooster.submit();">';
-	$html_form .= '<div style="display:none;">' . $nn . '<form name="frmbooster" action="' . $PHP_SELF . '" method="post">';
-	$html_form .= $nn . '<input type="hidden" name="link" id="link" value="' . $dlink . '">';
-	$html_form .= $nn . '<input type="hidden" name="numidx" id="numidx" value="' . (int) $numindex . '">';
-	$rnum = rand(11, 99); // $cktahu encoded base64
-	$html_form .= $nn . '<input type="hidden" name="sssid" value="' . encEnti(rotN($cktahu, $rnum)) . $rnum . '">';
-	$html_form .= '</form></div><br />';
-	$html_form .= counteritung('frmbooster', $dlay);
-	return $html_form;
-}
-
-// for debug manner, dump array
-function vdump($varray = array(), $textarea=false, $with_br=true) {
-	$buf = print_r($varray, true);
-	if ($textarea) {
-		$buf = "<textarea cols='90' rows='20' style='width:100%;font-size:11px;line-height:10px;'>" . $buf . "</textarea>";
-	} else {
-		$buf = ($with_br ? str_replace("\n", "<br />", $buf) : $buf);
-	}
-	print_r($buf);
-}
-
 ?>

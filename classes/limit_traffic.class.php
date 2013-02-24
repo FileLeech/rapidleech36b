@@ -33,28 +33,28 @@ class traffics {
 		$this->is_error = 0;
 		$this->ret_msg = '';
 
-		/*  touch the file */ {
-			if (!file_exists($this->fname)) {
-				@touch($this->fname);
-				if (!file_exists($this->fname)) {
-					$this->is_error = 1;
-					$this->ret_msg = "Can't find " . $this->fname;
-				}
+		/*  touch the file */
+		if (!file_exists($this->fname)) {
+			@touch($this->fname);
+			if (file_exists($this->fname)) {
+				if (!is_writable($this->fname)) $this->ret_msg = $L->sprintf($L->say['not_writable'], $this->fname);
+			} else {
+				$this->ret_msg = $L->sprintf($L->say['file_not_exists'], $this->fname);
 			}
+			$this->is_error = 1;
+		}
 
-			if ($this->is_error == 0) {
-				$this->max = ($options["max_trafic"] * 1024 * 1024);
-				$this->delayday = $options["day_reset_trafic"];
-				if ($options["date_trafic"]) {
-					$date = explode("/", $options["date_trafic"]);
-					if (is_array($date)) $this->is_expr($date);
-				}
+		if ($this->is_error == 0) {
+			$this->max = ($options["max_trafic"] * 1024 * 1024);
+			$this->delayday = $options["day_reset_trafic"];
+			if ($options["date_trafic"]) {
+				$date = explode("/", $options["date_trafic"]);
+				if (is_array($date)) $this->is_expr($date);
 			}
 		}
-		return ($this->is_error == 0);
 	}
 
-	/**
+	/*
 	 * Get Current Traffic
 	 */
 	function get() {
@@ -77,7 +77,7 @@ class traffics {
 		return $buftxt;
 	}
 
-	/**
+	/*
 	 * Check auto-reset
 	 */
 	function autoreset() {
@@ -102,7 +102,7 @@ class traffics {
 		return $this->initdate;
 	}
 
-	/**
+	/*
 	 * Check is it expired based on date_trafic
 	 */
 	function is_expr($date) {
@@ -112,7 +112,7 @@ class traffics {
 		return $this->is_expired;
 	}
 
-	/**
+	/*
 	 * Update traffic
 	 */
 	function updTraffic() {
@@ -124,7 +124,7 @@ class traffics {
 		}
 	}
 
-	/**
+	/*
 	 * Count remaining time
 	 */
 	function timeremain() {
@@ -134,4 +134,5 @@ class traffics {
 
 // =======
 }
+
 ?>

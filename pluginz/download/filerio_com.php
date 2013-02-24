@@ -7,9 +7,7 @@ if (!defined('RAPIDLEECH')) {
 class filerio_com extends DownloadClass {
 
     public function Download($link) {
-        if (strstr($link, "filekeen.com/")) {
-            $link = str_replace("filekeen.com/", "filerio.com/", $link);
-        }
+		$link = str_replace('/filekeen.com/', '/filerio.com/', $link);
         $page = $this->GetPage($link);
         is_present($page, "File Not Found");
 
@@ -64,7 +62,7 @@ class filerio_com extends DownloadClass {
         exit();
     }
 }
-/* 
+/*
  * imported from the existing filekeen code configuration by Ruud v.Tony 21-12-2011
  * updated to include filekeen.com in link by Ruud v.Tony 13-01-2012
  */

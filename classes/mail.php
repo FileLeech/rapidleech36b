@@ -22,7 +22,7 @@ function xmail($from, $to, $subj, $text, $filename, $partSize = FALSE, $method =
 		return FALSE;
 	}
 
-	$L->sprintf($L->say['_sendfile'], basename($filename));
+	echo $L->sprintf($L->say['_sendfile'], basename($filename));
 	echo "...<br />";
 	flush();
 	sleep(1);
@@ -48,7 +48,7 @@ function xmail($from, $to, $subj, $text, $filename, $partSize = FALSE, $method =
 				return mail($to, $subj, $zag . $file, $head) ? TRUE : FALSE;
 			}
 
-			$L->sprintf($L->say['_splitpart'], bytesToKbOrMbOrGb($partSize));
+			echo $L->sprintf($L->say['_splitpart'], bytesToKbOrMbOrGb($partSize));
 			echo ", " . $L->say['_method'] . " - RFC 2046...<br />";
 			echo "Total Parts: <b>" . $totalParts . "</b><br />";
 			$mailed = TRUE;
@@ -80,7 +80,7 @@ function xmail($from, $to, $subj, $text, $filename, $partSize = FALSE, $method =
 				return mail($to, $subj, $zag . chunk_split(base64_encode($fileContents)), $head) ? TRUE : FALSE;
 			}
 
-			$L->sprintf($L->say['_splitpart'], bytesToKbOrMbOrGb($partSize));
+			echo $L->sprintf($L->say['_splitpart'], bytesToKbOrMbOrGb($partSize));
 			echo ", " . $L->say['_method'] . " - Total Commander...<br />";
 			echo "Total Parts: <b>" . $totalParts . "</b><br />";
 			$mailed = TRUE;

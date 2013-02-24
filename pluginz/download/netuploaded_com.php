@@ -32,7 +32,7 @@ class netuploaded_com extends DownloadClass {
             $post[$key] = $value;
         }
         $this->page = $this->GetPage($this->link, $this->cookie, $post, $this->link);
-        is_present($this->page, '<p class="err">', cut_str($this->page, '<p class="err">', '<br />'));
+        is_present($this->page, '<p class="err">', cut_str($this->page, '<p class="err">', '<br>'));
         unset($post);
         $form = cut_str($this->page, '<Form name="F1"', '</Form>');
         if (!preg_match('/(\d+)<\/span> seconds/', $form, $wait)) html_error("Error: Timer not found!");

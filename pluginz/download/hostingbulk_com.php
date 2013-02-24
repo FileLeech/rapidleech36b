@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('RAPIDLEECH')) {
 	require_once ("index.html");
 	exit();
@@ -46,7 +47,7 @@ class hostingbulk_com extends DownloadClass {
 			$data['hb_id'] = $post['id'];
 			$data['hb_rand'] = $post['rand'];
 			$data['hb_free'] = 'yes';
-			return $this->JSCountdown($count[1], $data);
+			return JSCountDown($count[1], $data);
 		}
 
 		$page = $this->GetPage($link, 'lang=english', $post);

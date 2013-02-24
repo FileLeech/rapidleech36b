@@ -35,7 +35,7 @@ if (($_GET["premium_acc"] == "on" && $_GET["premium_user"] && $_GET["premium_pas
 	}
 	if (function_exists(encrypt) && $cookie!=""){$cookie=encrypt($cookie);}
 
-insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&port=".$Url["port"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($LINK)."&cookie=".urlencode($cookie)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "")."&auth=".$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["audl"]) ? "&audl=doum" : ""));
+insert_location("$PHP_SELF?filename=".urlencode($FileName)."&host=".$Url["host"]."&port=".$Url["port"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($LINK)."&cookie=".urlencode($cookie)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "")."&auth=".$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
 
 
 }else{
@@ -47,7 +47,7 @@ $page = geturl($Url["host"], defport($Url), $Url["path"].($Url["query"] ? "?".$U
 is_page($page);
 	is_present($page,"filename mismatched or file does not exist", "FileId and filename mismatched or file does not exist!");
 	is_present($page,"You are trying to download file larger than", "Only premium members may download file larger than 400MB.");
-	is_present($page,"existing download session", "You have an existing download session.<br />As a free member you can download only 1 file at a time.");
+	is_present($page,"existing download session", "You have an existing download session.<br>As a free member you can download only 1 file at a time.");
 
 	preg_match_all('/Set-Cookie: (.*);/U',$page,$temp);
 	$cookie = implode(';',$temp[1]);
@@ -58,8 +58,8 @@ is_page($page);
         echo "<form method=\"post\" action=\"$PHP_SELF\">$nn";
 	echo "<input type=hidden name=step value=second>\n";
 	echo "<input type=hidden name=wait value=$wait>\n";
-        echo "<b>Please enter code:</b><br />$nn";
-        echo "<img src=\"http://ugotfile.com/captcha?" . rand() . "\" ><br />$nn";
+        echo "<b>Please enter code:</b><br>$nn";
+        echo "<img src=\"http://ugotfile.com/captcha?" . rand() . "\" ><br>$nn";
         echo "<input name=\"link\" value=\"$LINK\" type=\"hidden\">$nn";
         echo "<input name=\"referer\" value=\"$Referer\" type=\"hidden\">$nn";
         echo "<input name=\"cookie\" value=\"$cookie\" type=\"hidden\">$nn";
@@ -93,7 +93,7 @@ is_page($page);
 	$FileName = basename($Url["path"]);
 	if (function_exists(encrypt) && $cookie!=""){$cookie=encrypt($cookie);}
 
-insert_location("$PHP_SELF?cookie=".urlencode($cookie)."&filename=".urlencode($FileName)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "")."&auth=".$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["audl"]) ? "&audl=doum" : ""));
+insert_location("$PHP_SELF?cookie=".urlencode($cookie)."&filename=".urlencode($FileName)."&host=".$Url["host"]."&path=".urlencode($Url["path"].($Url["query"] ? "?".$Url["query"] : ""))."&referer=".urlencode($Referer)."&email=".($_GET["domail"] ? $_GET["email"] : "")."&partSize=".($_GET["split"] ? $_GET["partSize"] : "")."&method=".$_GET["method"]."&proxy=".($_GET["useproxy"] ? $_GET["proxy"] : "")."&saveto=".$_GET["path"]."&link=".urlencode($LINK).($_GET["add_comment"] == "on" ? "&comment=".urlencode($_GET["comment"]) : "")."&auth=".$auth.($pauth ? "&pauth=$pauth" : "").(isset($_GET["idx"]) ? "&idx=".$_GET["idx"] : ""));
 
 }
 }

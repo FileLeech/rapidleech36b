@@ -9,9 +9,7 @@ class filepost_com extends DownloadClass {
     public function Download($link) {
         global $premium_acc;
 
-        if (strstr($link, "fp.io/")) {
-            $link = str_replace("fp.io/", "filepost.com/files/", $link);
-        }
+		$link = str_replace('/fp.io/', '/filepost.com/files/', $link);
         $this->link = $link;
         if (!$_REQUEST['step']) {
             $this->page = $this->GetPage($this->link);
@@ -22,7 +20,7 @@ class filepost_com extends DownloadClass {
             is_present($this->page, "File not found");
             is_present($this->page, "This IP address has been blocked on our service due to some fraudulent activity.");
             $this->Cookies = GetCookiesArr($this->page);
-            if ($this->Cookies['SID'] == '') html_error("Error Cookie [SID] not found!");
+            if (empty($this->Cookies['SID'])) html_error("Error Cookie [SID] not found!");
         }
         if ($_REQUEST ["premium_acc"] == "on" && (($_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) || ($premium_acc ["filepost_com"] ["user"] && $premium_acc ["filepost_com"] ["pass"]))) {
             return $this->Login();
@@ -200,6 +198,7 @@ class filepost_com extends DownloadClass {
             }
         } else {
             $this->page = $this->GetPage($this->link, $this->Cookies, 0, $this->link);
+			is_present($this->page, "You can only download 50GB a day");
             if (strpos($this->page, 'var is_pass_exists = true')) {
                 if (!preg_match("@code: '([^']+)',@", $this->page, $code) || !preg_match("@[({]token: '([^']+)',@", $this->page, $token)) html_error('Error: Post Password Data [Premium] not found!');
                 $Url = "http://filepost.com/files/get/?SID={$this->Cookies['SID']}&JsHttpRequest=" . jstime() . "-xml";

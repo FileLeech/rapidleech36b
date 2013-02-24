@@ -51,7 +51,7 @@ function upload() {
 		      $tid=md5(time()."_file".$_GET["files"][$i]);
 			?>
 			<tr><td>
-			<form action="<?php echo ROOT_URL;?>upload.php" method="get" target="<?php echo 'wp_'.$tid; ?>" onSubmit="return openwinup('<?php echo 'wp_'.$tid; ?>');">
+			<form action="upload.php" method="get" target="<?php echo 'wp_'.$tid; ?>" onSubmit="return openwinup('<?php echo 'wp_'.$tid; ?>');">
 			<table>
 			<tr valign="middle">			 
 			 <td><b><?php echo htmlspecialchars(basename($file["name"]))."</b>  , ". $file["size"] ?></td>

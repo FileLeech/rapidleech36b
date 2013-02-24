@@ -1,8 +1,10 @@
-<?php 
-if(!defined('RAPIDLEECH'))
-  { require_once("index.html"); exit; }
-
-?><div align="center" class="tdfootcredits"></div>
+<?php
+if (!defined('RAPIDLEECH')) {
+	require_once('index.html');
+	exit;
+}
+?>
+<div align="center" class="tdfootcredits"></div>
 <div align="center" id="main_footer">
 <?php print CREDITS; ?><br /><hr /><?php print VERSION; ?><br />
 </div>
@@ -30,7 +32,7 @@ echo "<div style='padding-left:5px;'><small>".($server['property'])."<br />".$L-
 </script>
 <?php if(file_exists(STATIC_DIR."sorttable.js")){
 ?>
-<script type="text/javascript" src="<?php echo ROOT_URL.STATIC_DIR;?>sorttable.js"></script>
+<script type="text/javascript" src="<?php echo STATIC_DIR;?>sorttable.js"></script>
 <?php } ?>
 </body>
 </html>

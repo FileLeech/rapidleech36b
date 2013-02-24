@@ -26,7 +26,7 @@ class cramit_in extends DownloadClass {
     }
     
     private function Free($link) {
-        global $L;
+        global $PHP_SELF, $L;
         
         if ($_REQUEST['down_direct'] == '1') {
             $post['op'] = $_POST['op'];
@@ -52,7 +52,6 @@ class cramit_in extends DownloadClass {
             $page = $this->GetPage($link, 0, $post, $link);
         }
         if (strpos($page, "Enter the code below:") || strpos($page, "Wrong captcha")) {
-			global $PHP_SELF;
             $form = cut_str($page, '<Form name="F1" method="POST"', '</Form>');
             if (!preg_match_all('@<input type="hidden" name="([^"]+)" value="([^"]+)?">@i', $form, $match)) html_error("Error: Post Data[2] not found!");
             $data = array_merge($this->DefaultParamArr($link), array_combine($match[1], $match[2]));
@@ -69,7 +68,7 @@ class cramit_in extends DownloadClass {
             echo "</form></center>\n</body>\n</html>";
             exit;
         }
-        is_present($page, cut_str($page, '<p class="err">', '<br />'));
+        is_present($page, cut_str($page, '<p class="err">', '<br>'));
         if (!preg_match('#http://cramit.in/file_download/[^"]+#i', $page, $rd)) html_error("Error: Redirect Link [FREE] not found!");
         $rlink = trim($rd[0]);
         $page = $this->GetPage($rlink, 0, 0, $link);
@@ -81,6 +80,7 @@ class cramit_in extends DownloadClass {
     }
     
     private function Premium($link, $password = false) {
+        global $PHP_SELF;
         
         if ($password == true) {
             $post['op'] = $_POST['op'];
@@ -99,7 +99,6 @@ class cramit_in extends DownloadClass {
             $this->page = $this->GetPage($link, $cookie, 0, $link);
         }
         if (!preg_match('@http:\/\/cramit\.in\/file_download\/[^|\r|\n|"?]+@i', $this->page, $rd)) { //non direct download also password link have the same layout...
-			global $PHP_SELF;
             $form = cut_str($this->page, '<Form name="F1" method="POST"', '</Form>');
             if (!preg_match_all('@<input type="hidden" name="([^"]+)" value="([^"]+)?">@i', $form, $match)) html_error("Error: Post Data [PREMIUM] not found!");
             $match = array_combine($match[1], $match[2]);

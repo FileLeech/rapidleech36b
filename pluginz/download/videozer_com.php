@@ -7,6 +7,7 @@ if (!defined('RAPIDLEECH')) {
 
 class videozer_com extends DownloadClass {
 	public function Download($link) {
+		global $L;
 		$page = $this->GetPage($link);
 		is_present ($page, "The page you have requested cannot be found", "Video is not found - Try checking the link.");
 		is_present ($page, "Video is not available - ", "Video is not available - " . cut_str($page, "Video is not available - ", "\n"));

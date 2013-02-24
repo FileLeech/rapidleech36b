@@ -43,7 +43,7 @@ $not_done= true;
 switch ($mode){
   
 	case "guest":
-	echo ('<b><center style="color: #C0C0C0"><span style="background-color: #F8F8B6">Use guest mode</span></center></b><br />');
+	echo ('<b><center style="color: #C0C0C0"><span style="background-color: #F8F8B6">Use guest mode</span></center></b><br>');
 ///////////////////////////////////////////////////// START ////////////////////////////////////////////////////////
 $Url=parse_url("http://www.ex.ua/edit_storage");
 $page = geturl($Url["host"], $Url["port"] ? $Url["port"] : 80, $Url["path"].($Url["query"] ? "?".$Url["query"] : ""), "http://www.ex.ua/storage", 0, 0, 0, $_GET["proxy"],$pauth);
@@ -86,7 +86,7 @@ HTML;
 
 	case "member":
 	if ($continue_up){
-	echo ('<b><center style="color: #00FF00"><span style="background-color: #F8F8B6">Use member mode</span></center></b><br />');
+	echo ('<b><center style="color: #00FF00"><span style="background-color: #F8F8B6">Use member mode</span></center></b><br>');
 ///////////////////////////////////////////////////// START ////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////// END //////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ HTML;
 
 	case "premium":
 	if ($continue_up){
-	echo ('<b><center style="color: #FF0000"><span style="background-color: #F8F8B6">Use premium mode</span></center></b><br />');
+	echo ('<b><center style="color: #FF0000"><span style="background-color: #F8F8B6">Use premium mode</span></center></b><br>');
 ///////////////////////////////////////////////////// START ////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////// END //////////////////////////////////////////////////////////

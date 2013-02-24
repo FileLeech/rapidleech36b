@@ -56,7 +56,7 @@ function mrename_go() {
 		}
 	} else {
 ?>
-<script type="text/javascript">location.href="<?php echo ROOT_URL.basename($PHP_SELF) . "?act=files"; ?>";</script>
+<script type="text/javascript">location.href="<?php echo $PHP_SELF . "?act=files"; ?>";</script>
 <?php
 	}
 }

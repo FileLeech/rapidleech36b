@@ -8,10 +8,8 @@ class crocko_com extends DownloadClass {
 
     public function Download($link) {
         global $premium_acc;
-        
-        if (strstr($link, "easy-share.com/")) {
-            $link = str_replace("easy-share.com/", "crocko.com/", $link);
-        }
+
+		$link = str_replace('easy-share.com/', 'crocko.com/', $link);
         if ($_REQUEST ["premium_acc"] == "on" && (($_REQUEST ["premium_user"] && $_REQUEST ["premium_pass"]) || ($premium_acc["crocko_com"]["user"] && $premium_acc["crocko_com"]["pass"]))) {
             $this->DownloadPremium($link);
         } else {
@@ -20,7 +18,7 @@ class crocko_com extends DownloadClass {
     }
 
     public function CheckBack($header) {
-        is_notpresent($header, "ontent-Disposition: attachment;", "You have input wrong captcha, Please try again!");
+        is_notpresent($header, "Disposition: attachment;", "You have input wrong captcha, Please try again!");
     }
 
     private function DownloadFree($link) {
@@ -49,13 +47,13 @@ class crocko_com extends DownloadClass {
             if (preg_match('/wf = (\d+);/', $page, $wait)) $this->CountDown($wait[1]);
             if (preg_match("/u='(.+)'/", $page, $cap)) $link = "http://www.crocko.com$cap[1]";
             $page = $this->GetPage($link, $cookie, 0, $Referer);
-        }            
+        }
         //get new timer, then refresh the page
         if (preg_match("/w='(\d+)'/", $page, $wait)) {
             if ($wait[1] > 100) {
                 $data = $this->DefaultParamArr($link, $cookie);
                 $data['step'] = 'countdown';
-                $this->JSCountdown($wait[1], $data);
+                JSCountdown($wait[1], $data);
             } else {
                 $this->CountDown($wait[1]);
                 $page = $this->GetPage($link, $cookie, 0, $Referer);

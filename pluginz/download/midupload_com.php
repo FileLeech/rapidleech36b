@@ -17,7 +17,7 @@ class midupload_com extends DownloadClass {
             $post[$k] = $v;
         }
         $page = $this->GetPage($link, "lang=english", $post, $link);
-        is_present($page, cut_str($page, '<p class="err">', '<br />')); // this will display "You have to wait bla...bla...bla..."
+        is_present($page, cut_str($page, '<p class="err">', '<br>')); // this will display "You have to wait bla...bla...bla..."
         unset($post);
         $form = cut_str($page, '<Form name="F1" method="POST"', '</Form>');
         if (preg_match('/(\d+)<\/span> seconds/', $form, $w)) $this->CountDown ($w[1]);
@@ -47,7 +47,7 @@ class midupload_com extends DownloadClass {
         }
         $page = $this->GetPage($link, "lang=english", $post, $link);
         is_present($page, cut_str($page, '<p class="err">', '</p>')); // incase the captcha layout have been broken, we can fix that!
-        is_present($page, cut_str($page, '<font class="err">', '<br />')); // same error message "You have to wait bla...bla...bla..."
+        is_present($page, cut_str($page, '<font class="err">', '<br>')); // same error message "You have to wait bla...bla...bla..."
         if (!preg_match('/Location: (http:\/\/[^\r\n]+)/i', $page, $dl)) html_error('Error [Download Link not found!]');
         $filename = basename(parse_url($dl[1], PHP_URL_PATH));
         $this->RedirectDownload($dl[1], $filename, "lang=english", 0, $link);

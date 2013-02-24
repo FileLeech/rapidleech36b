@@ -101,9 +101,9 @@ $l['_uploading'] = "Mengupload File";
 $l['close'] = "Tutup";
 $l['closewin'] = "Tutup window";
 $l['chk_txt_matches'] = "Check Pencarian";
-$l['go_match'] = "Cari";	 
+$l['go_match'] = "Cari";
 $l['match_csensitive'] = "Case Sensitive";
-$l['match_hideunmatch'] = "Hide UnMatch";	 	 
+$l['match_hideunmatch'] = "Hide UnMatch";
 $l['days'] = "hari";
 $l['hours'] = "jam";
 $l['minutes'] = "menit";
@@ -120,7 +120,7 @@ $l['disabled'] = "disabled";
 $l['not_writable'] = "<b>{1}</b> is not writable, please make sure it is chmod to 777"; // {1}=path or file
 $l['file_not_exists'] = "[FILE]: <b>{1}</b> tidak ditemukan."; // {1}= file
 $l['dir_not_exists'] = "Kesalahan Fatal, [DIR]: <b>{1}</b> tidak ada. Periksa \$options[\"download_dir\"] di file config Anda."; // {1}= dir
-$l['malfunction_ip'] = "<b>Kesalahan.!</b> Autorisasi RL bermsalah:: nilai <b>\$list_allow_ip</b> kosong (config.php)";
+$l['malfunction_ip'] = "<b>Kesalahan.!</b> Autorisasi RL bermsalah:: nilai <b>\$options['list_allow_ip']</b> kosong (config.php)";
 //main php
 $l['cpanel'] = "Panel Kontrol";
 $l['plugins'] = "Plugins";
@@ -142,7 +142,7 @@ $l['exceed_alert'] = "* batas maximum tercapai;";
 $l['expired_since'] = "* expired sejak ;";
 $l['cpuload_sloadhigh'] = "Server terlalu sibuk, silahkan tunggu;";
 $l['exceed_download'] = "You have exceeded your download limit, you can only download {1} files in {2}"; // {1}=limit donload {2}=delay time
-$l['maxjob_limited_1'] = "Server dibatasi melakukan {1} simultan downloads secara bersamaan.";
+$l['maxjob_limited'] = "Server dibatasi melakukan {1} simultan downloads secara bersamaan.";
 $l['nolimit_cpu'] = "no limit cpu usage";
 $l['link_transload'] = "Link yang akan ditransload";
 $l['_transload'] = "Transload File";
@@ -159,12 +159,20 @@ $l['logged'] = "[logged]";
 $l['server_stats'] = "Status Server:";
 $l['log_act'] = "Log Aktifitas:";
 $l['lact_files'] = "file(s)";
-$l['lact_autodeleted'] = "terhapus oleh autodelete";	 
+$l['lact_autodeleted'] = "terhapus oleh autodelete";
 $l['current_storage'] = "Status Ruang Files:";
 $l['current_traffic'] = "Status Traffic:";
 $l['reset_traffic_remain'] = "Sisa Waktu Reset Traffic:";
 $l['max_traffic'] = "maximum quota traffic";
 $l['forbidden_rename'] = "Tipe file {1} tidak diperbolehkan"; // {1}=extension
+$l['of'] = "of";
+$l['until'] = "until";
+$l['upto'] = "upto";
+$l['_sendfile'] = "Sending file <b>{1}</b>"; // {1} = filename
+$l['_nosplitemail'] = "No need spliting, Send single mail";
+$l['_splitpart'] = "Spliting into {1} part size"; // {1} = part size
+$l['_sendpart'] = "Sending part <b>{1}</b>"; //{1} = part number
+$l['_emails'] = "Emails";
 $l['send_email'] = "Kirim File ke Email";
 $l['email'] = "Email:";
 $l['split_file'] = "Pecah Files";
@@ -237,7 +245,7 @@ $l['curl_stat'] = "mode cURL:";
 $l['curl_notice'] = "acc checker tidak dapat digunakan tanpa cURL aktif";
 $l['_on'] = "ON";
 $l['_off'] = "OFF";
-//=index.php	 
+//=index.php
 $l['path_not_defined'] = "Path tidak ditentukan untuk penyimpanan file ini";
 $l['didnt_enter_mail'] = "Anda tidak memasukkan e-mail dengan benar";
 $l['size_not_true'] = "Untrue a size of the part is specified";
@@ -268,10 +276,11 @@ $l['try_free_dl'] = "Mencoba mode free-download.";
 $l['execute'] = "Laksanakan";
 $l['alert_srvload'] = "<code>LimitServerLoad Mode: <b>ON</b></code>";
 $l['con_lost'] = "Connection lost";
+$l['no_host'] = "No host file found";
 //http.php;
 $l['_pwait'] = "Silahkan tungu";
 $l['_pwait_sec'] = "Silahkan tunggu <b>{1}</b> detik...";	// {1} = number of seconds
-$l['_retrieving'] = "Membuka halaman download";
+$l['_retrieving'] = "Menerima halaman pengunduhan";
 $l['_enter'] = "Masuk";
 $l['_here'] = "disini";
 $l['_error_retrieve'] = "Gagal mendapatkan link";
@@ -482,7 +491,7 @@ $l['_started'] = "proses..";
 $l['audl_start'] = "Mulai auto download";
 $l['add_link'] = "Tambah links";
 $l['error_interval'] = "Kesalahan pada interval delay (dari 1 hingga 3600 detik)";
-$l['reach_lim_audl'] = "Maaf tidak dapat memproses lebih dari %link% sekaligus.";
+$l['reach_lim_audl'] = "Maaf tidak dapat memproses lebih dari {1} Link sekaligus.";
 $l['auto_check_link'] = "Periksa Link Otomatis";
 $l['quota_reach'] = "Quota iframe reached. All iframe is busy..";
 $l['one_by_one'] = "One-by-one (Queue)";
@@ -494,6 +503,7 @@ $l['iframe_ready'] = "IFrame ready:";
 $l['add_more'] = "add more link here...";
 $l['ytube_select'] = 'YouTube Video Format Selector';
 $l['ytube_fmt'] = '&amp;fmt=';
+$l['ytube_dlink'] = "Direct Link";
 $l['ytube_auto'] = 'Auto-get the highest quality format available';
 $l['ytube_38'] = '38 [Video: MP4 4096x3072 | Audio: AAC 2ch 44.10kHz]';
 $l['ytube_37'] = '37 [Video: MP4 1920x1080 | Audio: AAC 2ch 44.10kHz]';
@@ -506,6 +516,12 @@ $l['ytube_43'] = '43 [Video: WebM 640x360 | Audio: Vorbis 2ch 44.10kHz]';
 $l['ytube_18'] = '18 [Video: MP4 480x360 | Audio: AAC 2ch 44.10kHz]';
 $l['ytube_5'] = '5 [Video: FLV 400x240 | Audio: MP3 1ch 22.05kHz]';
 $l['ytube_17'] = '17 [Video: 3GP 176x144 | Audio: AAC 2ch 44.10kHz]';
+$l['run_servside'] = "Jalankan Server Side";
+$l['_delay'] = "Waktu delay";
+$l['_delaysec'] = "Delay (dalam detik)";
+// auul
+$l['reach_lim_auul'] = "Sorry you can not proceed more than {1} Files at once.";
+$l['no_file_host'] = "No files or hosts selected for upload.";
 // lynx
 $l['term_download'] = "Peraturan Download:";
 $l['term_nosimultan'] = "Gak bisa simultan, (kudu hiji-hiji||satu-satu)";
@@ -516,12 +532,12 @@ $l['term_dontpost'] = "[color=red]JANGAN post link hasil sulap di thread[/color]
 $l['term_cendolink'] = "[center]jangan lupa\\n[IMG]http://www.kaskus.us/newhomeimages/good.gif[/IMG][/center]";
 $l['no_selectfile'] = "Kesalahan, Tidak memlilih file";
 $l['_fname'] = "NamaFile";
-$l['_b64_desc'] = "Link Download Base64";
+$l['_b64_desc'] = "Link Unduh Base64";
 $l['_term'] = "+Term";
 $l['_b64link'] = "B64Link";
 $l['_deletelink'] = "Link Hapus";
 $l['_genlink'] = "Generate Link";
- //del.php; 
+ //del.php;
 $l['_rsure'] = "Apakah Anda yakin untuk";
 $l['_todelete'] = "menghapus file ini";
 $l['_sucesdelete'] = "berhasil dihapus!";

@@ -368,7 +368,7 @@ class rlRar {
 			fclose($rar_pipes[2]);
 			$this->rar_return = proc_close($rar_process);
 		} else {
-			$this->rar_error = 'Error openning rar process';
+			$this->rar_error = (function_exists('proc_open')) ? 'Error openning rar process' : 'proc_open() is disabled';
 			$this->rar_return = -1;
 		}
 		if ($this->debug || ($this->rar_return != 0 && strpos($this->rar_error, 'Enter password') !== 0) || ($this->rar_list !== FALSE && strpos($this->rar_list[count($this->rar_list) - 1], 'is not RAR archive') !== FALSE)) {

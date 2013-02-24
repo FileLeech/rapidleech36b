@@ -5,12 +5,29 @@
  * $Id: lang.class.php - 05apr2010-Idx $
  *****************************************************/
 
+if (!defined('RAPIDLEECH')) {
+	require_once("../404.php");
+	exit;
+}
+
 class RxLang {
 
 	var $path;
 	var $settings;
-	var $sections;
 	var $say = array();
+
+	function __construct() {
+		global $options;
+
+		$this->path = $this->set_path(LANG_DIR);
+		$language = preg_replace('#[^a-z0-9\-_]#i', '', $options['lang']);
+		// Check language
+		if (empty($language) || ($options['lang'] && !$this->language_exists($options['lang']))) {
+			$language = $options['lang'] = 'english';
+		}
+		// Load language
+		$this->set_language($language);
+	}
 
 	/**
 	 * Set the path for the language folder.
@@ -19,7 +36,8 @@ class RxLang {
 	function set_path($path) {
 		// strip last "/" if exist
 		if (substr($path, -1) == PATH_SPLITTER) $path = substr($path, 0, -1);
-		$this->path = $path;
+
+		return $path;
 	}
 
 	/**
@@ -28,12 +46,8 @@ class RxLang {
 	 * @return boolean True when exists, false when does not exist.
 	 */
 	function language_exists($language) {
-		$language = preg_replace("#[^a-z0-9\-_]#i", "", $language);
-		if (file_exists($this->path . "/" . $language . ".php")) {
-			return true;
-		} else {
-			return false;
-		}
+		if (file_exists($this->path . "/" . $language . ".php")) return true;
+		else return false;
 	}
 
 	/**
@@ -41,13 +55,6 @@ class RxLang {
 	 * @param string The language to use.
 	 */
 	function set_language($language="english") {
-		$language = preg_replace("#[^a-z0-9\-_]#i", "", $language);
-
-		// Default language is English.
-		if ($language == "") {
-			$language = "english";
-		}
-
 		// Check if the language exists.
 		if (!$this->language_exists($language)) {
 			die("Language $language ($this->path" . PATH_SPLITTER . "$language) is not installed");
@@ -55,7 +62,8 @@ class RxLang {
 
 		require $this->path . PATH_SPLITTER . $language . ".php";
 		$this->settings = $langinfo;
-		$this->sections = $l;
+		//==== language globally loaded here
+		$this->load($l);
 	}
 
 	/**
@@ -63,20 +71,20 @@ class RxLang {
 	 * @param array the language variable we need to load globally
 	 * @param boolean supress the error if the variable doesn't exist?
 	 */
-	function load($supress_error = false) {
+	function load($l = array(), $supress_error = false) {
 		// Assign language variables.
-		if (is_array($this->sections)) {
-			foreach ($this->sections as $key => $val) {
-				if (empty($this->$key) || $this->$key != $val) {
+		if (is_array($l)) {
+			foreach ($l as $key => $val) {
+				if (!empty($key) && $key != $val) {
 					//$this->$key = $val;
 					$this->say[$key] = $val;
 				}
 			}
 		} else {
 			if ($supress_error != true) {
-				die("$this->sections does not exist or not an array!");
+				die("$l does not exist or not an array!");
 			}
-			
+
 		}
 	}
 
@@ -95,7 +103,7 @@ class RxLang {
 	 * Get the language variables for a section.
 	 * @return array The language variables.
 	 */
-	function get_languages($admin=0) {
+	function get_languages() {
 		$dir = @opendir($this->path);
 		while ($lang = readdir($dir)) {
 			$ext = do_strtolower(get_extension($lang));
@@ -110,7 +118,5 @@ class RxLang {
 	}
 
 }
-
-// edited by vreets so it can load single php file without need to call lot of file (again...)
 
 ?>

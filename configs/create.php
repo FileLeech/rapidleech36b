@@ -4,18 +4,18 @@ if (!defined('RAPIDLEECH')) {
 	exit;
 }
 
-$c = $options['mtn_col_row']['mtn_colums'];
-$r = $options['mtn_col_row']['mtn_rows'];
+$c = $options['mtn_colums'];
+$r = $options['mtn_rows'];
 $text = $options['mtn_text'];
-$videoenable = $options['mtn_video_option']['enable'];
-$timeenable = $options['mtn_time']['enable'];
-$font = $options['mtn_video_option']['txtfont'];
-$infocolor = $options['mtn_video_option']['txtcolor'];
-$size = $options['mtn_video_option']['txtsize'];
-$tcolor = $options['mtn_time']['tcolor'];
-$ed = $options['mtn_edge'];
 $bg = $options['mtn_bgcolor'];
 $q = $options['mtn_quality'];
+$ed = $options['mtn_edge'];
+$videoenable = $options['mtn_video_option']['enable'];
+$font = $options['mtn_video_option']['txtfont'];
+$size = $options['mtn_video_option']['txtsize'];
+$infocolor = $options['mtn_video_option']['txtcolor'];
+$timeenable = $options['mtn_time']['enable'];
+$tcolor = $options['mtn_time']['tcolor'];
 $exec_dir = BINARY_DIR . 'media/mtn';
 $font_dir = STATIC_DIR . 'font/';
 if ($_POST['video'] != "") {

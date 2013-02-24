@@ -49,7 +49,7 @@ function delete_go() {
 			echo "<b class=\"r\">".$L->say['error_upd_list']."</b><br /><br />";
 		}
 	} else {
-		echo('<script type="text/javascript">location.href="'.ROOT_URL.basename($PHP_SELF).'?act=files";</script>');
+		echo('<script type="text/javascript">location.href="'.$PHP_SELF.'?act=files";</script>');
 	}
 }
 ?>

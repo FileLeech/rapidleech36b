@@ -1,9 +1,10 @@
 <?php
-if (!defined('RAPIDLEECH')){
-  require_once("index.html");exit;
+if (!defined('RAPIDLEECH')) {
+	require_once('index.html');
+	exit;
 }
-
-?><table align="center" style="margin-top:-2px;">
+?>
+<table align="center" style="margin-top:-2px;">
 <tbody>
 <tr>
 <td valign="top">
@@ -17,17 +18,17 @@ if (!defined('RAPIDLEECH')){
 <table cellpadding="0" cellspacing="0" border="0">
 <tr><td>
 <?php
-if($options["navi_left"]["showcpanel"]){
-  if(isset($options["xpanel_filename"]) && @file_exists($options["xpanel_filename"])){
+if($options['navi_left']["showcpanel"]){
+  if(isset($options['xpanel_filename']) && @file_exists($options['xpanel_filename'])){
  ?>
- <div><a href="<?php echo ROOT_URL.$options["xpanel_filename"];?>" id="left_cpanel" class="nav-leftimg" target="_blank" title="<?php echo $L->say['cpanel'];?>"><span><?php echo $L->say['cpanel'];?></span></a></div>
+ <a href="<?php echo $options['xpanel_filename'];?>" target="_blank" title="<?php echo $L->say['cpanel'];?>"><div id="left_cpanel"></div></a>
  <?php
  }
 }
 
-if($options["navi_left"]["showplugins"]){
+if($options['navi_left']["showplugins"]){
 ?>
-<div><a href="javascript:;" onclick="ddir=document.getElementById('dir'); if(ddir.style.display!=''){ddir.style.display='';}else{ddir.style.display='none';}" id="left_plugin" class="nav-leftimg" title="<?php echo $L->say['plugins'];?>"><span><?php echo $L->say['plugins'];?></span></a></div>
+<a href="javascript:;" onclick="ddir=document.getElementById('dir'); if(ddir.style.display!=''){ddir.style.display='';}else{ddir.style.display='none';}"><div id="left_plugin" title="<?php echo $L->say['plugins'];?>"></div></a>
 <div align="center" class="splugins"><?php echo '<b><small>'.count($host).'</small></b> Plugins'; ?></div>
 <div id="dir" dir="rtl" align="left" style="overflow-y:scroll; height:150px; padding-left:5px; display:none;"></div>
 <script type="text/javascript">
@@ -40,63 +41,69 @@ foreach($host as $site => $file)
 ?>
 );
 function inserthost(arHost){
-  var dtpl = '', d = document;
-  for(var i=0; i < arHost.length; i++)
-   {  dtpl += '<span class=&quot;c&quot;>' + arHost[i] + '<\/span><br \/>';}
-  d.getElementById('dir').innerHTML = dtpl;
+	var dtpl = '', d = document;
+	for(var i=0; i < arHost.length; i++) {
+		dtpl += '<span class=&quot;c&quot;>' + arHost[i] + '<\/span><br \/>';
+	}
+	d.getElementById('dir').innerHTML = dtpl;
 }
 setTimeout("inserthost(arHost)", 100);
 /* ]]> */
 </script>
 <?php
 }
-if($options["navi_left"]["showaudl"]){
+if($options['navi_left']["showaudl"]){
 ?>
-<div><a href="<?php echo ROOT_URL;?>audl.php" id="left_audl" class="nav-leftimg" target="_blank" title="<?php echo $L->say['audl'];?>"><span><?php echo $L->say['audl'];?></span></a></div>
+<a href="audl.php" target="_blank" title="<?php echo $L->say['audl'];?>"><div id="left_audl"></div></a>
 <?php
 }
-if($options["navi_left"]["showauul"]){
+if($options['navi_left']["showauul"]){
 ?>
-<div><a href="<?php echo ROOT_URL;?>auul.php" id="left_auul" class="nav-leftimg" target="_blank" title="<?php echo $L->say['auul'];?>"><span><?php echo $L->say['auul'];?></span></a></div>
+<a href="auul.php" target="_blank" title="<?php echo $L->say['auul'];?>"><div id="left_auul"></div></a>
 <?php
 }
-if($options["navi_left"]["showlynx"]){
+if($options['navi_left']["showlynx"]){
 ?>
-<div><a href="<?php echo ROOT_URL;?>lynx.php" id="left_lynx" class="nav-leftimg" target="_blank" title="<?php echo $L->say['lynx'];?>"><span><?php echo $L->say['lynx'];?></span></a></div>
+<a href="lynx.php" target="_blank" title="<?php echo $L->say['lynx'];?>"><div id="left_lynx"></div></a>
 <?php
 }
-if($options["navi_left"]["showmtn"]){
+if($options['navi_left']["showmtn"]){
 ?>
-<div><a href="<?php echo ROOT_URL;?>mtn.php" id="left_mtn" class="nav-leftimg" target="_blank" title="<?php echo $L->say['mtn'];?>"><span><?php echo $L->say['mtn'];?></span></a></div>
+<a href="mtn.php" target="_blank" title="<?php echo $L->say['mtn'];?>"><div id="left_mtn"></div></a>
 <?php
 }
-?></td></tr>
-</table>
-</td></tr>
+?>
+
+</td>
+</tr></table>
+</td>
+</tr>
 <tr><td>
-<div id="left_NFO"><center><img style="padding-top:10px;" src="<?php echo ROOT_URL.IMAGE_DIR;?>fbload.gif" border="0" alt="<?php echo $L->say['loading_pwait']?>" /></center></div>
+<div id="left_NFO"><center><img style="padding-top:10px;" src="<?php echo IMAGE_DIR;?>fbload.gif" border="0" alt="<?php echo $L->say['loading_pwait']?>" /></center></div>
 </td></tr>
 <tr>
 <td height="100%" style="padding:2px;">
-<div id="nfoconfig" style="height:120px; display:none;"></div>
-</td>
+<div id="nfoconfig" style="height:120px; display:none;">
+</div></td>
 </tr>
 </table>
-</td></tr>
+
+</td>
+</tr>
 </table></td>
 <td align="center" valign="top">
-<noscript><br /><b><?php echo $L->say['js_disable'];?></b></noscript>
-<table cellspacing="2" class="menuUtama" border="0">
+<table cellpadding="0" cellspacing="0" class="menuUtama" border="0">
 <tbody>
 <tr>
-<td id="navcell1" onclick="switchCell(1);">Main</td>
-<td id="navcell2" onclick="switchCell(2);">Config</td>
-<td id="navcell3" onclick="switchCell(3);">Server Files</td>
-<td id="navcell4" onclick="switchCell(4);">Validator</td>
-<td id="navcell5" onclick="switchCell(5);">RS Checker</td>
+<td id="navcell1" align="center" onclick="switchCell(1);">&nbsp;</td>
+<td id="navcell2" align="center" onclick="switchCell(2);">&nbsp;</td>
+<td id="navcell3" align="center" onclick="switchCell(3);">&nbsp;</td>
+<td id="navcell4" align="center" onclick="switchCell(4);">&nbsp;</td>
+<td id="navcell5" align="center" onclick="switchCell(5);">&nbsp;</td>
 </tr>
 </tbody>
 </table>
+<noscript><b><?php echo $L->say['js_disable'];?></b></noscript><br />
 
 <table id="tb_content">
 <tbody>
@@ -104,8 +111,8 @@ if($options["navi_left"]["showmtn"]){
 <td align="left">
 
 <?php
-if($options["limitbyip"]){
-  if($ada_acc && ($trheute > $options["maximum_free_downloads"])){
+if($options['limitbyIP']){
+  if($ada_acc && ($trheute > $options['maximum_free_downloads'])){
 ?>
 <div align="center" style="font-size:15px;"><br /> <?php echo $msgNya;?><div><?php echo $L->say['sorry_inc'];?></div><br /></div>
 <?php
@@ -114,11 +121,11 @@ if($options["limitbyip"]){
 ?>
 
 <form action="<?php echo $PHP_SELF;?>" name="transload" method="post"<?php if ($options['new_window']) { echo ' target="_blank"'; } ?>>
-<table class="tab-content" id="tb1" cellspacing="5" width="100%"<?php if($options["limitbyip"]){if($trheute>$options["maximum_free_downloads"]){print ' style="display:none;"';}}?>>
+<table class="tab-content" id="tb1" cellspacing="5" width="100%"<?php if($options['limitbyIP']){if($trheute>$options['maximum_free_downloads']){print ' style="display:none;"';}}?>>
 <tbody>
 <tr>
 
-<?php if( (isset($limitation_alert) && $limitation_alert) || ($options["limitbyip"] && $ada_acc && ($trheute > $options["maximum_free_downloads"]))) {
+<?php if( (isset($limitation_alert) && $limitation_alert) || ($options["limitbyIP"] && $ada_acc && ($trheute > $options["maximum_free_downloads"]))) {
 ?>
 <td align="left">
 <div style="padding-top:20px;"><div class="warn_alert"><?php echo $limitmsg;?></div></div>
@@ -130,15 +137,14 @@ if($options["limitbyip"]){
 ?>
 
 <td align="left">
-
-<p align="left"><b><?php echo $L->say['link_transload'];?></b><br />&nbsp;<input type="text" name="link" id="link" size="50" />
-<p align="left"><b><?php echo $L->say['referrer'];?></b><br />&nbsp;<input type="text" name="referer" id="referer" size="50" />
+<p align="left"><b><?php echo $L->say['link_transload'];?></b><br />&nbsp;<input type="text" name="link" id="link" size="50" /></p>
+<p align="left"><b><?php echo $L->say['referrer'];?></b><br />&nbsp;<input type="text" name="referer" id="referer" size="50" /></p>
 </td>
 <td align="left" valign="top">
 <div style="padding-top:25px;"></div><input type="<?php echo ($options['new_window'] && $options['new_window_js']) ? 'button" onclick="new_transload_window();' : 'submit'; ?>" value="<?php echo $L->say['_transload'];?>" />
 
 <?php
-if(isset($options["mip_enabled"]) && $options["mip_enabled"]){
+if(isset($options['mip_enabled']) && $options['mip_enabled']){
   $mip_action = "select";  // select || download
   if(file_exists(CLASS_DIR."mip.php")) @include_once(CLASS_DIR."mip.php");
 }
@@ -151,8 +157,8 @@ if(isset($options["mip_enabled"]) && $options["mip_enabled"]){
 </tr>
 <tr id="usernpass" style="display: none;">
 <td align="center">
-<label for="iuser"><?php echo $L->say['_iuser'];?></label><input type="text" name="iuser" value="" /><br />
-<label for="ipass"><?php echo $L->say['_ipass'];?></label><input type="text" name="ipass" value="" />
+<label><input type="text" name="iuser" value="" /><?php echo $L->say['_iuser'];?></label><br />
+<label><input type="text" name="ipass" value="" /><?php echo $L->say['_ipass'];?></label>
 </td>
 </tr>
 <tr>
@@ -171,12 +177,12 @@ if(isset($options["mip_enabled"]) && $options["mip_enabled"]){
 <br /><small class='subtitle'><?php echo $L->say['user_stats'];?></small>
 
 <?php
-echo ($options["limitbyip"] && $ada_acc ? $L->say['limit_leech'] : '').'<hr />';
+echo ($options["limitbyIP"] && $ada_acc ? $L->say['limit_leech'] : '').'<hr />';
 echo ($options["OnlineVisitor"] ? '<div>'.$L->say['user_online'].' <b class="g">'.$visitors->online['total'].'</b></div>':'');
-echo $L->say['detect_ip'].' <b>'.$ipmu.' </b>'.($options["logact"] ? '<small class="y">' . $L->say['logged'].'</small>' : '');
+echo $L->say['detect_ip'].' <b>'.$visitors->userip.' </b>'.($options["logact"] ? '<small class="y">' . $L->say['logged'].'</small>' : '');
 if($ref!=''){echo '<br />'.$L->say['referrer'].': <small>'.$ref.'</small>';}
-if($options["limitbyip"] && $ada_acc){
-   echo '<br />', $L->sprintf( $L->say['already_use_premix'], $heute, $options["maximum_free_downloads"], $options["delay_per_ip"] );
+if($options["limitbyIP"] && $ada_acc){
+   echo '<br />', $L->sprintf( $L->say['already_use_premix'], $visitors->heute, $options["maximum_free_downloads"], $options["delay_per_ip"] );
 }
 ?>
 </td>
@@ -192,9 +198,7 @@ if($options["storage_limit"]>0){
 	echo '(Max: <b class="r">'.bytesToKbOrMbOrGb($options["storage_limit"]*1024*1024).'</b>)';
 }
 if($options["limitbytraffic"]){
-	echo "<br />".$L->say['current_traffic']." <b class='g'>".bytesToKbOrMbOrGb($traffic->total).
-	     "</b>&nbsp;".$L->say['of']."&nbsp;<span class=\"s\" title=\"".$L->say['max_traffic']."\"><b>".bytesToKbOrMbOrGb($traffic->max)."</b></span> ".($traffic->expiredate ? $L->say['until']." <small><span class='g'>".date("d-M-Y", $traffic->expiredate)."</span></small>" : "");
-
+	echo "<br />".$L->say['current_traffic']." <b class='g'>".bytesToKbOrMbOrGb($traffic->total)."</b>&nbsp;".$L->say['of']."&nbsp;<span class=\"s\" title=\"".$L->say['max_traffic']."\"><b>".bytesToKbOrMbOrGb($traffic->max)."</b></span> ".($traffic->expiredate ? $L->say['until']." <small><span class='g'>".date("d-M-Y", $traffic->expiredate)."</span></small>" : "");
 	if($options["day_reset_trafic"] > 0) {
 	  echo "<br />".$L->say['reset_traffic_remain']."&nbsp;<small class=\"s\">".sec2time( $traffic->timeremain() )."</small>";
 	}
@@ -217,7 +221,7 @@ if(is_array($deleted) && $deleted["count"] > 0){
 <?php echo $L->say['lact_autodeleted'];?>
 <label onclick='return slip(this);' style='float:right;'>
 <span id='act_hist_txt'><?php echo $L->say['show_last_act'];?></span>
-<input id='act_hist_img' type='image' src='<?php echo ROOT_URL.IMAGE_DIR;?>plus.png' /></label>
+<input id='act_hist_img' type='image' src='<?php echo IMAGE_DIR;?>plus.png' /></label>
 <div id='act_history' class='acthistory_result' style='display:none;'>
 <pre style='margin:0;'>
 <?php foreach($deleted["files"] as $file){
@@ -300,7 +304,7 @@ if($options["download_dir_is_changeable"]){
 <td><label><input type="checkbox" name="saveto" id="saveto" onclick="javascript:var displ=this.checked?'':'none';document.getElementById('path').style.display=displ;"<?php echo isset($_COOKIE["saveto"]) ? ' checked="checked"' : ''; ?> />&nbsp;<?php echo $L->say['save_to'];?></label>
 <table id="path"<?php echo isset($_COOKIE["saveto"]) ? "" : " style=\"display: none;\""; ?>>
 <tr><td>
-<?php echo $L->say['save_path'];?>&nbsp;<input type="text" name="path" size="40" value="<?php echo (isset($_COOKIE["path"]) ? $_COOKIE["path"] : (substr($options["download_dir"], 0, 6) != "ftp://" ? realpath(DOWNLOAD_DIR) : $options["download_dir"])); ?>" <?php echo ($options["download_dir_is_changeable"] ? '':'readonly');?> />
+<?php echo $L->say['save_path'];?>&nbsp;<input type="text" name="path" size="40" value="<?php echo (isset($_COOKIE["path"]) ? $_COOKIE["path"] : (substr($options['download_dir'], 0, 6) != "ftp://" ? realpath(DOWNLOAD_DIR) : $options['download_dir'])); ?>" <?php echo ($options['download_dir_is_changeable'] ? '':'readonly');?> />
 </td></tr>
 </table>
 </td>
@@ -329,7 +333,6 @@ if($options["download_dir_is_changeable"]){
 <label><input type="checkbox" name="ytube_mp4" id="ytube_mp4" />&nbsp;<small><?php echo $L->say['plugin_youtube'];?></small></label>
 </td>
 </tr>
-
 <tr>
 <td>
 <label><input type="checkbox" name="df_acc" id="df_acc" onclick="javascript:var displ=this.checked?'':'none';document.getElementById('dfblock').style.display=displ;"<?php if(isset($premium_acc['depositfiles_com']['cookie'])) print ' checked="checked"'; ?> />&nbsp;<small><?php echo $L->say['plugin_depost'];?></small></label>
@@ -387,12 +390,6 @@ if($options["download_dir_is_changeable"]){
 </td>
 </tr>
 
-<tr>
-<td>
-<label><input type="checkbox" name="vBulletin_plug" id="vBulletin_plug" />&nbsp;<small><?php echo $L->say['plugin_buletin'];?></small></label>
-</td>
-</tr>
-
 </table>
 
 </td>
@@ -433,7 +430,6 @@ if(isset($_POST["act"])){
 <a href="javascript:;" onclick="flist_match_hide();"><?php echo $L->say['chk_txt_matches'];?></a>&nbsp;|&nbsp;
 </span>
 <a href="javascript:;" onclick='<?php echo (!$ajax_serverfiles? 'urlload()' : 'go_gLoad(150)')?>;'><?php echo $L->say['_sfrefresh'];?></a>
-
 <?php
   if ($options["show_all"] === true) {
   if(!$list) unset($Path);
@@ -449,10 +445,10 @@ if(getCookie("showAll") == 1) {
    }else{
      if(!$list) echo '<script type="text/javascript">deleteCookie("showAll");</script>';
    }
-?>
+	?>
 <div id="flist_match_hitems" style="display:none;" class="acthistory_prompt">
 <input type="text" title="<?php echo $L->say['chk_txt_matches'];?>" size="20" id="flist_match_search" onkeypress="javascript:if(event.keyCode==13){return flist_match(); }" />
-<input type="image" title="<?php echo $L->say['go_match'];?>" style="vertical-align:bottom;padding-bottom:1px;" src="<?php echo ROOT_URL.STATIC_DIR;?>images/btn_search.png" onclick="return flist_match(); return false;" />&nbsp;
+<input type="image" title="<?php echo $L->say['go_match'];?>" style="vertical-align:bottom;padding-bottom:1px;" src="<?php echo STATIC_DIR;?>images/btn_search.png" onclick="return flist_match(); return false;" />&nbsp;
 <a href="javascript:;" onclick="flist_match_hide();"><small><?php echo $L->say['close'];?></small></a>
 <div></div><span>
   <label><input type="checkbox" id="flist_match_ins" /><?php echo $L->say['match_csensitive'];?></label>
@@ -462,7 +458,7 @@ if(getCookie("showAll") == 1) {
 <div class="dseparator" style="height:12px"></div>
 <?php
 if($ajax_serverfiles){
-?>
+  ?>
   <span id="tablefilewaiting" style="position:absolute;margin:-10px 0 0 30px;"></span>
   <div id="tablefilescontent" style="padding-top:5px;"></div>
 
@@ -500,11 +496,11 @@ echo ($total_files>0 ? "(".$total_files.' file'.($total_files>1 ? 's' : '').') &
 <td><b><?php echo $L->say['tabel_sz'];?></b></td>
 <?php
 echo
-  (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]==1 && $options["show_column_sfile"]["md5"] ? '<td><b>' . 'MD5' . '</b></td>':'').
-  (!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) && $_COOKIE['showAll']!=1) ? ($options["show_column_sfile"]["downloadlink"] ? '<td><b>'.$L->say['tabel_dl'].'</b></td>':'').
-  ($options["show_column_sfile"]["comments"] ? '<td><b>'.$L->say['tabel_cmt'].'</b></td>' : '') : '').
-  ($options["show_column_sfile"]["date"] ? '<td><b>'.$L->say['tabel_dt'].'</b></td>' : '').
-  ($options["show_column_sfile"]["age"] ? '<td><b class="sorttable_nosort">'.$L->say['tabel_age'].'</b></td>' : '').
+  (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]==1 && $options['show_column_sfile']["md5"] ? '<td><b>' . 'MD5' . '</b></td>':'').
+  (!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) && $_COOKIE['showAll']!=1) ? ($options['show_column_sfile']["downloadlink"] ? '<td><b>'.$L->say['tabel_dl'].'</b></td>':'').
+  ($options['show_column_sfile']["comments"] ? '<td><b>'.$L->say['tabel_cmt'].'</b></td>' : '') : '').
+  ($options['show_column_sfile']["date"] ? '<td><b>'.$L->say['tabel_dt'].'</b></td>' : '').
+  ($options['show_column_sfile']["age"] ? '<td><b class="sorttable_nosort">'.$L->say['tabel_age'].'</b></td>' : '').
   ($feat_ajax["ajax_delete"]=='1' ? '<td><b class="sorttable_nosort">'.$L->say['act_del'].'</b></td>' : '')
 ?>
 </tr>
@@ -545,7 +541,7 @@ echo
 	($options["show_column_sfile"]["comments"] ? '<td>'.(isset($file["comment"]) ? str_replace("\\r\\n", "<br />", $file["comment"]) : "").'</td>':''):'').
    ($options["show_column_sfile"]["date"] ? '<td>'.str_replace(" ","&nbsp;",date("d.m.Y H:i:s", $file["date"])).'</td>':'').
    ($options["show_column_sfile"]["age"] ? '<td><small>'.$file["age"].'</small></td>':'').
-   ($feat_ajax["ajax_delete"]=="1" ? "<td><a id=\"dL-{$total_files}\" href=\"".ROOT_URL."del.php?d={$_fdkey}&amp;lineid={$total_files}\" rel=\"facebox\"> <img src=\"".ROOT_URL.IMAGE_DIR."rldel.png\" alt=\"X\" /></a></td>" : "")
+   ($feat_ajax["ajax_delete"]=="1" ? "<td><a id=\"dL-{$total_files}\" href=\"del.php?d={$_fdkey}&amp;lineid={$total_files}\" rel=\"facebox\"> <img src=\"".IMAGE_DIR."rldel.png\" alt=\"X\" /></a></td>" : "")
  ?>
 </tr>
 
@@ -554,21 +550,18 @@ echo
    } //end foreach
 
 	$n_column = 0;
-	foreach($options["show_column_sfile"] as $cocol => $colval){
+	foreach($options['show_column_sfile'] as $cocol => $colval){
       if($colval){
 	    switch($cocol)
 		{
 	     case "ip": // add colspan when not show all & column ip shown
-		   if(!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]!=1))
-		   { $n_column++; }
+		   if(!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]!=1)) $n_column++;
 		 break;
 		 case "md5": // add colspan when show all & column md5 shown
-		   if(isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]==1)
-		   { $n_column++; }
+		   if(isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]==1) $n_column++;
 		 break;
 		 case "downloadlink": // add colspan when downloadlink shown and it's in showdownloaded
-		   if(!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]!=1))
-		    { $n_column++; }
+		   if(!isset($_COOKIE["showAll"]) || (isset($_COOKIE["showAll"]) && $_COOKIE["showAll"]!=1)) $n_column++;
 		 break;
 	     default: $n_column++;
 		 break;
@@ -610,7 +603,7 @@ echo
 </form>
 
 <br /><div class="acthistory_prompt rlxmode" style="background-color:transparent;font-size:85%;margin:3px 15px 3px 15px;">RL x-mode:&nbsp;
-<?php echo ($userck_std_mode ? "<b>standard</b>&nbsp;|&nbsp;<a href='".ROOT_URL.basename($PHP_SELF)."?ajax=off&amp;ausv={$usrajxnuid}' title='Disable Ajax'>basic HTML</a>" : "<a href='".ROOT_URL.basename($PHP_SELF)."?ajax=on&amp;ausv={$usrajxnuid}' title='Enable Ajax'>standard</a>&nbsp;|&nbsp;<b>basic HTML</b>");
+<?php echo ($userck_std_mode ? "<b>standard</b>&nbsp;|&nbsp;<a href='".$PHP_SELF."?ajax=off&amp;ausv={$usrajxnuid}' title='Disable Ajax'>basic HTML</a>" : "<a href='".$PHP_SELF."?ajax=on&amp;ausv={$usrajxnuid}' title='Enable Ajax'>standard</a>&nbsp;|&nbsp;<b>basic HTML</b>");
 ?></div>
 
 </td>
@@ -662,7 +655,7 @@ if($ajax_serverfiles) {
 </td></tr>
 </table></center>
 
-	<span id="lnkwait" style="display:none;background-color:#800000;text-align:center;"><img src="<?php echo ROOT_URL.IMAGE_DIR;?>fbload.gif" border="1" alt="<?php echo $L->say['loading_pwait']?>" />&nbsp;&nbsp;<b class="o"><?php echo $L->say['loading_pwait']?></b></span>
+	<span id="lnkwait" style="display:none;background-color:#800000;text-align:center;"><img src="<?php echo IMAGE_DIR;?>fbload.gif" border="1" alt="<?php echo $L->say['loading_pwait']?>" />&nbsp;&nbsp;<b class="o"><?php echo $L->say['loading_pwait']?></b></span>
 	<div id="linkresult" align="left"></div></div>
 
 </td>
@@ -678,18 +671,16 @@ if($ajax_serverfiles) {
 <tr><td align="center" width="100%">
 <div style="text-align:center"><center>
  <table><tr><td align="center">
-   <div><b><?php echo $L->say['rs_acc_chk'];?></b><br /><small>[by: reiluke; <?php echo $L->say['modded'];?> -&gt; &#73;&#100;&#111;&#101;&#110;&#107;]</small><br />
+ 	<div><b><?php echo $L->say['rs_acc_chk'];?></b><br /><small>[by: reiluke; <?php echo $L->say['modded'];?> -&gt; &#73;&#100;&#111;&#101;&#110;&#107;]</small><br />
  	<form name="myform" id="myform" method="post" action="https://ssl.rapidshare.com/cgi-bin/premiumzone.cgi" target=_blank>
 	<input type="hidden" name="login" id="login" />
 	<input type="hidden" name="username" id="username" />
 	<input type="hidden" name="password" id="password" />
 	</form>
 <script type="text/javascript">
-/* <![CDATA[ */
 function doAccChk(){
 	ajxtmr = setTimeout("get('accounts','waiting','showresults','btnchkacc')", 300);
 }
-/* ]]> */
 </script>
 	<form action="javascript:doAccChk();" name="acctform" id="acctform">
    <textarea rows="4" id="accounts" class="redtxtarea"></textarea>
@@ -703,8 +694,8 @@ function doAccChk(){
 
 	<div style="padding-top:15px;"></div>
 	<input type="submit" name="button" id="btnchkacc" value="Check" onclick="document.getElementById('waiting').style.display='';" <?php echo ($ch_curl == 1)?'':'disabled';?> />
-     </form>
-   </div>
+	</form>
+	</div>
 </td></tr>
 </table></center>
 
@@ -712,7 +703,6 @@ function doAccChk(){
   <div id="waiting" style="display:none;"></div>
   <div id="showresults"></div>
  </div>
-
  </div>
 </td>
 </tr>
@@ -758,21 +748,17 @@ $CNfo = "<hr \/>";
 if($showAccRsStatus){ // this mean == ($ch_curl == 1 && $exist_accrs && $options["premix_status"])
  $CNfo.= "<div id=\"refresh\" style=\"float:right;\">&nbsp;<a href=\"javascript:;\" title=\"{$L->say['_refresh']} acc status\" onclick=\"stacc();this.blur();\"><small>{$L->say['_refresh']}<\/small><\/a><\/div><div id=\"accshowresults\" style=\"display:none;\"><\/div><div id=\"accwaiting\" align=\"center\" style=\"display:none;\" title=\"".$L->say['loading_pwait']."\"><\/div><hr \/>";
 }
-if($options["auto_del_time"]>0){
-	$autodel_unit_time = $L->say['hours'];
-	if($options["auto_del_time"]<1) {
-	  $options["auto_del_time"] = floor(60 * $options["auto_del_time"]);
-      $autodel_unit_time = $L->say['minutes'];
-	}
-	$CNfo.= "<span class=\"c\">*{$L->say['_autodel']}:&nbsp;<b class=\"g\">{$options["auto_del_time"]}<\/b>&nbsp;{$autodel_unit_time}<\/span>";
+if ($options["auto_del_time"] > 0) {
+	list($ddelay, $autodel_unit_time) = autodel_formatted($options['auto_del_time']);
+	$CNfo.= "<span class=\"c\">*{$L->say['_autodel']}:&nbsp;<b class=\"g\">".$ddelay."<\/b>&nbsp;{$autodel_unit_time}<\/span>";
 }
-if($options["limitsize"]>0){
-  $CNfo.= "<br \/><span class=\"c\">*{$L->say['_maxfilesize']}:&nbsp;<b class=\"s\">{$options["limitsize"]}<\/b>&nbsp;MB<\/span>";
+if($options["maxlimitsize"]>0){
+  $CNfo.= "<br \/><span class=\"c\">*{$L->say['_maxfilesize']}:&nbsp;<b class=\"s\">{$options["maxlimitsize"]}<\/b>&nbsp;MB<\/span>";
 }
-if($options["lowlimitsize"]>0)	{
-  $CNfo.= "<br \/><span class=\"c\">*{$L->say['_minfilesize']}:&nbsp;<b class=\"s\">{$options["lowlimitsize"]}<\/b>&nbsp;MB<\/span>";
+if($options["minlimitsize"]>0)	{
+  $CNfo.= "<br \/><span class=\"c\">*{$L->say['_minfilesize']}:&nbsp;<b class=\"s\">{$options["minlimitsize"]}<\/b>&nbsp;MB<\/span>";
 }
-if($options["downloadLimitbyip"] && $options["downloadsPerIP"] > 0){
+if($options["downloadLimitbyIP"] && $options["downloadsPerIP"] > 0){
   $CNfo.= "<br \/><span class=\"c\">*{$L->say['_limitip']}:&nbsp;<b class=\"s\">{$options["downloadsPerIP"]}<\/b> per <b class=\"s\">{$options["downloadDelayPerIP"]}<\/b>s<\/span>";
 }
 //if($options["pointboost"]>0){
@@ -793,12 +779,12 @@ if(isset($premium_acc) && isset($acc_txt) && $acc_txt!=''){
 //--end acc NFO
 
 if(strstr($CNfo,"<span")){
-  echo "<script type=\"text/javascript\">
-  var divnfo = document.getElementById('nfoconfig');
-  divnfo.innerHTML = '".$CNfo."';\n
-  divnfo.style.display='';\n";
-  if($showAccRsStatus) echo 'doStatacc();';
-  echo "\n</script>";
+	echo "<script type=\"text/javascript\">
+			var divnfo = document.getElementById('nfoconfig');
+			divnfo.innerHTML = '".$CNfo."';\n
+			divnfo.style.display='';\n";
+	if($showAccRsStatus) echo 'doStatacc();';
+	echo "\n</script>";
 }
 ?><hr />
 </div>

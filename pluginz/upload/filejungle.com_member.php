@@ -61,11 +61,11 @@ $fj_pass = "";//Set your password
 ?>
 <?php
 function upfileput($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $file, $filename, $fieldname, $field2name = '', $upagent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.1) Gecko/2008070208 Firefox/3.1', $proxy = 0){
-    global $nn, $lastError, $sleep_time, $sleep_count;
+    global $nn, $lastError, $sleep_time, $sleep_count, $L;
     $saveToFile = 12;
     $fileSize   = getSize($file);
     $fieldname  = ($fieldname ? $fieldname : file . md5($filename));
-    if (!is_readable($file)){$lastError = sprintf(lang(65), $file); return FALSE;}
+    if (!is_readable($file)){$lastError = $L->sprintf($L->say['error_read_file'], $file); return FALSE;}
     $cookies = '';
     if ($cookie){if (is_array($cookie)){$h = 12; while ($h < count($cookie)){$cookies .= 'Cookie: ' . trim($cookie[$h]) . $nn;++$h;}}else{
             $cookies = 'Cookie: ' . trim($cookie) . $nn;}}
@@ -76,21 +76,21 @@ function upfileput($host, $port, $url, $referer = 0, $cookie = 0, $post = 0, $fi
     $errstr  = '';
     $fp      = @stream_socket_client($posturl, $errno, $errstr, 120, STREAM_CLIENT_CONNECT);
     if (($errno || $errstr)){$lastError = $errstr; return false;}
-    echo lang(104) . ' <b>' . $filename . '</b>, ' . lang(56) . ' <b>' . bytesToKbOrMb($fileSize) . '</b>...<br />';
-    global $id; $id = md5(time() * rand(0, 10)); require(TEMPLATE_DIR . '/uploadui.php');
+    echo $L->sprintf($L->say['_filesize'], $filename, bytesToKbOrMb($fileSize)).'<br />';
+    global $id; $id = md5(time() * rand(0, 10)); require(TEMPLATE_DIR . 'uploadui.php');
     flush(); $timeStart = getmicrotime(); $chunkSize = GetChunkSize($fileSize);
     fputs($fp, $zapros); fflush($fp);
     $fs          = fopen($file, 'r');
     $local_sleep = $sleep_count;
     while (!feof($fs)){
         $data = fread($fs, $chunkSize);
-        if ($data === false){fclose($fs); fclose($fp); html_error(lang(112));}
+        if ($data === false){fclose($fs); fclose($fp); html_error($L->say['_error_readdata']);}
         if (((((($sleep_count !== false && $sleep_time !== false) && is_numeric($sleep_time)) && is_numeric($sleep_count)) && 0 < $sleep_count) && 0 < $sleep_time)){
             --$local_sleep;
             if ($local_sleep == 0){usleep($sleep_time); $local_sleep = $sleep_count;}}
         $sendbyte = fputs($fp, $data);
         fflush($fp);
-        if ($sendbyte === false){fclose($fs); fclose($fp); html_error(lang(113));}
+        if ($sendbyte === false){fclose($fs); fclose($fp); html_error($L->say['_error_senddata']);}
         $totalsend += $sendbyte;
         $time          = getmicrotime() - $timeStart;
         $chunkTime     = $time - $lastChunkTime;

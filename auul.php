@@ -17,9 +17,9 @@ require_once './global.php';
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charSet; ?>" />
 <title>AuUL :: <?php echo $RL_VER; ?> ::</title>
-<link type="text/css" href="<?php print ROOT_URL.IMAGE_DIR; ?>style_sujancok<?php print $options["csstype"]; ?>.css?<?php echo rand(1, 9999); ?>" rel="stylesheet" media="screen" />
-<link type="image/gif" rel="shortcut icon" href="<?php echo ROOT_URL.IMAGE_DIR . 'ico_home.gif?' . rand(11, 9999); ?>" />
-<script type="text/javascript" src="<?php echo ROOT_URL.STATIC_DIR; ?>js.php?auul"></script>
+<link type="text/css" href="<?php print IMAGE_DIR; ?>style_sujancok<?php print $options["csstype"]; ?>.css?<?php echo rand(1, 9999); ?>" rel="stylesheet" media="screen" />
+<link type="image/gif" rel="shortcut icon" href="<?php echo IMAGE_DIR . 'ico_home.gif?' . rand(11, 9999); ?>" />
+<script type="text/javascript" src="<?php echo STATIC_DIR; ?>js.php?auul"></script>
 <script type="text/javascript">
 /* <![CDATA[ */
 var dcontainer, ifrm;
@@ -53,11 +53,42 @@ function cleanResidue() {
 </script>
 </head>
 <body>
-<div class="head_container"><center>
-<a href="<?php echo ROOT_URL.$options['index_file']; ?>" class="tdheadolgo" title="Rapidleech"><span>Rapidleech36B</span></a>
-</center></div>
+<div align="center" class="head_container">
+<a href="<?php echo $options['index_file']; ?>" class="tdheadolgo" title="Rapidleech"><span>Rapidleech36B</span></a>
+</div>
 <br />
 <center>
+<?php
+//SHOW TIME WORK
+if( $options["limit_timework"] ){
+  $is_worktime = cek_worktime($options["workstart"], $options["workend"]);
+  $limitmsg="";
+  if(!$is_worktime){
+    if(!empty($limitmsg)){$limitmsg.="<br />";}$limitmsg.=$L->sprintf($L->say['worktime_alert'], $options["workstart"]);
+    echo "<div style=\"padding-top:20px;padding-bottom:20px;\"><div class=\"warn_alert\">{$limitmsg}</div></div>";
+	if($options["navi_left"]["server_info"]){
+	  if(@file_exists(CLASS_DIR."sinfo.php")) {
+		require_once(CLASS_DIR."sinfo.php");
+		echo "<div style='padding-left:5px;text-align:center;width:auto;margin-top:-5px;'><small>{$server['property']}". $L->sprintf($L->say["page_load"], $maintimer->stop())."</small></div>";
+	  }
+	}else echo "<hr />";
+	echo "</center></body></html>";
+	exit();
+  }
+}
+if ($options['auto_del_time'] > 0) {
+	list($ddelay, $autodel_unit_time) = autodel_formatted($options['auto_del_time']);
+	echo "<span class=\"c\">" . $L->say['_autodel'] . ":&nbsp;<b class=\"g\">" . $ddelay . "</b>&nbsp;" . $autodel_unit_time . "</span>";
+	//auto_del($options['auto_del_time']);
+	purge_files($options['auto_del_time']);
+}
+if ($options['auul'] > 0) {
+	echo "&nbsp;||&nbsp;<span class=\"c\">File Allow:&nbsp;<b class=\"g\">" . $options['auul'] . "</b>&nbsp;file" . ($options['auul'] > 1 ? "s" : "") . "</span>";
+}
+if ($options['limit_timework']) {
+	echo "<br /><span class=\"c\">" . $L->say['_timework'] . ":&nbsp;</span><b class=\"s\">" . $options['workstart'] . "</b>&nbsp;" . $L->say['_upto'] . "&nbsp;<b class=\"s\">" . $options['workend'] . "</b>";
+}
+?>
 <?php
 // If the user submit to upload, go into upload page
 if (isset($_GET['action']) && $_GET['action'] == 'upload') {
@@ -67,6 +98,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'upload') {
 	$hostss = array();
 	// Sort the upload hosts and files
 	foreach ($_POST['files'] as $file) {
+		if ($options['auul'] > 0) {  // if there's a limitation in auul file submission
+			if (count($_POST['files']) > $options['auul']) {
+				echo '<script type="text/javascript">function dopostback(){d.backpost.submit();}</script><form action="' . basename($PHP_SELF) . '" name="backpost" id="backpost" method="post"><div style="display:none;"></div></form>';
+				die('<span style="color:red; background-color:#fec; padding:3px; border:2px solid #FFaa00"><b>' . $L->sprintf($L->say['reach_lim_auul'], $options['auul']) . '</b></span><br/><br/><a href="javascript:;" onclick="dopostback()"><b>[ ' . $L->say['back_main'] . ' ]</b></a>' . "\r\n" . '</body></html>');
+			}
+		}
 		foreach ($_POST['hosts'] as $host) {
 			$hostss[] = $host;
 			$uploads[DOWNLOAD_DIR . $file][$host] = "";
@@ -77,7 +114,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'upload') {
 	$hostss = array_unique($hostss);
 	// If there aren't anything
 	if (count($uploads) == 0) {
-		echo "No files or hosts selected for upload";
+		echo $L->say['no_file_host'];
 		exit;
 	}
 	$did = 1;
@@ -85,18 +122,18 @@ if (isset($_GET['action']) && $_GET['action'] == 'upload') {
 	foreach ($uploads as $file => $hosts) {
 		// If file does not exist
 		if (!file_exists($file)) {
-			html_error("ERROR: file not exist $file");
+			html_error($L->sprintf($L->say['file_not_exists'], $file));
 		}
 		// If file is not readable
 		if (is_readable($file)) {
 			$lfile = $file;
 			$lname = basename($lfile);
 		} else {
-			html_error("ERROR: not readable $file");
+			html_error($L->sprintf($L->say['error_read_file'], $file));
 		}
 		// Get the size of the file
 		$fsize = getSize($lfile);
-		// Start uploading this file			
+		// Start uploading this file
 		echo "Uploading <b>" . basename($file) . "</b>&nbsp[<b class='g'>" . bytesToKbOrMbOrGb($fsize) . "</b>]<br />";
 		// Upload to different hosts
 
@@ -122,8 +159,7 @@ var orlink='<?php echo basename($file); ?> to <?php echo $host; ?>';
 			// Save the download link
 			$uploads[$file][$host] = $download_link;
 			$uploads[$file]['date'] = date("Y-m-d H:i:s");
-			echo "<script type=\"text/javascript\">cleanResidue();</script>" .
-					"\r\n</td></tr></table>\r\n";
+			echo "<script type=\"text/javascript\">cleanResidue();</script>\r\n</td></tr></table>\r\n";
 			//ob_get_contents();
 			//@ob_end_flush();
 			//@ob_get_clean();
@@ -170,7 +206,7 @@ var orlink='<?php echo basename($file); ?> to <?php echo $host; ?>';
 	$output = substr($output, 0, -6);
 	echo $output;
 ?></textarea><br />
-<button name="backauul" onclick="location.href='<?php echo $PHP_SELF;?>'">Back to Main</button><br />
+<button name="backauul" onclick="location.href='<?php echo $PHP_SELF;?>'"><?php echo $L->say['back_main'];?></button><br />
 <a onclick="openmyList('<?php echo MYUPLOAD_LST . "?" . rand();?>'); return false;" style="color: #99C9E6" href="<?php echo MYUPLOAD_LST . "?" . rand();?>" target="_blank"><b>myuploads</b></a>
 
 <br/><br/>
@@ -223,12 +259,12 @@ if(getCookie("showAll") == 1) {
 		<th>Name</th>
 		<th width="120">Size</th>
 	</tr>
- <tbody id="divcontainer" style="height:<?php echo (count($list)<13? "100%" : "280px");?>; padding:5px; white-space:nowrap; overflow:auto;">
+ <tbody id="tcontainer" style="height:<?php echo (count($list)<13? "100%" : "280px");?>; padding:5px; white-space:nowrap; overflow:auto;">
 <?php
 		$brs = 1;
 		foreach ($list as $key => $file) {
 			if (isset($file["name"]) && @file_exists($file["name"])) {
-?>	
+?>
 <tr id='brs<?php echo $brs;?>' class='rowlist' onmousedown='clk("chkfL-<?php echo $brs;?>")' onmouseout='if(document.getElementById("chkfL-<?php echo $brs;?>").checked) {this.className="rowlist_checked";}else{this.className="rowlist";}'>
  <td align="center"><input type="checkbox" name="files[]" id="chkfL-<?php echo $brs;?>" onclick="clk(this.id)" value="<?php echo basename($file["name"]); ?>" /></td>
  <td><?php echo basename($file["name"]); ?></td>
@@ -258,7 +294,7 @@ if(getCookie("showAll") == 1) {
 			}
 		}
 		if (empty($upload_services)) {
-			$bftxt = "<span style='color:#FF6600'><b>No Supported Upload Services!</b></span>";
+			$bftxt = "<span style='color:#FF6600'><b>$L->say['no_support_upl_serv']</b></span>";
 		} else {
 			sort($upload_services);
 			reset($upload_services);
@@ -297,7 +333,7 @@ tr_tpl+= '<td>((name))</td>';
 tr_tpl+= '</tr>';
 function inserthost(){
   var text = "", d = document;
-  for(var idx in dHost) {  
+  for(var idx in dHost) {
     var phost = dHost[idx]; var _tpl = tr_tpl;
 	_tpl = _tpl.replace(/\(\(upl\)\)/g, phost["upl"]);
 	_tpl = _tpl.replace(/\(\(name\)\)/g, phost["upl"].replace("_"," ") + phost["size"]);

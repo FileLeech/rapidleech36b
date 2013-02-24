@@ -72,7 +72,7 @@ else {
 	$pre_tr = true;
 	foreach ($sites as $site) {
 		echo "\t<tr><td style='white-space:nowrap;'><input type='checkbox' name='enable_{$site['sname']}' value='yes'".((@$UlTo[strtolower($site['hname'])]['upload'] === false)?"":" checked='checked'")." />&nbsp;".htmlentities($site['hname'])."&nbsp;&nbsp;</td>";
-		if (empty($UlTo[strtolower($site['hname'])]['user']) || empty($UlTo[strtolower($site['hname'])]['pass'])) echo"<td style='text-align:right;'>&nbsp;".lang(37).":&nbsp;<input type='text' name='{$site['sname']}_login' value='' style='width:120px;' /><br />&nbsp;".lang(38).":&nbsp;<input type='password' name='{$site['sname']}_pass' value='' style='width:120px;' /></td></tr>\n";
+		if (empty($UlTo[strtolower($site['hname'])]['user']) || empty($UlTo[strtolower($site['hname'])]['pass'])) echo"<td style='text-align:right;'>&nbsp;".$L->say['_uname'].":&nbsp;<input type='text' name='{$site['sname']}_login' value='' style='width:120px;' /><br />&nbsp;".$L->say['_pass'].":&nbsp;<input type='password' name='{$site['sname']}_pass' value='' style='width:120px;' /></td></tr>\n";
 		else echo "<td style='text-align:right;font-weight:bold;'>&nbsp;[Default Account Loaded]</td></tr>\n";
 		echo "\t<tr><td><br /></td></tr>\n";
 	}

@@ -16,9 +16,9 @@ error_reporting(E_ALL & ~E_NOTICE);
 
 @set_time_limit(0);
 ini_alter("memory_limit", "1024M");
-@ob_end_clean();
+if (ob_get_level()) @ob_end_clean();
 if (isset($_POST['link'])) {
-	@ob_implicit_flush(TRUE);
+	@ob_implicit_flush(true);
 }
 ignore_user_abort(false);
 clearstatcache();
@@ -26,7 +26,7 @@ error_reporting(6135);
 
 $nn = "\r\n";
 $fromaddr = "RapidLeech";
-$dev_name = ' - Release.Candidate';
+$dev_name = 'Development Stage';
 $rev_num = '36B.Rv8.0';
 $plusrar_v = '4.1';
 $RL_VER = 'Rx08.ii' . $rev_num;
@@ -41,31 +41,8 @@ define('CLASS_DIR', 'classes/');
 define('CONFIG_DIR', 'configs/');
 define('LANG_DIR', CLASS_DIR . 'languages/');
 
-$loca["thisFile"] = str_replace('\\', '/', __FILE__);
-$loca["docRoot"] = $_SERVER['DOCUMENT_ROOT'] . (substr($_SERVER['DOCUMENT_ROOT'], -1) != "/" ? "/" : "");
-$webRoot = str_replace(array($loca["docRoot"], basename(__FILE__)), '', $loca["thisFile"]);
-unset($loca);
-if ($webRoot == "/") $webRoot = "";
-define('ROOT_URL', "http://" . $_SERVER["SERVER_NAME"] . "/" . $webRoot);
-
-// check fileconfig existence
-if (!@file_exists(CONFIG_DIR . "config.php")) {
-
-	define('DEFAULT_CONFIG_FILE', CONFIG_DIR . 'config.default.php');
-	require_once DEFAULT_CONFIG_FILE;
-
-	$fninstall = CONFIG_DIR . "setup.php";
-	if (file_exists($fninstall)) {
-		require_once($fninstall);
-	} else {
-		die("File not found " . $fninstall);
-	}
-	exit();
-}
-
-// Load configuration & accounts
-require_once(CONFIG_DIR . "config.php");
-require_once(CONFIG_DIR . "accounts.php");
+//check config.php is exist or not, run setup file only if needed
+require_once(CONFIG_DIR . 'setup.php');
 
 // Load function and class
 require_once(CLASS_DIR . "other.php");
@@ -88,17 +65,8 @@ define('IMAGE_DIR', TEMPLATE_DIR . 'skin/' . $options["csstype"] . '/');
 // Language initialisation
 require_once(CLASS_DIR . "lang.class.php");
 $L = new RxLang;
-$L->set_path(LANG_DIR);
-
-// Check language
-if (!$options['lang'] || ($options['lang'] && !$L->language_exists($options['lang']))) {
-	$options['lang'] = 'english';
-}
-// Load language
-$L->set_language($options['lang']);
-$L->load();
 $charSet = $L->settings["charset"];
-//==== language global loaded here
+
 // Check DOWNLOAD_DIR and FILES_LST
 $czFlst = checkExistence();
 
@@ -108,15 +76,17 @@ checkStrict();
 define('THIS_SCRIPT', basename($PHP_SELF));
 // check for forbidden page (audl, auul, lynx, mtn)
 $keyfn = str_replace("." . get_extension(THIS_SCRIPT), "", THIS_SCRIPT);
-if (isset($options["forbid"]["_{$keyfn}"]) && $options["forbid"]["_{$keyfn}"]) {
+if (isset($options["forbid_{$keyfn}"]) && $options["forbid_{$keyfn}"]) {
 	get_tpl("404", ucwords(do_strtolower($keyfn)) . " " . $L->say["disabled"]);
 	exit();
 }
 
 // Load server spec
 $server = getServerPlatf();
-// get real IP
-$ipmu = get_real_ip();
+
+// Load visitor class, user ip defined in here
+require_once (CLASS_DIR . 'visitors.class.php');
+$visitors = new Visitor();
 
 switch (THIS_SCRIPT) {
 	case $options['index_file']:
@@ -127,15 +97,6 @@ switch (THIS_SCRIPT) {
 			header("Pragma: no-cache");
 		}
 
-		if (!defined('CRLF')) define('CRLF', "\r\n");
-		if (!defined("FTP_AUTOASCII")) define("FTP_AUTOASCII", -1);
-		if (!defined("FTP_BINARY")) define("FTP_BINARY", 1);
-		if (!defined("FTP_ASCII")) define("FTP_ASCII", 0);
-		if (!defined('FTP_FORCE')) define('FTP_FORCE', TRUE);
-		define('FTP_OS_Unix', 'u');
-		define('FTP_OS_Windows', 'w');
-		define('FTP_OS_Mac', 'm');
-		
 		register_shutdown_function("pause_download");
 
 		break;
@@ -145,7 +106,7 @@ switch (THIS_SCRIPT) {
 
 		if (!defined('UPLOAD_DIR')) define('UPLOAD_DIR', HOST_DIR . 'upload/');
 		if (!defined('CRLF')) define('CRLF', "\r\n");
-		include(CLASS_DIR . "http.php");
+		require_once(CLASS_DIR . "http.php");
 		require_once(HOST_DIR . "download/hosts.php");
 
 		break;
@@ -169,17 +130,14 @@ if ($options["limited_edition"] || $options["limited_area"]) {
 
 login_check();
 
-$deleted = ($options["auto_del_time"] > 0 ? purge_files($options["auto_del_time"]) : 0);
+$deleted = ($options['auto_del_time'] > 0 ? purge_files($options['auto_del_time']) : 0);
 
-if ($options["downloadLimitbyip"]) purge_files_ip($options["downloadDelayPerIP"]);
+$options['downloadLimitbyIP'] ? $visitors->purge_files_IP($options['downloadDelayPerIP']) : '';
 
-if ($options["OnlineVisitor"] || $options["logact"]) {
-	require_once(CLASS_DIR . "visitors.class.php");
-	$visitors = new Visitor;
-}
-if ($options["OnlineVisitor"]) $visitors->updOnlineUser();
+($options['OnlineVisitor'] || $options['logact']) && $visitors->is_error != 0 ? html_error($visitors->ret_msg, 0) : '';
 
-if ($options["logact"]) {
-	if (!$visitors->is_latestVisitor()) $visitors->updLogVisitor('IN');
-}
+$options['OnlineVisitor'] ? $visitors->updOnlineUser() : '';
+
+$options['logact'] && !$visitors->is_latestVisitor() ? $visitors->updLogVisitor('IN') : '';
+
 ?>

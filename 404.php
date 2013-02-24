@@ -15,13 +15,11 @@ require_once './global.php';
 <head>
 <meta http-equiv="Content-Type"	content="text/html; charset=<?php echo $charSet;?>" />
 <meta name="robots" content="noindex, nofollow" />
-<link rel="shortcut icon" type="image/gif" href="<?php echo ROOT_URL.IMAGE_DIR.'ico_home.gif'.'?'.rand(11,9999);?>" />
-<link type="text/css" href="<?php print ROOT_URL.IMAGE_DIR;?>style_sujancok<?php print $options["csstype"];?>.css?<?php echo rand(1,9999);?>" rel="stylesheet" media="screen" />
+<link rel="shortcut icon" type="image/gif" href="<?php echo IMAGE_DIR.'ico_home.gif'.'?'.rand(11,9999);?>" />
+<link type="text/css" href="<?php print IMAGE_DIR;?>style_sujancok<?php print $options["csstype"];?>.css?<?php echo rand(1,9999);?>" rel="stylesheet" media="screen" />
 <title><?php echo ':: ' . $RL_VER . ' ::';?></title>
 </head><body>
-<div class="head_container"><center>
-<a href="javascript:;" class="tdheadolgo" title="Rapidleech"><span>Rapidleech36B</span></a>
-</center></div>
+<div class="head_container" align="center"><a href="javascript:;" class="tdheadolgo" title="Rapidleech36B"></a>&nbsp;</div>
 <div align="center"><h1>
 <?php echo $RL_VER;?>
 <br />

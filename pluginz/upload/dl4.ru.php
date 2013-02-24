@@ -31,7 +31,7 @@
 			is_page($upfiles);
 
 			$tmp=cut_str($upfiles,'["','"]');
-			if (!is_numeric($tmp)) html_error ('Error get finish url <br />'.$upfiles);
+			if (!is_numeric($tmp)) html_error ('Error get finish url <br>'.$upfiles);
 			$download_link=$ref.'file/view/'.$tmp;
 
 // sert 10.10.2008

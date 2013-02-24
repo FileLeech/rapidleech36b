@@ -33,8 +33,8 @@ class fileband_com extends DownloadClass {
             $post['method_free'] = 'Free Download';
             $page = $this->GetPage($link, 0, $post, $link);
         }
-        if (preg_match('@<p class="err">(.*)<br />@', $page, $match)) html_error($match[1]);
-        if (preg_match('@(\d+)<\/span>&nbsp;<b>seconds@', $page, $wait)) $this->CountDown($wait[1]);
+		is_present($page, cut_str($page, '<p class="err">', '<br>'));
+        if (preg_match('/(\d+)<\/span>&nbsp;<b>seconds/', $page, $wait)) $this->CountDown($wait[1]);
         if (strpos($page, "Enter code below:")) {
             if (preg_match('@http:\/\/fileband\.com\/captchas\/[^"]+@', $page, $cap)) $imglink = trim($cap[0]);
             $data = $this->DefaultParamArr($link);
