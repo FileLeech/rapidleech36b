@@ -193,7 +193,7 @@ $l['plugin_netl'] = "Netload.in Cookie Value";
 $l['plugin_hotfile'] = "Hotfile.com Cookie Value";
 $l['plugin_cookie'] = "Additional Cookie Value";
 $l['plugin_rs'] = "Rapidshare.com Cookie Value";
-$l['plugin_ul'] = "Uploaded.to Cookie Value";
+$l['plugin_ul'] = "Uploaded.net Cookie Value";
 $l['plugin_upl'] = "Uploading.com Cookie Value";
 $l['_autolog'] = "autologin=";
 $l['_cookie_user'] = "cookie_user=";

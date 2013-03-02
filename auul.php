@@ -54,7 +54,7 @@ function cleanResidue() {
 </head>
 <body>
 <div align="center" class="head_container">
-<a href="<?php echo $options['index_file']; ?>" class="tdheadolgo" title="Rapidleech"><span>Rapidleech36B</span></a>
+<a href="<?php echo $options['index_file']; ?>" class="tdheadolgo" title="Rapidleech"></a>
 </div>
 <br />
 <center>

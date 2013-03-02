@@ -7,7 +7,6 @@ if (!defined('RAPIDLEECH')) {
 /* Index Function */ {
 // THIS FILE CONTAINS GENERAL FUNCTION NEEDED
 // METHODS IN THIS FILE:
-//   create_hosts_file()
 //   login_check()
 //   is_present()
 //   is_notpresent()
@@ -76,37 +75,6 @@ if (!defined('RAPIDLEECH')) {
 //   ________()
 }
 
-function create_hosts_file($host_file = "hosts.php") {
-	global $L;
-	$fp = opendir(HOST_DIR . 'download/');
-	while (($file = readdir($fp)) !== false) {
-		if (substr($file, - 4) == ".inc") {
-			require_once (HOST_DIR . 'download/' . $file);
-		}
-	}
-	if (!is_array($host)) {
-		print $L->say['no_host'];
-	} else {
-		$fs = fopen(HOST_DIR . 'download/' . $host_file, "wb");
-		if (!$fs) {
-			print $L->say['cant_write_host'];
-		} else {
-			fwrite($fs, "<?php\r\n\$host = array(\r\n");
-			$i = 0;
-			foreach ($host as $site => $file) {
-				if ($i != (count($host) - 1)) {
-					fwrite($fs, "'" . $site . "' => '" . $file . "',\r\n");
-				} else {
-					fwrite($fs, "'" . $site . "' => '" . $file . "');\r\n?>");
-				}
-				$i++;
-			}
-			closedir($fp);
-			fclose($fs);
-		}
-	}
-}
-
 function login_check() {
 	global $options;
 	if ($options['login']) {
@@ -155,8 +123,7 @@ function insert_location($inputs, $action = 0) {
 		if ($action === 0) $action = $_SERVER['SCRIPT_NAME'];
 		$fname = 'r' . TIME_NOW . 'l';
 		echo "\n<form name='$fname' " . (!empty($action) ? "action='$action' " : '') . "method='POST'>\n";
-		foreach ($inputs as $name => $value)
-			echo "\t<input type='hidden' name='$name' value='$value' />\n";
+		foreach ($inputs as $name => $value) echo "\t<input type='hidden' name='$name' value='$value' />\n";
 		echo "</form>\n<script type='text/javascript'>void(document.$fname.submit());</script>\n</body>\n</html>";
 		flush();
 	}
@@ -249,7 +216,6 @@ function html_error($msg, $newwin = 1, $retry = 0) {
 		}
 		flush();
 		echo ('</div>');
-//		if ($onGoing) ongoingRemove();
 		echo ($nn . '</body></html>');
 		exit();
 	}

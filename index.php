@@ -201,13 +201,6 @@ if (empty($_GET ["filename"]) || empty($_GET ["host"]) || empty($_GET ["path"]))
 	check_referer();
 	echo('<div align="center">');
 
-	/* Deprecated of useless and unworth feature for some cases might fail this status.
-	  if ($options['MaxServerJob'] > 0) {
-	  if ($options['MaxServerJob'] <= ongoingGet()) {
-	  html_error($L->sprintf($L->say['maxjob_limited'], $options['MaxServerJob']));
-	  }
-	  } */
-
 	if ($options["limitbyIP"]) {
 		if ($ada_acc) {
 			$trheute = $visitors->heute + 1;
@@ -216,9 +209,6 @@ if (empty($_GET ["filename"]) || empty($_GET ["host"]) || empty($_GET ["path"]))
 			}
 		}
 	}
-
-	/* Deprecated of useless and unworth feature for some cases might fail this status.
-	  ongoingAdd(); */
 
 	do {
 		$_GET['filename'] = urldecode(trim($_GET['filename']));
@@ -294,9 +284,6 @@ if (empty($_GET ["filename"]) || empty($_GET ["host"]) || empty($_GET ["path"]))
 		}
 	} while ($redirectto && !$lastError);
 
-	/* Deprecated of useless and unworth feature for some cases might fail this status.
-	  ongoingRemove(); */
-
 	if ($lastError) {
 		html_error($lastError, 0);
 	} elseif ($file["bytesReceived"] == $file["bytesTotal"] || $file["size"] == "Unknown") {
@@ -337,16 +324,6 @@ if (empty($_GET ["filename"]) || empty($_GET ["host"]) || empty($_GET ["path"]))
 		if ($options['new_window']) {
 			print '<br /><a href="javascript:window.close();">' . $L->say['closewin'] . '</a>';
 		} else {
-			/* 			if ($options['pointboost'] > 0 && empty($_GET["idx"])) {
-			  // i'd rather not delete current downloaded file
-			  if(!defined("DOWNLOADED_FILE")){define('DOWNLOADED_FILE', DOWNLOAD_DIR.basename($file["file"]));}
-			  @write_file(DOWNLOADED_FILE, " ");
-			  if($numidx < $options["pointboost"]-1)
-			  {
-			  // generate reload form (link, secondcounterdown, auth, indexnumber)
-			  echo genReload($_GET["link"], 3, $auth, $numidx);
-			  }
-			  } */
 			$rnd = rand(11, 99);
 			// generate delete link
 			echo $L->sprintf($L->say['_del_link'], 'del.php?d=' . str_replace("=", "", rotN(base64_encode($file["date"] . ':' . '4puZ'), $rnd)) . "-" . $rnd, date("M-d, Y - H:i:s", $file["date"]));

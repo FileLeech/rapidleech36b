@@ -13,7 +13,7 @@ class uploading_com extends DownloadClass {
 			if (empty($this->cookie['SID'])) html_error('Error: Cookie [SID] not found!');
 		}
 		$this->link = $link;
-		if ((isset($_REQUEST['cookieuse']) && $_REQUEST["cookieuse"] == 'on' && preg_match('/remembered_user=([\w.]+);?/i', $_REQUEST['cookie']) !== false) || ($_REQUEST['premium_acc'] == 'on' && !empty($premium_acc['uploading_com']['cookie']))) {
+		if (($_REQUEST["upl_acc"] == "on" && (!empty($_GET["upl_cookie"]) || !empty($_GET["upl_hash"]))) || (isset($_REQUEST['cookieuse']) && $_REQUEST["cookieuse"] == 'on' && preg_match('/remembered_user=([\w.]+);?/i', $_REQUEST['cookie']) !== false) || ($_REQUEST['premium_acc'] == 'on' && !empty($premium_acc['uploading_com']['cookie']))) {
 			$this->changeMesg($L->say['_retrieving'] . '<br />Uploading.com Premium Download [Cookie]');
 			return $this->Login();
 		} elseif (($_REQUEST['premium_acc'] == 'on' && (($_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || (!empty($premium_acc['uploading_com']['user']) && !empty($premium_acc['uploading_com']['pass']))))) {
@@ -101,7 +101,9 @@ class uploading_com extends DownloadClass {
 
 	private function Login($captcha = false) {
 		global $premium_acc;
-		if ((isset($_REQUEST["cookieuse"]) && $_REQUEST["cookieuse"] == "on" && preg_match("/remembered_user\s*=\s*([\w|\%]+)\s*;?/i", $_REQUEST["cookie"], $c)) || ($_REQUEST["premium_acc"] == "on" && !empty($premium_acc["uploading_com"]["cookie"]))) {
+		if ($_REQUEST["upl_acc"] == "on" && (!empty($_GET["upl_cookie"]) || !empty($_GET["upl_hash"]))) {
+			$usecookie = (empty($_GET["upl_cookie"]) ? strrev(dcd(!empty($_GET["upl_hash"]))) : $_GET['upl_cookie']);
+		} elseif ((isset($_REQUEST["cookieuse"]) && $_REQUEST["cookieuse"] == "on" && preg_match("/remembered_user\s*=\s*([\w|\%]+)\s*;?/i", $_REQUEST["cookie"], $c)) || ($_REQUEST["premium_acc"] == "on" && !empty($premium_acc["uploading_com"]["cookie"]))) {
 			$usecookie = (empty($c[1]) ? !empty($premium_acc["uploading_com"]["cookie"]) : $c[1]);
 		} else $usecookie = false;
 		$posturl = 'http://uploading.com/';
@@ -158,7 +160,7 @@ class uploading_com extends DownloadClass {
 	private function Premium($password = false) {
 		$post_url = "http://uploading.com/files/get/?ajax";
 		if ($password == true) {
-			$post = array(); 
+			$post = array();
 			$post['action'] = $_POST['action'];
 			$post['code'] = $_POST['code'];
 			$post['pass'] = $_POST['password'];

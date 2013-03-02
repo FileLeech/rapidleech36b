@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('RAPIDLEECH')) {
 	require_once ('index.html');
 	exit;
@@ -8,16 +9,18 @@ class uploaded_net extends DownloadClass {
 
 	private $cookie, $page;
 	public $link;
+
 	public function Download($link) {
 		global $premium_acc;
-		
+
 		$link = str_replace(array('ul.to/folder/', 'ul.to/', 'uploaded.to/'), array('uploaded.net/folder/', 'uploaded.net/file/', 'uploaded.net/'), $link);
 		$this->link = $link;
 		if (!$_REQUEST['step']) {
 			$this->page = $this->GetPage($this->link);
 			if (preg_match_all('/href="([^\r\n"]+)" class="file"/', $this->page, $match, PREG_SET_ORDER)) {
 				$arr_link = array();
-				foreach ($match as $tmp) $arr_link[] = "http://uploaded.net/$tmp[1]";
+				foreach ($match as $tmp)
+					$arr_link[] = "http://uploaded.net/$tmp[1]";
 				$this->moveToAutoDownloader($arr_link);
 			}
 			is_present($this->page, 'doesn\'t contain files', 'The folder link doesn\'t contain any files!');
@@ -25,8 +28,12 @@ class uploaded_net extends DownloadClass {
 			is_present($this->page, 'This file was protected by a password against unauthorised downloads');
 			$this->cookie = GetCookiesArr($this->page);
 		}
-		if (($_REQUEST["cookieuse"] == "on" && preg_match("/login[\s\t]?=[\s\t]?([\w\%]+);?/i", $_REQUEST["cookie"], $c)) || ($_REQUEST["premium_acc"] == "on" && $premium_acc["uploaded_net"]["cookie"])) {
-			$loginc = (empty($c[1]) ? urldecode($premium_acc["uploaded_net"]["cookie"]) : urldecode($c[1]));
+		if (($_REQUEST["ul_acc"] == "on" && (!empty($_GET["ul_cookie"]) || !empty($_GET["ul_hash"]))) || ($_REQUEST["cookieuse"] == "on" && preg_match("/login[\s\t]?=[\s\t]?([\w\%]+);?/i", $_REQUEST["cookie"], $c)) || ($_REQUEST["premium_acc"] == "on" && $premium_acc["uploaded_net"]["cookie"])) {
+			if ($_REQUEST['ul_acc'] == 'on' && (!empty($_GET["ul_cookie"]) || !empty($_GET["ul_hash"]))) {
+				$loginc = (empty($_GET["ul_cookie"]) ? strrev(dcd(!empty($_GET["ul_hash"]))) : !empty($_GET["ul_cookie"]));
+			} else {
+				$loginc = (empty($c[1]) ? urldecode($premium_acc["uploaded_net"]["cookie"]) : urldecode($c[1]));
+			}
 			return $this->login($loginc);
 		} elseif ($_REQUEST['premium_acc'] == 'on' && (($_REQUEST['premium_user'] && $_REQUEST['premium_pass']) || ($premium_acc['uploaded_net']['user'] && $premium_acc['uploaded_net']['pass']))) {
 			return $this->login();
@@ -50,7 +57,7 @@ class uploaded_net extends DownloadClass {
 			$page = $this->GetPage($posturl . 'io/login', $this->cookie, $post, $posturl, 0, 1);
 			is_present($page, "Error[" . cut_str($page, 'err":"', '"')) . "]";
 			$this->cookie = GetCookiesArr($page, $this->cookie);
-		} elseif($loginc) {
+		} elseif ($loginc) {
 			if (strpos($loginc, '%')) $loginc = urldecode($loginc);
 			$this->cookie['login'] = urlencode($loginc);
 		}

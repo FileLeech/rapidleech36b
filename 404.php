@@ -19,7 +19,7 @@ require_once './global.php';
 <link type="text/css" href="<?php print IMAGE_DIR;?>style_sujancok<?php print $options["csstype"];?>.css?<?php echo rand(1,9999);?>" rel="stylesheet" media="screen" />
 <title><?php echo ':: ' . $RL_VER . ' ::';?></title>
 </head><body>
-<div class="head_container" align="center"><a href="javascript:;" class="tdheadolgo" title="Rapidleech36B"></a>&nbsp;</div>
+<div class="head_container" align="center"><a href="javascript:;" class="tdheadolgo" title="Rapidleech"></a>&nbsp;</div>
 <div align="center"><h1>
 <?php echo $RL_VER;?>
 <br />

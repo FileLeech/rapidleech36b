@@ -1,11 +1,11 @@
 <?php
-
 if (!defined('RAPIDLEECH')) {
 	require_once ("index.html");
 	exit();
 }
 
 class hotfile_com extends DownloadClass {
+
 	public function Download($link) {
 		global $premium_acc;
 
@@ -33,8 +33,10 @@ class hotfile_com extends DownloadClass {
 			unset($page);
 		}
 
-		if (($_REQUEST["cookieuse"] == "on" && preg_match("/auth\s?=\s?(\w{64})/i", $_REQUEST["cookie"], $c)) || ($_REQUEST["premium_acc"] == "on" && $premium_acc["hotfile_com"]["cookie"])) {
-			$cookie = (empty($c[1]) ? $premium_acc["hotfile_com"]["cookie"] : $c[1]);
+		if (($_REQUEST["hf_acc"] == "on" && (!empty($_GET["hf_cookie"]) || !empty($_GET["hf_hash"]))) || ($_REQUEST["cookieuse"] == "on" && preg_match("/auth\s?=\s?(\w{64})/i", $_REQUEST["cookie"], $c)) || ($_REQUEST["premium_acc"] == "on" && $premium_acc["hotfile_com"]["cookie"])) {
+			if (!empty($_GET["hf_cookie"])) $cookie = $_GET["hf_cookie"];
+			elseif (!empty($_GET["hf_hash"])) $cookie = strrev(dcd($_GET["hf_hash"]));
+			else $cookie = (empty($c[1]) ? $premium_acc["hotfile_com"]["cookie"] : $c[1]);
 			$this->DownloadPremium($link, $cookie);
 		} elseif (($_REQUEST["premium_acc"] == "on" && $_REQUEST["premium_user"] && $_REQUEST["premium_pass"]) ||
 			($_REQUEST["premium_acc"] == "on" && $premium_acc["hotfile_com"]["user"] && $premium_acc["hotfile_com"]["pass"])) {
@@ -43,6 +45,7 @@ class hotfile_com extends DownloadClass {
 			$this->DownloadFree($link);
 		}
 	}
+
 	private function DownloadFree($link) {
 		$page = $this->GetPage($link);
 		if ($_GET["step"] != "1") {
@@ -50,14 +53,14 @@ class hotfile_com extends DownloadClass {
 				html_error("Error getting timer.");
 			}
 			$t = $t[1];
-			$hl = ($t[1] > 0 ? $t[1]/1000 : 0);
+			$hl = ($t[1] > 0 ? $t[1] / 1000 : 0);
 
 			if ($hl > 0) {
 				$data = $this->DefaultParamArr($link);
 				$data['step'] = '2';
 				JSCountDown($hl, $data, 'You reached your hourly traffic limit');
 			} else {
-				insert_timer(($t[0]/1000)+1, "Waiting captcha/link timelock:");
+				insert_timer(($t[0] / 1000) + 1, "Waiting captcha/link timelock:");
 			}
 			$post['action'] = cut_str($page, "action value=", ">");
 			$post['tm'] = cut_str($page, "tm value=", ">");
@@ -86,7 +89,7 @@ class hotfile_com extends DownloadClass {
 			$cfound = (stristr($page, "api.recaptcha.net/challenge?k=") ? true : false);
 		}
 
-		if($_GET["step"] == "1" && !$lfound) {
+		if ($_GET["step"] == "1" && !$lfound) {
 			//Send captcha
 			$post['action'] = $_POST['action'];
 			$post['recaptcha_challenge_field'] = $_POST['challenge'];
@@ -117,12 +120,8 @@ class hotfile_com extends DownloadClass {
 			$capt_img = substr($page, strpos($page, "\r\n\r\n") + 4);
 			$imgfile = DOWNLOAD_DIR . "hotfile_captcha.jpg";
 
-			if (file_exists($imgfile)) {
-				unlink($imgfile);
-			}
-			if (! write_file($imgfile, $capt_img)) {
-				html_error("Error getting CAPTCHA image.", 0);
-			}
+			if (file_exists($imgfile)) unlink($imgfile);
+			if (!write_file($imgfile, $capt_img)) html_error("Error getting CAPTCHA image.", 0);
 
 			$this->EnterCaptcha($imgfile, $data, 20);
 			exit;
@@ -176,7 +175,7 @@ class hotfile_com extends DownloadClass {
 
 	private function login($authc = false) {
 		global $premium_acc;
-		
+
 		if (!$authc) {
 			$user = ($_REQUEST["premium_user"] ? $_REQUEST["premium_user"] : $premium_acc["hotfile_com"]["user"]);
 			$pass = ($_REQUEST["premium_pass"] ? $_REQUEST["premium_pass"] : $premium_acc["hotfile_com"]["pass"]);

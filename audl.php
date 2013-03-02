@@ -579,7 +579,7 @@ forceAudl();
 <td valign="top" class="backaudl">
 <a href="javascript:;" onclick="dopostback();" title="Back to Autodl" alt="Back to Autodl"><div id="left_audl"></div></a>
 </td>
-<td><textarea name="addlinks" id="addlinks" class="redtxtarea" style="width:640px; height:20px;" onfocus="if(this.value=='add more link here...'){this.value='';}this.style.height=100;" onblur="if(this.value==''){this.style.height=20; this.value='add more link here...'}"><?php echo $L->say['add_more']; ?></textarea></td>
+<td><textarea name="addlinks" id="addlinks" class="redtxtarea" style="width:640px; height:20px;" onfocus="if(this.value=='add more link here...'){this.value='';}this.style.height='100px';" onblur="if(this.value==''){this.style.height='20px'; this.value='add more link here...';}"><?php echo $L->say['add_more']; ?></textarea></td>
 <td valign="top"><input type="button" id="btnaddlinks" value="<?php echo $L->say['add_link']; ?> " onclick="javascript:addLinks('addlinks');" <?php echo (isset($_REQUEST["autochk_lnk"]) && $_REQUEST["autochk_lnk"] == "on" ? "disabled=true" : ""); ?> /></td>
 </tr>
 </table>

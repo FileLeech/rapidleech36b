@@ -157,8 +157,8 @@ if(isset($options['mip_enabled']) && $options['mip_enabled']){
 </tr>
 <tr id="usernpass" style="display: none;">
 <td align="center">
-<label><input type="text" name="iuser" value="" /><?php echo $L->say['_iuser'];?></label><br />
-<label><input type="text" name="ipass" value="" /><?php echo $L->say['_ipass'];?></label>
+<label><?php echo $L->say['_iuser'];?><input type="text" name="iuser" value="" /></label><br />
+<label><?php echo $L->say['_ipass'];?><input type="text" name="ipass" value="" /></label>
 </td>
 </tr>
 <tr>
