@@ -121,7 +121,7 @@ if ($showcpanel2) {
  * Now I'll split that into 5 kind of array, 4 for premium account(download), 1 for upload account.
  */
 // PREMIUM WITH USER & PASS
-$ar_pre_upass_acc = array( // User Pass
+$ar_pre_upass_acc = array(// User Pass
 	'4shared_com',
 	'animeground_com',
 	'bayfiles_com',
@@ -183,16 +183,16 @@ $ar_pre_upass_acc = array( // User Pass
 	'uploadstation_com',
 	'upstore_net',
 	'youtube_com',
-	);
+);
 // PREMIUM ACCOUNT COOKIE
 $ar_pre_cookie_acc = array(
 	'autologin' => 'depositfiles_com',
 	'auth' => 'hotfile_com',
 	'cookie_user' => 'netload_in',
-    'enc' => 'rapidshare_com',
+	'enc' => 'rapidshare_com',
 	'login' => 'uploaded_net',
 	'remembered_user' => 'uploading_com',
-	);
+);
 // PREMIUM ACCOUNT KEY
 $ar_pre_key_acc = array(
 	'fileflyer_com',
@@ -200,7 +200,7 @@ $ar_pre_key_acc = array(
 	'livefile_org',
 	'shareflare_net',
 	'vip-file_com',
-	);
+);
 // PREMIUM ACCOUNT MULTI (eg rapidshare.com which is useless now since they have
 // change their regulation for premium account bandwidth limit)
 // Maybe we can add new filehost if the plugin supported :D
@@ -216,54 +216,54 @@ $ar_up_acc = array(
 	'bulletupload_com',
 	'cramit_in',
 	'crocko_com',
-    'cyberlocker_ch',
+	'cyberlocker_ch',
 	'depositfiles_com',
 	'extabit_com',
 	'file4sharing_com',
 	'fileape_com',
-    'filecloud_io',
+	'filecloud_io',
 	'filedino_com',
 	'filefactory_com',
 	'filefat_com',
 	'filegaze_com',
 	'filejungle_com',
-    'filemates_com',
+	'filemates_com',
 	'filepost_com',
 	'fileserve_com',
 	'fileserving_com',
 	'filesflash_com',
-    'filesmonster_com',
+	'filesmonster_com',
 	'freakshare_com',
 	'gigasize_com',
 	'hellshare_com',
 	'hotfile_com',
 	'howfile_com',
-    'jumbofiles_com',
+	'jumbofiles_com',
 	'letitbit_net',
 	'luckyshare_net',
 	'maknyos_com',
 	'mediafire_com',
 	'megashare_com',
-    'megashares_com',
+	'megashares_com',
 	'movshare_net',
 	'netload_in',
 	'netuploaded_com',
 	'nowvideo_eu',
 	'oron_com',
-    'rapidshare_com',
+	'rapidshare_com',
 	'sendspace_com',
 	'share-online_biz',
 	'sharpfile_com',
 	'slingfile_com',
-    'speedshare_eu',
+	'speedshare_eu',
 	'speedyshare_com',
 	'turbobit_net',
 	'ugotfile_com',
 	'uploaded_net',
 	'uploading_com',
-    'uploadstation_com',
+	'uploadstation_com',
 	'youtube_com',
-	);
+);
 #=========END Glbl Array=========
 
 function view_perms($mode) {
@@ -305,7 +305,9 @@ function view_perms($mode) {
 	return $type . join("", $owner) . join("", $group) . join("", $world);
 }
 
-function array_trim(&$v) { $v = trim($v); }
+function array_trim(&$v) {
+	$v = trim($v);
+}
 
 function array_string(&$v) {
 	if (count($v) == 0 || empty($v)) return $v;
@@ -499,10 +501,10 @@ if ($task == 'editor') {
 $buffer_TEXT = '';
 if (!is_readable(FILECONFIG) or is_dir(FILECONFIG) || !is_readable(FILEACCOUNT) or is_dir(FILEACCOUNT)) {
 	foreach ($settingfile as $file) {
-		if (file_exists($file)) $buffer_TEXT .="<b>Permision denied (" . htmlspecialchars($file) . ")!</b>"; else $buffer_TEXT .='<b>' . $file . ' does not exists.</b><br />';
+		if (file_exists($file)) $buffer_TEXT .="<b>Permision denied (" . htmlspecialchars($file) . ")!</b>";
+		else $buffer_TEXT .='<b>' . $file . ' does not exists.</b><br />';
 	}
 	unset($file);
-	$buffer_TEXT .= "\r\n<hr width=\"800\">\r\n<small>" . VERSION . "</small>\r\n</div>\r\n</td></tr>\r\n</table>\r\n</center>\r\n</body>\r\n</html><br />";
 } else {
 	$close_config_page = false;
 	$styledisplay = ' style="display:none;"';
@@ -567,9 +569,9 @@ if (!is_readable(FILECONFIG) or is_dir(FILECONFIG) || !is_readable(FILEACCOUNT) 
 						$new_options[$k] = (isset($_POST['opt_' . $k]) && $_POST['opt_' . $k] ? true : false);
 					} elseif (is_numeric($options[$k])) {
 						/*
-							//Check Numeric Field, if invalid or blank, give its default value.
-							>> filterNumericFld($postname, $title, $defaultval) {}
-						   */
+						  //Check Numeric Field, if invalid or blank, give its default value.
+						  >> filterNumericFld($postname, $title, $defaultval) {}
+						 */
 						$_POST['opt_' . $k] = filterNumericFld('opt_' . $k, str_replace('_', ' ', $k), $options[$k]);
 						$new_options[$k] = (isset($_POST['opt_' . $k]) && $_POST['opt_' . $k] ? floor($_POST['opt_' . $k]) : 0);
 					} else {
@@ -742,7 +744,6 @@ if (!is_readable(FILECONFIG) or is_dir(FILECONFIG) || !is_readable(FILEACCOUNT) 
 									}
 								}
 							} //-- counting done
-
 							// we do list array vector here...
 							if (!$multiacc) { // single acc
 								$vector_sacc = explode(":", $arr_acc[0]["user"] . ":" . $arr_acc[0]["pass"]);
@@ -755,9 +756,7 @@ if (!is_readable(FILECONFIG) or is_dir(FILECONFIG) || !is_readable(FILEACCOUNT) 
 							} //--end list array vector
 
 							setcookie($v . '_premix', "", TIME_NOW - 3600, "/");
-
 						} //--end if multi premix
-
 					} else {
 						fieldfilter($v . '_premix', 'user_' . $v, 'pass_' . $v, $badpetik);
 					}
@@ -830,7 +829,6 @@ if (!is_readable(FILECONFIG) or is_dir(FILECONFIG) || !is_readable(FILEACCOUNT) 
 						$vektor .= "\r\n";
 						$_account .= $vektor . ");  //foobar - $v- multi; */\r\n";
 					}
-
 				} else {
 					$field = array();
 					$field[$v . '_premix'] = array($v, "user_$v", "pass_$v");
@@ -876,7 +874,7 @@ if (!is_readable(FILECONFIG) or is_dir(FILECONFIG) || !is_readable(FILEACCOUNT) 
 
 			$_account .= "?>";
 
-			if (isset($_POST['debug']) && $_POST['debug'] == 1) {
+			if ($_debug) {
 				$buffer_TEXT .= 'Debug Mode: <b class="a">ON</b><br />';
 				foreach ($settingfile as $s) {
 					$buffer_TEXT .= '<textarea name="edit_text" cols="122" rows="20" width="100%" readonly="readonly">' . ($s) . '</textarea><br />';
@@ -943,155 +941,163 @@ if (!is_readable(FILECONFIG) or is_dir(FILECONFIG) || !is_readable(FILEACCOUNT) 
 //			exit();
 		} // end xpanel dashboard
 	} // end post submit
-
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charSet; ?>"/>
-	<meta name="robots" content="noindex, nofollow"/>
-	<link rel="shortcut icon" type="image/gif" href="<?php echo IMAGE_DIR . 'ico_home.gif?' . rand(11, 9999); ?>"/>
-	<title>RL-CPanel :: <?php echo $RL_VER;?> ::</title>
-	<link type="text/css" href="<?php echo IMAGE_DIR; ?>style_sujancok<?php print $options["csstype"]; ?>.css?<?php echo rand(1, 9999); ?>" rel="stylesheet" media="screen"/>
-	<style type="text/css">
-		<!--
-		label:hover { text-decoration: underline overline; }
-		table { border-collapse: collapse; border: 0px solid #1E2637; }
-		th, td { padding: 0; }
-		-->
-	</style>
-	<script type="text/javascript" src="<?php echo STATIC_DIR; ?>jquery.min.js"></script>
-	<script type="text/javascript" src="<?php echo STATIC_DIR; ?>js.php?xpanel"></script>
-	<script type="text/javascript">
-		/* <![CDATA[ */
-		var timer, txplain, method, stRet, hdret;
-		var d = document, lastslash;
-		var dirpath = location.pathname;
-		lastslash = dirpath.lastIndexOf("/");
-		dirpath = dirpath.substring(0, lastslash + 1);
-		var hash = '<?php echo CLASS_DIR . 'ajax/hash.php';?>';
-		var imgpath = '<?php echo IMAGE_DIR;?>';
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charSet; ?>"/>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="shortcut icon" type="image/gif" href="<?php echo IMAGE_DIR . 'ico_home.gif?' . rand(11, 9999); ?>"/>
+<title>RL-CPanel :: <?php echo $RL_VER; ?> ::</title>
+<link type="text/css" href="<?php echo IMAGE_DIR; ?>style_sujancok<?php print $options["csstype"]; ?>.css?<?php echo rand(1, 9999); ?>" rel="stylesheet" media="screen"/>
+<style type="text/css">
+<!--
+label:hover { text-decoration: underline overline; }
+table { border-collapse: collapse; border: 0px solid #1E2637; }
+th, td { padding: 0; }
+-->
+</style>
+<script type="text/javascript" src="<?php echo STATIC_DIR; ?>jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo STATIC_DIR; ?>js.php?xpanel"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var timer, txplain, method, stRet, hdret;
+var d = document, lastslash;
+var dirpath = location.pathname;
+lastslash = dirpath.lastIndexOf("/");
+dirpath = dirpath.substring(0, lastslash + 1);
+var hash = '<?php echo CLASS_DIR . 'ajax/hash.php'; ?>';
+var imgpath = '<?php echo IMAGE_DIR; ?>';
 <?php
-				if (!isset($_POST['setupsave'])) {
+	if (!isset($_POST['setupsave'])) {
 ?>
-		var options = jQuery.parseJSON(<?php echo json_encode(json_encode($options));?>);
-		var general_checkbox = ['limitbyIP', 'downloadLimitbyIP', 'limitbytraffic', 'limited_edition', 'limited_area', 'limit_timework', 'limit_cpuload', 'forbidden_filetypes_block', 'new_window', 'mip_enabled', 'disable_action', 'premix_status', 'show_column_sfile_all', 'navi_left_all', 'forbid_all', 'showautoclose', 'mtn_showconfig', 'mtn_video_options', 'mtn_time'];
-		var forbid_checkbox = ['audl', 'auul', 'mtn', 'lynx'];
+var options = jQuery.parseJSON(<?php echo json_encode(json_encode($options)); ?>);
+var general_checkbox = ['limitbyIP', 'downloadLimitbyIP', 'limitbytraffic', 'limited_edition', 'limited_area', 'limit_timework', 'limit_cpuload', 'forbidden_filetypes_block', 'new_window', 'mip_enabled', 'disable_action', 'premix_status', 'show_column_sfile_all', 'navi_left_all', 'forbid_all', 'showautoclose', 'mtn_showconfig', 'mtn_video_options', 'mtn_time'];
+var forbid_checkbox = ['audl', 'auul', 'mtn', 'lynx'];
 
-		function load_current_config() {
-			// Default options value loaded
-			$.each(options, function(k, v){
-				if (!in_array(k, ['disableadvanceeditor', 'xpanel_filename', 'index_file', 'allowcpanel', 'list_allow_ip', 'CpuLoadFormat', 'passthru_allowed'])) {
-					if (jQuery.type(options[k]) === 'object') {
-						if (in_array(k, ['loginCp', 'users'])) {
-							var i = 0;
-							$.each(options[k], function(u, p){
-								if (k === 'loginCp') {
-									$('#newloginCp [name="usercp[]"]').eq(i).val(u);
-									$('#newloginCp [name="passcp[]"]').eq(i).val(p);
-								} else {
-									$('#loginrl [name="users[]"]').eq(i).val(u);
-									$('#loginrl [name="pass[]"]').eq(i).val(p);
-								}
-								i++;
-							});
+function load_current_config() {
+	// Default options value loaded
+	$.each(options, function(k, v) {
+		if (!in_array(k, ['disableadvanceeditor', 'xpanel_filename', 'index_file', 'allowcpanel', 'list_allow_ip', 'CpuLoadFormat', 'passthru_allowed'])) {
+			if (jQuery.type(options[k]) === 'object') {
+				if (in_array(k, ['loginCp', 'users'])) {
+					var i = 0;
+					$.each(options[k], function(u, p) {
+						if (k === 'loginCp') {
+							$('#newloginCp [name="usercp[]"]').eq(i).val(u);
+							$('#newloginCp [name="passcp[]"]').eq(i).val(p);
 						} else {
-							$.each(options[k], function(key, values){
-								if (jQuery.type(options[k][key]) === 'boolean') {
-									$('#opt_'+ k +'_'+ key +'').prop('checked', values ? true : false);
-								} else if(jQuery.type(options[k][key]) === 'number') {
-									$('#opt_'+ k +'_'+ key +'').val(Math.floor(values));
-								} else {
-									$('#opt_'+ k +'_'+ key +'').val(values);
-								}
-							});
+							$('#loginrl [name="users[]"]').eq(i).val(u);
+							$('#loginrl [name="pass[]"]').eq(i).val(p);
 						}
-					} else if(jQuery.type(options[k]) === 'array') {
-						$('#opt_'+ k +'').val(v);
-					} else if(jQuery.type(options[k]) === 'boolean') {
-						$('#opt_'+ k +'').prop('checked', v ? true : false);
-					} else if(jQuery.type(options[k]) === 'number') {
-						$('#opt_'+ k +'').val(Math.floor(v));
-					} else {
-						$('#opt_'+ k +'').val(v);
-					}
-				}
-			});
-
-			$('#opt_list_allow_ip').val('<?php echo (!empty($options['list_allow_ip']) ? $options['list_allow_ip'] : $visitors->userip);?>');
-			$('#opt_CpuLoadFormat').val('<?php echo (!function_exists('exec') && !function_exists('shell_exec') ? "percent" : "load");?>');
-			$('#opt_passthru_allowed').<?php echo (!function_exists('passthru') ? "prop('checked', false)" : "prop('checked', true)");?>;
-			$('#opt_limited_area').<?php echo (!file_exists(CLASS_DIR.'geoip.inc.php') || !file_exists(BINARY_DIR.'geoip/GeoIP.dat') ? "prop('disabled', true); $('#showlimitedarea .g').show()" : "prop('disabled', false); $('#showlimitedarea .g').hide()");?>;
-			$('#opt_disable_to_act_rar').<?php echo ((substr(PHP_OS, 0, 3) != "WIN" && @file_exists(BINARY_DIR . 'rar') && (function_exists('exec')||  function_exists('shell_exec'))) ? "prop('disabled', false); $('#rar .g').hide()" : "prop('disabled', true); $('#rar .g').show()");?>;
-			$('#opt_disable_to_act_unrar').<?php echo ((substr(PHP_OS, 0, 3) != "WIN" && @file_exists(BINARY_DIR . 'unrar') && (function_exists('exec')||  function_exists('shell_exec'))) ? "prop('disabled', false); $('#unrar .g').hide()" : "prop('disabled', true); $('#unrar .g').show()");?>;
-
-			$.each(general_checkbox, function(i, v){
-				var gid = str_replace('_', '', v).toLowerCase();
-				if (!in_array(v, ['show_column_sfile_all', 'navi_left_all', 'forbid_all'])) {
-					if (in_array(v, ['disable_action', 'forbidden_filetypes_block'])) {
-						$('#opt_'+ v +'').prop('checked') ? $('#' + gid +'list').hide() : $('#' + gid +'list').show();
-					} else if(v === 'showautoclose' || v.substr(0,3) === 'mtn') {
-						$('#opt_' + (v.substr(0,3) === 'mtn' ? v + '_enable': v) + '').prop('checked') ? $('#'+ gid +', #' + gid +'ket').show() : $('#'+ gid +', #'+ gid +'ket').hide();
-					} else {
-						$('#opt_'+ v +'').prop('checked') ? $('#'+ gid +'list').show() : $('#'+ gid +'list').hide();
-					}
-				}
-			});
-			$.each(forbid_checkbox, function(i, v){
-				if ($('#opt_forbid_'+ v +'').prop('checked')) {
-					v === 'lynx' ? $('#opt_deletelink_in_lynx').prop({disabled:true, checked:false}) : $('#'+ v +'configlist').hide();
-					$('#show'+ v +' .r').show();
+						i++;
+					});
 				} else {
-					v === 'lynx' ? $('#opt_deletelink_in_lynx').prop({disabled:false, checked:true}) : $('#'+ v +'configlist').show();
-					$('#show'+ v +' .r').hide();
+					$.each(options[k], function(key, values) {
+						if (jQuery.type(options[k][key]) === 'boolean') {
+							$('#opt_' + k + '_' + key + '').prop('checked', values ? true : false);
+						} else if (jQuery.type(options[k][key]) === 'number') {
+							$('#opt_' + k + '_' + key + '').val(Math.floor(values));
+						} else {
+							$('#opt_' + k + '_' + key + '').val(values);
+						}
+					});
 				}
-			});
-			if ($('#opt_navi_left_server_info').prop('checked')) {
-				$('#opt_cpuUsageNFO').prop('disabled', false);
-				$('#showcpuusagenfo .r').hide();
+			} else if (jQuery.type(options[k]) === 'array') {
+				$('#opt_' + k + '').val(v);
+			} else if (jQuery.type(options[k]) === 'boolean') {
+				$('#opt_' + k + '').prop('checked', v ? true : false);
+			} else if (jQuery.type(options[k]) === 'number') {
+				$('#opt_' + k + '').val(Math.floor(v));
 			} else {
-				$('#opt_cpuUsageNFO').prop({disabled: true, checked: false});
-				$('#showcpuusagenfo .r').show();
+				$('#opt_' + k + '').val(v);
 			}
 		}
+	});
 
-		$(document).ready(function () {
+	$('#opt_list_allow_ip').val('<?php echo (!empty($options['list_allow_ip']) ? $options['list_allow_ip'] : $visitors->userip); ?>');
+	$('#opt_CpuLoadFormat').val('<?php echo (!function_exists('exec') && !function_exists('shell_exec') ? "percent" : "load"); ?>');
+	$('#opt_passthru_allowed').<?php echo (!function_exists('passthru') ? "prop('checked', false)" : "prop('checked', true)"); ?>;
+	$('#opt_limited_area').<?php echo (!file_exists(CLASS_DIR . 'geoip.inc.php') || !file_exists(BINARY_DIR . 'geoip/GeoIP.dat') ? "prop('disabled', true); $('#showlimitedarea .g').show()" : "prop('disabled', false); $('#showlimitedarea .g').hide()"); ?>;
+	$('#opt_disable_to_act_rar').<?php echo ((substr(PHP_OS, 0, 3) != "WIN" && @file_exists(BINARY_DIR . 'rar') && (function_exists('exec') || function_exists('shell_exec'))) ? "prop('disabled', false); $('#rar .g').hide()" : "prop('disabled', true); $('#rar .g').show()"); ?>;
+	$('#opt_disable_to_act_unrar').<?php echo ((substr(PHP_OS, 0, 3) != "WIN" && @file_exists(BINARY_DIR . 'unrar') && (function_exists('exec') || function_exists('shell_exec'))) ? "prop('disabled', false); $('#unrar .g').hide()" : "prop('disabled', true); $('#unrar .g').show()"); ?>;
 
-			$.each(general_checkbox, function(i, v){
-				var gid = str_replace('_', '', v).toLowerCase();
-				$('#opt_' + (v.substr(0,3) === 'mtn' ? v + '_enable': v) + '').click(function(){
-				if (in_array(v, ['disable_action', 'show_column_sfile_all', 'navi_left_all', 'forbid_all'])) {
-					if ($(this).prop('checked')) { $('#'+ gid +'list :checkbox').each(function() { $(this).prop('checked', true); }); }
-					else { $('#'+ gid +'list :checkbox').prop('checked', in_array(v, ['disable_action', 'forbid_all']) ? false : true); }
-					if (v === 'forbid_all') {
-						$.each(forbid_checkbox, function(k, values) {
-							values === 'lynx' ? $('#opt_forbid_'+ values +'').prop('checked') ? $('#opt_deletelink_in_lynx').prop({disabled: true, checked: false}) : $('#opt_deletelink_in_lynx').prop({disabled: false, checked: true}) : $('#'+ values +'configlist').toggle();
-							$('#show'+ values +' .r').toggle();
-						});
-					}
-				} else if (v === 'showautoclose' || v.substr(0, 3) === 'mtn') { $('#'+ gid +', #'+ gid +'ket').toggle(); }
-				(v !== 'showautoclose' || v.substr(0, 3) !== 'mtn') ? $('#'+ gid +'list').toggle() : '';
-				});
-			});
-			$.each(forbid_checkbox, function (i, v) {
-				$('#opt_forbid_'+ v +'').click(function() {
-					v === 'lynx' ? $(this).prop('checked') ? $('#opt_deletelink_in_lynx').prop({disabled: true, checked: false}) : $('#opt_deletelink_in_lynx').prop({disabled: false, checked: true}) : $('#'+ v +'configlist').toggle();
-					$('#show'+ v +' .r').toggle();
-				});
-			});
-			$('#opt_navi_left_server_info').click(function () {
-				$(this).prop('checked') ? $('#opt_cpuUsageNFO').prop('disabled', false) : $('#opt_cpuUsageNFO').prop({disabled: true, checked: false});
-				$('#showcpuusagenfo .r').toggle();
-			});
+	$.each(general_checkbox, function(i, v) {
+		var gid = str_replace('_', '', v).toLowerCase();
+		if (!in_array(v, ['show_column_sfile_all', 'navi_left_all', 'forbid_all'])) {
+			if (in_array(v, ['disable_action', 'forbidden_filetypes_block'])) {
+				$('#opt_' + v + '').prop('checked') ? $('#' + gid + 'list').hide() : $('#' + gid + 'list').show();
+			} else if (v === 'showautoclose' || v.substr(0, 3) === 'mtn') {
+				$('#opt_' + (v.substr(0, 3) === 'mtn' ? v + '_enable' : v) + '').prop('checked') ? $('#' + gid + ', #' + gid + 'ket').show() : $('#' + gid + ', #' + gid + 'ket').hide();
+			} else {
+				$('#opt_' + v + '').prop('checked') ? $('#' + gid + 'list').show() : $('#' + gid + 'list').hide();
+			}
+		}
+	});
+	$.each(forbid_checkbox, function(i, v) {
+		if ($('#opt_forbid_' + v + '').prop('checked')) {
+			v === 'lynx' ? $('#opt_deletelink_in_lynx').prop({disabled: true, checked: false}) : $('#' + v + 'configlist').hide();
+			$('#show' + v + ' .r').show();
+		} else {
+			v === 'lynx' ? $('#opt_deletelink_in_lynx').prop({disabled: false, checked: true}) : $('#' + v + 'configlist').show();
+			$('#show' + v + ' .r').hide();
+		}
+	});
+	if ($('#opt_navi_left_server_info').prop('checked')) {
+		$('#opt_cpuUsageNFO').prop('disabled', false);
+		$('#showcpuusagenfo .r').hide();
+	} else {
+		$('#opt_cpuUsageNFO').prop({disabled: true, checked: false});
+		$('#showcpuusagenfo .r').show();
+	}
+}
 
-			load_current_config();
-		});
-<?php
+$(document).ready(function() {
+
+	$.each(general_checkbox, function(i, v) {
+		var gid = str_replace('_', '', v).toLowerCase();
+		$('#opt_' + (v.substr(0, 3) === 'mtn' ? v + '_enable' : v) + '').click(function() {
+			if (in_array(v, ['disable_action', 'show_column_sfile_all', 'navi_left_all', 'forbid_all'])) {
+				if ($(this).prop('checked')) {
+					$('#' + gid + 'list :checkbox').each(function() {
+						$(this).prop('checked', true);
+					});
 				}
+				else {
+					$('#' + gid + 'list :checkbox').prop('checked', in_array(v, ['disable_action', 'forbid_all']) ? false : true);
+				}
+				if (v === 'forbid_all') {
+					$.each(forbid_checkbox, function(k, values) {
+						values === 'lynx' ? $('#opt_forbid_' + values + '').prop('checked') ? $('#opt_deletelink_in_lynx').prop({disabled: true, checked: false}) : $('#opt_deletelink_in_lynx').prop({disabled: false, checked: true}) : $('#' + values + 'configlist').toggle();
+						$('#show' + values + ' .r').toggle();
+					});
+				}
+			} else if (v === 'showautoclose' || v.substr(0, 3) === 'mtn') {
+				$('#' + gid + ', #' + gid + 'ket').toggle();
+			}
+			(v !== 'showautoclose' || v.substr(0, 3) !== 'mtn') ? $('#' + gid + 'list').toggle() : '';
+		});
+	});
+	$.each(forbid_checkbox, function(i, v) {
+		$('#opt_forbid_' + v + '').click(function() {
+			v === 'lynx' ? $(this).prop('checked') ? $('#opt_deletelink_in_lynx').prop({disabled: true, checked: false}) : $('#opt_deletelink_in_lynx').prop({disabled: false, checked: true}) : $('#' + v + 'configlist').toggle();
+			$('#show' + v + ' .r').toggle();
+		});
+	});
+	$('#opt_navi_left_server_info').click(function() {
+		$(this).prop('checked') ? $('#opt_cpuUsageNFO').prop('disabled', false) : $('#opt_cpuUsageNFO').prop({disabled: true, checked: false});
+		$('#showcpuusagenfo .r').toggle();
+	});
+
+	load_current_config();
+});
+<?php
+	}
 ?>
-		/* ]]> */
-	</script>
-	<script type="text/javascript" src="<?php echo STATIC_DIR; ?>rxpanel.js"></script>
-	<script type="text/javascript" src="<?php echo STATIC_DIR; ?>jscolor/jscolor.js"></script>
+/* ]]> */
+</script>
+<script type="text/javascript" src="<?php echo STATIC_DIR; ?>rxpanel.js"></script>
+<script type="text/javascript" src="<?php echo STATIC_DIR; ?>jscolor/jscolor.js"></script>
 </head>
 <body>
 <div class="head_container" align="center"><a href="javascript:;" class="tdheadolgo" title="Rapidleech"></a></div>
@@ -1107,7 +1113,7 @@ if (!is_readable(FILECONFIG) or is_dir(FILECONFIG) || !is_readable(FILEACCOUNT) 
 }// end config file exist
 ?>
 <hr width="800%"/>
-<small><?php echo VERSION;?></small>
+<small><?php echo VERSION; ?></small>
 </div>
 </td>
 </tr>
