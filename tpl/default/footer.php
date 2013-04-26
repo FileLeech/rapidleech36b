@@ -24,11 +24,13 @@ echo "<div style='padding-left:5px;'><small>".($server['property'])."<br />".$L-
 ?>
 </div>
 <script type="text/javascript">
- var inner_left = document.getElementById('preleft_nfo').innerHTML;
- document.getElementById('left_NFO').innerHTML = inner_left;
- <?php if($options["cpuUsageNFO"] && isset($srvload)){?>
+/* <![CDATA[ */
+var inner_left = d.getElementById('preleft_nfo').innerHTML;
+document.getElementById('left_NFO').innerHTML = inner_left;
+ <?php if($options['limit_cpuload'] && isset($srvload)){?>
  setTimeout("document.getElementById('srvload').style.display='none'", 2500);
  <?php }?>
+/* ]]> */
 </script>
 <?php if(file_exists(STATIC_DIR."sorttable.js")){
 ?>

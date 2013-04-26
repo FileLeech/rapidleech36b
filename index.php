@@ -16,7 +16,6 @@ define('VERSION', '<small class="footer3"><span>[ olc | ccpb | kaskus ]</span><b
 //************************
 // MAIN ...
 //************************
-
 $_REQUEST['premium_acc'] = $_POST['premium_acc'] = isset($_REQUEST['premium_acc']) && $_REQUEST['premium_acc'] == 'on' ? 'on' : false;
 $_REQUEST['df_acc'] = $_POST['df_acc'] = isset($_REQUEST['df_acc']) && $_REQUEST['df_acc'] == 'on' ? 'on' : false;
 $_REQUEST['hf_acc'] = $_POST['hf_acc'] = isset($_REQUEST['hf_acc']) && $_REQUEST['hf_acc'] == 'on' ? 'on' : false;
@@ -258,8 +257,8 @@ if (empty($_GET ["filename"]) || empty($_GET ["host"]) || empty($_GET ["path"]))
 			$file = geturl($_GET['host'], defport($url), $_GET['path'], $_GET['referer'], $_GET['cookie'], $_GET['post'], $pathWithName, $_GET['proxy'], $pauth, $auth, $url['scheme']);
 		}
 
-		if ($options['redir'] && $lastError && strpos($lastError, $L->say['_error'] . " " . $L->say['_redirect_to'] . " [")) {
-			$redirectto = trim(cut_str($lastError, $L->say['_error'] . " " . $L->say['_redirect_to'] . " [", "]"));
+		if ($options['redir'] && $lastError && strpos($lastError, substr($L->say['_error_redirectto'], 0, strpos($L->say['_error_redirectto'], '{1}'))) !== false) {
+			$redirectto = trim(cut_str($lastError, substr($L->say['_error_redirectto'], 0, strpos($L->say['_error_redirectto'], '{1}')), ']'));
 			print $L->say['_redirecting_to'] . " <b>$redirectto</b> ... <br />$nn";
 			$_GET['referer'] = urlencode($_GET['link']);
 			if (strpos($redirectto, '://') === false) { // If redirect doesn't have the host

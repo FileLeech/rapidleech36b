@@ -258,7 +258,6 @@ $l['_back'] = "Kembali";
 $l['incorrect_userpass'] = "Kesalahan pada username/password.";
 $l['back_main'] = "Kembali ke main";
 $l['_error'] = "Kesalahan!";
-$l['_redirect_to'] = "sedang teralihkan ke";
 $l['_redirecting_to'] = "Mengalihkan ke:";
 $l['_filesize'] = "File <b>{1}</b>, Size <b>{2}</b>..."; // {1}=file {2}=size
 $l['_filesaved'] = "File <b>{1}</b> (<b>{2}</b>) Tersimpan!<br />Time: <b>{3} detik(s)</b> | Kecepatan Rata-rata: <b>{4} KB/s</b><br />"; // {1}=file link {2}=filesize {3}=time {4}=speed

@@ -59,7 +59,7 @@ class freakshare_com extends DownloadClass {
 				if ($wait > 70) {
 					$data = array_merge($this->DefaultParamArr($this->link, $this->cookie), $match);
 					$data['step'] = 'countdown';
-					JSCountDown($wait, $data);
+					$this->JSCountDown($wait, $data);
 				} else {
 					$this->CountDown($wait);
 					$post = array();

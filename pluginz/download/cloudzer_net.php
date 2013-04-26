@@ -22,6 +22,35 @@ class cloudzer_net extends DownloadClass {
 			return $this->Free();
 		}
 	}
+
+	private function Premium() {
+		$cookie = $this->login();
+		$page = $this->GetPage($this->link, $cookie);
+		if (!preg_match('/https?:\/\/.+\.cloudzer\.net\/dl\/[^\r\n\s\t\'"]+/', $page, $dl)) html_error('Error[Download Link PREMIUM not found!]');
+		$dlink = trim($dl[0]);
+		$this->RedirectDownload($dlink, "cloudzer", $cookie, 0, $this->link);
+	}
+
+	private function login() {
+		global $premium_acc;
+
+		$user = ($_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["cloudzer_net"] ["user"]);
+		$pass = ($_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["cloudzer_net"] ["pass"]);
+		if (empty($user) || empty($pass)) html_error("Login failed, $user [user] or $pass [password] is empty!");
+
+		$posturl = 'http://cloudzer.net/';
+		$post['id'] = $user;
+		$post['pw'] = $pass;
+		$page = $this->GetPage($posturl.'io/login', $this->cookie, $post, $posturl, 0, 1);
+		is_present($page, 'User and password do not match!');
+		$cookie = GetCookiesArr($page, $this->cookie);
+
+		//check account
+		$page = $this->GetPage($posturl.'me', $cookie, 0, $posturl);
+		is_present($page, '>Free<', 'Account Free!');
+		return $cookie;
+
+	}
 	
 	private function Free() {
 		
@@ -98,5 +127,6 @@ class cloudzer_net extends DownloadClass {
 
 /*
  * Rename uploaded.net into cloudzer.net since most of the template is the same by Tony Fauzi Wihana/Ruud v.Tony 21-01-2013 (must edit hosts.php first to work with short link)
+ * Updated 27-03-2013 to support premium by Tony Fauzi Wihana/Ruud v.Tony
  */
 ?>

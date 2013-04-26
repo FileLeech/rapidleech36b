@@ -7,9 +7,10 @@ if (!defined('RAPIDLEECH')) {
 if (!@file_exists(CONFIG_DIR . 'config.php')) {
 	define('DEFAULT_CONFIG_FILE', CONFIG_DIR . 'config.default.php');
 	require_once DEFAULT_CONFIG_FILE;
+	require_once(CLASS_DIR . 'other.php');
 
-	define('TEMPLATE_DIR', 'tpl/' . $options['template_used'] . '/');
-	define('IMAGE_DIR', TEMPLATE_DIR . 'skin/' . $options["csstype"] . '/');
+	define('TEMPLATE_DIR', 'tpl/' . $default_options['template_used'] . '/');
+	define('IMAGE_DIR', TEMPLATE_DIR . 'skin/' . $default_options["csstype"] . '/');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -17,6 +18,56 @@ if (!@file_exists(CONFIG_DIR . 'config.php')) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Rx08 &rsaquo; Rapidleech - Installation</title>
 <link rel="stylesheet" href="<?php echo CONFIG_DIR; ?>css/setup.css" type="text/css" />
+<?php
+if (!isset($_POST['step']) && !isset($_POST['submit'])) {
+  function js_special_chars($t) {
+    return str_replace(array('\\', "'", '"', '&', "\n", "\r", "\t", chr(8), chr(12)), array("\\", "\\'", "\\\"", "\&", '\\n', "\\r", "\\t", "\\b", "\\f"), $t);
+  }
+?>
+<script type="text/javascript">
+/* <![CDATA[ */
+var d = document;
+
+function load_default() {
+<?php
+foreach ($default_options as $k => $v) {
+	if (in_array($k, array('disableadvanceeditor', 'xpanel_filename', 'index_file', 'allowcpanel', 'loginCp'))) {
+		if (is_array($default_options[$k])) {
+			foreach ($default_options[$k] as $ucp => $pcp) {
+				$ucp = js_special_chars($ucp); $pcp = js_special_chars($pcp);
+				echo "\td.getElementById('usercp').value ='{$ucp}';\r\n";
+				echo "\td.getElementById('passcp').value ='{$pcp}';\r\n";
+			}
+		} elseif(is_bool($default_options[$k])) {
+			echo "\td.getElementById('{$k}').".($v ? "setAttribute('checked','checked')" : "removeAttribute('checked')").";\r\n";
+		} else {
+			$v = js_special_chars($v);
+			echo "\td.getElementById('{$k}').value = '{$v}';\r\n";
+		}
+	}
+}
+?>
+	if (d.getElementById('allowcpanel').checked) {
+		d.getElementById('loginCp_form').style.display = 'block';
+	} else {
+		d.getElementById('loginCp_form').style.display = 'none';
+	}
+}
+d.addEventListener('DOMContentLoaded',function(){
+	d.getElementById('continue').removeAttribute('disabled');
+	d.getElementById('continue').onclick = function() { d.setup_form.submit();}
+	d.getElementById('allowcpanel').onclick = function() {
+		var displ = this.checked ? 'block':'none';
+		d.getElementById('loginCp_form').style.display = displ;
+	}
+
+	load_default();
+});
+/* ]]> */
+</script>
+<?php
+}
+?>
 </head>
 <body class="install-body">
 <div class="container">
@@ -29,12 +80,45 @@ if (!@file_exists(CONFIG_DIR . 'config.php')) {
 		echo ":: POST; Niatna mo ada form utk user customize default primary config. lagi dibuat... :p";
 		echo '<br /><br />';
 		echo '<p>Saving config file ...</p>';
-		$target_conf_file = CONFIG_DIR . 'config.php';
-		$ret_copy = copy(DEFAULT_CONFIG_FILE, $target_conf_file);
-		if ($ret_copy) @chmod($target_conf_file, 0666);
+
+		$options = array();
+		foreach ($default_options as $k => $v) {
+			if (!array_key_exists($k, $options)) {
+				$options[$k] = $v;
+			}
+			if (in_array($k, array('disableadvanceeditor', 'xpanel_filename', 'index_file', 'allowcpanel'))) {
+				if (is_bool($default_options[$k])) {
+					$options[$k] = (isset($_POST[$k]) && $_POST[$k] ? true : false);
+				} else {
+					$options[$k] = (isset($_POST[$k]) && $_POST[$k] ? stripslashes($_POST[$k]) : '');
+				}
+			} else {
+				$options[$k] = $v;
+			}
+		}
+		$options['loginCp'] = array();
+		if (isset($_POST['usercp']) && isset($_POST['passcp']) && count($_POST['usercp']) > 0 && count($_POST['usercp']) == count($_POST['passcp'])) {
+			foreach ($_POST['usercp'] as $k => $u) {
+				$u = stripslashes($u); $p = stripslashes($_POST['passcp'][$k]);
+				if ($u == '' || $p == '') { $u = $p = 'admin'; }
+				$options['loginCp'][$u] = $p;
+			}
+		}
+		ob_start(); var_export($options); $opt = ob_get_contents(); ob_end_clean();
+		$opt = (strpos($opt, "\r\n") === false ? str_replace(array("\r", "\n"), "\r\n", $opt) : $opt);
+		$opt = "<?php\r\n if (!defined('RAPIDLEECH')) {\r\n\trequire_once('index.html');\r\n\texit;\r\n}\r\n\r\n\$options = " .
+				$opt . "; \r\n\r\nrequire_once('accounts.php');\r\n\r\n" .
+				"# DEFINE writable dir OR files\r\ndefine('LOG_DIR', CONFIG_DIR . 'logfile/');\r\ndefine('FILES_LST', LOG_DIR . 'Rx08_2208081410_f1L3Z.lst');\r\n" .
+				"define('IP_L33CH_L0G', LOG_DIR . 'Rx08_2208081410_IP_L33CH_L0G.lst');\r\ndefine('VISITOR_LST', LOG_DIR . 'Rx08_2208081410_v1zit0r.lst');\r\n" .
+				"define('TRAFFIC_LST', LOG_DIR . 'Rx08_2208081410_tR4fic.txt');\r\ndefine('LOG_PHP', LOG_DIR . 'Rx08_2208081410_d4Mn.log.php');\r\n" .
+				"define('LASTLOG_LST', LOG_DIR . 'Rx08_2208081410_d4Mn_Last.txt');\r\ndefine('MYUPLOAD_LST', LOG_DIR . 'myuploads.txt');\r\n?>";
+		if (!@write_file(CONFIG_DIR . "config.php", $opt, 1)) {
+			echo '<p>It was not possible to write the configuration<br />Set permissions of "configs" folder to 0777 and try again</p>';
+		}
+		if ($opt) @chmod(CONFIG_DIR . "config.php", 0666);
 		sleep(1);
 
-		if ($ret_copy) {
+		if ($opt) {
 			echo '<p>Config file saved.';
 			echo '<center><input type="submit" onclick="location.href=\'' . $options['index_file'] . '\';" value="Let&#8217;s rock n&#8217; roll!" class="button"/></center></p>';
 		} else {
@@ -118,12 +202,24 @@ if (!@file_exists(CONFIG_DIR . 'config.php')) {
 </div>
 </div>
 <p>If for any reason this Installation doesn't work, You can delete <code>config.php</code> to see this page again. You may also simply open <code>config.default.php</code> in a text editor, set it up with your need, and save it as <code>config.php</code>.</p>
-<div style="text-align:center">
-<form action="<?php echo $options["index_file"]; ?>" method="post">
+<form action="<?php echo $default_options["index_file"];?>" name='setup_form' method="post">
+<table style="width: 100%;" column="2">
+<tr><td style="text-align: left;"><input type="checkbox" id="disableadvanceeditor" name="disableadvanceeditor" value="1" />&nbsp;Disable Advance Editor</td><td><b>False</b> for security reason, so you can set xpanel access manualy</td></tr>
+<tr><td style="text-align: left;"><div style="padding-left: 5px;"><input type="text" id="xpanel_filename" name="xpanel_filename" size="10" value="" />&nbsp;Xpanel Filename</div></td><td>You need to allow this file in your htaccess if needed</td></tr>
+<tr><td style="text-align: left;"><div style="padding-left: 5px;"><input type="text" id="index_file" name="index_file" size="10" value="" />&nbsp;Index Filename</div></td><td>Set index filename, incase you have a different name instead of index.php</td></tr>
+<tr><td style="text-align: left;"><input type="checkbox" id="allowcpanel" name="allowcpanel" value="1" />&nbsp;Allow Cpanel</td><td><b>WARNING</b> set this to FALSE will Disable access to xpanel.</td></tr>
+<table style="text-align: left; width: 300px;" id="loginCp_form">
+<tr><td>Admin Name</td><td><input type="text" id="usercp" name="usercp[]" size="25" value="" /></td></tr>
+<tr><td>Admin Pass</td><td><input type="password" id="passcp" name="passcp[]" size="25" value="" /></td></tr>
+</table>
+</table>
+<tr><td>
+<div style ="text-align: center;">
 <input type="hidden" name="step" value="1" />
-<input type="submit" value="Let&#8217;s go!" class="button"/>
-</form>
+<input type="submit" id="continue" value="Let&#8217;s go!" class="button" disabled="disabled" />
 </div>
+</td></tr>
+</form>
 <?php
 	}
 ?>

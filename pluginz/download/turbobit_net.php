@@ -59,7 +59,7 @@ class turbobit_net extends DownloadClass {
 				if (!preg_match('@\W(?:min)?Limit[\s\t]*:[\s\t]*([\d\s\t\r\n\+\-\*/\(\)]+)[\s\t]*[\,\;]@i', $page, $count)) html_error('Countdown not found.');
 				$data = $this->DefaultParamArr($this->link, encrypt(CookiesToStr($this->cookie)));
 				$data['step'] = '2';
-				JSCountDown($count[1], $data);
+				$this->JSCountDown($count[1], $data);
 				break;
 			}
 			case '2': { // Download
@@ -79,7 +79,7 @@ class turbobit_net extends DownloadClass {
 
 				if (preg_match('@\W(?:min)?Limit[\s\t]*:[\s\t]*([\d\s\t\r\n\+\-\*/\(\)]+)[\s\t]*[\,\;]@i', $page, $count)) {
 					$data = $this->DefaultParamArr($this->link, encrypt(CookiesToStr($this->cookie)));
-					JSCountDown($count[1], $data, 'FreeDL limit reached');
+					$this->JSCountDown($count[1], $data, 'FreeDL limit reached');
 				}
 
 				if (!preg_match('@(https?://[^/\r\n\t\s\'\"<>]+)?/captcha/[^\r\n\t\s\'\"<>]+@i', $page, $imgurl)) html_error('Error: CAPTCHA not found.');
@@ -233,7 +233,7 @@ class turbobit_net extends DownloadClass {
 	}
 
 	private function CookieLogin($user, $pass, $filename = 'turbobit_dl.php') {
-		global $options;
+		global $secretkey;
 		if (empty($user) || empty($pass)) html_error('Login Failed: User or Password is empty.');
 
 		$filename = DOWNLOAD_DIR . basename($filename);
@@ -245,8 +245,8 @@ class turbobit_net extends DownloadClass {
 
 		$hash = hash('crc32b', $user.':'.$pass);
 		if (array_key_exists($hash, $savedcookies)) {
-			$_secretkey = $options['secretkey'];
-			$options['secretkey'] = sha1($user.':'.$pass);
+			$_secretkey = $secretkey;
+			$secretkey = sha1($user.':'.$pass);
 			$this->cookie = (decrypt(urldecode($savedcookies[$hash]['enc'])) == 'OK') ? $this->IWillNameItLater($savedcookies[$hash]['cookie']) : '';
 			$secretkey = $_secretkey;
 			if (empty($this->cookie) || (is_array($this->cookie) && count($this->cookie) < 1)) return $this->Login($user, $pass);
@@ -261,7 +261,7 @@ class turbobit_net extends DownloadClass {
 	}
 
 	private function SaveCookies($user, $pass, $filename = 'turbobit_dl.php') {
-		global $options;
+		global $secretkey;
 		$maxdays = 7; // Max days to keep cookies saved
 		$filename = DOWNLOAD_DIR . basename($filename);
 		if (file_exists($filename)) {
@@ -273,10 +273,10 @@ class turbobit_net extends DownloadClass {
 			foreach ($savedcookies as $k => $v) if (time() - $v['time'] >= ($maxdays * 24 * 60 * 60)) unset($savedcookies[$k]);
 		} else $savedcookies = array();
 		$hash = hash('crc32b', $user.':'.$pass);
-		$_secretkey = $options['secretkey'];
-		$options['secretkey'] = sha1($user.':'.$pass);
+		$_secretkey = $secretkey;
+		$secretkey = sha1($user.':'.$pass);
 		$savedcookies[$hash] = array('time' => time(), 'enc' => urlencode(encrypt('OK')), 'cookie' => $this->IWillNameItLater($this->cookie, false));
-		$options['secretkey'] = $_secretkey;
+		$secretkey = $_secretkey;
 
 		file_put_contents($filename, "<?php exit(); ?>\r\n" . serialize($savedcookies), LOCK_EX);
 	}

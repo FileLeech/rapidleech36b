@@ -247,7 +247,7 @@ class putlocker_com extends DownloadClass {
 	}
 
 	private function CookieLogin($user, $pass, $filename = 'putlocker_dl.php') {
-		global $options;
+		global $secretkey;
 		if (empty($user) || empty($pass)) html_error('Login Failed: User or Password is empty.');
 
 		$filename = DOWNLOAD_DIR . basename($filename);
@@ -259,10 +259,10 @@ class putlocker_com extends DownloadClass {
 
 		$hash = hash('crc32b', $user.':'.$pass);
 		if (array_key_exists($hash, $savedcookies)) {
-			$_secretkey = $options['secretkey'];
-			$options['secretkey'] = sha1($user.':'.$pass);
+			$_secretkey = $secretkey;
+			$secretkey = sha1($user.':'.$pass);
 			$this->cookie = (decrypt(urldecode($savedcookies[$hash]['enc'])) == 'OK') ? $this->IWillNameItLater($savedcookies[$hash]['cookie']) : '';
-			$options['secretkey'] = $_secretkey;
+			$secretkey = $_secretkey;
 			if (empty($this->cookie) || (is_array($this->cookie) && count($this->cookie) < 1)) return $this->Login($user, $pass);
 
 			$page = $this->GetPage('http://www.putlocker.com/', $this->cookie);
@@ -275,7 +275,7 @@ class putlocker_com extends DownloadClass {
 	}
 
 	private function SaveCookies($user, $pass, $filename = 'putlocker_dl.php') {
-		global $options;
+		global $secretkey;
 		$maxdays = 7; // Max days to keep cookies saved
 		$filename = DOWNLOAD_DIR . basename($filename);
 		if (file_exists($filename)) {
@@ -287,10 +287,10 @@ class putlocker_com extends DownloadClass {
 			foreach ($savedcookies as $k => $v) if (time() - $v['time'] >= ($maxdays * 24 * 60 * 60)) unset($savedcookies[$k]);
 		} else $savedcookies = array();
 		$hash = hash('crc32b', $user.':'.$pass);
-		$_secretkey = $options['secretkey'];
-		$options['secretkey'] = sha1($user.':'.$pass);
+		$_secretkey = $secretkey;
+		$secretkey = sha1($user.':'.$pass);
 		$savedcookies[$hash] = array('time' => time(), 'enc' => urlencode(encrypt('OK')), 'cookie' => $this->IWillNameItLater($this->cookie, false));
-		$options['secretkey'] = $_secretkey;
+		$secretkey = $_secretkey;
 
 		file_put_contents($filename, "<?php exit(); ?>\r\n" . serialize($savedcookies), LOCK_EX);
 	}

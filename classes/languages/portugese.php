@@ -235,7 +235,6 @@ $l['prep_dl'] = "...Preparando";
 $l['leeching'] = "Leechando..";
 $l['back_main'] = "Voltar para o iníncio";
 $l['_error'] = "Erro!";
-$l['_redirect_to'] = "foi redirecionado para";
 $l['_redirecting_to'] = "Redirecionando para:";
 $l['_filesaved'] = "File <b>{1}</b> (<b>{2}</b>) Salvado!<br />Time: <b>{3} second(s)</b> | Velocidade: <b>{4} KB/s</b><br />"; // {1}=file link {2}=filesize {3}=time {4}=speed
 $l['_del_link'] = "<p><small>Link para deletar: <a href=\"{1}\"><b>Deletar</b></a> | File Created: <b>{2}</b></small></p>"; // {1}=del link {2}=filcreated
@@ -465,7 +464,7 @@ $l['_term'] = "+Termo";
 $l['_b64link'] = "B64Link";
 $l['_deletelink'] = "Deletar link";
 $l['_genlink'] = "Gerar Link";
-//del.php; 
+//del.php;
 $l['_rsure'] = "Você tem certeza que deseja";
 $l['_todelete'] = "deleletar este arquivo";
 $l['_sucesdelete'] = "deletado com sucesso!";

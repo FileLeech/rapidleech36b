@@ -53,7 +53,7 @@ function rar() {
                 <select name="rar_opts[comp_lvl]">
                   <option value="0" selected="selected"><?php echo $L->say['_store']; ?></option>
 <?php
-      if (!$options['disable_archive_compression']) {
+      if (!$options['disable_to']['act_archive_compression']) {
 ?>
                   <option value="1"><?php echo $L->say['_fastest']; ?></option>
                   <option value="2"><?php echo $L->say['_fast']; ?></option>
@@ -218,7 +218,7 @@ function rar_st(elementid, st){
   require_once(CLASS_DIR."rar.php");
 
   if ($options['disable_to']['act_del']) { $_GET['rar_opts']['delete'] = 0; }
-  if ($options['disable_archive_compression']) { $_GET['rar_opts']['comp_lvl'] = 0; }
+  if ($options['disable_to']['act_archive_compression']) { $_GET['rar_opts']['comp_lvl'] = 0; }
 
   if ($_GET['rar_opts']['separated']) { $am = count($_GET['rar_opts']['filestorar']); }
   else { $am = 1; }

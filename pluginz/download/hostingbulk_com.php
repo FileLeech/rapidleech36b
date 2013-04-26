@@ -47,7 +47,7 @@ class hostingbulk_com extends DownloadClass {
 			$data['hb_id'] = $post['id'];
 			$data['hb_rand'] = $post['rand'];
 			$data['hb_free'] = 'yes';
-			return JSCountDown($count[1], $data);
+			return $this->JSCountDown($count[1], $data);
 		}
 
 		$page = $this->GetPage($link, 'lang=english', $post);

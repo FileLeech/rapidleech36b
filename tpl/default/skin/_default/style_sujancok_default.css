@@ -39,7 +39,7 @@ img{
 h1{font-size: 8pt; color: #FF8000;}
 .div_left_ndot{ margin:-5px 0 -10px 0; padding-bottom:5px;}
 .div_right_ndot{ padding:0; margin:-15px 0 -10px 0; }
-.div_right_ndot ul { padding-top: 2px; line-height:10px;}
+.div_right_ndot ul { padding-top: 0px; line-height:10px;}
 .div_right_ndot ul li{ padding-top:9px; font-size: 11px;}
 .ndot{list-style:none;}
 .float{float: left; }

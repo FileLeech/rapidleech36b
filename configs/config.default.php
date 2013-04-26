@@ -4,7 +4,7 @@ if (!defined('RAPIDLEECH')) {
 	exit;
 }
 
-$options = array(
+$default_options = array(
 ###MAIN-CONFIG
 'disableadvanceeditor' => false, //for security reason, so you just can set access manualy
 'xpanel_filename' => 'xpanel.php', // u need to allow this file in your htaccess if needed
@@ -60,7 +60,6 @@ $options = array(
 'rename_these_filetypes_to' => '.xxx', // If forbidden_filetypes_block = false then rename those filetypes to this
 'check_these_before_unzipping' => true, // true - Don't allow extraction/creation of these filetypes from file actions
 'disable_action' => false, //no action menus
-'disable_archive_compression' => false, //true=Only allow 0% ratio compression in tar, zip and rar
 'disable_to' => array(// disabled action files properties
 	'act_upload' => false,
 	'act_ftp' => false,
@@ -69,11 +68,12 @@ $options = array(
 	'act_split' => false,
 	'act_merge' => false,
 	'act_md5' => false,
+	'act_archive_compression' => false,
 	'act_pack' => false,
 	'act_zip' => false,
 	'act_unzip' => false,
-	'act_rar' => false,
-	'act_unrar' => false,
+	'act_rar' => true,
+	'act_unrar' => true,
 	'act_rename' => false,
 	'act_mrename' => false,
 	'act_delete' => false,
@@ -86,10 +86,9 @@ $options = array(
 	'age' => true,
 	'ip' => true,
 ),
-'new_window' => false, // false disabled, true use new window
-'new_window_js' => true, //  (only used when new_window enabled) true full size window, false javascript window
+'2gb_fix' => true, // true - Try to list files bigger than 2gb on 32 bit o.s.
 'show_all' => true, // true - To show all files in the catalog, false to hide it
-'bw_save' => false, // Bandwidth Saving
+'bw_save' => true, // Bandwidth Saving
 
 #Auto-Rename #
 'rename_prefix' => '', //eg. mysite => mysite_file_name.rar
@@ -107,84 +106,84 @@ $options = array(
 	'showmtn' => true,
 	'server_info' => true,
 ),
-'cpuUsageNFO' => true, // require server_info = true
-'OnlineVisitor' => true, //Show Online Visitor
-'premix_status' => true, // enable acc premix status
-'ip_premixstat_list' => array('127.0.0.1'), // trusted ip, can view detil acc.
-
+'forbid' => array(
+	'audl' => false,
+	'auul' => false,
+	'lynx' => false,
+	'mtn' => false,
+),
 ###-Auto Download-Config
-'forbid_audl' => false,
 'audl' => 5, //how many link allow to auto-download work ?
 'showautoclose' => true, //autoclose popup when leeching in audl
 'timeautoclose' => 250,
 'autochecklink' => true, // Auto check submited link in audl
 'iframealocate' => 5, //how many iframe to allocate in audl for manual method.
 'premium_acc_audl' => true, // False - To disable premium account in autodownload
-
 ###-Auto Upload-Config
-'forbid_auul' => false,
 'auul' => 5, //how many file allow to auto-upload work ?
 'openwindows' => 5, //how many iframe to allocate in auul
 'myuploads_disable' => false, # True - Disable myuploads.txt creation
-
 ###-Movie Thumbnailer-Config
-'forbid_mtn' => false,
-'mtn_colums' => 3,
-'mtn_rows' => 3,
+'mtn_showconfig' => array(
+	'enable' => true,
+	'showtext' => true
+),
+'mtn_colrow' => array(
+	'columns' => 3,
+	'rows' => 3
+),
+'mtn_width' => 0,
+'mtn_height' => 100,
 'mtn_text' => '',
+'mtn_suffix' => 's',
 'mtn_bgcolor' => '3A9191',
 'mtn_quality' => 80,
 'mtn_edge' => 0,
-'mtn_video_option' => array(
+'mtn_cuttime' => array(
+	'cut' => 1,
+	'time' => 'min'
+),
+'mtn_individualshots' => false,
+'mtn_saveinfo' => false,
+'mtn_video_options' => array(
 	'enable' => false,
 	'txtcolor' => 'FFFFFF',
-	'txtfont' => '',
+	'txtfont' => 'Tahomabd.ttf',
 	'txtsize' => 10,
 ),
 'mtn_time' => array(
 	'enable' => false,
+	'tshadow' => 'FFFFFF',
 	'tcolor' => 'FFFFFF',
 ),
-
-###-Listed Files-Config
-'forbid_lynx' => false,
+'mtn_location' => array(
+	'info' => 4,
+	'time' => 2,
+),
 'deletelink_in_lynx' => true,
+'cpuUsageNFO' => true, // require server_info = true
+'OnlineVisitor' => true, //Show Online Visitor
+'premix_status' => true, // enable acc premix status
+'ip_premixstat_list' => array('127.0.0.1'), // trusted ip, can view detil acc.
 
 ###-MISC-CONFIG
-'2gb_fix' => true, // true - Try to list files bigger than 2gb on 32 bit o.s.
 'no_cache' => true, // true - Prohibition by Browser; otherwise allowed
 'redir' => true, // true - Redirect passive method
+'new_window' => false, // false disabled, true use new window
+'new_window_js' => true, //  (only used when new_window enabled) true full size window, false javascript window
 'use_curl' => false, // true - Will use curl instead stream socket client(especially in ssl connection), disable this if filehost refuse data sended by curl. Need curl exec/extension enable in your server
 'compressed_web' => 0, // toogle compressed mode, 0:disable; 1:compress all page source; 2: compress main body only
+'upload_html_disable' => false, // true - Disable *.upload.html creation
 'disable_ajax' => false, //switch to old method, No-Ajax in Serverfiles
 'disable_ajaxren' => false, //toogle ajax instant rename. require: rsajax.js; rsajax_ren.js
 'logact' => true, //do log-activity
 'alternatefree' => true, //Auto switch freedownload if premium is not good
 'mip_enabled' => false, //If you need to disable multiple ip support, set to false
 'mip_arotate' => false, //Auto change to next ip after start transload process
-'upload_html_disable' => false, // true - Disable *.upload.html creation
 'timezone' => 0, // set Timezone. 0 Mean using time in UTC (GMT+0)
 'lang' => 'english', // set Language.
 'template_used' => 'default', // set Template for your RL. eg default
 'csstype' => '_default', // set Skin/Theme to your RL. eg. _default
-
-#Secret key for cookie encryption
-#Make up a random one to protect your premium cookies (max length: 56). Example: 'secretkey' = 'UijSY5wjP1Ii'; - DO NOT use this example 'secretkey', or your premium accounts/cookies could be stolen!!
-#IF THIS IS NOT SET BEFORE YOU USE PREMIUM SERVICES, YOU WILL BE WARNED BY THE RAPIDLEECH SCRIPT. OTHERWISE YOUR PREMIUM ACCOUNTS AND/OR COOKIES COULD BE COMPROMISED!
-'secretkey' => 'UijSY5wjP1Ii'
 );
-// End Config ------
-
-require_once('accounts.php');
-
-
-# DEFINE writable dir OR files
-define('LOG_DIR', CONFIG_DIR . 'logfile/');
-define('FILES_LST', LOG_DIR . 'Rx08_2208081410_f1L3Z.lst');
-define('IP_L33CH_L0G', LOG_DIR . 'Rx08_2208081410_IP_L33CH_L0G.lst');
-define('VISITOR_LST', LOG_DIR . 'Rx08_2208081410_v1zit0r.lst');
-define('TRAFFIC_LST', LOG_DIR . 'Rx08_2208081410_tR4fic.txt');
-define('LOG_PHP', LOG_DIR . 'Rx08_2208081410_d4Mn.log.php');
-define('LASTLOG_LST', LOG_DIR . 'Rx08_2208081410_d4Mn_Last.txt');
-define('MYUPLOAD_LST', LOG_DIR . 'myuploads.txt');
+// End Default Config ------
 ?>

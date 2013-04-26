@@ -30,7 +30,7 @@ class ultramegabit_com extends DownloadClass {
 			$msg = $acc ? 'Free users' : 'Guests';
 			$wait = ($time[1] - time()) + ($wtime * 60);
 
-			JSCountDown($wait, 0, "$msg are only able to download 1 file every $wtime minutes");
+			$this->JSCountDown($wait, 0, "$msg are only able to download 1 file every $wtime minutes");
 			return;
 		}
 		if (!preg_match('@https?://[^/\r\n]+/files/[^\'\"\s\t<>\r\n]+@i', $page, $dlink)) html_error('Error: Download link not found.');
@@ -51,7 +51,7 @@ class ultramegabit_com extends DownloadClass {
 		}
 
 		$FileName = urldecode(basename(parse_url($dlink[0], PHP_URL_PATH)));
-		$this->RedirectDownload($dlink[0], $FileName);
+		$this->RedirectDownload($dlink[0], $FileName, $this->cookie);
 	}
 
 	private function Login($link) {

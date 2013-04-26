@@ -15,22 +15,22 @@
 </tr>
 </table>
 </div>
-<script>
-function pr(percent, received, speed)
-{
-	document.getElementById("received").innerHTML = '<b>' + received + '</b>';
-	document.getElementById("percent").innerHTML = '<b>' + percent + '%</b>';
+<script type="text/javascript">
+/* <![CDATA[ */
+function pr(percent, received, speed) {
+	$('#received').html('<b>' + received + '</b>');
+	$('#percent').html('<b>' + percent + '%</b>');
 	document.title= '['+percent + '%]->['+orlink+']'+' Uploaded';
 	if (percent > 90) {percent=percent-1;}
-	document.getElementById("progress").style.width = percent + '%';
-	document.getElementById("speed").innerHTML = '<b>' + speed + ' KB/s</b>';
+	$('#progress').css('width', percent + '%');
+	$('#speed').html('<b>' + speed + ' KB/s</b>');
 	return true;
 }
 
-function mail(str, field)
-{
-	document.getElementById("mailPart." + field).innerHTML = str;
+function mail(str, field) {
+	$("#mailPart." + field + "").html(str);
 	return true;
 }
+/* ]]> */
 </script>
 <br />

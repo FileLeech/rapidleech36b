@@ -23,11 +23,20 @@ class hipfile_com extends DownloadClass {
 	}
 
 	private function Free() {
-		$form = cut_str($this->page, '<Form name="F1" method="POST"', '</Form>');
+		$form = cut_str($this->page, '<Form method="POST" action=\'\'', '</Form>');
+		if (!preg_match_all('/type="hidden" name="([^"]+)" value="([^"]+)?"/', $form, $one) || !preg_match_all('/type="submit" name="(\w+_free)" value="([^"]+)"/', $form, $two)) html_error('Error[Post Data 1 - FREE not found!]');
+		$match = array_merge(array_combine($one[1], $one[2]), array_combine($two[1], $two[2]));
+		$post = array();
+		foreach ($match as $key => $value) {
+			$post[$key] = $value;
+		}
+		$page = $this->GetPage($this->link, $this->cookie, $post, $this->link);
+		unset($post);
+		$form = cut_str($page, '<Form name="F1" method="POST"', '</Form>');
 		// without countdown work too, u can skip the countdown by removing this line
 		if (preg_match('/(\d+)<\/span> seconds/', $form, $wait)) $this->CountDown($wait[1]);
 		// end countdown timer
-		if (!preg_match_all('/<input type="hidden" name="([^\s\t\r\n"]+)" value="([^\s\t\r\n"]+)?">/', $form, $match)) html_error('Error[Post Data - FREE not found!]');
+		if (!preg_match_all('/type="hidden" name="([^"]+)" value="([^"]+)?"/', $form, $match)) html_error('Error[Post Data 2 - FREE not found!]');
 		$match = array_combine($match[1], $match[2]);
 		$post = array();
 		foreach ($match as $key => $value) {
@@ -92,5 +101,6 @@ class hipfile_com extends DownloadClass {
  * Hipfile free download plugin by Ruud v.Tony 02/08/2012
  * Updated to support premium by Tony Fauzi Wihana/Ruud v.Tony 09/08/2012
  * small fix in free download also checking link by Tony Fauzi Wihana/Ruud v.Tony 10/02/2013
+ * Reverted the free download mode by Tony Fauzi Wihana/Ruud v.Tony 25/04/2013 (Why they need to revert the form without any major progress?)
  */
 ?>

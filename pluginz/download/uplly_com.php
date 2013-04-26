@@ -29,7 +29,7 @@ class uplly_com extends DownloadClass {
             unset($post);
             $post['link'] = urlencode($link);
             $post['stop'] = '1';
-            JSCountDown($wait, $post, 'You did more than a download in a short time');
+            $this->JSCountDown($wait, $post, 'You did more than a download in a short time');
             exit();
         }
         if(preg_match('#<p class="err">([^<>]+)</p>#', $page, $error))html_error($error[1]);
@@ -73,7 +73,7 @@ class uplly_com extends DownloadClass {
         global $premium_acc;
         $username = $_REQUEST["premium_user"] ? trim($_REQUEST["premium_user"]) : $premium_acc ["uplly_com"] ["user"];
         $password = $_REQUEST["premium_pass"] ? trim($_REQUEST["premium_pass"]) : $premium_acc ["uplly_com"] ["pass"];
-        if(empty($username) or empty($password))html_error('Usuer and/or Password this empty.'); 
+        if(empty($username) or empty($password))html_error('Usuer and/or Password this empty.');
         $url = 'http://uplly.com/';
         $post = array();
         $post["login"] = $username;

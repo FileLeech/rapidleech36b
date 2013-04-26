@@ -257,7 +257,6 @@ $l['leeching'] = "Leeching..";
 $l['_back'] = "Go Back";
 $l['incorrect_userpass'] = "Incorrect username and/or password.";
 $l['_error'] = "Error!";
-$l['_redirect_to'] = "it is redirected to";
 $l['_redirecting_to'] = "Redirecting to:";
 $l['_filesize'] = "File <b>{1}</b>, Size <b>{2}</b>..."; // {1}=file {2}=size
 $l['_filesaved'] = "File <b>{1}</b> (<b>{2}</b>) Saved!<br />Time: <b>{3} second(s)</b> | Average Speed: <b>{4} KB/s</b><br />"; // {1}=file link {2}=filesize {3}=time {4}=speed

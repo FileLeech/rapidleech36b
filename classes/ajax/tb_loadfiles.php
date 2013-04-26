@@ -6,7 +6,7 @@ if (!defined('RAPIDLEECH')) {
 
 if (isset($_POST['TBLoad'])) {
 	$expires = 60; // set expired cached page in 60 sec
-	header("content-type:text/xml; charset=$charSet");
+	header("content-type:text/xml; charset=ISO-8859-1");
 	header("Expires: " . gmdate("D, d M Y H:i:s", TIME_NOW + $expires) . "GMT");
 
 	clearstatcache();
@@ -125,7 +125,7 @@ if (isset($_POST['TBLoad'])) {
 					$resXML.= "\n" . ' <fileid>brs' . $total_files . '</fileid>' . $rn;
 					$resXML.= ' <filename>' . xmlentities(basename($file["name"])) . '</filename>' . $rn;
 
-					$resXML.= ' <filepath>' . link_for_file($file['name'], true) . '</filepath>' . $rn;
+					$resXML.= ' <filepath>' . link_for_file($file["name"], true) . '</filepath>' . $rn;
 
 					$_fsize = str_replace(" ", "((space))", $file["size"]);
 					$_fsize = str_replace("&nbsp;", "((space))", $_fsize);

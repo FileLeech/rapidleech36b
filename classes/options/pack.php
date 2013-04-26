@@ -17,7 +17,7 @@ function rl_pack() {
 				<select name="arc_ext">
 				<option value="tar" selected="selected">tar</option>
 <?php
-			if (!$options['disable_archive_compression']) {
+			if (!$options['disable_to']['act_archive_compression']) {
 ?>
 				<option value="tar.gz">tar.gz</option>
 				<option value="tar.bz">tar.bz</option>
@@ -84,7 +84,7 @@ function pack_go() {
 			echo $L->sprintf($L->say['pack_in_arcv'],$arc_name)."<br />";
 			$stmp = strtolower ( $arc_name );
 			$arc_method = "Tar";
-			if (!$options['disable_archive_compression']) {
+			if (!$options['disable_to']['act_archive_compression']) {
 				if (strrchr ( $stmp, "tar.gz" ) + 5 == strlen ( $stmp )) { $arc_method = "Tar.gz"; }
 				elseif (strrchr ( $stmp, "tar.bz2" ) + 6 == strlen ( $stmp )) { $arc_method = "Tar.bz2"; }
 			}

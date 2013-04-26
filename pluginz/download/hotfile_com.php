@@ -58,7 +58,7 @@ class hotfile_com extends DownloadClass {
 			if ($hl > 0) {
 				$data = $this->DefaultParamArr($link);
 				$data['step'] = '2';
-				JSCountDown($hl, $data, 'You reached your hourly traffic limit');
+				$this->JSCountDown($hl, $data, 'You reached your hourly traffic limit');
 			} else {
 				insert_timer(($t[0] / 1000) + 1, "Waiting captcha/link timelock:");
 			}

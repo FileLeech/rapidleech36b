@@ -98,7 +98,7 @@ class depositfiles_com extends DownloadClass {
 						if ($diff < 1) break; // Error?
 						$x++;
 					}
-					if ($limit[1] > 0) return JSCountDown($limit[1], $this->DefaultParamArr($this->link), 'Connection limit has been exhausted for your IP address');
+					if ($limit[1] > 0) return $this->JSCountDown($limit[1], $this->DefaultParamArr($this->link), 'Connection limit has been exhausted for your IP address');
 				} else html_error('Connection limit has been exhausted for your IP address. Please try again later.');
 			}
 
@@ -228,7 +228,7 @@ class depositfiles_com extends DownloadClass {
 	}
 
 	private function CookieLogin($user, $pass, $filename = 'depositfiles_dl.php') {
-		global $options;
+		global $secretkey;
 		if (empty($user) || empty($pass)) html_error('Login Failed: User or Password is empty.');
 
 		$filename = DOWNLOAD_DIR . basename($filename);
@@ -240,10 +240,10 @@ class depositfiles_com extends DownloadClass {
 
 		$hash = hash('crc32b', $user.':'.$pass);
 		if (array_key_exists($hash, $savedcookies)) {
-			$_secretkey = $options['secretkey'];
-			$options['secretkey'] = sha1($user.':'.$pass);
+			$_secretkey = $secretkey;
+			$secretkey = sha1($user.':'.$pass);
 			$this->cookie = (decrypt(urldecode($savedcookies[$hash]['enc'])) == 'OK') ? $this->IWillNameItLater($savedcookies[$hash]['cookie']) : '';
-			$options['secretkey'] = $_secretkey;
+			$secretkey = $_secretkey;
 			if (empty($this->cookie) || (is_array($this->cookie) && count($this->cookie) < 1)) return $this->Login($user, $pass);
 
 			$page = $this->GetPage('http://' . $this->domain . '/', $this->cookie);
@@ -256,7 +256,7 @@ class depositfiles_com extends DownloadClass {
 	}
 
 	private function SaveCookies($user, $pass, $filename = 'depositfiles_dl.php') {
-		global $options;
+		global $secretkey;
 		$maxdays = 7; // Max days to keep cookies saved
 		$filename = DOWNLOAD_DIR . basename($filename);
 		if (file_exists($filename)) {
@@ -268,10 +268,10 @@ class depositfiles_com extends DownloadClass {
 			foreach ($savedcookies as $k => $v) if (TIME_NOW - $v['time'] >= ($maxdays * 24 * 60 * 60)) unset($savedcookies[$k]);
 		} else $savedcookies = array();
 		$hash = hash('crc32b', $user.':'.$pass);
-		$_secretkey = $options['secretkey'];
-		$options['secretkey'] = sha1($user.':'.$pass);
+		$_secretkey = $secretkey;
+		$secretkey = sha1($user.':'.$pass);
 		$savedcookies[$hash] = array('time' => TIME_NOW, 'enc' => urlencode(encrypt('OK')), 'cookie' => $this->IWillNameItLater($this->cookie, false));
-		$options['secretkey'] = $_secretkey;
+		$secretkey = $_secretkey;
 
 		file_put_contents($filename, "<?php exit(); ?>\r\n" . serialize($savedcookies), LOCK_EX);
 	}

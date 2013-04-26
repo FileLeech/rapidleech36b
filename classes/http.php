@@ -56,36 +56,6 @@ function insert_timer($countd, $caption = "", $timeouttext = "", $hide = false) 
 	return true;
 }
 
-/* Use this function for filehost longer timelock
- * Param int $secs -> The number of seconds to count down
- * Param array $post -> Variable array to include as POST so you dont need to start over the process
- * Param $string $text -> Default text you want to display when counting down
- * Param bool
- */
-
-function JSCountdown($secs, $post = 0, $text='Waiting link timelock', $stop = 1) {
-	global $PHP_SELF, $L;
-	if (!is_numeric($secs)) {
-		html_error($L->say['_wrong_counter']);
-	}
-	echo "<p><center><span id='dl' class='htmlerror'><b>ERROR: Please enable JavaScript. (Countdown)</b></span><br /><span id='dl2'>Please wait</span></center></p>\n";
-	echo "<form action='$PHP_SELF' name='cdwait' method='POST'>\n";
-	if (!empty($post) && is_array($post)) foreach ($post as $name => $input) echo "<input type='hidden' name='$name' id='C_$name' value='$input' />\n";
-	echo "<script type='text/javascript'>\n";
-	echo "/* <![CDATA[ */\n";
-	echo "var c = $secs;var text = '$text';var c2 = 0;var dl = document.getElementById('dl');var a2 = document.getElementById('dl2');fc();fc2();\n";
-	echo "function fc() {\n\tif (c > 0) {\n\t\tif (c > 120) {\n\t\t\tdl.innerHTML = text+'. Please wait <b>'+ Math.round(c/60) +'</b> minutes...';\n";
-	echo "\t\t} else {\n\t\t\tdl.innerHTML = text+'. Please wait <b>'+c+'</b> seconds...';\n\t\t}\n\t\tc = c - 1;\n\t\tsetTimeout('fc()', 1000);\n";
-	echo "\t} else {\n\t\tdl.style.display='none';\n\t\tvoid(";
-	if (!empty($post)) echo "document.forms.cdwait.submit()";
-	else echo "location.reload()";
-	echo ");\n\t}\n}\n";
-	echo "function fc2(){if(c>120){if(c2<=20){a2.innerHTML=a2.innerHTML+'.';c2=c2+1}else{c2=10;a2.innerHTML=''}setTimeout('fc2()',100)}else{dl2.style.display='none'}}\n";
-	echo "/* ]]> */\n";
-	echo "</script>\n</form>\n<br />\n";
-	if ($stop) exit("</body></html>");
-}
-
 /*
  * Function to check if geturl function has completed successfully
  */

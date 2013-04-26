@@ -28,7 +28,7 @@ class uploadhero_com extends DownloadClass {
 				$wait = $timer[2];
 				if (!empty($timer[1])) $wait += ($timer[1] * 60);
 				$data = $this->DefaultParamArr($link);
-				return JSCountDown($wait, $data, 'You have to wait before downloading again');
+				return $this->JSCountDown($wait, $data, 'You have to wait before downloading again');
 			}
 			if (!preg_match('@<img src="((https?://(?:[^/\r\n<>\"]+\.)?uploadhero\.com)?/captchadl\.php\?[^\r\n<>\"]+)"@i', $this->page, $cimg)) html_error('Error: CAPTCHA not found.');
 			$cimg = (empty($cimg[2])) ? 'http://uploadhero.com'.$cimg[1] : $cimg[1];

@@ -26,16 +26,16 @@ if (!defined('RAPIDLEECH')) {
 <script type="text/javascript">
 /* <![CDATA[ */
 function pr(percent, received, speed) {
-	document.getElementById("received").innerHTML = '<b>' + received + "<\/b>";
-	document.getElementById("percent").innerHTML = '<b>' + percent + "%<\/b>";
-	document.getElementById("progress").style.width = percent + '%';
-	document.getElementById("speed").innerHTML = '<b>' + speed + " KB\/s<\/b>";
+	$('#received').html('<b>' + received + "<\/b>");
+	$('#percent').html('<b>' + percent + "%<\/b>");
+	$('#progress').css('width', percent + '%');
+	$('#speed').html('<b>' + speed + " KB\/s<\/b>");
 	document.title = percent + '% Downloaded';
 	return true;
 }
 
 function mail(str, field) {
-	document.getElementById("mailPart." + field).innerHTML = str;
+	$("#mailPart." + field +"").html(str);
 	return true;
 }
 /* ]]> */

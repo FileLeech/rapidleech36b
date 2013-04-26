@@ -42,9 +42,11 @@ if(isset($diskspace_callable) && $diskspace_callable==1){
 </td></tr>
 </table>
 <script type="text/javascript">
+/* <![CDATA[ */
 function goforit(){
  setTimeout("getthedate()",1000);
  timeDiff('<?php echo date('Y', TIME_NOW); ?>', '<?php echo date('n', TIME_NOW); ?>', '<?php echo date('j', TIME_NOW); ?>', '<?php echo date('G', TIME_NOW); ?>', '<?php echo date('i', TIME_NOW); ?>', '<?php echo date('s', TIME_NOW); ?>', 'dd-mm-yyyy');
 };
 $(document).ready(function() { goforit(); });
+/* ]]> */
 </script>

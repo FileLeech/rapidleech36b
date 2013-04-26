@@ -14,7 +14,7 @@ function zip() {
 						<td><?php echo $L->say['arcv_name'];?>:&nbsp;<input type="text" name="archive" size="25" value=".zip" /></td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" name="no_compression"<?php echo ($options['disable_archive_compression'] ? ' disabled="disabled" checked="checked"' : ''); ?> />&nbsp;<?php echo $L->say['no_compress'];?></td>
+						<td><input type="checkbox" name="no_compression"<?php echo ($options['disable_to']['act_archive_compression'] ? ' disabled="disabled" checked="checked"' : ''); ?> />&nbsp;<?php echo $L->say['no_compress'];?></td>
 					</tr>
 				</table>
 				<table>
@@ -56,7 +56,7 @@ function zip_go() {
 	}
 	require_once (CLASS_DIR . "pclzip.php");
 	$archive = new PclZip ( $_POST ["archive"] );
-	$no_compression = ($options['disable_archive_compression'] || isset($_POST["no_compression"]));
+	$no_compression = ($options['disable_to']['act_archive_compression'] || isset($_POST["no_compression"]));
 	if (file_exists ( $_POST ["archive"] )) {
 		if ($no_compression) { $v_list = $archive->add ( $add_files, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_NO_COMPRESSION); }
 		else { $v_list = $archive->add ( $add_files, PCLZIP_OPT_REMOVE_ALL_PATH); }

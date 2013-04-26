@@ -95,7 +95,7 @@ var dlinks, arlinks, startFrm = 0;
 ?>
 function changelink(obj, refresh){
 	var strshow = "<?php echo ($L->say['_show'] != '' ? $L->say['_show'] : 'Show'); ?>&nbsp;";
-	if(refresh==undefined) refresh = 0;
+	if(typeof(refresh) == 'undefined') refresh = 0;
 	if(getCookie("showAll") == 1) {
 		if(refresh==0) deleteCookie("showAll");
 		obj.innerHTML = strshow + "<?php echo ($L->say['_downloaded'] != '' ? $L->say['_downloaded'] : 'Downloaded'); ?>";
@@ -115,22 +115,6 @@ function go_gLoad(dlay){
 }
 <?php
 	} // end ajax
-	if(is_array($deleted) && $deleted["count"] > 0) {
-?>
-function slip(Obj){var lst='<?php echo $L->say['hide_last_act'];?>';
-   var d_txt = $('#act_hist_txt');
-   var d_img = $('#act_hist_img');
-   var d_hist = $('#act_history');
-   if( d_txt.html() == lst ){
-     d_txt.html('<?php echo $L->say['show_last_act'];?>');
-     d_img.attr('src', '<?php echo IMAGE_DIR;?>plus.png'); d_hist.hide();
-   }else{
-     d_txt.html(lst); d_img.attr('src', '<?php echo IMAGE_DIR;?>min.png');
-     d_hist.show();
-   } d_img.blur(); return false;
-}
-<?php
-	} // end delete log
 ?>
 /* ]]> */
 </script>

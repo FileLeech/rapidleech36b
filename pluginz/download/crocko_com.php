@@ -53,7 +53,7 @@ class crocko_com extends DownloadClass {
             if ($wait[1] > 100) {
                 $data = $this->DefaultParamArr($link, $cookie);
                 $data['step'] = 'countdown';
-                JSCountdown($wait[1], $data);
+                $this->JSCountdown($wait[1], $data);
             } else {
                 $this->CountDown($wait[1]);
                 $page = $this->GetPage($link, $cookie, 0, $Referer);

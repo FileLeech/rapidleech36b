@@ -76,7 +76,7 @@ checkStrict();
 define('THIS_SCRIPT', basename($PHP_SELF));
 // check for forbidden page (audl, auul, lynx, mtn)
 $keyfn = str_replace("." . get_extension(THIS_SCRIPT), "", THIS_SCRIPT);
-if (isset($options["forbid_{$keyfn}"]) && $options["forbid_{$keyfn}"]) {
+if (isset($options['forbid'][$keyfn]) && $options['forbid'][$keyfn]) {
 	get_tpl("404", ucwords(do_strtolower($keyfn)) . " " . $L->say["disabled"]);
 	exit();
 }

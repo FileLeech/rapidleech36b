@@ -61,7 +61,7 @@ class d4shared_com extends DownloadClass {
 			$data['port'] = $url['port'];
 			$data['path'] = urlencode($url['path'] . ($url['query'] ? '?' . $url['query'] : ''));
 			$data['saveto'] = $_GET['path'];
-			JSCountDown($count[1], $data);
+			$this->JSCountDown($count[1], $data);
 		}
 
 		$this->RedirectDownload($dllink, $FileName, $this->cookie);

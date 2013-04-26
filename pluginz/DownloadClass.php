@@ -5,6 +5,7 @@ if (!defined('RAPIDLEECH')) {
 }
 
 class DownloadClass {
+
 	/*
 	 * Prints the initial form for displaying messages
 	 * @return void
@@ -99,15 +100,17 @@ class DownloadClass {
 		global $PHP_SELF, $options;
 		if (empty($link_array) || !is_array($link_array) || count($link_array) == 0) html_error('Error getting links from folder.');
 
-		if (!@is_file('audl.php') || !empty($options['forbid_audl'])) html_error('audl.php not found or you have disable auto download feature!');
+		if (!@is_file('audl.php') || !empty($options['forbid']['audl'])) html_error('audl.php not found or you have disable auto download feature!');
 
 		$pos = strrpos($PHP_SELF, '/');
-		$audlpath = ($pos !== false) ? substr($PHP_SELF, 0, $pos + 1).'audl.php?GO=GO' : 'audl.php?GO=GO';
+		$audlpath = ($pos !== false) ? substr($PHP_SELF, 0, $pos + 1) . 'audl.php?GO=GO' : 'audl.php?GO=GO';
 		$inputs = GetDefaultParams();
 		$inputs['links'] = implode("\r\n", $link_array);
 
-		$key_array = array('premium_acc', 'premium_user', 'premium_pass', 'df_acc', 'df_cookie', 'hf_acc', 'hf_cookie', 'net_acc', 'net_cookie', 'rs_acc', 'rs_cookie', 'ul_acc', 'ul_cookie', 'upl_acc', 'upl_cookie', 'cookieuse', 'cookie');
-		foreach ($key_array as $v) if (!empty($_GET[$v])) $inputs[$v] = urlencode($_GET[$v]);
+		if ($options['premium_acc_audl']) {
+			$key_array = array('premium_acc', 'premium_user', 'premium_pass', 'df_acc', 'df_cookie', 'hf_acc', 'hf_cookie', 'net_acc', 'net_cookie', 'rs_acc', 'rs_cookie', 'ul_acc', 'ul_cookie', 'upl_acc', 'upl_cookie', 'cookieuse', 'cookie');
+			foreach ($key_array as $v) if (!empty($_GET[$v])) $inputs[$v] = urlencode($_GET[$v]);
+		}
 		insert_location($inputs, $audlpath);
 		exit();
 	}
@@ -127,7 +130,7 @@ class DownloadClass {
 	public function EnterCaptcha($captchaImg, $inputs, $captchaSize = '5') {
 		global $L;
 		echo "\n<form name='captcha' action='{$_SERVER['SCRIPT_NAME']}' method='POST'>\n";
-		foreach ($inputs as $name => $input) echo "\t<input type='hidden' name='$name' id='$name' value='$input' />\n";
+		foreach ($inputs as $name => $input) echo "\t<input type='hidden' name='$name' value='$input' />\n";
 		echo "\t<h4>" . $L->say['_enter'] . " <img alt='CAPTCHA Image' src='$captchaImg' /> " . $L->say['_here'] . ": <input type='text' name='captcha' size='$captchaSize' />&nbsp;&nbsp;\n\t\t<input type='submit' onclick='return check();' value='Enter Captcha' />\n\t</h4>\n\t<script type='text/javascript'>/* <![CDATA[ */\n\t\tfunction check() {\n\t\t\tvar captcha=document.dl.captcha.value;\n\t\t\tif (captcha == '') {\n\t\t\t\twindow.alert('You didn\'t enter the image verification code');\n\t\t\t\treturn false;\n\t\t\t} else return true;\n\t\t}\n\t/* ]]> */</script>\n</form>\n</body>\n</html>";
 	}
 
@@ -152,9 +155,41 @@ class DownloadClass {
 		return $DParam;
 	}
 
+	/* Use this function for filehost longer timelock
+	 * Param int $secs -> The number of seconds to count down
+	 * Param array $post -> Variable array to include as POST so you dont need to start over the process
+	 * Param $string $text -> Default text you want to display when counting down
+	 * Param bool
+	 */
+
+	public function JSCountdown($secs, $post = 0, $text = 'Waiting link timelock', $stop = 1) {
+		global $PHP_SELF, $L;
+		if (!is_numeric($secs)) {
+			html_error($L->say['_wrong_counter']);
+		}
+		echo "<p><center><span id='dl' class='htmlerror'><b>ERROR: Please enable JavaScript. (Countdown)</b></span><br /><span id='dl2'>Please wait</span></center></p>\n";
+		echo "<form action='$PHP_SELF' name='cdwait' method='POST'>\n";
+		if (!empty($post) && is_array($post))
+			foreach ($post as $name => $input) echo "<input type='hidden' name='$name' id='C_$name' value='$input' />\n";
+		echo "<script type='text/javascript'>\n";
+		echo "/* <![CDATA[ */\n";
+		echo "var c = $secs;var text = '$text';var c2 = 0;var dl = $('#dl');var a2 = $('#dl2');fc();fc2();\n";
+		echo "function fc() {\n\tif (c > 0) {\n\t\tif (c > 120) {\n\t\t\tdl.html(text+'. Please wait <b>'+ Math.round(c/60) +'</b> minutes...');\n";
+		echo "\t\t} else {\n\t\t\tdl.html(text+'. Please wait <b>'+c+'</b> seconds...');\n\t\t}\n\t\tc = c - 1;\n\t\tsetTimeout('fc()', 1000);\n";
+		echo "\t} else {\n\t\tdl.hide();\n\t\tvoid(";
+		if (!empty($post)) echo "document.forms.cdwait.submit()";
+		else echo "location.reload()";
+		echo ");\n\t}\n}\n";
+		echo "function fc2(){if(c>120){if(c2<=20){a2.html($(this).html()+'.');c2=c2+1;}else{c2=10;a2.html('');}setTimeout('fc2()',100)}else{dl2.hide();}}\n";
+		echo "/* ]]> */\n";
+		echo "</script>\n</form>\n<br />\n";
+		if ($stop) exit("</body></html>");
+	}
+
 	public function changeMesg($mesg) {
 		echo('<script type="text/javascript">document.getElementById(\'mesg\').innerHTML="' . stripslashes($mesg) . '";</script>');
 	}
 
 }
+
 ?>

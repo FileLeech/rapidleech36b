@@ -245,7 +245,7 @@ function IWillNameItLater($cookie, $decrypt=true) {
 }
 
 function CookieLogin($user, $pass) {
-	global $cookie, $domain, $referer, $options, $pauth;
+	global $cookie, $domain, $referer, $secretkey, $pauth;
 	if (!defined('DOWNLOAD_DIR')) {
 		global $options;
 		if (substr($options['download_dir'], -1) != '/') $options['download_dir'] .= '/';
@@ -261,10 +261,10 @@ function CookieLogin($user, $pass) {
 
 	$hash = hash('crc32b', $user.':'.$pass);
 	if (array_key_exists($hash, $savedcookies)) {
-		$_secretkey = $options['secretkey'];
-		$options['secretkey'] = sha1($user.':'.$pass);
+		$_secretkey = $secretkey;
+		$secretkey = sha1($user.':'.$pass);
 		$cookie = (decrypt(urldecode($savedcookies[$hash]['enc'])) == 'OK') ? IWillNameItLater($savedcookies[$hash]['cookie']) : '';
-		$options['secretkey'] = $_secretkey;
+		$secretkey = $_secretkey;
 		if ((is_array($cookie) && count($cookie) < 1) || empty($cookie)) return Login($user, $pass);
 
 		$page = geturl($domain, 80, '/', $referer, $cookie, 0, 0, $_GET['proxy'], $pauth);is_page($page);
@@ -276,7 +276,7 @@ function CookieLogin($user, $pass) {
 }
 
 function SaveCookies($user, $pass) {
-	global $cookie, $options;
+	global $cookie, $secretkey;
 	$maxdays = 7; // Max days to keep cookies saved
 	$filename = DOWNLOAD_DIR.basename('turbobit_ul.php');
 	if (file_exists($filename)) {
@@ -288,10 +288,10 @@ function SaveCookies($user, $pass) {
 		foreach ($savedcookies as $k => $v) if (time() - $v['time'] >= ($maxdays * 24 * 60 * 60)) unset($savedcookies[$k]);
 	} else $savedcookies = array();
 	$hash = hash('crc32b', $user.':'.$pass);
-	$_secretkey = $options['secretkey'];
-	$options['secretkey'] = sha1($user.':'.$pass);
+	$_secretkey = $secretkey;
+	$secretkey = sha1($user.':'.$pass);
 	$savedcookies[$hash] = array('time' => time(), 'enc' => urlencode(encrypt('OK')), 'cookie' => IWillNameItLater($cookie, false));
-	$options['secretkey'] = $_secretkey;
+	$secretkey = $_secretkey;
 
 	write_file($filename, "<?php exit(); ?>\r\n" . serialize($savedcookies));
 }

@@ -14,7 +14,7 @@ $VERSION = '<small style="color:#239FD9"><b>[ <a href="http://ocean-leecher.net/
 
 function notexist() {
 	global $msg, $VERSION, $RL_VER, $options, $L;
-	echo "<html><head><title>:: $RL_VER ::</title><meta http-equiv='Content-Type' content='text/html; charset=" . ($charSet != "" ? $charSet : "utf-8") . "'><link type='text/css' href='" . IMAGE_DIR . "style_sujancok" . $options['csstype'] . "css?" . rand(1, 9999) . "' rel='stylesheet'></head><body><br /><h1>$RL_VER: NoP</h1><center><b class='r'>" . $L->say['_inexist'] . "</b><br /><br /><hr style='width:500px;' />$msg<br />$VERSION</center></body></html>";
+	echo "<html><head><title>:: {$RL_VER} ::</title><meta http-equiv='Content-Type' content='text/html; charset=" . ($charSet != "" ? $charSet : "utf-8") . "'><link type='text/css' href='" . IMAGE_DIR . "style_sujancok" . $options['csstype'] . "css?" . rand(1, 9999) . "' rel='stylesheet'></head><body><br /><h1>{$RL_VER}: NoP</h1><center><b class='r'>" . $L->say['_inexist'] . "</b><br /><br /><hr style='width:500px;' />{$msg}<br />{$VERSION}</center></body></html>";
 	exit();
 }
 
