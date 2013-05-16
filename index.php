@@ -289,6 +289,9 @@ if (empty($_GET ["filename"]) || empty($_GET ["host"]) || empty($_GET ["path"]))
 		list($final_link, $current_time) = link_for_file(dirname($pathWithName) . "/" . basename($file["file"]), false, true);
 
 		echo "<script type=\"text/javascript\">pr(100, '" . $file["size"] . "', '" . $file["speed"] . "')</script>";
+		if ($options['enable_stop_transload']) {
+			echo "<script type=\"text/javascript\">$('#stoptl').hide();</script>";
+		}
 		echo $L->sprintf($L->say['_filesaved'], $final_link, $file ["size"], $file ["time"], $file ["speed"]);
 		// we do have base date from here, no need to reassign again in other.php for purge file
 		$file["date"] = getNowzone($current_time);
@@ -296,7 +299,7 @@ if (empty($_GET ["filename"]) || empty($_GET ["host"]) || empty($_GET ["path"]))
 		$tosave = array("name" => $file["file"], "size" => str_replace(" ", "&nbsp;", $file["size"]), "date" => $file["date"], "age" => $L->say['less_a_minute'], "link" => $_GET["link"], "comment" => str_replace("\n", "\\n", str_replace("\r", "\\r", $_GET["comment"])), "ip" => $visitors->userip);
 		//print_r($tosave);
 		$result = write_file(FILES_LST, serialize($tosave) . "\r\n", 0);
-		if ($options['downloadLimitbyIP']) $result2 = write_file($visitors->FN['leech_log'], serialize(array("name" => $file["file"], "date" => $file["date"], "ip" => $visitors->userip)) . "\r\n", 0);
+		$result2 = $options['downloadLimitbyIP'] ? write_file($visitors->FN['leech_log'], serialize(array("name" => $file["file"], "date" => $file["date"], "ip" => $visitors->userip)) . "\r\n", 0) : '';
 
 		if (!$result || !$result2) {
 			echo $L->say['error_upd_list'] . "<br />";

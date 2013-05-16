@@ -178,6 +178,7 @@ $ar_pre_upass_acc = array(// User Pass
 	'speedyshare_com',
 	'turbobit_net',
 	'ugotfile_com',
+	'ultramegabit_com',
 	'uploaded_net',
 	'uploading_com',
 	'uploadstation_com',
@@ -1016,8 +1017,8 @@ function load_current_config() {
 	});
 
 	$('#opt_list_allow_ip').val('<?php echo (!empty($options['list_allow_ip']) ? $options['list_allow_ip'] : $visitors->userip); ?>');
-	$('#opt_CpuLoadFormat').val('<?php echo (!function_exists('exec') && !function_exists('shell_exec') ? "percent" : "load"); ?>');
-	$('#opt_passthru_allowed').<?php echo (!function_exists('passthru') ? "prop('checked', false)" : "prop('checked', true)"); ?>;
+	$('#opt_CpuLoadFormat').val('<?php echo (!function_exists('exec') && !function_exists('shell_exec') ? "percent" : "load");?>');
+	$('#opt_passthru_allowed').<?php echo (function_exists('passthru') ? "prop({checked: true, disabled: false})" : "prop('checked', false)");?>;
 	$('#opt_limited_area').<?php echo (!file_exists(CLASS_DIR . 'geoip.inc.php') || !file_exists(BINARY_DIR . 'geoip/GeoIP.dat') ? "prop('disabled', true); $('#showlimitedarea .g').show()" : "prop('disabled', false); $('#showlimitedarea .g').hide()"); ?>;
 	$('#opt_disable_to_act_rar').<?php echo ((substr(PHP_OS, 0, 3) != "WIN" && @file_exists(BINARY_DIR . 'rar') && (function_exists('exec') || function_exists('shell_exec'))) ? "prop('disabled', false); $('#rar .g').hide()" : "prop('disabled', true); $('#rar .g').show()"); ?>;
 	$('#opt_disable_to_act_unrar').<?php echo ((substr(PHP_OS, 0, 3) != "WIN" && @file_exists(BINARY_DIR . 'unrar') && (function_exists('exec') || function_exists('shell_exec'))) ? "prop('disabled', false); $('#unrar .g').hide()" : "prop('disabled', true); $('#unrar .g').show()"); ?>;

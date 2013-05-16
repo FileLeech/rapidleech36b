@@ -389,7 +389,7 @@ $('#resetlog').show();
 <td class="tdacc"><b>True</b> replace spaces for underscores in file names</td>
 </tr>
 <tr>
-<td class="tdacc"><input type="checkbox" id="opt_check_these_before_unzipping" name="opt_check_these_before_unzipping" value="1" /><label for="opt_check_these_before_unzipping">&nbsp;Check forbidden file in archive</label></td>
+<td class="tdacc"><input type="checkbox" id="opt_check_these_before_unzipping" name="opt_check_these_before_unzipping" value="1" /><label for="opt_check_these_before_unzipping">&nbsp;Block forbidden file types for file actions</label></td>
 <td class="tdacc"><b class="o">True</b> Don't allow extraction/creation of these filetypes from file actions</td>
 </tr>
 <tr>
@@ -757,6 +757,10 @@ $('#resetlog').show();
 <tr>
 <td class="tdacc"><label><input type="checkbox" id="opt_alternatefree" name="opt_alternatefree" value="1" />&nbsp;Alternate switch to freedownload</label></td>
 <td class="tdacc">Auto switch to free download if premium not available</td>
+</tr>
+<tr>
+<td class="tdacc"><label><input type="checkbox" id="opt_enable_stop_transload" name="opt_enable_stop_transload" value="1" />&nbsp;Enable Stop Transload</label></td>
+<td class="tdacc">Enable stop process while transloading file</td>
 </tr>
 <tr>
 <td class="tdacc"><label><input type="checkbox" id="opt_mip_enabled" name="opt_mip_enabled" value="1" />&nbsp;Enable Multi-IP</label></td>

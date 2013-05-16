@@ -20,7 +20,7 @@ if (ob_get_level()) @ob_end_clean();
 if (isset($_POST['link'])) {
 	@ob_implicit_flush(true);
 }
-ignore_user_abort(false);
+ignore_user_abort(true);
 clearstatcache();
 error_reporting(6135);
 

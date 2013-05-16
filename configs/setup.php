@@ -148,7 +148,7 @@ d.addEventListener('DOMContentLoaded',function(){
 			$checker["safemode"] = (ini_get('safe_mode') ? retchk(0) : retchk(1));
 			$checker["stream_socket_client"] = (!function_exists('stream_socket_client') ? retchk(0) : retchk(1));
 			$checker["memory_limit"] = ((int) ini_get('memory_limit') > 32 ? retchk(1) : retchk(0));
-			$checker["openssl"] = (!extension_loaded('open_ssl') ? retchk(0, 'Some rapidleech plugin which need https support will not run properly without this extension enabled') : retchk(1));
+			$checker["openssl"] = (!extension_loaded('openssl') ? retchk(0, 'Some rapidleech plugin which need https support will not run properly without this extension enabled') : retchk(1));
 			$checker["curl"] = (!extension_loaded('curl') || !function_exists('curl_init') || !function_exists('curl_exec') ? retchk(0) : retchk(1));
 			$checker["fopen"] = (!ini_get('allow_url_fopen') ? retchk(0) : retchk(1));
 			$checker["call_time"] = (!ini_get('allow_call_time_pass_reference') ? retchk(0, 'You might see warnings without this turned on') : retchk(1));

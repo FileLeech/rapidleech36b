@@ -26,18 +26,27 @@ if (!defined('RAPIDLEECH')) {
 <script type="text/javascript">
 /* <![CDATA[ */
 function pr(percent, received, speed) {
-	$('#received').html('<b>' + received + "<\/b>");
-	$('#percent').html('<b>' + percent + "%<\/b>");
-	$('#progress').css('width', percent + '%');
-	$('#speed').html('<b>' + speed + " KB\/s<\/b>");
-	document.title = percent + '% Downloaded';
-	return true;
+  $('#received').html('<b>' + received + "<\/b>");
+  $('#percent').html('<b>' + percent + "%<\/b>");
+  $('#progress').css('width', percent + '%');
+  $('#speed').html('<b>' + speed + " KB\/s<\/b>");
+  document.title = percent + '% Downloaded';
+  return true;
 }
 
 function mail(str, field) {
-	$("#mailPart." + field +"").html(str);
-	return true;
+  $("#mailPart." + field +"").html(str);
+  return true;
 }
 /* ]]> */
 </script>
 <br />
+<?php
+if ($options['enable_stop_transload']) {
+  ignore_user_abort(false);
+?>
+<form method="post" action="<?php echo $PHP_SELF;?>" id="stoptl"><input type="submit" name="stop" value="Stop Transload" /></form>
+<br />
+<?php
+}
+?>

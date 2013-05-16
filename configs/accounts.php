@@ -67,6 +67,7 @@ $premium_acc["rapidshare_com"] = array(
 //$premium_acc["speedyshare_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["turbobit_net"] = array('user' => '', 'pass' => '');
 //$premium_acc["ugotfile_com"] = array('user' => '', 'pass' => '');
+//$premium_acc["ultramegabit_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["uploaded_net"] = array('user' => '', 'pass' => '');
 //$premium_acc["uploading_com"] = array('user' => '', 'pass' => '');
 //$premium_acc["uploadstation_com"] = array('user' => '', 'pass' => '');
@@ -151,7 +152,7 @@ $upload_acc = array();
 #Secret key for cookie encryption
 #Make up a random one to protect your premium cookies (max length: 56). Example: $secretkey = 'UijSY5wjP1Ii'; - DO NOT use this example $secretkey, or your premium accounts/cookies could be stolen!!
 #IF THIS IS NOT SET BEFORE YOU USE PREMIUM SERVICES, YOU WILL BE WARNED BY THE RAPIDLEECH SCRIPT. OTHERWISE YOUR PREMIUM ACCOUNTS AND/OR COOKIES COULD BE COMPROMISED!
-$secretkey = 'UijSY5wjP1Ii';//Place your Secret Key
+$secretkey = 'fuckumuthafucka';//Place your Secret Key
 
 # Acc info & drop down
 $ar_host_acc = array(
@@ -211,6 +212,7 @@ $ar_host_acc = array(
 	'speedyshare_com'	=>  'speedyshare.com',
 	'turbobit_net'	=>  'turbobit.net',
 	'ugotfile_com'	=>  'ugotfile.com',
+	'ultramegabit_com'	=>  'ultramegabit.com',
 	'uploaded_net'	=>  'uploaded.net',
 	'uploading_com'	=>  'uploading.com',
 	'uploadstation_com'	=>  'uploadstation.com',
